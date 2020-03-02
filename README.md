@@ -1,3 +1,3 @@
 # GearEngine
 
-![GearEngine](./Image/Gear Engine.png)
+<center><img src="./Image/Gear Engine.png" width="600" height="600"></center> 
