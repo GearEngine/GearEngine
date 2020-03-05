@@ -10,15 +10,15 @@ platform:
 configuration:
 - Release
 
-clone_folder: C:\Hazel
+clone_folder: C:\Gear
 
 before_build:
-  - cd C:\Hazel
+  - cd C:\Gear
   - git submodule update --init --recursive
-  - cd C:\Hazel\scripts
-  - Win-GenProjects.bat && cd C:\Hazel
+  - cd C:\Gear\scripts
+  - Win-GenProjects.bat && cd C:\Gear
 
 build:
-  project: C:\Hazel\Hazel.sln
+  project: C:\Gear\Gear.sln
   parallel: true
   verbosity: normal
