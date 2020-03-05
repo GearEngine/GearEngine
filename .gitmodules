@@ -3,10 +3,10 @@
 	url = https://github.com/gabime/spdlog
 [submodule "Gear/vendor/GLFW"]
 	path = Gear/vendor/GLFW
-	url = https://github.com/zxwnstn/glfw
+	url = https://github.com/GearEngine/glfw
 [submodule "Gear/vendor/imgui"]
-	path =Gear/vendor/imgui
-	url = https://github.com/zxwnstn/imgui
+	path = Gear/vendor/imgui
+	url = https://github.com/GearEngine/imgui
 [submodule "Gear/vendor/glm"]
 	path = Gear/vendor/glm
 	url = https://github.com/g-truc/glm
