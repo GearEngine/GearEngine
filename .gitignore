@@ -1,0 +1,12 @@
+# ignore bin & vs
+.vs/
+bin/
+bin-int/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+SandBox/imgui.ini
+SandBox/GearProfile-Runtime.json
+SandBox/GearProfile-Shutdown.json
+SandBox/GearProfile-Startup.json

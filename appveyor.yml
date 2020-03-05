@@ -1,0 +1,24 @@
+version: 0.1 ({build})
+skip_branch_with_pr: true
+
+image:
+- Visual Studio 2017
+
+platform:
+- x64
+
+configuration:
+- Release
+
+clone_folder: C:\Hazel
+
+before_build:
+  - cd C:\Hazel
+  - git submodule update --init --recursive
+  - cd C:\Hazel\scripts
+  - Win-GenProjects.bat && cd C:\Hazel
+
+build:
+  project: C:\Hazel\Hazel.sln
+  parallel: true
+  verbosity: normal
