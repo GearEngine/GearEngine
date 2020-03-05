@@ -3,6 +3,7 @@
 
 #include "Gear/Core/Log.h"
 
+#include "Gear/Core/SceneManager.h"
 #include "Gear/Renderer/Renderer.h"
 
 #include <GLFW/glfw3.h>
@@ -25,7 +26,6 @@ namespace Gear {
 		Renderer::Init();
 
 		m_ImGuilayer = new ImGuiLayer;
-		PushOverlay(m_ImGuilayer);
 	}
 
 	Application::~Application()
@@ -44,27 +44,11 @@ namespace Gear {
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
 
-		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
+		for (auto it = m_CurScene->end(); it != m_CurScene->begin();) {
 			(*--it)->OnEvent(e);
 			if (e.m_Handled)
 				break;
 		}
-	}
-
-	void Application::PushLayer(Layer * layer)
-	{
-		GR_PROFILE_FUNCTION();
-
-		m_LayerStack.PushLayer(layer);
-		layer->OnAttach();
-	}
-
-	void Application::PushOverlay(Layer * layer)
-	{
-		GR_PROFILE_FUNCTION();
-
-		m_LayerStack.PushOverlay(layer);
-		layer->OnAttach();
 	}
 
 	void Application::Run()
@@ -79,20 +63,21 @@ namespace Gear {
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
+			
 			if (!m_Minimized)
 			{
+				m_CurScene = Gear::SceneManager::GetCurScene();
 				{
 					GR_PROFILE_SCOPE("LayerStack OnUpdate");
 
-					for (Layer* layer : m_LayerStack)
+					for (Layer* layer : *m_CurScene)
 						layer->OnUpdate(timestep);
 				}
 
 				m_ImGuilayer->Begin();
 				{
 					GR_PROFILE_SCOPE("LayerStack OnImGuiRender");
-
-					for (Layer* layer : m_LayerStack)
+					for (Layer* layer : *m_CurScene)
 						layer->OnImGuiRender();
 				}
 				m_ImGuilayer->End();

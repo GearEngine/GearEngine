@@ -4,6 +4,7 @@
 #include "Gear/Core/Application.h"
 #include "Gear/Core/Layer.h"
 #include "Gear/Core/Log.h"
+#include "Gear/Core/SceneManager.h"
 
 #include "Gear/Core/Timestep.h"
 
