@@ -4,7 +4,6 @@
 namespace Gear {
 
 	SceneManager* SceneManager::s_Instance = nullptr;
-	Scene* SceneManager::s_CurScene = nullptr;
 
 	SceneManager::SceneManager()
 	{
@@ -54,10 +53,10 @@ namespace Gear {
 	void SceneManager::ScenePush(const std::string& name)
 	{
 		auto scene = m_SceneStoradge.find(name);
-		if (s_CurScene != scene->second)
+		if (m_CurrentScene != scene->second)
 		{
 			m_SceneStack.push(scene->second);
-			s_CurScene = m_SceneStack.top();
+			m_CurrentScene = m_SceneStack.top();
 		}
 		else
 		{
@@ -71,7 +70,7 @@ namespace Gear {
 		if (m_SceneStack.size() != 1) 
 		{
 			m_SceneStack.pop();
-			s_CurScene = m_SceneStack.top();
+			m_CurrentScene = m_SceneStack.top();
 		}
 		else
 		{
@@ -84,9 +83,9 @@ namespace Gear {
 		auto scene = m_SceneStoradge.find(name);
 		if (scene != m_SceneStoradge.end())
 		{
-			if (s_CurScene != scene->second)
+			if (m_CurrentScene != scene->second)
 			{
-				s_CurScene = scene->second;
+				m_CurrentScene = scene->second;
 			}
 		}
 	}

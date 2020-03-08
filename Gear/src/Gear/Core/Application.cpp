@@ -33,6 +33,7 @@ namespace Gear {
 		GR_PROFILE_FUNCTION();
 
 		Renderer::Shutdown();
+		Gear::SceneManager::Destory();
 	}
 
 	void Application::OnEvent(Event & e)
@@ -66,7 +67,7 @@ namespace Gear {
 			
 			if (!m_Minimized)
 			{
-				m_CurScene = Gear::SceneManager::GetCurScene();
+				m_CurScene = Gear::SceneManager::Get()->GetCurrentScene();
 				{
 					GR_PROFILE_SCOPE("LayerStack OnUpdate");
 

@@ -17,8 +17,8 @@ namespace Gear {
 		
 		inline std::string GetName() const { return m_Name; }
 
-		auto begin() { return m_LayerStack.begin(); }
-		auto end() { return m_LayerStack.end(); }
+		std::vector<Layer*>::iterator begin() { return m_LayerStack.begin(); }
+		std::vector<Layer*>::iterator end() { return m_LayerStack.end(); }
 
 	private:
 		std::string m_Name;

@@ -58,7 +58,9 @@ namespace Gear {
 
 		s_Data->TextureShader = Shader::Create("assets/shaders/Texture.glsl");
 		s_Data->TextureShader->Bind();
-		s_Data->TextureShader->SetInt("u_Texture", 0);
+		s_Data->TextureShader->SetInt("u_Texture0", 0);
+		s_Data->TextureShader->SetInt("u_Texture1", 1);
+		s_Data->TextureShader->SetInt("u_Texture2", 2);
 	}
 
 	void Renderer2D::Shutdown()
@@ -146,18 +148,18 @@ namespace Gear {
 		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec2 & position, const glm::vec2 & size, float rotation, const Ref<Texture>& texture, float tilingFactor, const glm::vec4& tintColor)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2 & position, const glm::vec2 & size, float rotation, const Ref<Texture>& texture, float tilingFactor, const glm::vec4& tintColor, int slot, int x, int y)
 	{
-		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, texture, tilingFactor, tintColor);
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, texture, tilingFactor, tintColor, slot);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec3 & position, const glm::vec2 & size, float rotation, const Ref<Texture>& texture, float tilingFactor, const glm::vec4& tintColor)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3 & position, const glm::vec2 & size, float rotation, const Ref<Texture>& texture, float tilingFactor, const glm::vec4& tintColor, int slot, int x, int y)
 	{
 		GR_PROFILE_FUNCTION();
 
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
-		texture->Bind();
+		texture->Bind(x, y);
 
 		glm::mat4 translate = glm::translate(glm::mat4(1.0f), position)
 			* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f, })

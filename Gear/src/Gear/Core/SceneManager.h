@@ -19,7 +19,7 @@ namespace Gear {
 
 		void changeScene(const std::string& name);
 
-		inline static Scene* GetCurScene() { return s_CurScene; }
+		inline Scene* GetCurrentScene() { return m_CurrentScene; }
 
 		inline static SceneManager* Get() {
 			if (s_Instance == nullptr)
@@ -33,7 +33,7 @@ namespace Gear {
 	private:
 		std::unordered_map<std::string, Scene*> m_SceneStoradge;
 		std::stack<Scene*> m_SceneStack;
-		static Scene* s_CurScene;
+		Scene* m_CurrentScene;
 		static SceneManager* s_Instance;
 	};
 

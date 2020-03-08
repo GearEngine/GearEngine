@@ -15,8 +15,8 @@ void Sandbox2D::OnAttach()
 {
 	GR_PROFILE_FUNCTION();
 
-	m_CheckerboardTexture = Gear::Texture2D::Create("assets/textures/Checkerboard.png");
-	m_Cherno = Gear::Texture2D::Create("assets/textures/ChernoLogo.png");
+	//m_CheckerboardTexture = Gear::Texture2D::Create("assets/textures/Checkerboard.png");
+	m_Worms = Gear::Texture2D::Create("assets/textures/temp.png", 1, 20);
 }
 
 void Sandbox2D::OnDetach()
@@ -30,7 +30,15 @@ void Sandbox2D::OnUpdate(Gear::Timestep ts)
 	// Update
 	m_CameraController.OnUpdate(ts);
 
-	if(Gear::Input::IsKeyPressd(GR_KEY_P))
+	pastTime += ts;
+	if (pastTime > frameDelay) {
+		y--;
+		pastTime = 0.f;
+		if (y < 0)
+			y = 19;
+	}
+
+	if (Gear::Input::IsKeyPressd(GR_KEY_P))
 	{
 		if (temp) {
 			Gear::SceneManager::Get()->changeScene("SampleScene2");
@@ -53,9 +61,13 @@ void Sandbox2D::OnUpdate(Gear::Timestep ts)
 	{
 		GR_PROFILE_SCOPE("Renderer Draw");
 		Gear::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		Gear::Renderer2D::DrawRotatedQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(m_SquareRotate), m_SquareColor);
-		Gear::Renderer2D::DrawQuad({ m_ChernoPosition[0], m_ChernoPosition[1] }, { 0.5f, 0.75f }, m_Cherno, 1.0f, tintColor);
-		Gear::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 10.f, 10.0f }, glm::radians(45.0f), m_CheckerboardTexture, 10.0f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
+		//Gear::Renderer2D::DrawRotatedQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(m_SquareRotate), m_SquareColor);
+		//Gear::Renderer2D::DrawQuad({ m_ChernoPosition[0], m_ChernoPosition[1] }, { 1.0f, 1.0f }, m_Cherno, 1.0f, tintColor);
+		//Gear::Renderer2D::DrawQuad({ m_ChernoPosition[0], m_ChernoPosition[1] }, { 1.0f, 1.0f }, m_Cherno, 1.0f, tintColor);
+
+
+		Gear::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 1.f, 1.0f }, glm::radians(0.0f), m_Worms, 1.0f, tintColor, 0, x, y);
+		//Gear::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 1.f, 1.0f }, glm::radians(0.0f), m_CheckerboardTexture, 1.0f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f), 1);
 		Gear::Renderer2D::EndScene();
 	}
 }
