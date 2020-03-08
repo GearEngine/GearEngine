@@ -7,6 +7,8 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "glad/glad.h"
+
 namespace Gear {
 
 	struct Renderer2DStorage
@@ -81,7 +83,18 @@ namespace Gear {
 	void Renderer2D::EndScene()
 	{
 		GR_PROFILE_FUNCTION();
+		
+	}
 
+	std::tuple<int, int, int> Renderer2D::getPixel(int x, int y)
+	{
+		unsigned char* data = new unsigned char[1];
+
+		glReadPixels(x, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+		std::tuple<int, int, int> ret = { data[0], data[1], data[2] };
+
+		return ret;
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)

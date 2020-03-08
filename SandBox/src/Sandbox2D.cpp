@@ -30,13 +30,28 @@ void Sandbox2D::OnUpdate(Gear::Timestep ts)
 	// Update
 	m_CameraController.OnUpdate(ts);
 
-	pastTime += ts;
-	if (pastTime > frameDelay) {
-		y--;
-		pastTime = 0.f;
-		if (y < 0)
-			y = 19;
+	WindowWomrsPosition = glm::vec4(wormsPosition, 1.0f);
+	WindowWomrsPosition = m_CameraController.GetCamera().GetViewProjectionMatrix() * WindowWomrsPosition;
+	WindowWomrsPosition.x *= 640;
+	WindowWomrsPosition.x += 640;
+	WindowWomrsPosition.y *= 360;
+	WindowWomrsPosition.y += 360;
+
+
+	velocity += ts * gravity * 0.01;
+	if (wormsPosition.y == 0.0)
+		velocity = 0.0f;
+	wormsPosition.y -= velocity;
+
+	auto color = Gear::Renderer2D::getPixel((int)WindowWomrsPosition.x, (int)WindowWomrsPosition.y - 30);
+	auto[r, g, b] = color;
+	if (r != 25 && g != 25 && b != 25) 
+	{
+		wormsPosition.y += velocity;
+		velocity = 0;
 	}
+
+
 
 	if (Gear::Input::IsKeyPressd(GR_KEY_P))
 	{
@@ -65,10 +80,15 @@ void Sandbox2D::OnUpdate(Gear::Timestep ts)
 		//Gear::Renderer2D::DrawQuad({ m_ChernoPosition[0], m_ChernoPosition[1] }, { 1.0f, 1.0f }, m_Cherno, 1.0f, tintColor);
 		//Gear::Renderer2D::DrawQuad({ m_ChernoPosition[0], m_ChernoPosition[1] }, { 1.0f, 1.0f }, m_Cherno, 1.0f, tintColor);
 
-
-		Gear::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 1.f, 1.0f }, glm::radians(0.0f), m_Worms, 1.0f, tintColor, 0, x, y);
+		Gear::Renderer2D::DrawQuad({ 0.0f, -4.0f }, { 2.0f, 1.0f }, m_SquareColor);
+		Gear::Renderer2D::DrawRotatedQuad(wormsPosition, { 1.f, 1.0f }, glm::radians(0.0f), m_Worms, 1.0f, tintColor, 0, x, y);
 		//Gear::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 1.f, 1.0f }, glm::radians(0.0f), m_CheckerboardTexture, 1.0f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f), 1);
 		Gear::Renderer2D::EndScene();
+
+
+
+
+		//Gear::Renderer2D::EndScene(Gear::Input::GetMouseX(), Gear::Input::GetMouseY());
 	}
 }
 
@@ -81,7 +101,10 @@ void Sandbox2D::OnImGuiRender()
 	ImGui::ColorEdit4("Sqaure2 Color", glm::value_ptr(m_SquareColor2));
 	ImGui::ColorEdit4("cherno tintColor Color", glm::value_ptr(tintColor));
 	ImGui::SliderFloat("rotate Square1", &m_SquareRotate, -360.0f, 360.0f);
+	ImGui::SliderFloat("worms Y position", &wormsPosition.y, 0, 10.0f);
+	ImGui::SliderFloat("velocty", &velocity, 0, 1.0f);
 	ImGui::SliderFloat2("position", m_ChernoPosition, -10.0f, 10.f, "%.3f");
+	ImGui::Text("WomrsWindowPosition x : %f y : %f", WindowWomrsPosition.x, WindowWomrsPosition.y);
 	ImGui::End();
 }
 

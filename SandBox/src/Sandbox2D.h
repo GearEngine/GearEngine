@@ -35,5 +35,10 @@ private:
 	float pastTime = 0.0f;
 	float frameDelay = 0.04f;
 
+	glm::vec3 wormsPosition = { 0.0f, 0.0f, -0.1f };
+	glm::vec4 WindowWomrsPosition;
+	float gravity = 0.98f;
+	float velocity = 0.0f;
+
 	static bool temp;
 };
