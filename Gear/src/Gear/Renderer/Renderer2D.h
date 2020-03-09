@@ -1,7 +1,7 @@
 #pragma once
 
 #include "OrthographicCamera.h"
-#include "Texture.h"
+#include "Animation.h"
 
 namespace Gear {
 
@@ -22,8 +22,14 @@ namespace Gear {
 
 		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color);
 		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color);
-		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture>& texture, float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f), int slot = 0, int x = 0, int y = 0);
-		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture>& texture, float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f), int slot = 0, int x = 0, int y = 0);
-	};
+		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture>& texture, float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f));
+		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture>& texture, float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f));
 	
+		static void DrawAnimationQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Animation2D> animation, const glm::vec4& tintColor = glm::vec4(1.0f));
+		static void DrawAnimationQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Animation2D> animation, const glm::vec4& tintColor = glm::vec4(1.0f));
+		static void DrawAnimationRotateQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Animation2D> animation, const glm::vec4& tintColor = glm::vec4(1.0f));
+		static void DrawAnimationRotateQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Animation2D> animation, const glm::vec4& tintColor = glm::vec4(1.0f));
+
+
+	};
 }

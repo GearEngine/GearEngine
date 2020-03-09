@@ -34,7 +34,7 @@ namespace Gear {
 		return nullptr;
 	}
 
-	Ref<Texture2D> Texture2D::Create(const std::string & path, int indexX, int indexY)
+	Ref<FrameTexture2D> FrameTexture2D::Create(const std::string & path, int frameX, int frameY)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -42,7 +42,7 @@ namespace Gear {
 			GR_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return CreateRef<OpenGLFrameTexture2D>(path, indexX, indexY);
+			return CreateRef<OpenGLFrameTexture2D>(path, frameX, frameY);
 		}
 		GR_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;

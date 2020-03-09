@@ -16,7 +16,8 @@ void Sandbox2D::OnAttach()
 	GR_PROFILE_FUNCTION();
 
 	//m_CheckerboardTexture = Gear::Texture2D::Create("assets/textures/Checkerboard.png");
-	m_Worms = Gear::Texture2D::Create("assets/textures/temp.png", 1, 20);
+	auto texture = Gear::FrameTexture2D::Create("assets/textures/wairbakd.png", 1, 10);
+	m_Worms = Gear::Animation2D::Create(texture, 0.05f, true);
 }
 
 void Sandbox2D::OnDetach()
@@ -37,11 +38,16 @@ void Sandbox2D::OnUpdate(Gear::Timestep ts)
 	WindowWomrsPosition.y *= 360;
 	WindowWomrsPosition.y += 360;
 
+	if (Gear::Input::IsKeyPressd(GR_KEY_SPACE))
+	{
+		m_Worms->Start();
+	}
 
-	velocity += ts * gravity * 0.01;
+	m_Worms->Update(ts);
+	/*velocity += ts * gravity * 0.01;
 	if (wormsPosition.y == 0.0)
 		velocity = 0.0f;
-	wormsPosition.y -= velocity;
+	wormsPosition.y -= velocity;*/
 
 	auto color = Gear::Renderer2D::getPixel((int)WindowWomrsPosition.x, (int)WindowWomrsPosition.y - 30);
 	auto[r, g, b] = color;
@@ -81,7 +87,7 @@ void Sandbox2D::OnUpdate(Gear::Timestep ts)
 		//Gear::Renderer2D::DrawQuad({ m_ChernoPosition[0], m_ChernoPosition[1] }, { 1.0f, 1.0f }, m_Cherno, 1.0f, tintColor);
 
 		Gear::Renderer2D::DrawQuad({ 0.0f, -4.0f }, { 2.0f, 1.0f }, m_SquareColor);
-		Gear::Renderer2D::DrawRotatedQuad(wormsPosition, { 1.f, 1.0f }, glm::radians(0.0f), m_Worms, 1.0f, tintColor, 0, x, y);
+		Gear::Renderer2D::DrawAnimationRotateQuad(wormsPosition, { 1.f, 1.0f }, glm::radians(0.0f), m_Worms, tintColor);
 		//Gear::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 1.f, 1.0f }, glm::radians(0.0f), m_CheckerboardTexture, 1.0f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f), 1);
 		Gear::Renderer2D::EndScene();
 

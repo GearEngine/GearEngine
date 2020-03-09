@@ -28,7 +28,7 @@ namespace Gear {
 	};
 
 	class OpenGLFrameTexture2D
-		: public Texture2D
+		: public FrameTexture2D
 	{
 	public:
 		OpenGLFrameTexture2D(const std::string &path, int frameX, int frameY);
@@ -39,7 +39,11 @@ namespace Gear {
 
 		virtual void SetData(void* data, uint32_t size) override {};
 
-		virtual void Bind(int indexX, int indexY, uint32_t slot =0) const override;
+		virtual void Bind(uint32_t slot = 0) const override {};
+		virtual void Bind(int indexX, int indexY, uint32_t slot = 0) const override;
+
+		virtual inline const uint32_t GetMaxFrameX() const override { return m_FrameX; }
+		virtual inline const uint32_t GetMaxFrameY() const override { return m_FrameY; }
 
 	private:
 		void DivideTexture(unsigned char* data);

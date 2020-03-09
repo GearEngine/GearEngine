@@ -97,6 +97,7 @@ namespace Gear {
 		glBindTextureUnit(slot, m_RendererID);
 	}
 
+
 	/////////////////////////////////////////////////////////////
 	// Texture2D Buffer /////////////////////////////////////////
 	/////////////////////////////////////////////////////////////
@@ -158,11 +159,11 @@ namespace Gear {
 		m_RendererIDs.clear();
 	}
 
-	void OpenGLFrameTexture2D::Bind(int indexX, int indexY, uint32_t slot) const
+	void OpenGLFrameTexture2D::Bind(int frameX, int frameY, uint32_t slot) const
 	{
 		GR_PROFILE_FUNCTION();
 
-		glBindTextureUnit(slot, m_RendererIDs[indexX][indexY]);
+		glBindTextureUnit(slot, m_RendererIDs[frameX][frameY]);
 	}
 
 	void OpenGLFrameTexture2D::DivideTexture(unsigned char * data)
