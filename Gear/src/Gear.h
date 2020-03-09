@@ -22,8 +22,7 @@
 
 #include "Gear/Renderer/Buffer.h"
 #include "Gear/Renderer/Shader.h"
-#include "Gear/Renderer/Texture.h"
-#include "Gear/Renderer/Animation.h"
+#include "Gear/Renderer/Animator.h"
 #include "Gear/Renderer/VertexArray.h"
 
 #include "Gear/Renderer/OrthographicCamera.h"

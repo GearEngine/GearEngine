@@ -16,8 +16,12 @@ void Sandbox2D::OnAttach()
 	GR_PROFILE_FUNCTION();
 
 	//m_CheckerboardTexture = Gear::Texture2D::Create("assets/textures/Checkerboard.png");
-	auto texture = Gear::FrameTexture2D::Create("assets/textures/wairbakd.png", 1, 10);
-	m_Worms = Gear::Animation2D::Create(texture, 0.05f, true);
+	auto airStrike = Gear::FrameTexture2D::Create("assets/textures/wairbakd.png", 1, 10);
+	auto idle = Gear::FrameTexture2D::Create("assets/textures/wbrth1.png", 1, 15);
+	auto walk = Gear::FrameTexture2D::Create("assets/textures/wwalk.png", 1, 15);
+	wormsAnimation.AddAnimation("CallAirStrike", Gear::Animation2D::Create(airStrike, 0.05f, false));
+	wormsAnimation.AddAnimation("Idle", Gear::Animation2D::Create(idle, 0.05f, false));
+	wormsAnimation.AddAnimation("Walk", Gear::Animation2D::Create(walk, 0.05f, false));
 }
 
 void Sandbox2D::OnDetach()
@@ -40,10 +44,11 @@ void Sandbox2D::OnUpdate(Gear::Timestep ts)
 
 	if (Gear::Input::IsKeyPressd(GR_KEY_SPACE))
 	{
-		m_Worms->Start();
+		OnAirStrike = true;
+		OnIdle = false;
 	}
 
-	m_Worms->Update(ts);
+
 	/*velocity += ts * gravity * 0.01;
 	if (wormsPosition.y == 0.0)
 		velocity = 0.0f;

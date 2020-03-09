@@ -27,6 +27,7 @@ namespace Gear {
 		static Ref<Animation2D> Create(Ref<FrameTexture2D> sprite, float fps, bool loop = false);
 		static Ref<Animation2D> Create(Ref<FrameTexture2D> sprite, float fps, const std::vector<std::pair<int, int>> frameOrder, bool loop = false);
 
+	public:
 		void Bind(uint32_t slot = 0) const;
 		
 		void Update(Timestep ts);

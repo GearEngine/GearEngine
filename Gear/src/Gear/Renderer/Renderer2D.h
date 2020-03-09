@@ -30,6 +30,5 @@ namespace Gear {
 		static void DrawAnimationRotateQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Animation2D> animation, const glm::vec4& tintColor = glm::vec4(1.0f));
 		static void DrawAnimationRotateQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Animation2D> animation, const glm::vec4& tintColor = glm::vec4(1.0f));
 
-
 	};
 }

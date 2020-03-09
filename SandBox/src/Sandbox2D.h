@@ -22,7 +22,7 @@ private:
 	Gear::Ref<Gear::Shader> m_FlatColorShader;
 
 	Gear::Ref<Gear::Texture2D> m_CheckerboardTexture;
-	Gear::Ref<Gear::Animation2D> m_Worms;
+	Gear::Animator2D wormsAnimation;
 	float m_ChernoPosition[2] = {0.0f, 0.0f};
 
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
@@ -39,6 +39,10 @@ private:
 	glm::vec4 WindowWomrsPosition;
 	float gravity = 0.98f;
 	float velocity = 0.0f;
+
+	bool OnWalk = false;
+	bool OnAirStrike = false;
+	bool OnIdle = true;
 
 	static bool temp;
 };
