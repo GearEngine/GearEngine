@@ -17,6 +17,9 @@
 #include "Gear/Core/Log.h"
 #include "Gear/Debug/Instrumentor.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #ifdef GR_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif

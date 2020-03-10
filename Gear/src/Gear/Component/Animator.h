@@ -1,10 +1,11 @@
 #pragma once
 
-#include "Animation.h"
+#include "Component.h"
+#include "Gear/Renderer/Animation.h"
 
 namespace Gear {
 
-	class Animator2D
+	class Animator2D : public Component
 	{
 	public:
 		Animator2D() = default;

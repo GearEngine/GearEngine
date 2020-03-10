@@ -17,11 +17,11 @@ void Sandbox2D::OnAttach()
 
 	//m_CheckerboardTexture = Gear::Texture2D::Create("assets/textures/Checkerboard.png");
 	auto airStrike = Gear::FrameTexture2D::Create("assets/textures/wairbakd.png", 1, 10);
-	auto idle = Gear::FrameTexture2D::Create("assets/textures/wbrth1.png", 1, 15);
-	auto walk = Gear::FrameTexture2D::Create("assets/textures/wwalk.png", 1, 15);
-	wormsAnimation.AddAnimation("CallAirStrike", Gear::Animation2D::Create(airStrike, 0.05f, false));
-	wormsAnimation.AddAnimation("Idle", Gear::Animation2D::Create(idle, 0.05f, false));
-	wormsAnimation.AddAnimation("Walk", Gear::Animation2D::Create(walk, 0.05f, false));
+	/*auto idle = Gear::FrameTexture2D::Create("assets/textures/wbrth1.png", 1, 15);
+	auto walk = Gear::FrameTexture2D::Create("assets/textures/wwalk.png", 1, 15);*/
+	wormsAnimation = Gear::Animation2D::Create(airStrike, 0.1f, false);
+	/*wormsAnimation.AddAnimation("Idle", Gear::Animation2D::Create(idle, 0.05f, false));
+	wormsAnimation.AddAnimation("Walk", Gear::Animation2D::Create(walk, 0.05f, false));*/
 }
 
 void Sandbox2D::OnDetach()
@@ -36,6 +36,8 @@ void Sandbox2D::OnUpdate(Gear::Timestep ts)
 	m_CameraController.OnUpdate(ts);
 
 	WindowWomrsPosition = glm::vec4(wormsPosition, 1.0f);
+
+	//screen position
 	WindowWomrsPosition = m_CameraController.GetCamera().GetViewProjectionMatrix() * WindowWomrsPosition;
 	WindowWomrsPosition.x *= 640;
 	WindowWomrsPosition.x += 640;
@@ -44,10 +46,9 @@ void Sandbox2D::OnUpdate(Gear::Timestep ts)
 
 	if (Gear::Input::IsKeyPressd(GR_KEY_SPACE))
 	{
-		OnAirStrike = true;
-		OnIdle = false;
+		wormsAnimation->Start();
 	}
-
+	wormsAnimation->Update(ts);
 
 	/*velocity += ts * gravity * 0.01;
 	if (wormsPosition.y == 0.0)
@@ -92,7 +93,7 @@ void Sandbox2D::OnUpdate(Gear::Timestep ts)
 		//Gear::Renderer2D::DrawQuad({ m_ChernoPosition[0], m_ChernoPosition[1] }, { 1.0f, 1.0f }, m_Cherno, 1.0f, tintColor);
 
 		Gear::Renderer2D::DrawQuad({ 0.0f, -4.0f }, { 2.0f, 1.0f }, m_SquareColor);
-		Gear::Renderer2D::DrawAnimationRotateQuad(wormsPosition, { 1.f, 1.0f }, glm::radians(0.0f), m_Worms, tintColor);
+		Gear::Renderer2D::DrawAnimationRotateQuad(wormsPosition, { 1.f, 1.0f }, glm::radians(0.0f), wormsAnimation, tintColor);
 		//Gear::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 1.f, 1.0f }, glm::radians(0.0f), m_CheckerboardTexture, 1.0f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f), 1);
 		Gear::Renderer2D::EndScene();
 

@@ -30,11 +30,11 @@ namespace Gear {
 	public:
 		void Bind(uint32_t slot = 0) const;
 		
-		void Update(Timestep ts);
-		void Start();
-		void Stop();
-		void Pause();
-		void Resume();
+		virtual void Update(Timestep ts) override;
+		virtual void Start() override;
+		virtual void Stop() override;
+		virtual void Pause() override;
+		virtual void Resume() override;
 
 		inline void SetFrameX(uint32_t frameX) { m_CurrentFrameX = frameX; }
 		inline void SetFrameY(uint32_t frameY) { m_CurrentFrameY = frameY; }

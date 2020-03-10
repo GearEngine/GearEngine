@@ -119,11 +119,11 @@ namespace Gear {
 
 	void Animation2D::Resume()
 	{
-		m_OnAnimation = false;
+		m_OnAnimation = true;
 	}
 
 	void Animation2D::Pause()
 	{
-		m_OnAnimation = true;
+		m_OnAnimation = false;
 	}
 }

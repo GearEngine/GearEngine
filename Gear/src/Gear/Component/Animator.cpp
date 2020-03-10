@@ -15,6 +15,8 @@ namespace Gear {
 
 	void Animator2D::PlayAnimation(std::string name)
 	{
+		m_CurrentAnimation->Stop();
+
 		auto find = m_AnimationList.find(name);
 
 		if (find == m_AnimationList.end())

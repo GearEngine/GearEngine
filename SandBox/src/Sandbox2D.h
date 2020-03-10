@@ -22,7 +22,7 @@ private:
 	Gear::Ref<Gear::Shader> m_FlatColorShader;
 
 	Gear::Ref<Gear::Texture2D> m_CheckerboardTexture;
-	Gear::Animator2D wormsAnimation;
+	Gear::Ref<Gear::Animation2D> wormsAnimation;
 	float m_ChernoPosition[2] = {0.0f, 0.0f};
 
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
