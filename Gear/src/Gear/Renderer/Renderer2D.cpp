@@ -7,6 +7,8 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "glad/glad.h"
+
 namespace Gear {
 
 	struct Renderer2DStorage
@@ -58,7 +60,9 @@ namespace Gear {
 
 		s_Data->TextureShader = Shader::Create("assets/shaders/Texture.glsl");
 		s_Data->TextureShader->Bind();
-		s_Data->TextureShader->SetInt("u_Texture", 0);
+		s_Data->TextureShader->SetInt("u_Texture0", 0);
+		s_Data->TextureShader->SetInt("u_Texture1", 1);
+		s_Data->TextureShader->SetInt("u_Texture2", 2);
 	}
 
 	void Renderer2D::Shutdown()
@@ -79,7 +83,18 @@ namespace Gear {
 	void Renderer2D::EndScene()
 	{
 		GR_PROFILE_FUNCTION();
+		
+	}
 
+	std::tuple<int, int, int> Renderer2D::getPixel(int x, int y)
+	{
+		unsigned char* data = new unsigned char[1];
+
+		glReadPixels(x, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+		std::tuple<int, int, int> ret = { data[0], data[1], data[2] };
+
+		return ret;
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
@@ -158,6 +173,47 @@ namespace Gear {
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
 		texture->Bind();
+
+		glm::mat4 translate = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f, })
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		s_Data->TextureShader->SetMat4("u_Transform", translate);
+
+		s_Data->QuardVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
+	}
+
+	void Renderer2D::DrawAnimationQuad(const glm::vec2 & position, const glm::vec2 & size, const Ref<Animation2D> animation, const glm::vec4 & tintColor)
+	{
+		DrawAnimationQuad({ position.x, position.y, 0.0f }, size, animation, tintColor);
+	}
+
+	void Renderer2D::DrawAnimationQuad(const glm::vec3 & position, const glm::vec2 & size, const Ref<Animation2D> animation, const glm::vec4 & tintColor)
+	{
+		GR_PROFILE_FUNCTION();
+
+		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
+		animation->Bind();
+
+		glm::mat4 translate = glm::translate(glm::mat4(1.0f), position)
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		s_Data->TextureShader->SetMat4("u_Transform", translate);
+
+		s_Data->QuardVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
+	}
+
+	void Renderer2D::DrawAnimationRotateQuad(const glm::vec2 & position, const glm::vec2 & size, float rotation, const Ref<Animation2D> animation, const glm::vec4 & tintColor)
+	{
+		DrawAnimationRotateQuad({ position.x, position.y, 0.0f }, size, rotation, animation, tintColor);
+	}
+
+	void Renderer2D::DrawAnimationRotateQuad(const glm::vec3 & position, const glm::vec2 & size, float rotation, const Ref<Animation2D> animation, const glm::vec4 & tintColor)
+	{
+		GR_PROFILE_FUNCTION();
+
+		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
+		animation->Bind();
 
 		glm::mat4 translate = glm::translate(glm::mat4(1.0f), position)
 			* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f, })

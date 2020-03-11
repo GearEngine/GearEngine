@@ -23,6 +23,35 @@ namespace Gear {
 	public:
 		static Ref<Texture2D> Create(uint32_t width, uint32_t height);
 		static Ref<Texture2D> Create(const std::string& path);
+		
+	};
 
+	class FrameTexture2D : public Texture
+	{
+	public:
+		static Ref<FrameTexture2D> Create(const std::string& path, int frameX, int frameY);
+
+	public:
+		virtual void Bind(int indexX, int indexY, uint32_t slot = 0) const = 0;
+
+		virtual const uint32_t GetMaxFrameX() const = 0;
+		virtual const uint32_t GetMaxFrameY() const = 0;
+	};
+
+	class TextureStorage
+	{
+	public:
+		static Ref<Texture2D> GetTexture2D(const std::string& name);
+		static Ref<FrameTexture2D> GetFrameTexture2D(const std::string& name);
+		static void AddTexture2D(const std::string& name, Ref<Texture2D> texture);
+		static void AddFrameTexture2D(const std::string& name, Ref<FrameTexture2D> texture);
+		//static void DeleteTexture2D(const std::string& name, Ref<FrameTexture2D> texture);
+		//static void DeleteFrameTexture2D(const std::string& name, Ref<FrameTexture2D> texture);
+
+		static void Clear();
+
+	private:
+		static std::unordered_map<std::string, Ref<Texture2D>> m_Texture2Ds;
+		static std::unordered_map<std::string, Ref<FrameTexture2D>> m_FrameTexture2Ds;
 	};
 }

@@ -1,6 +1,6 @@
 workspace "Gear"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "Worms"
 
 	configurations
 	{
@@ -18,6 +18,7 @@ IncludeDir["Glad"] = "Gear/vendor/Glad/include"
 IncludeDir["ImGui"] = "Gear/vendor/imgui"
 IncludeDir["glm"] = "Gear/vendor/glm"
 IncludeDir["stb_image"] = "Gear/vendor/stb_image"
+IncludeDir["fmod"] = "Gear/vendor/fmod/include"
 
 include "Gear/vendor/Glad"
 include "Gear/vendor/GLFW"
@@ -43,7 +44,8 @@ project "Gear"
 		"%{prj.name}/vendor/stb_image/**.h",
 		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl"
+		"%{prj.name}/vendor/glm/glm/**.inl",
+		"%{prj.name}/vendor/fmod/include/**.h"
 	}
 	
 	defines
@@ -58,15 +60,20 @@ project "Gear"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.fmod}"
 	}
-
+	libdirs
+	{
+		"%{prj.name}/vendor/fmod/lib",
+	}
 	links
 	{
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"opengl32.lib"
+		"opengl32.lib",
+		"fmod64_vc.lib"
 	}
 
 	filter "system:windows"
@@ -115,7 +122,57 @@ project "Sandbox"
 		"Gear/vendor/spdlog/include",
 		"Gear/src",
 		"Gear/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.fmod}"
+	}
+	links
+	{
+		"Gear"
+	}
+	
+
+	filter "system:windows"
+		systemversion "latest"
+
+	filter "configurations:Debug"
+		defines "GR_DEBUG"
+		runtime "Debug"
+		symbols "on"
+	
+	filter "configurations:Release"
+		defines "GR_RELEASE"
+		runtime "Release"
+		optimize "on"
+	
+	filter "configurations:Dist"
+		defines "GR_DIST"
+		runtime "Release"
+		optimize "on"
+
+project "Worms"
+	location "Worms"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+	
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+	
+	includedirs
+	{
+		"Gear/vendor/spdlog/include",
+		"Gear/src",
+		"%{prj.name}/src",
+		"Gear/vendor",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.fmod}"
 	}
 	links
 	{
