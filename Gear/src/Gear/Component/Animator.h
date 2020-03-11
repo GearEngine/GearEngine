@@ -25,7 +25,6 @@ namespace Gear {
 	private:
 		std::unordered_map<std::string, Ref<Animation2D>> m_AnimationList;
 		Ref<Animation2D> m_CurrentAnimation;
-		
 	};
 
 }

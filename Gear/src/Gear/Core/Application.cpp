@@ -3,8 +3,8 @@
 
 #include "Gear/Core/Log.h"
 
-#include "Gear/Core/SceneManager.h"
 #include "Gear/Renderer/Renderer.h"
+#include "Gear/Manager/Sound.h"
 
 #include <GLFW/glfw3.h>
 

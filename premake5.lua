@@ -1,6 +1,6 @@
 workspace "Gear"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "Worms"
 
 	configurations
 	{
@@ -103,6 +103,54 @@ project "Gear"
 
 project "Sandbox"
 	location "Sandbox"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+	
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+	
+	includedirs
+	{
+		"Gear/vendor/spdlog/include",
+		"Gear/src",
+		"Gear/vendor",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.fmod}"
+	}
+	links
+	{
+		"Gear"
+	}
+	
+
+	filter "system:windows"
+		systemversion "latest"
+
+	filter "configurations:Debug"
+		defines "GR_DEBUG"
+		runtime "Debug"
+		symbols "on"
+	
+	filter "configurations:Release"
+		defines "GR_RELEASE"
+		runtime "Release"
+		optimize "on"
+	
+	filter "configurations:Dist"
+		defines "GR_DIST"
+		runtime "Release"
+		optimize "on"
+
+project "Worms"
+	location "Worms"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"

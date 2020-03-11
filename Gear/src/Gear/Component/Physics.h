@@ -4,8 +4,10 @@
 
 namespace Gear {
 
-	class Phisics : public Component
+	class Physics : public Component
 	{
+
+
 	public:
 
 	};

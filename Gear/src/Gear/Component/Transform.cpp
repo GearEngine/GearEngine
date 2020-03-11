@@ -45,7 +45,7 @@ namespace Gear {
 	void Transform2D::intialize()
 	{
 		m_Position = { 0.f,0.f,0.f };
-		m_Scale = { 0.f,0.f };
+		m_Scale = { 1.0f, 1.0f };
 		m_Rotation = 0.f;
 	}
 

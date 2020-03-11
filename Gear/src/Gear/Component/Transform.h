@@ -11,7 +11,7 @@ namespace Gear {
 
 	};
 
-	class Transform2D
+	class Transform2D : public Transform
 	{
 	public:
 		Transform2D();

@@ -4,7 +4,6 @@
 #include "Gear/Core/Application.h"
 #include "Gear/Core/Layer.h"
 #include "Gear/Core/Log.h"
-#include "Gear/Core/SceneManager.h"
 
 #include "Gear/Core/Timestep.h"
 
@@ -22,8 +21,11 @@
 
 #include "Gear/Renderer/Buffer.h"
 #include "Gear/Renderer/Shader.h"
-#include "Gear/Component/Animator.h"
+#include "Gear/Component/Entity.h"
 #include "Gear/Renderer/VertexArray.h"
 
 #include "Gear/Renderer/OrthographicCamera.h"
 // ------------------------------------- 
+
+#include "Gear/Manager/SceneManager.h"
+#include "Gear/Manager/Sound.h"
