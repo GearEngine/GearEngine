@@ -33,7 +33,8 @@ namespace Gear {
 		GR_PROFILE_FUNCTION();
 
 		Renderer::Shutdown();
-		Gear::SceneManager::Destory();
+		SceneManager::Destory();
+		SoundSystem::Destroy();
 	}
 
 	void Application::OnEvent(Event & e)

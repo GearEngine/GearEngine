@@ -21,10 +21,6 @@ public:
 		scene->PushLayer(new Sandbox2D());
 		Gear::SceneManager::Get()->AddScene(scene->GetName(), scene);
 
-		Gear::Scene* scene2 = new Gear::Scene("SampleScene2");
-		scene2->PushLayer(new Sandbox2D());
-		Gear::SceneManager::Get()->AddScene(scene2->GetName(), scene2);
-
 		Gear::SceneManager::Get()->changeScene("SampleScene");
 	}
 

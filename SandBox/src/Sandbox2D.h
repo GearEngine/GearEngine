@@ -37,6 +37,7 @@ private:
 
 	glm::vec3 wormsPosition = { 0.0f, 0.0f, -0.1f };
 	glm::vec4 WindowWomrsPosition;
+	Gear::Ref<Gear::Sound> m_Sound;
 	float gravity = 0.98f;
 	float velocity = 0.0f;
 

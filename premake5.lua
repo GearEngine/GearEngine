@@ -18,6 +18,7 @@ IncludeDir["Glad"] = "Gear/vendor/Glad/include"
 IncludeDir["ImGui"] = "Gear/vendor/imgui"
 IncludeDir["glm"] = "Gear/vendor/glm"
 IncludeDir["stb_image"] = "Gear/vendor/stb_image"
+IncludeDir["fmod"] = "Gear/vendor/fmod/include"
 
 include "Gear/vendor/Glad"
 include "Gear/vendor/GLFW"
@@ -43,7 +44,8 @@ project "Gear"
 		"%{prj.name}/vendor/stb_image/**.h",
 		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl"
+		"%{prj.name}/vendor/glm/glm/**.inl",
+		"%{prj.name}/vendor/fmod/include/**.h"
 	}
 	
 	defines
@@ -58,15 +60,20 @@ project "Gear"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.fmod}"
 	}
-
+	libdirs
+	{
+		"%{prj.name}/vendor/fmod/lib",
+	}
 	links
 	{
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"opengl32.lib"
+		"opengl32.lib",
+		"fmod64_vc.lib"
 	}
 
 	filter "system:windows"
@@ -115,7 +122,8 @@ project "Sandbox"
 		"Gear/vendor/spdlog/include",
 		"Gear/src",
 		"Gear/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.fmod}"
 	}
 	links
 	{

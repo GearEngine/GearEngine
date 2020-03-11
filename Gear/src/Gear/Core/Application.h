@@ -4,6 +4,7 @@
 
 #include "Window.h"
 #include "Gear/Core/Scene.h"
+#include "Gear/Core/Sound.h"
 #include "Gear/Events/Event.h"
 #include "Gear/Events/ApplicationEvent.h"
 
