@@ -22,8 +22,8 @@
 ## BLOG 
 - [Junsoo Kang](https://blog.naver.com/zxwnstn)  
 Game Developer 
-- [Kiseop Kim](https://blog.naver.com/zxwnstn)  
-Software Engineer
+- [Kiseop Kim](https://blog.naver.com/kiseop91)  
+CLO3D Software Engineer 
    
 
 ## Document 
