@@ -2,7 +2,6 @@
 
 #include "Component.h"
 
-#define ToString(type) #type
 namespace Gear {
 
 	class State : public Component

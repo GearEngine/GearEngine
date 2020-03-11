@@ -11,9 +11,7 @@ namespace Gear {
 
 
 	public:
-
 		std::unordered_map<std::string, Ref<Sound>> m_Sound;
-
 	};
 
 }

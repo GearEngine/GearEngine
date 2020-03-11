@@ -169,6 +169,7 @@ project "Worms"
 	{
 		"Gear/vendor/spdlog/include",
 		"Gear/src",
+		"%{prj.name}/src",
 		"Gear/vendor",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.fmod}"

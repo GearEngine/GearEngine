@@ -4,10 +4,14 @@
 
 namespace Gear {
 
+	//Å°µî·Ï, 
 	class Controller : public Component
 	{
-	private:
+	public:
 
+
+	private:
+		
 	};
 
 }
