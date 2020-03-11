@@ -1,9 +1,6 @@
-# GearEngine
-<img src="https://ci.appveyor.com/api/projects/status/github/GearEngine/GearEngine?branch=master&svg=true"> 
-<img src="https://img.shields.io/github/issues-pr/GearEngine/GearEngine/GearEngine"> 
-<img src="https://img.shields.io/github/languages/top/GearEngine/GearEngine">  
-<img src="https://img.shields.io/github/contributors/GearEngine/GearEngine"> 
-<center><img src="./Image/Gear Engine.png" width="600" height="600"></center> 
+# GearEngine 
+<img src="https://ci.appveyor.com/api/projects/status/github/GearEngine/GearEngine?branch=master&svg=true">  <img src="https://img.shields.io/github/issues-pr/GearEngine/GearEngine/GearEngine">  <img src="https://img.shields.io/github/languages/top/GearEngine/GearEngine">  <img src="https://img.shields.io/github/contributors/GearEngine/GearEngine"> 
+<img src="./Image/Gear Engine.png" width="600" height="600">
  
 ## 🚀Introduce GearEngine 
 
