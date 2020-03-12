@@ -1,10 +1,10 @@
 # GearEngine 
 <img src="https://ci.appveyor.com/api/projects/status/github/GearEngine/GearEngine?branch=master&svg=true">  <img src="https://img.shields.io/github/issues-pr/GearEngine/GearEngine/GearEngine">  <img src="https://img.shields.io/github/languages/top/GearEngine/GearEngine">  <img src="https://img.shields.io/github/contributors/GearEngine/GearEngine"> 
-<img src="./Image/Gear Engine.png" width="960" height="600">
+<img src="./Image/Gear Engine.png" width="960" height="580">
  
 ## 🚀Introduce GearEngine 
 
-### Aiming at high performance multi-platform game engine. C++ 
+### Aiming at high performance multi-platform C++ Game Engine.
 
 - Our Goal
 - 3D & 2D Game 
