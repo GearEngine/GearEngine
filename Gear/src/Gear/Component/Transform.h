@@ -15,8 +15,10 @@ namespace Gear {
 	{
 	public:
 		Transform2D();
-		Transform2D(const glm::vec3& position, const glm::vec2& scale, const float rotate);
 
+		virtual void Update(Timestep ts) override;
+
+		void SetTransform(const glm::vec3& position, const float rotation, const glm::vec2& scale);
 		void SetPosition(const glm::vec3& position);
 		void SetRotation(const float rotation);
 		void SetScale(const glm::vec2& scale);

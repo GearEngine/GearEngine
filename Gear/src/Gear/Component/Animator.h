@@ -11,8 +11,8 @@ namespace Gear {
 		Animator2D() = default;
 		~Animator2D();
 
+		virtual void Update(Timestep ts) override;
 		void AddAnimation(std::string name, Ref<Animation2D> animation);
-		void Update(Timestep ts);
 
 		void PlayAnimation(std::string name);
 		void PauseAnimation();

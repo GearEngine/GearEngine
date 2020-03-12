@@ -6,7 +6,7 @@ namespace Gear {
 
 	class Physics : public Component
 	{
-
+		virtual void Update(Timestep ts) override;
 
 	public:
 

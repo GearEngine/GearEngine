@@ -5,7 +5,7 @@ namespace Gear {
 	Entity2D::~Entity2D()
 	{
 		DetatchSoundPlayer();
-		DetatchState();
+		DetatchFSM();
 		DetatchTransform();
 		DetatchAnimator();
 		DetatchPhysics();
@@ -16,10 +16,10 @@ namespace Gear {
 		if (!m_SoundPlayer)
 			m_SoundPlayer = new SoundPlayer;
 	}
-	void Entity2D::AttatchState()
+	void Entity2D::AttatchFSM()
 	{
-		if (!m_State)
-			m_State = new State;
+		if (!m_FSM)
+			m_FSM = new FSM;
 	}
 	void Entity2D::AttatchTransform()
 	{
@@ -47,10 +47,10 @@ namespace Gear {
 		if (m_SoundPlayer)
 			delete m_SoundPlayer;
 	}
-	void Entity2D::DetatchState()
+	void Entity2D::DetatchFSM()
 	{
-		if (m_State)
-			delete m_State;
+		if (m_FSM)
+			delete m_FSM;
 	}
 	void Entity2D::DetatchTransform()
 	{
@@ -78,10 +78,10 @@ namespace Gear {
 		if (m_SoundPlayer)
 			m_SoundPlayer->Activate();
 	}
-	void Entity2D::ActivateState()
+	void Entity2D::ActivateFSM()
 	{
-		if (m_State)
-			m_State->Activate();
+		if (m_FSM)
+			m_FSM->Activate();
 	}
 	void Entity2D::ActivateTransform()
 	{
@@ -109,10 +109,10 @@ namespace Gear {
 		if (m_SoundPlayer)
 			m_SoundPlayer->InActivate();
 	}
-	void Entity2D::InActivateState()
+	void Entity2D::InActivateFSM()
 	{
-		if (m_State)
-			m_State->InActivate();
+		if (m_FSM)
+			m_FSM->InActivate();
 	}
 	void Entity2D::InActivateTransform()
 	{

@@ -16,6 +16,7 @@
 
 #include "Gear/Core/Log.h"
 #include "Gear/Debug/Instrumentor.h"
+#include "Gear/Core/Timestep.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

@@ -5,4 +5,8 @@ namespace Gear {
 
 	
 
+	void SoundPlayer::Update(Timestep ts)
+	{
+	}
+
 }

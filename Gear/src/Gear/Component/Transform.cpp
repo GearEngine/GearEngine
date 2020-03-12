@@ -8,10 +8,16 @@ namespace Gear {
 	{
 		intialize();
 	}
-	
-	Transform2D::Transform2D(const glm::vec3& position, const glm::vec2& scale, const float rotate)
-		:m_Position(position), m_Scale(scale), m_Rotation(rotate), m_Translate(glm::mat4(1.0f))
+
+	void Transform2D::Update(Timestep ts)
 	{
+	}
+
+	void Transform2D::SetTransform(const glm::vec3& position, const float rotation, const glm::vec2& scale)
+	{
+		m_Position = position;
+		m_Scale = scale;
+		m_Rotation = rotation;
 	}
 
 	void Transform2D::SetPosition(const glm::vec3 & position)
