@@ -56,6 +56,7 @@ project "Gear"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
+		"%{prj.name}/vendor",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
@@ -66,6 +67,7 @@ project "Gear"
 	libdirs
 	{
 		"%{prj.name}/vendor/fmod/lib",
+		"Gear/vendor/box2d"
 	}
 	links
 	{
@@ -120,6 +122,7 @@ project "Sandbox"
 	includedirs
 	{
 		"Gear/vendor/spdlog/include",
+		"Gear/vendor/box2d",
 		"Gear/src",
 		"Gear/vendor",
 		"%{IncludeDir.glm}",
@@ -129,7 +132,12 @@ project "Sandbox"
 	{
 		"Gear"
 	}
-	
+
+	libdirs
+	{
+		"%{prj.name}/vendor/fmod/lib",
+		"Gear/vendor/box2d"
+	}
 
 	filter "system:windows"
 		systemversion "latest"
@@ -168,17 +176,24 @@ project "Worms"
 	includedirs
 	{
 		"Gear/vendor/spdlog/include",
+		"Gear/vendor/box2d",
 		"Gear/src",
 		"%{prj.name}/src",
 		"Gear/vendor",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.fmod}"
 	}
+
 	links
 	{
 		"Gear"
 	}
-	
+
+	libdirs
+	{
+		"%{prj.name}/vendor/fmod/lib",
+		"Gear/vendor/box2d"
+	}
 
 	filter "system:windows"
 		systemversion "latest"

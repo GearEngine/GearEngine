@@ -2,6 +2,7 @@
 #include <Gear/Core/EntryPoint.h>
 
 #include "InGameScene/Layer/InGameLayer.h"
+#include "box2d/box2d.h"
 
 class Worms : public Gear::Application
 {

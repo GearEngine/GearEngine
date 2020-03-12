@@ -72,6 +72,13 @@
 
 #define GR_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
+
+#ifdef GR_RELEASE
+	#pragma comment (lib,"box2d_rel.lib")
+#elif GR_DEBUG
+	#pragma comment (lib,"box2d_de.lib")
+#endif
+
 namespace Gear {
 
 	template<typename T>
