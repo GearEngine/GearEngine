@@ -4,7 +4,6 @@
 Worm::Worm(const glm::vec3& position, const float rotation, const glm::vec2 scale)
 {
 	//Attach Component
-
 	AttatchAnimator();
 	AttatchPhysics();
 	AttatchSoundPlayer();
@@ -14,9 +13,10 @@ Worm::Worm(const glm::vec3& position, const float rotation, const glm::vec2 scal
 	AttatchDrawer();
 
 	//Register Component specific
-
 	//Animator
-	//TODO : Add Animator
+	m_Animator->AddAnimation("OnMove", Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnMove"), 0.05f, true));
+	m_Animator->AddAnimation("OnUseItem", Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.2f, true));
+	m_Animator->AddAnimation("OnIdle", Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnIdle"), 0.2f, true));
 
 	//Physics
 	//TODO : Add Physics
@@ -56,13 +56,17 @@ Worm::Worm(const glm::vec3& position, const float rotation, const glm::vec2 scal
 	//Drawer
 	m_Drawer->LinkAnimation(m_Animator);
 	m_Drawer->LinkTransform(m_Transform);
+
+	m_Animator->PlayAnimation("OnMove");
 }
 
-void Worm::update(Gear::Timestep ts)
+void Worm::Update(Gear::Timestep ts)
 {
 	m_Controller->Update(ts);
+	m_Animator->Update(ts);
 }
 
 void Worm::Render()
 {
+	m_Drawer->Render();
 }

@@ -53,8 +53,8 @@ namespace Gear {
 
 		uint32_t m_MaxFrameX;
 		uint32_t m_MaxFrameY;
-		uint32_t m_CurrentFrameX;
-		uint32_t m_CurrentFrameY;
+		uint32_t m_CurrentFrameX = 0;
+		uint32_t m_CurrentFrameY = 0;
 
 		bool m_HasFrameOrder = false;
 		std::vector<std::pair<int, int>> m_FrameOrder;

@@ -11,6 +11,18 @@ namespace Gear {
 	void Animator2D::AddAnimation(std::string name, Ref<Animation2D> animation)
 	{
 		m_AnimationList.insert({ name, animation });
+		m_CurrentAnimation = animation;
+	}
+
+	void Animator2D::SetCurrentAnimation(const std::string name)
+	{
+		auto find = m_AnimationList.find(name);
+		if (find == m_AnimationList.end())
+		{
+			GR_CORE_WARN("{0} doesn't exist", name);
+			return;
+		}
+		m_CurrentAnimation = find->second;
 	}
 
 	void Animator2D::PlayAnimation(std::string name)

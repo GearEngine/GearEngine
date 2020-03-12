@@ -61,7 +61,8 @@ namespace Gear {
 		}
 		else
 		{
-			GR_CORE_WARN("%s doesn't exist!", name);
+			GR_CORE_WARN("{0} doesn't exist!", name);
+			return nullptr;
 		}
 	}
 	Ref<FrameTexture2D> TextureStorage::GetFrameTexture2D(const std::string & name)
@@ -73,7 +74,8 @@ namespace Gear {
 		}
 		else
 		{
-			GR_CORE_WARN("%s doesn't exist!", name);
+			GR_CORE_WARN("{0} doesn't exist!", name);
+			return nullptr;
 		}
 	}
 	void TextureStorage::AddTexture2D(const std::string & name, Ref<Texture2D> texture)
@@ -85,7 +87,7 @@ namespace Gear {
 		}
 		else
 		{
-			GR_CORE_WARN("%s aleady exist!", name);
+			GR_CORE_WARN("{0} aleady exist!", name);
 		}
 	}
 
@@ -98,7 +100,7 @@ namespace Gear {
 		}
 		else
 		{
-			GR_CORE_WARN("%s aleady exist!", name);
+			GR_CORE_WARN("{0} aleady exist!", name);
 		}
 	}
 	void TextureStorage::Clear()

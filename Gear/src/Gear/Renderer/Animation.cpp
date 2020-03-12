@@ -88,7 +88,6 @@ namespace Gear {
 		m_Sprite->Bind(m_CurrentFrameX, m_CurrentFrameY, slot);
 	}
 
-
 	void Animation2D::Start()
 	{
 		if (m_HasFrameOrder)

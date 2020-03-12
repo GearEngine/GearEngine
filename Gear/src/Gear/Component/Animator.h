@@ -13,6 +13,7 @@ namespace Gear {
 
 		virtual void Update(Timestep ts) override;
 		void AddAnimation(std::string name, Ref<Animation2D> animation);
+		void SetCurrentAnimation(const std::string name);
 		inline Ref<Animation2D> GetCurrentAnimation() { return m_CurrentAnimation; }
 
 		void PlayAnimation(std::string name);

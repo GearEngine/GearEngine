@@ -9,15 +9,14 @@ public:
 	Worms()
 	{
 		//Load Resource
-		Gear::TextureStorage::AddFrameTexture2D("OnMove", Gear::FrameTexture2D::Create("assets/textures/wwalk.png", 1, 10));
+		Gear::TextureStorage::AddTexture2D("default", Gear::Texture2D::Create("assets/textures/Checkerboard.png"));
+		Gear::TextureStorage::AddFrameTexture2D("OnMove", Gear::FrameTexture2D::Create("assets/textures/wwalk.png", 1, 15));
 		Gear::TextureStorage::AddFrameTexture2D("OnUseItem", Gear::FrameTexture2D::Create("assets/textures/wairbakd.png", 1, 10));
-		Gear::TextureStorage::AddFrameTexture2D("OnIdle", Gear::FrameTexture2D::Create("assets/textures/wbrth1.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("OnIdle", Gear::FrameTexture2D::Create("assets/textures/wbrth1.png", 1, 20));
 
 		Gear::Scene* scene = new Gear::Scene("InGameScene");
 		scene->PushOverlay(m_ImGuilayer);
 		scene->PushLayer(new InGameLayer());
-
-
 
 		Gear::SceneManager::Get()->AddScene(scene->GetName(), scene);
 		Gear::SceneManager::Get()->changeScene("InGameScene");

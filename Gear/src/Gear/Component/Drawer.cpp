@@ -9,7 +9,7 @@
 namespace Gear {
 	Drawer2D::Drawer2D()
 	{
-		m_DefaultTexture = Texture2D::Create("assets/textures/Checkerboard.png");
+		m_DefaultTexture = TextureStorage::GetTexture2D("default");
 		m_DefaultTranslate = glm::translate(glm::mat4(1.0f), {0.0f, 0.0f, 0.0f})
 			* glm::rotate(glm::mat4(1.0f), 0.0f, { 0.0f, 0.0f, 1.0f, })
 			* glm::scale(glm::mat4(1.0f), { 1.0f, 1.0f, 1.0f });

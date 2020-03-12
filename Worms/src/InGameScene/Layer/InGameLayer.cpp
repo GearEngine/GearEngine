@@ -20,10 +20,8 @@ void InGameLayer::OnUpdate(Gear::Timestep ts)
 {
 	m_CameraController.OnUpdate(ts);
 	
-	Gear::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-	Gear::RenderCommand::Clear();
-
-	MousePosition = { Gear::Input::GetMouseX(), 720.0f - Gear::Input::GetMouseY() };
+	worm.Update(ts);
+	/*MousePosition = { Gear::Input::GetMouseX(), 720.0f - Gear::Input::GetMouseY() };
 	MouseWorldPosition = glm::inverse(m_CameraController.GetCamera().GetViewProjectionMatrix()) * glm::vec4(MousePosition, 0.0f, 1.0f);
 
 	MouseWorldPosition.x /= 640;
@@ -31,11 +29,15 @@ void InGameLayer::OnUpdate(Gear::Timestep ts)
 
 	auto CameraPos = m_CameraController.GetCamera().GetPosition();
 	MouseWorldPosition.x += CameraPos.x - 1.77777f * m_CameraController.GetZoomLevel();
-	MouseWorldPosition.y += CameraPos.y - 1.0f * m_CameraController.GetZoomLevel();
+	MouseWorldPosition.y += CameraPos.y - 1.0f * m_CameraController.GetZoomLevel();*/
 
+
+	Gear::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+	Gear::RenderCommand::Clear();
 	Gear::Renderer2D::BeginScene(m_CameraController.GetCamera());
-	Gear::Renderer2D::DrawQuad(MouseWorldPosition, { 1.0, 1.0f }, {0.9f, 0.3f, 0.2f, 1.0f});
-	Gear::Renderer2D::DrawQuad({0.0f, 0.0f}, { 1.0, 1.0f }, { 0.9f, 0.3f, 0.2f, 1.0f });
+	/*Gear::Renderer2D::DrawQuad(MouseWorldPosition, { 1.0, 1.0f }, {0.9f, 0.3f, 0.2f, 1.0f});
+	Gear::Renderer2D::DrawQuad({0.0f, 0.0f}, { 1.0, 1.0f }, { 0.9f, 0.3f, 0.2f, 1.0f });*/
+	worm.Render();
 	Gear::Renderer2D::EndScene();
 }
 

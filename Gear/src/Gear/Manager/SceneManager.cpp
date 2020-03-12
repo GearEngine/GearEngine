@@ -32,7 +32,7 @@ namespace Gear {
 		}
 		else
 		{
-			GR_CORE_TRACE("%s Scene aleady Exist!", name);
+			GR_CORE_TRACE("{0} Scene aleady Exist!", name);
 		}
 	}
 
@@ -46,7 +46,7 @@ namespace Gear {
 		}
 		else
 		{
-			GR_CORE_TRACE("%s Scene dosn't Exist!", name);
+			GR_CORE_TRACE("{0} Scene dosn't Exist!", name);
 		}
 	}
 
@@ -60,7 +60,7 @@ namespace Gear {
 		}
 		else
 		{
-			GR_CORE_TRACE("%s Scene is aleady Current Scene!", name);
+			GR_CORE_TRACE("{0} Scene is aleady Current Scene!", name);
 		}
 
 	}

@@ -12,7 +12,7 @@ namespace Gear {
 
 	class Entity 
 	{
-	public:
+	protected:
 		virtual void AttatchSoundPlayer() = 0;
 		virtual void AttatchFSM() = 0;
 		virtual void AttatchTransform() = 0;
@@ -44,11 +44,15 @@ namespace Gear {
 		virtual void InActivateAnimator() = 0;
 		virtual void InActivateController() = 0;
 		virtual void InActivateDrawer() = 0;
+
+	public:
+		virtual void Update(Timestep ts) = 0;
+		virtual void Render() = 0;
 	};
 
 	class Entity2D : public Entity
 	{
-	public:
+	protected:
 		virtual ~Entity2D();
 
 		virtual void AttatchSoundPlayer() override;

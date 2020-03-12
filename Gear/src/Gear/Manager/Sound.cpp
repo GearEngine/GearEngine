@@ -101,7 +101,7 @@ namespace Gear {
 		}
 		else
 		{
-			GR_CORE_WARN("%s aleady have!", name);
+			GR_CORE_WARN("{0} aleady have!", name);
 		}
 	}
 
@@ -114,7 +114,7 @@ namespace Gear {
 		}
 		else 
 		{
-			GR_CORE_WARN("%s does't exist!", name);
+			GR_CORE_WARN("{0} does't exist!", name);
 			return nullptr;
 		}
 	}
@@ -128,7 +128,7 @@ namespace Gear {
 		}
 		else
 		{
-			GR_CORE_WARN("%s does't exist!", name);
+			GR_CORE_WARN("{0} does't exist!", name);
 		}
 	}
 
