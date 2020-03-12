@@ -2,7 +2,7 @@
 
 namespace WormState {
 
-	enum
+	enum : unsigned int
 	{
 		OnMove,
 		OnDye,
@@ -13,13 +13,13 @@ namespace WormState {
 		OnReadyJump,
 		OnAirItemUse,
 		OnTurnOver,
-		OnDamaged,
+		OnDamaged
 	};
 }
 
 namespace WormCommand {
 
-	enum
+	enum : unsigned int
 	{
 		BackJump,
 		Jump,

@@ -44,16 +44,21 @@ namespace Gear {
 		m_CurrentAnimation->Resume();
 	}
 
+	void Animator2D::SetFrameX(int frameX)
+	{
+		m_CurrentAnimation->Pause();
+		m_CurrentAnimation->SetFrameX(frameX);
+	}
+
+	void Animator2D::SetFrameY(int frameY)
+	{
+		m_CurrentAnimation->Pause();
+		m_CurrentAnimation->SetFrameY(frameY);
+	}
+
 	void Animator2D::Update(Timestep ts)
 	{
 		m_CurrentAnimation->Update(ts);
-	}
-	void Animator2D::Render()
-	{
-	}
-	void Animator2D::Bind(uint32_t slot)
-	{
-		m_CurrentAnimation->Bind(slot);
 	}
 }
 

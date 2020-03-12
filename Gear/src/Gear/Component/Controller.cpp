@@ -7,11 +7,11 @@ namespace Gear {
 	void Controller::Update(Timestep ts)
 	{
 		m_Command = m_None;
-		for (auto& e : m_Commands)
+		for (auto& command : m_Commands)
 		{
-			if (Gear::Input::IsKeyPressd(e.Keycode))
+			if (Gear::Input::IsKeyPressd(command.Keycode))
 			{
-				m_Command = e;
+				m_Command = command;
 				return;
 			}
 		}

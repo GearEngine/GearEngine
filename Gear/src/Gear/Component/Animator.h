@@ -13,18 +13,19 @@ namespace Gear {
 
 		virtual void Update(Timestep ts) override;
 		void AddAnimation(std::string name, Ref<Animation2D> animation);
+		inline Ref<Animation2D> GetCurrentAnimation() { return m_CurrentAnimation; }
 
 		void PlayAnimation(std::string name);
 		void PauseAnimation();
 		void StopAnimation();
 		void ResumeAnimation();
-
-		void Render();
-		void Bind(uint32_t slot);
+		void SetFrameX(int frameX);
+		void SetFrameY(int frameY);
 
 	private:
 		std::unordered_map<std::string, Ref<Animation2D>> m_AnimationList;
 		Ref<Animation2D> m_CurrentAnimation;
+		friend class Drawer;
 	};
 
 }

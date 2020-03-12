@@ -11,6 +11,7 @@ Worm::Worm(const glm::vec3& position, const float rotation, const glm::vec2 scal
 	AttatchFSM();
 	AttatchTransform();
 	AttatchController();
+	AttatchDrawer();
 
 	//Register Component specific
 
@@ -51,10 +52,15 @@ Worm::Worm(const glm::vec3& position, const float rotation, const glm::vec2 scal
 		{ WormCommand::SetTimer2, GR_KEY_2},		{ WormCommand::SetTimer3, GR_KEY_3},
 		{ WormCommand::SetTimer4, GR_KEY_4},		{ WormCommand::SetTimer5, GR_KEY_5}
 	});
+
+	//Drawer
+	m_Drawer->LinkAnimation(m_Animator);
+	m_Drawer->LinkTransform(m_Transform);
 }
 
 void Worm::update(Gear::Timestep ts)
 {
+	m_Controller->Update(ts);
 }
 
 void Worm::Render()

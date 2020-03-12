@@ -2,7 +2,7 @@
 
 #include "imgui/imgui.h"
 InGameLayer::InGameLayer()
-	: Layer("InGameLayer"), m_CameraController(1280.0f / 720.0f), worm(glm::vec3(0.0f, 0.0f, 0.1f))
+	: Layer("InGameLayer"), m_CameraController(1280.0f / 720.0f), worm({ 0.0f, 0.0f, 0.1f }, 0.0f, { 1.0f, 1.0f })
 {
 }
 

@@ -6,7 +6,7 @@ namespace Gear {
 
 	struct Command
 	{
-		using KeyEnumType = int;
+		using KeyEnumType = unsigned int;
 		Command() = default;
 		Command(int keytype, int keycode)
 			: KeyType(keytype), Keycode(keycode)

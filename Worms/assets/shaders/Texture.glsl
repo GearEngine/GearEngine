@@ -26,13 +26,11 @@ in vec2 v_TexCoord;
 		
 uniform vec4 u_Color;
 uniform float u_TilingFactor;
-uniform sampler2D u_Texture0;
-uniform sampler2D u_Texture1;
-uniform sampler2D u_Texture2;
+uniform sampler2D u_Texture;
 
 void main()
 {
-	color = texture(u_Texture0, vec2(v_TexCoord.x, v_TexCoord.y) ) * u_Color;
+	color = texture(u_Texture, vec2(v_TexCoord.x, v_TexCoord.y) ) * u_Color;
 	if(color.a == 0)
 		discard;
 

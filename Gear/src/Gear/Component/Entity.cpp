@@ -42,6 +42,12 @@ namespace Gear {
 			m_Controller = new Controller;
 	}
 
+	void Entity2D::AttatchDrawer()
+	{
+		if (!m_Drawer)
+			m_Drawer = new Drawer2D;
+	}
+
 	void Entity2D::DetatchSoundPlayer()
 	{
 		if (m_SoundPlayer)
@@ -66,6 +72,11 @@ namespace Gear {
 	{
 		if (m_Controller)
 			delete m_Controller;
+	}
+	void Entity2D::DetatchDrawer()
+	{
+		if (m_Drawer)
+			delete m_Drawer;
 	}
 	void Entity2D::DetatchPhysics()
 	{
@@ -104,6 +115,12 @@ namespace Gear {
 			m_Controller->Activate();
 	}
 
+	void Entity2D::ActivateDrawer()
+	{
+		if (m_Drawer)
+			m_Drawer->Activate();
+	}
+
 	void Entity2D::InActivateSoundPlayer()
 	{
 		if (m_SoundPlayer)
@@ -133,5 +150,10 @@ namespace Gear {
 	{
 		if (m_Controller)
 			m_Controller->InActivate();
+	}
+	void Entity2D::InActivateDrawer()
+	{
+		if (m_Drawer)
+			m_Drawer->InActivate();
 	}
 }

@@ -4,11 +4,11 @@
 
 namespace Gear {
 
-	class Command;
+	struct Command;
 
 	class FSM : public Component
 	{
-		using StateEnumType = int;
+		using StateEnumType = unsigned int;
 	public:
 		class InputHandler
 		{
@@ -34,7 +34,7 @@ namespace Gear {
 		virtual void Update(Timestep ts) override;
 
 		void Handle(Command cmd);
-		void RegisterHandler(const std::initializer_list < std::pair<StateEnumType, InputHandler*>>& handlers);
+		void RegisterHandler(const std::initializer_list<std::pair<StateEnumType, InputHandler*>>& handlers);
 		State& GetState(){ return m_State; }
 
 	private:

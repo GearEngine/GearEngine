@@ -4,7 +4,7 @@
 
 namespace Gear {
 
-	void FSM::State::RegisterStates(const std::initializer_list<std::pair<int, std::string>>& states)
+	void FSM::State::RegisterStates(const std::initializer_list<std::pair<StateEnumType, std::string>>& states)
 	{
 		for (auto& e : states)
 		{
@@ -30,7 +30,7 @@ namespace Gear {
 		m_State.SetCurrentState(m_Handlers[m_CurrentState]->Handle(cmd));
 	}
 
-	void FSM::RegisterHandler(const std::initializer_list<std::pair<int, InputHandler*>>& handlers)
+	void FSM::RegisterHandler(const std::initializer_list<std::pair<StateEnumType, InputHandler*>>& handlers)
 	{
 		for (auto& e : handlers)
 		{

@@ -60,9 +60,7 @@ namespace Gear {
 
 		s_Data->TextureShader = Shader::Create("assets/shaders/Texture.glsl");
 		s_Data->TextureShader->Bind();
-		s_Data->TextureShader->SetInt("u_Texture0", 0);
-		s_Data->TextureShader->SetInt("u_Texture1", 1);
-		s_Data->TextureShader->SetInt("u_Texture2", 2);
+		s_Data->TextureShader->SetInt("u_Texture", 0);
 	}
 
 	void Renderer2D::Shutdown()
@@ -139,6 +137,34 @@ namespace Gear {
 		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
 	}
 
+	void Renderer2D::DrawQuad(const glm::mat4 & translate, const glm::vec4 & color)
+	{
+		GR_PROFILE_FUNCTION();
+
+		s_Data->TextureShader->SetFloat4("u_Color", color);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
+		s_Data->TextureShader->SetMat4("u_Transform", translate);
+
+		s_Data->WhiteTexture->Bind();
+		s_Data->QuardVertexArray->Bind();
+
+		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4 & translate, const Ref<Texture>& texture, const glm::vec4 & tintColor)
+	{
+		GR_PROFILE_FUNCTION();
+
+		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
+		s_Data->TextureShader->SetMat4("u_Transform", translate);
+		
+		texture->Bind();
+		s_Data->QuardVertexArray->Bind();
+
+		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
+	}
+
 	void Renderer2D::DrawRotatedQuad(const glm::vec2 & position, const glm::vec2 & size, float rotation, const glm::vec4 & color)
 	{
 		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, color);
@@ -183,6 +209,32 @@ namespace Gear {
 		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
 	}
 
+	void Renderer2D::DrawRotatedQuad(const glm::mat4 & translate, const glm::vec4 & color)
+	{
+		GR_PROFILE_FUNCTION();
+
+		s_Data->TextureShader->SetFloat4("u_Color", color);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
+		s_Data->TextureShader->SetMat4("u_Transform", translate);
+	
+		s_Data->WhiteTexture->Bind();
+		s_Data->QuardVertexArray->Bind();
+
+		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::mat4 & translate, const Ref<Texture>& texture, const glm::vec4 & tintColor)
+	{
+		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
+		s_Data->TextureShader->SetMat4("u_Transform", translate);
+
+		texture->Bind();
+		s_Data->QuardVertexArray->Bind();
+
+		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
+	}
+
 	void Renderer2D::DrawAnimationQuad(const glm::vec2 & position, const glm::vec2 & size, const Ref<Animation2D> animation, const glm::vec4 & tintColor)
 	{
 		DrawAnimationQuad({ position.x, position.y, 0.0f }, size, animation, tintColor);
@@ -193,6 +245,7 @@ namespace Gear {
 		GR_PROFILE_FUNCTION();
 
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
 		animation->Bind();
 
 		glm::mat4 translate = glm::translate(glm::mat4(1.0f), position)
@@ -213,6 +266,7 @@ namespace Gear {
 		GR_PROFILE_FUNCTION();
 
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
 		animation->Bind();
 
 		glm::mat4 translate = glm::translate(glm::mat4(1.0f), position)
@@ -223,5 +277,21 @@ namespace Gear {
 		s_Data->QuardVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
 	}
+
+	void Renderer2D::DrawAnimation(const glm::mat4 & translate, const Ref<Animation2D> animation, const glm::vec4 & tintColor)
+	{
+		GR_PROFILE_FUNCTION();
+
+		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
+		s_Data->TextureShader->SetMat4("u_Transform", translate);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
+
+		animation->Bind();
+		s_Data->QuardVertexArray->Bind();
+
+		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
+	}
+
+
 
 }

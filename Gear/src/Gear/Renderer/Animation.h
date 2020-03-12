@@ -28,18 +28,18 @@ namespace Gear {
 		static Ref<Animation2D> Create(Ref<FrameTexture2D> sprite, float fps, const std::vector<std::pair<int, int>> frameOrder, bool loop = false);
 
 	public:
-		void Bind(uint32_t slot = 0) const;
-		
 		virtual void Update(Timestep ts) override;
 		virtual void Start() override;
 		virtual void Stop() override;
 		virtual void Pause() override;
 		virtual void Resume() override;
 
-		inline void SetFrameX(uint32_t frameX) { m_CurrentFrameX = frameX; }
-		inline void SetFrameY(uint32_t frameY) { m_CurrentFrameY = frameY; }
+		void SetFrameX(uint32_t frameX);
+		void SetFrameY(uint32_t frameY);
 		inline const uint32_t GetFrameX() const { return m_CurrentFrameX; }
 		inline const uint32_t GetFrameY() const { return m_CurrentFrameY; }
+
+		void Bind(uint32_t slot = 0) const;
 
 	private:
 		float pastTime = 0.0f;

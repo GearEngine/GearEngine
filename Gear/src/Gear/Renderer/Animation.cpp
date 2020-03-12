@@ -122,6 +122,18 @@ namespace Gear {
 		m_OnAnimation = true;
 	}
 
+	void Animation2D::SetFrameX(uint32_t frameX) 
+	{ 
+		if(m_MaxFrameX > frameX)
+			m_CurrentFrameX = frameX; 
+	}
+
+	void Animation2D::SetFrameY(uint32_t frameY) 
+	{ 
+		if (m_MaxFrameY > frameY)
+			m_CurrentFrameY = frameY; 
+	}
+
 	void Animation2D::Pause()
 	{
 		m_OnAnimation = false;
