@@ -21,7 +21,7 @@
 
 #include "Gear/Renderer/Buffer.h"
 #include "Gear/Renderer/Shader.h"
-#include "Gear/Component/Entity.h"
+#include "Gear/Component/EntitySystem.h"
 #include "Gear/Renderer/VertexArray.h"
 
 #include "Gear/Renderer/OrthographicCamera.h"

@@ -8,39 +8,29 @@ namespace Gear {
 
 	class FSM : public Component
 	{
-		using StateEnumType = unsigned int;
 	public:
 		class InputHandler
 		{
 		public:
-			virtual int Handle(Command cmd) = 0;
-		};
-
-		class State
-		{
-		public:
-			void RegisterStates(const std::initializer_list<std::pair<StateEnumType, std::string>>& states);
-			inline std::string GetCurrentState() { return m_States[m_CurrentState]; }
-			inline void SetCurrentState(StateEnumType state) { m_CurrentState = state; }
-
-		private:
-			std::unordered_map<StateEnumType, std::string> m_States;
-
-			int m_CurrentState = 0;
+			virtual EnumType Handle(const Command& cmd) = 0;
 		};
 
 	public:
 		virtual ~FSM();
-		virtual void Update(Timestep ts) override;
-
-		void Handle(Command cmd);
-		void RegisterHandler(const std::initializer_list<std::pair<StateEnumType, InputHandler*>>& handlers);
-		State& GetState(){ return m_State; }
 
 	private:
-		State m_State;
-		std::unordered_map<StateEnumType, InputHandler*> m_Handlers;
-		int m_CurrentState;
+		FSM() = default;
+		virtual void Update(Timestep ts) override;
+
+		void RegisterFSM(const std::initializer_list<std::pair<const EnumType, InputHandler*>>& handlers);
+		void Handle(const Command& cmd);
+
+	private:
+		std::vector<EnumType> m_States;
+		std::unordered_map<EnumType, InputHandler*> m_Handlers;
+		EnumType m_CurrentState = 0;
+
+		friend class EntitySystem;
 	};
 	
 }

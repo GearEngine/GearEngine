@@ -5,6 +5,7 @@
 
 #include "Gear/Renderer/Renderer.h"
 #include "Gear/Manager/Sound.h"
+#include "Gear/Component/EntitySystem.h"
 
 #include <GLFW/glfw3.h>
 
@@ -26,12 +27,14 @@ namespace Gear {
 		Renderer::Init();
 
 		m_ImGuilayer = new ImGuiLayer;
+		EntitySystem::Init();
 	}
 
 	Application::~Application()
 	{
 		GR_PROFILE_FUNCTION();
 
+		EntitySystem::ShutDown();
 		Renderer::Shutdown();
 		SceneManager::Destory();
 		SoundSystem::Destroy();
@@ -64,7 +67,6 @@ namespace Gear {
 			float time = (float)glfwGetTime();
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
-
 			
 			if (!m_Minimized)
 			{
@@ -72,9 +74,12 @@ namespace Gear {
 				{
 					GR_PROFILE_SCOPE("LayerStack OnUpdate");
 
+					EntitySystem::Update(timestep);
 					for (Layer* layer : *m_CurScene)
 						layer->OnUpdate(timestep);
 				}
+
+
 
 				m_ImGuilayer->Begin();
 				{

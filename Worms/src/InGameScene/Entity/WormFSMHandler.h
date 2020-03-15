@@ -3,7 +3,7 @@
 
 class OnMoveHandler : public Gear::FSM::InputHandler
 {
-	inline virtual int Handle(Gear::Command cmd) override
+	inline virtual Gear::EnumType Handle(const Gear::Command& cmd) override
 	{
 		return WormState::OnIdle;
 	}
@@ -11,7 +11,7 @@ class OnMoveHandler : public Gear::FSM::InputHandler
 
 class OnDyeHandler : public Gear::FSM::InputHandler
 {
-	inline virtual int Handle(Gear::Command cmd) override
+	inline virtual Gear::EnumType Handle(const Gear::Command& cmd) override
 	{
 		return WormState::OnIdle;
 	}
@@ -19,7 +19,7 @@ class OnDyeHandler : public Gear::FSM::InputHandler
 
 class OnAirHandler : public Gear::FSM::InputHandler
 {
-	inline virtual int Handle(Gear::Command cmd) override
+	inline virtual Gear::EnumType Handle(const Gear::Command& cmd) override
 	{
 		return WormState::OnIdle;
 	}
@@ -27,7 +27,7 @@ class OnAirHandler : public Gear::FSM::InputHandler
 
 class OnIdleHandler : public Gear::FSM::InputHandler
 {
-	inline virtual int Handle(Gear::Command cmd) override
+	inline virtual Gear::EnumType Handle(const Gear::Command& cmd) override
 	{
 		return WormState::OnIdle;
 	}
@@ -35,7 +35,7 @@ class OnIdleHandler : public Gear::FSM::InputHandler
 
 class OnReadyItemUseHandler : public Gear::FSM::InputHandler
 {
-	inline virtual int Handle(Gear::Command cmd) override
+	inline virtual Gear::EnumType Handle(const Gear::Command& cmd) override
 	{
 		return WormState::OnIdle;
 	}
@@ -43,7 +43,7 @@ class OnReadyItemUseHandler : public Gear::FSM::InputHandler
 
 class OnUseItemHandler : public Gear::FSM::InputHandler
 {
-	inline virtual int Handle(Gear::Command cmd) override
+	inline virtual Gear::EnumType Handle(const Gear::Command& cmd) override
 	{
 		return WormState::OnIdle;
 	}
@@ -51,7 +51,7 @@ class OnUseItemHandler : public Gear::FSM::InputHandler
 
 class OnReadyJumpHandler : public Gear::FSM::InputHandler
 {
-	inline virtual int Handle(Gear::Command cmd) override
+	inline virtual Gear::EnumType Handle(const Gear::Command& cmd) override
 	{
 		return WormState::OnIdle;
 	}
@@ -59,7 +59,7 @@ class OnReadyJumpHandler : public Gear::FSM::InputHandler
 
 class OnAirItemUseHandler : public Gear::FSM::InputHandler
 {
-	inline virtual int Handle(Gear::Command cmd) override
+	inline virtual Gear::EnumType Handle(const Gear::Command& cmd) override
 	{
 		return WormState::OnIdle;
 	}
@@ -67,7 +67,7 @@ class OnAirItemUseHandler : public Gear::FSM::InputHandler
 
 class OnTurnOverHandler : public Gear::FSM::InputHandler
 {
-	inline virtual int Handle(Gear::Command cmd) override
+	inline virtual Gear::EnumType Handle(const Gear::Command& cmd) override
 	{
 		return WormState::OnIdle;
 	}
@@ -75,7 +75,7 @@ class OnTurnOverHandler : public Gear::FSM::InputHandler
 
 class OnDamagedHandler : public Gear::FSM::InputHandler
 {
-	inline virtual int Handle(Gear::Command cmd) override
+	inline virtual Gear::EnumType Handle(const Gear::Command& cmd) override
 	{
 		return WormState::OnIdle;
 	}

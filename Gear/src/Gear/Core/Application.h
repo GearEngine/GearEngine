@@ -11,7 +11,6 @@
 
 #include "Gear/ImGui/ImGuiLayer.h"
 
-
 namespace Gear {
 
 	class Application
@@ -36,6 +35,7 @@ namespace Gear {
 
 	private:
 		std::unique_ptr<Window> m_Window;
+
 		bool m_Running = true;
 		bool m_Minimized = false;
 		Scene* m_CurScene;

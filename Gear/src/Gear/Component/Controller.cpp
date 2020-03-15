@@ -4,6 +4,10 @@
 
 namespace Gear {
 
+	Controller::~Controller()
+	{
+	}
+
 	void Controller::Update(Timestep ts)
 	{
 		m_Command = m_None;

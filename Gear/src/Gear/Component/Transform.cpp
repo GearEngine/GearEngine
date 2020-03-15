@@ -2,16 +2,13 @@
 #include "Transform.h"
 
 namespace Gear {
-	
-	Transform2D::Transform2D()
-		: m_Translate(glm::mat4(1.0f))
+
+	Transform2D::~Transform2D()
 	{
-		intialize();
 	}
 
 	void Transform2D::Update(Timestep ts)
 	{
-		RecalculateTranslate();
 	}
 
 	void Transform2D::SetTransform(const glm::vec3& position, const float rotation, const glm::vec2& scale)

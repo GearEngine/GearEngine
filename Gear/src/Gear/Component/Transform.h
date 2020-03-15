@@ -6,16 +6,14 @@ namespace Gear {
 
 	class Transform : public Component
 	{
-	public:
-		virtual ~Transform() = default;
-
 	};
 
 	class Transform2D : public Transform
 	{
 	public:
-		Transform2D();
+		virtual ~Transform2D();
 
+	private:
 		virtual void Update(Timestep ts) override;
 
 		void SetTransform(const glm::vec3& position, const float rotation, const glm::vec2& scale);
@@ -38,6 +36,8 @@ namespace Gear {
 		glm::vec3 m_Position;
 		glm::vec2 m_Scale;
 		float m_Rotation;
+
+		friend class EntitySystem;
 	};
 
 }

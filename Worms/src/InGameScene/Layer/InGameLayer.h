@@ -17,7 +17,9 @@ public:
 
 private:
 	Gear::OrthographicCameraController m_CameraController;
-	Worm worm;
+	Worm worm0;
+	Worm worm1;
+	Worm worm2;
 
 	glm::vec2 MousePosition;
 	glm::vec3 MouseWorldPosition;

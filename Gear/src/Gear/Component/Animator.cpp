@@ -2,19 +2,14 @@
 #include "Animator.h"
 
 namespace Gear {
+
 	Animator2D::~Animator2D()
 	{
 		m_CurrentAnimation.reset();
 		m_AnimationList.clear();
 	}
 
-	void Animator2D::AddAnimation(std::string name, Ref<Animation2D> animation)
-	{
-		m_AnimationList.insert({ name, animation });
-		m_CurrentAnimation = animation;
-	}
-
-	void Animator2D::SetCurrentAnimation(const std::string name)
+	void Animator2D::SetCurrentAnimation(EnumType name)
 	{
 		auto find = m_AnimationList.find(name);
 		if (find == m_AnimationList.end())
@@ -25,7 +20,7 @@ namespace Gear {
 		m_CurrentAnimation = find->second;
 	}
 
-	void Animator2D::PlayAnimation(std::string name)
+	void Animator2D::PlayAnimation(EnumType name)
 	{
 		m_CurrentAnimation->Stop();
 
@@ -71,6 +66,10 @@ namespace Gear {
 	void Animator2D::Update(Timestep ts)
 	{
 		m_CurrentAnimation->Update(ts);
+	}
+	void Animator2D::RegisterAnimation(const std::initializer_list<std::pair<const EnumType, Ref<Animation2D>>>& animationList)
+	{
+		m_AnimationList = animationList;
 	}
 }
 

@@ -6,10 +6,14 @@ namespace Gear {
 
 	class Physics : public Component
 	{
+	public:
+		virtual ~Physics() = default;
+
+	private:
 		virtual void Update(Timestep ts) override;
 
-	public:
-
+	private:
+		friend class EntitySystem;
 	};
 
 }

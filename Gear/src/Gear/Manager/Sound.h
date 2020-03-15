@@ -61,6 +61,6 @@ namespace Gear {
 	};
 }
 
-#define AddSound(path, name, loop, stream) Gear::SoundStorage::AddSound_(name, Gear::SoundSystem::CreateSound(path, loop, stream))
-#define GetSound(name) Gear::SoundStorage::GetSound_(name)
-#define PlaySound(name, channel) Gear::SoundSystem::Get()->PlaySound_(name, channel)
+#define ADD_SOUND(path, name, loop, stream) Gear::SoundStorage::AddSound_(name, Gear::SoundSystem::CreateSound(path, loop, stream))
+#define GET_SOUND(name) Gear::SoundStorage::GetSound_(name)
+#define PLAY_SOUND(name, channel) Gear::SoundSystem::Get()->PlaySound_(name, channel)

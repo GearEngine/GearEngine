@@ -89,4 +89,6 @@ namespace Gear {
 	{
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
+
+	using EnumType = unsigned int;
 }
