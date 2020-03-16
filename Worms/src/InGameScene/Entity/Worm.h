@@ -9,6 +9,7 @@ public:
 	~Worm();
 
 	void Update(Gear::Timestep ts);
+	int GetID() { return m_ID; }
 
 private:
 	int m_ID;

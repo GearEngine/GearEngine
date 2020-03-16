@@ -23,6 +23,7 @@ namespace Gear {
 		virtual void Update(Timestep ts) override;
 		void RegisterAnimation(const std::initializer_list < std::pair<const EnumType, Ref<Animation2D>>>& animationList);
 
+	public:
 		void SetCurrentAnimation(EnumType name);
 		inline Ref<Animation2D> GetCurrentAnimation() { return m_CurrentAnimation; }
 

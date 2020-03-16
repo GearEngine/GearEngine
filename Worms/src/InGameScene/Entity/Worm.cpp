@@ -54,7 +54,7 @@ Worm::~Worm()
 
 void Worm::Update(Gear::Timestep ts)
 {
-	if (Gear::Input::IsKeyPressd(GR_KEY_A))
+	if (Gear::Input::IsKeyPressd(GR_KEY_C))
 	{
 		auto event = Gear::CreateRef<Gear::EntityEvent>(EventType::Explosion, ExplosionData({1.0f, 1.0f}, 3.0f, 5.0f));
 		Gear::EventSystem::DispatchEvent(EventChannel::Explosion, event);

@@ -27,8 +27,8 @@ namespace Gear {
 		}
 	}
 
-	void FSM::Handle(const Command& cmd)
+	void FSM::Handle(int entityID, const Command& cmd)
 	{
-		m_CurrentState = m_Handlers[m_CurrentState]->Handle(cmd);
+		m_CurrentState = m_Handlers[m_CurrentState]->Handle(entityID, cmd);
 	}
 }

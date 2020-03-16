@@ -48,7 +48,6 @@ namespace Gear {
 		static void SubscribeChannel(int entityID, ChannelType channel);
 		static void UnSubscribeChannel(int entityID, ChannelType channel);
 		static void DispatchEvent(ChannelType channel, Ref<EntityEvent> event);
-
 		static void RegisterEventHandler(int entityID, ChannelType channel, Ref<EventHandler> handler);
 
 	private:

@@ -12,7 +12,7 @@ namespace Gear {
 		class InputHandler
 		{
 		public:
-			virtual EnumType Handle(const Command& cmd) = 0;
+			virtual EnumType Handle(int entityID, const Command& cmd) = 0;
 		};
 
 	public:
@@ -23,7 +23,8 @@ namespace Gear {
 		virtual void Update(Timestep ts) override;
 
 		void RegisterFSM(const std::initializer_list<std::pair<const EnumType, InputHandler*>>& handlers);
-		void Handle(const Command& cmd);
+		void Handle(int entityID, const Command& cmd);
+		inline EnumType GetCurrentState() const { return m_CurrentState; }
 
 	private:
 		std::vector<EnumType> m_States;

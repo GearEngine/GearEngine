@@ -16,7 +16,7 @@ namespace Gear {
 	std::vector<Ref<SoundPlayer>>	EntitySystem::m_SoundPlayers = std::vector<Ref<SoundPlayer>>();
 	std::vector<Ref<Transform2D>>	EntitySystem::m_Transforms = std::vector<Ref<Transform2D>>();
 	std::vector<Ref<Drawer2D>>		EntitySystem::m_Drawer = std::vector<Ref<Drawer2D>>();
-	std::vector<Ref<Physics>>		EntitySystem::m_Phisics = std::vector<Ref<Physics>>();
+	std::vector<Ref<Physics2D>>		EntitySystem::m_Phisics = std::vector<Ref<Physics2D>>();
 
 
 	void EntitySystem::Init()
@@ -57,14 +57,13 @@ namespace Gear {
 			//Event Handle
 			EventHandle(entity.second);
 
-			UpdateController(id);
-			UpdateFSM(id);
-			UpdatePhysics2D(id);
-			UpdateTransform2D(id);
-			UpdateAnimator2D(id);
-			UpdateSoundPlayer(id);
-			UpdateDrawer2D(id);
-
+			UpdateController(id, ts);
+			UpdateFSM(id, ts);
+			UpdateAnimator2D(id, ts);
+			UpdatePhysics2D(id, ts);
+			UpdateTransform2D(id, ts);
+			UpdateSoundPlayer(id, ts);
+			UpdateDrawer2D(id, ts);
 		}
 	}
 
@@ -98,25 +97,25 @@ namespace Gear {
 		entity->m_EventQueue.pop();
 	}
 
-	void EntitySystem::UpdateController(int entityID)
+	void EntitySystem::UpdateController(int entityID, Timestep ts)
 	{
 		if (!m_Controllers[entityID] || !m_Controllers[entityID]->m_OnActivate)
 		{
 			return;
 		}
-		
+		m_Controllers[entityID]->Update(ts);
 	}
 
-	void EntitySystem::UpdateFSM(int entityID)
+	void EntitySystem::UpdateFSM(int entityID, Timestep ts)
 	{
-		if (!m_FSMs[entityID] || m_FSMs[entityID]->m_OnActivate)
+		if (!m_FSMs[entityID] || !m_FSMs[entityID]->m_OnActivate)
 		{
 			return;
 		}
-		
+		m_FSMs[entityID]->Handle(entityID, m_Controllers[entityID]->GetCommand());
 	}
 
-	void EntitySystem::UpdateSoundPlayer(int entityID)
+	void EntitySystem::UpdateSoundPlayer(int entityID, Timestep ts)
 	{
 		if (!m_SoundPlayers[entityID] || !m_SoundPlayers[entityID]->m_OnActivate)
 		{
@@ -125,7 +124,7 @@ namespace Gear {
 		
 	}
 
-	void EntitySystem::UpdateDrawer2D(int entityID)
+	void EntitySystem::UpdateDrawer2D(int entityID, Timestep ts)
 	{
 		if (!m_Drawer[entityID] && !m_Drawer[entityID]->m_OnActivate)
 		{
@@ -134,7 +133,7 @@ namespace Gear {
 		
 	}
 
-	void EntitySystem::UpdatePhysics2D(int entityID)
+	void EntitySystem::UpdatePhysics2D(int entityID, Timestep ts)
 	{
 		if (!m_Phisics[entityID] || !m_Phisics[entityID]->m_OnActivate)
 		{
@@ -143,7 +142,7 @@ namespace Gear {
 		
 	}
 
-	void EntitySystem::UpdateTransform2D(int entityID)
+	void EntitySystem::UpdateTransform2D(int entityID, Timestep ts)
 	{
 		if (!m_Transforms[entityID] || !m_Transforms[entityID]->m_OnActivate)
 		{
@@ -152,12 +151,13 @@ namespace Gear {
 		m_Drawer[entityID]->m_Translate = m_Transforms[entityID]->GetTranslate();
 	}
 
-	void EntitySystem::UpdateAnimator2D(int entityID)
+	void EntitySystem::UpdateAnimator2D(int entityID, Timestep ts)
 	{
 		if (!m_Animators[entityID] || !m_Animators[entityID]->m_OnActivate)
 		{
 			return;
 		}
+		m_Animators[entityID]->Update(ts);
 		m_Drawer[entityID]->m_Animation = m_Animators[entityID]->GetCurrentAnimation();
 	}
 
@@ -297,7 +297,7 @@ namespace Gear {
 				if (!m_FSMs[entityID]) m_FSMs[entityID].reset(new FSM());
 				break;
 			case ComponentID::ID::Physics:		
-				if (!m_Phisics[entityID]) m_Phisics[entityID].reset(new Physics());
+				if (!m_Phisics[entityID]) m_Phisics[entityID].reset(new Physics2D());
 				break;
 			case ComponentID::ID::SoundPlayer:	
 				if (!m_SoundPlayers[entityID]) m_SoundPlayers[entityID].reset(new SoundPlayer());
@@ -378,25 +378,25 @@ namespace Gear {
 			switch (component)
 			{
 			case ComponentID::ID::Animantor:
-				if (!m_Animators[entityID]) m_Animators[entityID]->m_OnActivate = false;
+				if (m_Animators[entityID]) m_Animators[entityID]->m_OnActivate = false;
 				break;
 			case ComponentID::ID::Controller:
-				if (!m_Controllers[entityID]) m_Controllers[entityID]->m_OnActivate = false;
+				if (m_Controllers[entityID]) m_Controllers[entityID]->m_OnActivate = false;
 				break;
 			case ComponentID::ID::Drawer:
-				if (!m_Drawer[entityID]) m_Drawer[entityID]->m_OnActivate = false;
+				if (m_Drawer[entityID]) m_Drawer[entityID]->m_OnActivate = false;
 				break;
 			case ComponentID::ID::FSM:
-				if (!m_FSMs[entityID]) m_FSMs[entityID]->m_OnActivate = false;
+				if (m_FSMs[entityID]) m_FSMs[entityID]->m_OnActivate = false;
 				break;
 			case ComponentID::ID::Physics:
-				if (!m_Phisics[entityID]) m_Phisics[entityID]->m_OnActivate = false;
+				if (m_Phisics[entityID]) m_Phisics[entityID]->m_OnActivate = false;
 				break;
 			case ComponentID::ID::SoundPlayer:
-				if (!m_SoundPlayers[entityID]) m_SoundPlayers[entityID]->m_OnActivate = false;
+				if (m_SoundPlayers[entityID]) m_SoundPlayers[entityID]->m_OnActivate = false;
 				break;
 			case ComponentID::ID::Transform:
-				if (!m_Transforms[entityID]) m_Transforms[entityID]->m_OnActivate = false;
+				if (m_Transforms[entityID]) m_Transforms[entityID]->m_OnActivate = false;
 				break;
 			}
 		}
@@ -510,6 +510,46 @@ namespace Gear {
 			return nullptr;
 		}
 		return m_FSMs[entityID];
+	}
+
+	Ref<Animator2D> EntitySystem::GetAnimator2D(int entityID)
+	{
+		if (!m_Animators[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have FSM component!", entityID);
+			return nullptr;
+		}
+		return m_Animators[entityID];
+	}
+
+	Ref<Physics> EntitySystem::GetPhysics(int entityID)
+	{
+		if (!m_Phisics[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have FSM component!", entityID);
+			return nullptr;
+		}
+		return m_Phisics[entityID];
+	}
+
+	Ref<SoundPlayer> EntitySystem::GetSoundPlayer(int entityID)
+	{
+		if (!m_SoundPlayers[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have FSM component!", entityID);
+			return nullptr;
+		}
+		return m_SoundPlayers[entityID];
+	}
+
+	Ref<Controller> EntitySystem::GetController(int entityID)
+	{
+		if (!m_Controllers[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have FSM component!", entityID);
+			return nullptr;
+		}
+		return m_Controllers[entityID];
 	}
 
 	

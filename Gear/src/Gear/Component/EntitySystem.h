@@ -34,15 +34,14 @@ namespace Gear {
 		static void Shutdown();
 		static void EventHandle(Ref<Entity>& entity);
 
-
 	private:
-		static void UpdateController(int entityID);
-		static void UpdateFSM(int entityID);
-		static void UpdateSoundPlayer(int entityID);
-		static void UpdateDrawer2D(int entityID);
-		static void UpdatePhysics2D(int entityID);
-		static void UpdateTransform2D(int entityID);
-		static void UpdateAnimator2D(int entityID);
+		static void UpdateController(int entityID, Timestep ts);
+		static void UpdateFSM(int entityID, Timestep ts);
+		static void UpdateSoundPlayer(int entityID, Timestep ts);
+		static void UpdateDrawer2D(int entityID, Timestep ts);
+		static void UpdatePhysics2D(int entityID, Timestep ts);
+		static void UpdateTransform2D(int entityID, Timestep ts);
+		static void UpdateAnimator2D(int entityID, Timestep ts);
 
 		//user interface
 	public:
@@ -70,6 +69,10 @@ namespace Gear {
 		static Ref<Transform2D> GetTransform2DComponent(int entityID);
 		static Ref<Physics> GetPhysicsComponent(int entityID);
 		static Ref<FSM> GetFSMComponent(int entityID);
+		static Ref<Animator2D> GetAnimator2D(int entityID);
+		static Ref<Physics> GetPhysics(int entityID);
+		static Ref<SoundPlayer> GetSoundPlayer(int entityID);
+		static Ref<Controller> GetController(int entityID);
 
 	private:
 		static int s_EntityID;
@@ -87,7 +90,7 @@ namespace Gear {
 		static std::vector<Ref<SoundPlayer>>	m_SoundPlayers;
 		static std::vector<Ref<Transform2D>>	m_Transforms;
 		static std::vector<Ref<Drawer2D>>		m_Drawer;
-		static std::vector<Ref<Physics>>		m_Phisics;
+		static std::vector<Ref<Physics2D>>		m_Phisics;
 
 		friend class Application;
 		friend class EventSystem;

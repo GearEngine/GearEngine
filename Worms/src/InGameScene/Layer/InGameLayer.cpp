@@ -1,12 +1,19 @@
 #include "InGameLayer.h"
 
 #include "imgui/imgui.h"
+#include "EventChannel.h"
+
 InGameLayer::InGameLayer()
 	: Layer("InGameLayer"), m_CameraController(1280.0f / 720.0f), 
 	worm0({ 5.0f, 2.0f, 0.1f }, 0.0f, { 1.0f, 1.0f }), 
 	worm1({ 0.0f, 0.0f, 0.1f }, 0.0f, { 1.0f, 1.0f }), 
 	worm2({ -1.0f, 4.0f, 0.1f }, 0.0f, { 1.0f, 1.0f })
 {
+	Gear::EntitySystem::InActivateComponent(worm1.GetID(), { {Gear::ComponentID::Controller} });
+	Gear::EntitySystem::InActivateComponent(worm2.GetID(), { {Gear::ComponentID::Controller} });
+	
+	Gear::EventSystem::UnSubscribeChannel(worm1.GetID(), EventChannel::Explosion);
+	Gear::EventSystem::UnSubscribeChannel(worm2.GetID(), EventChannel::Explosion);
 }
 
 void InGameLayer::OnAttach()
