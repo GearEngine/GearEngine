@@ -34,9 +34,9 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
-		EntitySystem::ShutDown();
 		Renderer::Shutdown();
 		SceneManager::Destory();
+		EntitySystem::Shutdown();
 		SoundSystem::Destroy();
 	}
 
@@ -74,12 +74,9 @@ namespace Gear {
 				{
 					GR_PROFILE_SCOPE("LayerStack OnUpdate");
 
-					EntitySystem::Update(timestep);
 					for (Layer* layer : *m_CurScene)
 						layer->OnUpdate(timestep);
 				}
-
-
 
 				m_ImGuilayer->Begin();
 				{
@@ -89,7 +86,6 @@ namespace Gear {
 				}
 				m_ImGuilayer->End();
 			}
-
 			m_Window->OnUpdate();
 		}
 	}

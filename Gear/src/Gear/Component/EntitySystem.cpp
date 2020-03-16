@@ -30,7 +30,7 @@ namespace Gear {
 		m_Transforms.resize(10000);
 	}
 
-	void EntitySystem::ShutDown()
+	void EntitySystem::Shutdown()
 	{
 		m_EntityPool.clear();
 		m_ActivateEntitys.clear();
@@ -42,6 +42,8 @@ namespace Gear {
 		m_Phisics.clear();
 		m_SoundPlayers.clear();
 		m_Transforms.clear();
+
+		EventSystem::Shutdown();
 	}
 
 	void EntitySystem::Update(Timestep ts)
@@ -51,18 +53,115 @@ namespace Gear {
 		for (auto& entity : m_ActivateEntitys)
 		{
 			int id = entity.first;
-	
-			if (m_Drawer[id])
-			{
-				m_Drawer[id]->Render();
-			}
+			
+			//Event Handle
+			EventHandle(entity.second);
+
+			UpdateController(id);
+			UpdateFSM(id);
+			UpdatePhysics2D(id);
+			UpdateTransform2D(id);
+			UpdateAnimator2D(id);
+			UpdateSoundPlayer(id);
+			UpdateDrawer2D(id);
+
 		}
 	}
 
 	void EntitySystem::Render()
 	{
+		for (auto& entity : m_ActivateEntitys)
+		{
+			int id = entity.first;
 
+			if (!m_Drawer[id] || !m_Drawer[id]->m_OnActivate)
+				continue;
+			m_Drawer[id]->Render();
+		}
 	}
+
+	void EntitySystem::EventHandle(Ref<Entity>& entity)
+	{
+		if (entity->m_EventQueue.empty())
+			return;
+
+		auto& event = entity->m_EventQueue.front();
+		EntityEventType type = event->Type;
+
+		if (entity->m_EventHandler.find(type) == entity->m_EventHandler.end())
+		{
+			GR_CORE_WARN("Entity NO.{0} has no event:{1} Handler", entity->m_EntityID, type);
+			entity->m_EventQueue.pop();
+			return;
+		}
+		entity->m_EventHandler[type]->Handle(event->Data, entity->m_EntityID);
+		entity->m_EventQueue.pop();
+	}
+
+	void EntitySystem::UpdateController(int entityID)
+	{
+		if (!m_Controllers[entityID] || !m_Controllers[entityID]->m_OnActivate)
+		{
+			return;
+		}
+		
+	}
+
+	void EntitySystem::UpdateFSM(int entityID)
+	{
+		if (!m_FSMs[entityID] || m_FSMs[entityID]->m_OnActivate)
+		{
+			return;
+		}
+		
+	}
+
+	void EntitySystem::UpdateSoundPlayer(int entityID)
+	{
+		if (!m_SoundPlayers[entityID] || !m_SoundPlayers[entityID]->m_OnActivate)
+		{
+			return;
+		}
+		
+	}
+
+	void EntitySystem::UpdateDrawer2D(int entityID)
+	{
+		if (!m_Drawer[entityID] && !m_Drawer[entityID]->m_OnActivate)
+		{
+			return;
+		}
+		
+	}
+
+	void EntitySystem::UpdatePhysics2D(int entityID)
+	{
+		if (!m_Phisics[entityID] || !m_Phisics[entityID]->m_OnActivate)
+		{
+			return;
+		}
+		
+	}
+
+	void EntitySystem::UpdateTransform2D(int entityID)
+	{
+		if (!m_Transforms[entityID] || !m_Transforms[entityID]->m_OnActivate)
+		{
+			return;
+		}
+		m_Drawer[entityID]->m_Translate = m_Transforms[entityID]->GetTranslate();
+	}
+
+	void EntitySystem::UpdateAnimator2D(int entityID)
+	{
+		if (!m_Animators[entityID] || !m_Animators[entityID]->m_OnActivate)
+		{
+			return;
+		}
+		m_Drawer[entityID]->m_Animation = m_Animators[entityID]->GetCurrentAnimation();
+	}
+
+
 
 	int EntitySystem::CreateEntity(bool activate)
 	{
@@ -97,6 +196,17 @@ namespace Gear {
 			GR_CORE_TRACE("{0} entity Created!", entityID);
 		}
 		return entityID;
+	}
+
+	Ref<Entity> EntitySystem::GetEntity(int entityID)
+	{
+		auto entity = m_EntityPool.find(entityID);
+		if(entity == m_EntityPool.end()) 
+		{
+			GR_CORE_TRACE("{0} entity doesn't exist!", entityID);
+			return nullptr;
+		}
+		return entity->second;
 	}
 
 	void EntitySystem::ActivateEntity(int entityID)
@@ -372,15 +482,36 @@ namespace Gear {
 		m_SoundPlayers[entityID]->RegisterSound(sounds);
 	}
 
-	void EntitySystem::DispatchMessage_(int entityID, const std::string message)
+	Ref<Transform2D> EntitySystem::GetTransform2DComponent(int entityID)
 	{
-		for (auto& entity : m_ActivateEntitys)
+		if (!m_Transforms[entityID])
 		{
-			if (entityID != entity.first)
-			{
-				entity.second->ReceiveMessage_(entityID, message);
-			}
+			GR_CORE_WARN("{0} entity doesn't have Transform2D component!", entityID);
+			return nullptr;
 		}
+		return m_Transforms[entityID];
 	}
+
+	Ref<Physics> EntitySystem::GetPhysicsComponent(int entityID)
+	{
+		if (!m_Phisics[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have Physics component!", entityID);
+			return nullptr;
+		}
+		return m_Phisics[entityID];
+	}
+
+	Ref<FSM> EntitySystem::GetFSMComponent(int entityID)
+	{
+		if (!m_FSMs[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have FSM component!", entityID);
+			return nullptr;
+		}
+		return m_FSMs[entityID];
+	}
+
+	
 
 }

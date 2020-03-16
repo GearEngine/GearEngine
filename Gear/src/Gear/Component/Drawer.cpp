@@ -18,7 +18,9 @@ namespace Gear {
 	void Drawer2D::Update(Timestep ts)
 	{
 	}
+
 	void Drawer2D::Render()
 	{
+		Renderer2D::DrawAnimation(m_Translate, m_Animation);
 	}
 }

@@ -70,6 +70,7 @@ namespace Gear {
 	void Animator2D::RegisterAnimation(const std::initializer_list<std::pair<const EnumType, Ref<Animation2D>>>& animationList)
 	{
 		m_AnimationList = animationList;
+		m_CurrentAnimation = m_AnimationList.find(2)->second;
 	}
 }
 

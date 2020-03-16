@@ -1,5 +1,7 @@
 #pragma once
 #include "Component.h"
+#include <glm/glm.hpp>
+#include "Gear/Renderer/Texture.h"
 
 namespace Gear {
 
@@ -17,7 +19,11 @@ namespace Gear {
 	private:
 
 		virtual void Update(Timestep ts) override;
-		virtual void Render() override;
+		void Render();
+
+		glm::mat4 m_Translate;
+		glm::vec4 m_TintColor;
+		Ref<class Animation2D> m_Animation;
 
 		friend class EntitySystem;
 	};

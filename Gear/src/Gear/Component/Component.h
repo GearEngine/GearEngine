@@ -11,7 +11,6 @@ namespace Gear {
 
 	private:
 		virtual void Update(Timestep ts) = 0;
-		virtual void Render() {}
 
 		inline void InActivate() { m_OnActivate = false; }
 		inline void Activate() { m_OnActivate = true; }

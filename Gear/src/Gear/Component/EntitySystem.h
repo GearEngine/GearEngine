@@ -8,6 +8,7 @@
 #include "Transform.h"
 #include "Controller.h"
 #include "Drawer.h"
+#include "EventSystem.h"
 
 namespace Gear {
 
@@ -30,13 +31,26 @@ namespace Gear {
 	{
 	private:
 		static void Init();
-		static void ShutDown();
-		static void Update(Timestep ts);
-		static void Render();
+		static void Shutdown();
+		static void EventHandle(Ref<Entity>& entity);
+
+
+	private:
+		static void UpdateController(int entityID);
+		static void UpdateFSM(int entityID);
+		static void UpdateSoundPlayer(int entityID);
+		static void UpdateDrawer2D(int entityID);
+		static void UpdatePhysics2D(int entityID);
+		static void UpdateTransform2D(int entityID);
+		static void UpdateAnimator2D(int entityID);
 
 		//user interface
 	public:
 		static int CreateEntity(bool activate = false);
+		static Ref<Entity> GetEntity(int entityID);
+
+		static void Update(Timestep ts);
+		static void Render();
 
 		static void ActivateEntity(int entityID);
 		static void InActivateEntity(int entityID);
@@ -52,7 +66,10 @@ namespace Gear {
 		static void SetAnimator(int entityID, const std::initializer_list < std::pair<const EnumType, Ref<Animation2D>>>& animationList);
 		static void SetTransform(int entityID, const glm::vec3& position, const float rotation, const glm::vec2& scale);
 		static void SetSoundPlayer(int entityID, const std::initializer_list<std::pair<const EnumType, std::pair<Ref<Sound>, SoundChannel>>>& sounds);
-		static void DispatchMessage_(int entityID, const std::string message);
+		
+		static Ref<Transform2D> GetTransform2DComponent(int entityID);
+		static Ref<Physics> GetPhysicsComponent(int entityID);
+		static Ref<FSM> GetFSMComponent(int entityID);
 
 	private:
 		static int s_EntityID;
@@ -73,6 +90,7 @@ namespace Gear {
 		static std::vector<Ref<Physics>>		m_Phisics;
 
 		friend class Application;
+		friend class EventSystem;
 	};
 
 }
