@@ -59,9 +59,9 @@ namespace Gear {
 
 			UpdateController(id, ts);
 			UpdateFSM(id, ts);
-			UpdateAnimator2D(id, ts);
-			UpdatePhysics2D(id, ts);
 			UpdateTransform2D(id, ts);
+			UpdatePhysics2D(id, ts);
+			UpdateAnimator2D(id, ts);
 			UpdateSoundPlayer(id, ts);
 			UpdateDrawer2D(id, ts);
 		}
@@ -139,7 +139,7 @@ namespace Gear {
 		{
 			return;
 		}
-		
+		m_Phisics[entityID]->Update(ts);
 	}
 
 	void EntitySystem::UpdateTransform2D(int entityID, Timestep ts)
@@ -482,6 +482,27 @@ namespace Gear {
 		m_SoundPlayers[entityID]->RegisterSound(sounds);
 	}
 
+	void EntitySystem::SetPhysics(int entityID, bool activateGravity, float gravity, float friction, float elastics)
+	{
+		auto entity = m_EntityPool.find(entityID);
+		if (entity == m_EntityPool.end())
+		{
+			GR_CORE_WARN("{0} entity doesn't exist!", entityID);
+			return;
+		}
+		if (!m_Phisics[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have Physics component!", entityID);
+			return;
+		}
+		if (m_Transforms[entityID])
+		{
+			m_Phisics[entityID]->SetTargetPos(&m_Transforms[entityID]->m_Position);
+		}
+		m_Phisics[entityID]->RegisterBasicForce(gravity, friction, elastics);
+		m_Phisics[entityID]->SetGravity(activateGravity);
+	}
+
 	Ref<Transform2D> EntitySystem::GetTransform2DComponent(int entityID)
 	{
 		if (!m_Transforms[entityID])
@@ -522,7 +543,7 @@ namespace Gear {
 		return m_Animators[entityID];
 	}
 
-	Ref<Physics> EntitySystem::GetPhysics(int entityID)
+	Ref<Physics2D> EntitySystem::GetPhysics2D(int entityID)
 	{
 		if (!m_Phisics[entityID])
 		{

@@ -126,7 +126,7 @@ namespace Gear {
 
 				glDeleteShader(shader);
 
-				GR_CORE_ERROR({ 0 }, infoLog.data());
+				GR_CORE_ERROR("{0}", infoLog.data());
 				GR_CORE_ASSERT(false, "Shader compilation failure");
 				break;
 			}

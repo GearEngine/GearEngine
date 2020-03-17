@@ -12,9 +12,9 @@ Worm::Worm(const glm::vec3& position, const float rotation, const glm::vec2 scal
 
 	//Attach Component
 	Gear::EntitySystem::AttachComponent(m_ID, {
-		Gear::ComponentID::Animantor, Gear::ComponentID::Drawer,
-		Gear::ComponentID::Controller, Gear::ComponentID::Transform,
-		Gear::ComponentID::Physics, Gear::ComponentID::SoundPlayer,
+		Gear::ComponentID::Animantor,	Gear::ComponentID::Drawer,
+		Gear::ComponentID::Controller,	Gear::ComponentID::Transform,
+		Gear::ComponentID::Physics,		Gear::ComponentID::SoundPlayer,
 		Gear::ComponentID::FSM
 	});
 
@@ -41,6 +41,8 @@ Worm::Worm(const glm::vec3& position, const float rotation, const glm::vec2 scal
 		{ WormCommand::SetTimer4, GR_KEY_4},		{ WormCommand::SetTimer5, GR_KEY_5}
 	});
 
+	Gear::EntitySystem::SetPhysics(m_ID, true);
+
 	//Subscpribe EventChannel
 	Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Explosion);
 	Gear::EventSystem::RegisterEventHandler(m_ID, EventType::Explosion, s_ExplosionHandler);
@@ -54,11 +56,11 @@ Worm::~Worm()
 
 void Worm::Update(Gear::Timestep ts)
 {
-	if (Gear::Input::IsKeyPressd(GR_KEY_C))
+	/*if (Gear::Input::IsKeyPressd(GR_KEY_C))
 	{
 		auto event = Gear::CreateRef<Gear::EntityEvent>(EventType::Explosion, ExplosionData({1.0f, 1.0f}, 3.0f, 5.0f));
 		Gear::EventSystem::DispatchEvent(EventChannel::Explosion, event);
-	}
+	}*/
 }
 
 

@@ -16,12 +16,10 @@ public:
 	void OnEvent(Gear::Event& e) override;
 
 private:
-	Gear::OrthographicCameraController m_CameraController;
 	Worm worm0;
 	Worm worm1;
 	Worm worm2;
 
-	glm::vec2 MousePosition;
-	glm::vec3 MouseWorldPosition;
-
+	friend class TerrianLayer;
+	friend class MaskLayer;
 };

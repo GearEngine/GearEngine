@@ -13,8 +13,6 @@ namespace Gear {
 		virtual uint32_t GetWidth() const = 0;
 		virtual uint32_t GetHeight() const = 0;
 
-		virtual void SetData(void* data, uint32_t size) = 0;
-
 		virtual void Bind(uint32_t slot = 0) const = 0;
 	};
 
@@ -23,7 +21,12 @@ namespace Gear {
 	public:
 		static Ref<Texture2D> Create(uint32_t width, uint32_t height);
 		static Ref<Texture2D> Create(const std::string& path);
-		
+
+		virtual unsigned char* GetData() const = 0;
+		virtual void SetData(void* data, uint32_t size) = 0;
+
+	protected:
+		unsigned char* m_Data;
 	};
 
 	class FrameTexture2D : public Texture
@@ -36,6 +39,12 @@ namespace Gear {
 
 		virtual const uint32_t GetMaxFrameX() const = 0;
 		virtual const uint32_t GetMaxFrameY() const = 0;
+
+		virtual void SetData(void* data, int indexX, int indexY, uint32_t size) = 0;
+		virtual unsigned char* GetData(int indexX, int indexY) const = 0;
+
+	protected:
+		std::vector<std::vector<unsigned char*>> m_Datas;
 	};
 
 	class TextureStorage

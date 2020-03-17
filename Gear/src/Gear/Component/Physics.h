@@ -23,12 +23,16 @@ namespace Gear {
 	public:
 		inline void SetGravity(bool onGravity) { m_OnGravity = onGravity; }
 		inline void SetExternalVector(const glm::vec2& externalVector) { m_ExternalVector = externalVector; }
+		inline void SetTargetPos(glm::vec3* targetPos) { m_TargetPos = targetPos; }
+		void TargetUpdate(Timestep ts);
 
 	private:
 		bool m_OnGravity;
 		float m_Gravity;
 		glm::vec2 m_ExternalVector;
+		glm::vec3* m_TargetPos;
 
+		float m_DeltaTime;
 		float m_Friction;
 		float m_Elastics;
 

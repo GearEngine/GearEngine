@@ -8,14 +8,16 @@ class OnMoveHandler : public Gear::FSM::InputHandler
 		if (cmd.KeyType == WormCommand::Left)
 		{
 			GR_TRACE("{0}entity(Worm) On Move state have Left Command! ", entityID);
+			Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ -1.0f, 0.0f });
 			return WormState::OnMove;
 		}
 		if (cmd.KeyType == WormCommand::Right)
 		{
 			GR_TRACE("{0}entity(Worm) On Move state have Right Command! ", entityID);
+			Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 1.0f, 0.0f });
 			return WormState::OnMove;
 		}
-
+		Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 0.0f, 0.0f });
 		Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnIdle);
 		return WormState::OnIdle;
 	}

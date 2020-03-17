@@ -61,6 +61,7 @@ namespace Gear {
 		s_Data->TextureShader = Shader::Create("assets/shaders/Texture.glsl");
 		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_Texture", 0);
+		s_Data->TextureShader->SetInt("u_Mask", 1);
 	}
 
 	void Renderer2D::Shutdown()
@@ -95,6 +96,18 @@ namespace Gear {
 		return ret;
 	}
 
+	void Renderer2D::DrawTextureWithMask(const glm::mat4 & translate, const Ref<Texture>& texture, const Ref<Texture>& mask)
+	{
+		texture->Bind(0);
+		mask->Bind(1);
+
+		s_Data->TextureShader->SetInt("u_WithMask", 1);
+		s_Data->TextureShader->SetMat4("u_Transform", translate);
+
+		s_Data->QuardVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
+	}
+
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		DrawQuad({ position.x, position.y, 0.0f}, size, color);
@@ -104,6 +117,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", color);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
 		s_Data->WhiteTexture->Bind();
@@ -125,6 +139,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
 		texture->Bind();
@@ -141,6 +156,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", color);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
 		s_Data->TextureShader->SetMat4("u_Transform", translate);
@@ -155,6 +171,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
 		s_Data->TextureShader->SetMat4("u_Transform", translate);
@@ -174,6 +191,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", color);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
 		s_Data->WhiteTexture->Bind();
@@ -196,6 +214,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
 		texture->Bind();
@@ -213,6 +232,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", color);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
 		s_Data->TextureShader->SetMat4("u_Transform", translate);
@@ -225,6 +245,7 @@ namespace Gear {
 
 	void Renderer2D::DrawRotatedQuad(const glm::mat4 & translate, const Ref<Texture>& texture, const glm::vec4 & tintColor)
 	{
+		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
 		s_Data->TextureShader->SetMat4("u_Transform", translate);
@@ -244,6 +265,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
 		animation->Bind();
@@ -265,6 +287,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
 		animation->Bind();
@@ -282,6 +305,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetMat4("u_Transform", translate);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);

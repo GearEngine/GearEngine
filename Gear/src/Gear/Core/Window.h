@@ -13,7 +13,7 @@ namespace Gear {
 		unsigned int Height;
 
 		WindowProps(const std::string& title = "Gear Engine",
-			unsigned int width = 1280, unsigned int height = 720)
+			unsigned int width = WINDOW_WIDTH, unsigned int height = WINDOW_HEIGHT)
 			: Title(title), Width(width), Height(height)
 		{}
 	};

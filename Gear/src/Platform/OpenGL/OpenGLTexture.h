@@ -18,6 +18,7 @@ namespace Gear {
 		virtual uint32_t GetHeight() const override { return m_Height; }
 
 		virtual void SetData(void* data, uint32_t size) override;
+		virtual unsigned char* GetData() const override { return m_Data; }
 
 		virtual void Bind(uint32_t slot = 0) const override;
 	private:
@@ -25,6 +26,7 @@ namespace Gear {
 		uint32_t m_Width, m_Height;
 		uint32_t m_RendererID;
 		GLenum m_InternalFormat, m_DataFormat;
+		unsigned char* m_Data = nullptr;
 	};
 
 	class OpenGLFrameTexture2D
@@ -37,7 +39,9 @@ namespace Gear {
 		virtual uint32_t GetWidth() const override { return m_Width; }
 		virtual uint32_t GetHeight() const override { return m_Height; }
 
-		virtual void SetData(void* data, uint32_t size) override {};
+		//TODO : implement SetData
+		virtual void SetData(void* data, int indexX, int indexY, uint32_t size) override {}
+		virtual unsigned char* GetData(int indexX, int indexY) const override { return m_Data[indexX][indexY]; }
 
 		virtual void Bind(uint32_t slot = 0) const override {};
 		virtual void Bind(int indexX, int indexY, uint32_t slot = 0) const override;
@@ -57,5 +61,6 @@ namespace Gear {
 
 		GLenum m_InternalFormat, m_DataFormat;
 		std::vector<std::vector<uint32_t>> m_RendererIDs;
+		std::vector<std::vector<unsigned char*>> m_Data;
 	};
 }

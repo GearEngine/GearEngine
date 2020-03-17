@@ -91,4 +91,8 @@ namespace Gear {
 	}
 
 	using EnumType = unsigned int;
+
+	const unsigned int WINDOW_HEIGHT = 720;
+	const unsigned int WINDOW_WIDTH	 = 1280;
+
 }

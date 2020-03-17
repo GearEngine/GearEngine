@@ -33,12 +33,12 @@ namespace Gear {
 
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(1);
-		stbi_uc* data = nullptr;
+		m_Data = nullptr;
 		{
 			GR_PROFILE_SCOPE("stbi_load - OpenGlTexture2D::OpenGLTexture2D(const std::string&)");
-			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+			m_Data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 		}
-		GR_CORE_ASSERT(data, "Failed to load image!");
+		GR_CORE_ASSERT(m_Data, "Failed to load image!");
 		m_Width = width;
 		m_Height = height;
 
@@ -69,15 +69,16 @@ namespace Gear {
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
-
-		stbi_image_free(data);
+		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, m_Data);
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
 		GR_PROFILE_FUNCTION();
-
+		if (m_Data)
+		{
+			stbi_image_free(m_Data);
+		}
 		glDeleteTextures(1, &m_RendererID);
 	}
 
