@@ -17,6 +17,7 @@ public:
 	void DestroyMask(float x, float y, float radius);
 
 private:
+	float m_Radius = 20.0f;
 	Gear::Ref<Gear::Texture2D> m_Mask;
 	Gear::Ref<Gear::Texture2D> m_Terrian;
 
@@ -27,8 +28,8 @@ private:
 	glm::vec2 m_Mouse;
 	glm::vec2 m_MouseOnWorld;
 	glm::vec2 m_MouseToLocalTexture;
+	glm::vec3 m_Pixel;
 
-	float m_Radius = 20.0f;
 };
 
 class MaskLayer : public Gear::Layer

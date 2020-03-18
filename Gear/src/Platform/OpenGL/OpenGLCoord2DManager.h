@@ -1,5 +1,6 @@
 #pragma once
 #include "Gear/Manager/CoordManager.h"
+#include "Gear/Renderer/Texture.h"
 
 namespace Gear {
 
@@ -14,8 +15,9 @@ namespace Gear {
 
 		virtual glm::vec2 GetTextureLocalPosition_From_WorlPosition(const glm::vec2& worldPosition, const glm::mat4& textureTranslate) override;
 		virtual glm::vec2 GetTextureLocalPosition_From_ScreenPosition(const glm::vec2& screenPosition, const glm::mat4& textureTranslate) override;
+		
+		virtual glm::vec4 GetPixel_From_TextureLocal_With_WorldPosition(Ref<Texture2D> texture, const glm::vec2& worldPosition, const glm::mat4& textureTranslate) override;
+		virtual glm::vec4 GetPixel_From_TextureLocal_With_ScreenPosition(Ref<Texture2D> texture, const glm::vec2& screenPosition, const glm::mat4& textureTranslate) override;
+		virtual glm::vec4 GetPixel_From_TextureLocal_With_TextureLocalPosition(Ref<Texture2D> texture, const glm::vec2& textureLocalPosition) override;
 	};
-
-
-
 }

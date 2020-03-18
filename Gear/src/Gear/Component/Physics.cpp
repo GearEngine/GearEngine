@@ -1,11 +1,11 @@
 #include "grpch.h"
 #include "Physics.h"
+#include "Gear/Manager/CoordManager.h"
 
 namespace Gear {
 
 	void Physics2D::Update(Timestep ts)
 	{
-		m_DeltaTime += ts;
 		TargetUpdate(ts);
 	}
 
@@ -19,8 +19,21 @@ namespace Gear {
 
 	bool Physics2D::JudgePixelCollision()
 	{
-		
+		auto pixel = Coord2DManger::Get()->GetPixel_From_TextureLocal_With_WorldPosition
+		//TODO : Y offset must not hard cording
+		(m_PixelCollisionTargetTexture, glm::vec2(m_TargetPos->x, m_TargetPos->y - 0.2f), m_PixelCollisionTargetTextureTranslate);
+
+		if (pixel.r == m_TargetPixel.r && pixel.g == m_TargetPixel.g && pixel.b == m_TargetPixel.b)
+			return true;
 		return false;
+	}
+
+	void Physics2D::ActivatePixelCollision(const glm::vec3 & targetPixel, Ref<Texture2D> collisionTargetTexture, const glm::mat4& textureTranslate)
+	{
+		m_TargetPixel = targetPixel;
+		m_PixelCollisionTargetTexture = collisionTargetTexture;
+		m_PixelCollisionTargetTextureTranslate = textureTranslate;
+		m_ActivatedPixelCollision = true;
 	}
 
 	void Physics2D::TargetUpdate(Timestep ts)
@@ -45,13 +58,10 @@ namespace Gear {
 		{
 			if (JudgePixelCollision())
 			{
-				m_TargetPos->x -= m_ExternalVector.x * ts;
 				m_TargetPos->y -= m_ExternalVector.y * ts;
+				m_GravityAccelation = 0.0f;
 			}
 		}
-
 	}
-
-
 
 }

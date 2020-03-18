@@ -36,15 +36,15 @@ namespace Gear {
 		worldPosition.x += cameraPos.x - m_AspectRatio * m_CameraController->GetZoomLevel();
 		worldPosition.y += cameraPos.y - 1.0f * m_CameraController->GetZoomLevel();
 
-		return { worldPosition.x, worldPosition.y };
+		return glm::vec2(worldPosition.x, worldPosition.y);
 	}
 
 	glm::vec2 OpenGLCoord2DManager::GetScreenPosition_From_WorldPosition(const glm::vec2& worldPosition)
 	{
 		auto& camera = m_CameraController->GetCamera();
-		glm::vec3 screenPosition = camera.GetViewProjectionMatrix() * glm::vec4({ worldPosition, 0.0f, 1.0f});
-		
-		return { screenPosition.x, screenPosition.y };
+		glm::vec3 screenPosition = camera.GetViewProjectionMatrix() * glm::vec4({ worldPosition, 0.0f, 1.0f });
+
+		return glm::vec2(screenPosition.x, screenPosition.y);
 	}
 
 	glm::vec2 OpenGLCoord2DManager::GetTextureLocalPosition_From_ScreenPosition(const glm::vec2& screenPosition, const glm::mat4& textureTranslate)
@@ -62,9 +62,46 @@ namespace Gear {
 		localPosition.x += 0.5;
 		localPosition.y += 0.5;
 
-		return { localPosition.x, localPosition.y };
+		return glm::vec2(localPosition.x, localPosition.y);
 	}
 
-	
+	glm::vec4 OpenGLCoord2DManager::GetPixel_From_TextureLocal_With_WorldPosition(Ref<Texture2D> texture, const glm::vec2& worldPosition, const glm::mat4& textureTranslate)
+	{
+		auto textureLocalPosition = GetTextureLocalPosition_From_WorlPosition(worldPosition, textureTranslate);
+		return GetPixel_From_TextureLocal_With_TextureLocalPosition(texture, textureLocalPosition);
+	}
+
+	glm::vec4 OpenGLCoord2DManager::GetPixel_From_TextureLocal_With_ScreenPosition(Ref<Texture2D> texture, const glm::vec2& screenPosition, const glm::mat4& textureTranslate)
+	{
+		auto textureLocalPosition = GetTextureLocalPosition_From_ScreenPosition(screenPosition, textureTranslate);
+		return GetPixel_From_TextureLocal_With_TextureLocalPosition(texture, textureLocalPosition);
+	}
+
+	glm::vec4 OpenGLCoord2DManager::GetPixel_From_TextureLocal_With_TextureLocalPosition(Ref<Texture2D> texture, const glm::vec2 & textureLocalPosition)
+	{
+		glm::vec4 pixel;
+		int result;
+
+		unsigned int* data = (unsigned int*)texture->GetData();
+		int width = texture->GetWidth();
+		int height = texture->GetHeight();
+
+		int xPos = width * textureLocalPosition.x;
+		int yPos = height * textureLocalPosition.y;
+
+		if (xPos >= width || xPos < 0 || yPos >= height || yPos < 0)
+		{
+			return pixel = { 0.0f, 0.0f, 0.0f, 0.0f };
+		}
+
+		result = data[yPos * width + xPos];
+		unsigned char* divider = (unsigned char*)&result;
+		pixel.r = divider[0];
+		pixel.g = divider[1];
+		pixel.b = divider[2];
+		pixel.a = divider[3];
+
+		return pixel;
+	}
 
 }

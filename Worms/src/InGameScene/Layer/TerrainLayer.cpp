@@ -34,7 +34,6 @@ void TerrainLayer::OnUpdate(Gear::Timestep ts)
 	{
 		DestroyMask(m_MouseToLocalTexture.x, m_MouseToLocalTexture.y, m_Radius);
 	}
-
 	Gear::Renderer2D::DrawTextureWithMask(m_TerrainTranslate, m_Terrian, m_Mask);
 	Gear::Renderer2D::EndScene();
 }
@@ -115,7 +114,7 @@ void MaskLayer::OnUpdate(Gear::Timestep ts)
 	Gear::RenderCommand::Clear();
 
 	Gear::Renderer2D::BeginScene(m_CameraController.GetCamera());
-	Gear::Renderer2D::DrawQuad(m_MaskTranslate, m_Mask);
+	//Gear::Renderer2D::DrawQuad(m_MaskTranslate, m_Mask);
 }
 
 void MaskLayer::OnImGuiRender()

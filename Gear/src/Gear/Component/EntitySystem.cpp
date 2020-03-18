@@ -503,7 +503,9 @@ namespace Gear {
 		m_SoundPlayers[entityID]->RegisterSound(sounds);
 	}
 
-	void EntitySystem::SetPhysics(int entityID, bool activateGravity, float gravity, float limitGravityAccelation, float friction, float elastics)
+	void EntitySystem::SetPhysics(int entityID, bool activateGravity, float gravity, float limitGravityAccelation, float friction, 
+		float elastics, bool activatePixelCollision, const glm::vec3& targetPixel, Ref<Texture2D> targetTexture, 
+		const glm::mat4& targetTextureTranslate)
 	{
 		auto entity = m_EntityPool.find(entityID);
 		if (entity == m_EntityPool.end())
@@ -521,7 +523,11 @@ namespace Gear {
 			m_Phisics[entityID]->SetTargetPos(&m_Transforms[entityID]->m_Position);
 		}
 		m_Phisics[entityID]->RegisterBasicForce(gravity, limitGravityAccelation, friction, elastics);
-		m_Phisics[entityID]->ActiveGravity(activateGravity);
+		m_Phisics[entityID]->ActivateGravity(activateGravity);
+		if (activatePixelCollision)
+		{
+			m_Phisics[entityID]->ActivatePixelCollision(targetPixel, targetTexture, targetTextureTranslate);
+		}
 	}
 
 	Ref<Transform2D> EntitySystem::GetTransform2DComponent(int entityID)

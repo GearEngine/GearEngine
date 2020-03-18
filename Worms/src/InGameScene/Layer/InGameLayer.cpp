@@ -32,6 +32,9 @@ void InGameLayer::OnUpdate(Gear::Timestep ts)
 	
 	Gear::EntitySystem::Update(ts);
 	Gear::EntitySystem::Render();
+
+
+
 }
 
 void InGameLayer::OnImGuiRender()

@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include <glm/glm.hpp>
+#include "Gear/Renderer/Texture.h"
 
 namespace Gear {
 
@@ -22,26 +23,30 @@ namespace Gear {
 		bool JudgePixelCollision();
 
 	public:
-		inline void ActiveGravity(bool active) { m_ActivatedGravity = active; }
+		void ActivatePixelCollision(const glm::vec3& targetPixel, Ref<Texture2D> collisionTargetTexture, const glm::mat4& textureTranslate);
+		inline void ActivateGravity(bool active) { m_ActivatedGravity = active; }
 		inline void SetExternalVector(const glm::vec2& externalVector) { m_ExternalVector = externalVector; }
 		inline void SetTargetPos(glm::vec3* targetPos) { m_TargetPos = targetPos; }
 		void TargetUpdate(Timestep ts);
 
 	private:
-		bool m_ActivatedGravity;
-		bool m_ActivatedPixelCollision;
-		float m_Gravity;
+		bool m_ActivatedGravity = false;
+		bool m_ActivatedPixelCollision = false;
+
 		glm::vec2 m_ExternalVector;
 		glm::vec3* m_TargetPos = nullptr;
+		glm::vec3 m_TargetPixel;
+		glm::mat4 m_PixelCollisionTargetTextureTranslate;
 
-		float m_DeltaTime;
+		float m_Gravity;
 		float m_Friction;
 		float m_Elastics;
 		float m_GravityAccelation;
 		float m_LimitGravityAccelation;
 
-		friend class EntitySystem;
+		Ref<Texture2D> m_PixelCollisionTargetTexture;
 
+		friend class EntitySystem;
 	};
 
 }

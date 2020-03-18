@@ -41,7 +41,16 @@ Worm::Worm(const glm::vec3& position, const float rotation, const glm::vec2 scal
 		{ WormCommand::SetTimer4, GR_KEY_4},		{ WormCommand::SetTimer5, GR_KEY_5}
 	});
 
-	Gear::EntitySystem::SetPhysics(m_ID, true, 10.0f, 50.0f, 0.3f, 0.3f);
+	auto mask = Gear::TextureStorage::GetTexture2D("Terrain_Mask");
+	glm::vec3 maskPosition = { 0.0f, -5.0f, 0.0f };
+	glm::vec2 maskScale = { mask->GetWidth() / 20.0f , mask->GetHeight() / 20.0f };
+	glm::mat4 maskTranslate = glm::translate(glm::mat4(1.0f), maskPosition)
+		* glm::scale(glm::mat4(1.0f), { maskScale.x, maskScale.y, 1.0f });
+
+	Gear::EntitySystem::SetPhysics(
+		m_ID, true, 10.0f, 10.0f, 0.3f, 0.3f, true, { 234, 236, 232 },
+		mask, maskTranslate
+	);
 
 	//Subscpribe EventChannel
 	Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Explosion);
