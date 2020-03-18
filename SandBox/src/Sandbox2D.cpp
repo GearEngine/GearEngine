@@ -20,8 +20,8 @@ void Sandbox2D::OnAttach()
 	/*auto idle = Gear::FrameTexture2D::Create("assets/textures/wbrth1.png", 1, 15);
 	auto walk = Gear::FrameTexture2D::Create("assets/textures/wwalk.png", 1, 15);*/
 	wormsAnimation = Gear::Animation2D::Create(airStrike, 0.1f, false);
-	AddSound("assets/Sound/show only me.mp3", "bol4", true, true);
-	PlaySound(GetSound("bol4"), SoundChannel::BGM);
+	//AddSound("assets/Sound/show only me.mp3", "bol4", true, true);
+	//PlaySound(GetSound("bol4"), SoundChannel::BGM);
 }
 
 void Sandbox2D::OnDetach()
@@ -96,9 +96,6 @@ void Sandbox2D::OnUpdate(Gear::Timestep ts)
 		Gear::Renderer2D::DrawAnimationRotateQuad(wormsPosition, { 1.f, 1.0f }, glm::radians(0.0f), wormsAnimation, tintColor);
 		//Gear::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 1.f, 1.0f }, glm::radians(0.0f), m_CheckerboardTexture, 1.0f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f), 1);
 		Gear::Renderer2D::EndScene();
-
-
-
 
 		//Gear::Renderer2D::EndScene(Gear::Input::GetMouseX(), Gear::Input::GetMouseY());
 	}
