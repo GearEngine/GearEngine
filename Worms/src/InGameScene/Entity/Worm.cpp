@@ -47,9 +47,10 @@ Worm::Worm(const glm::vec3& position, const float rotation, const glm::vec2 scal
 	glm::mat4 maskTranslate = glm::translate(glm::mat4(1.0f), maskPosition)
 		* glm::scale(glm::mat4(1.0f), { maskScale.x, maskScale.y, 1.0f });
 
-	Gear::EntitySystem::SetPhysics(
-		m_ID, true, 10.0f, 10.0f, 0.3f, 0.3f, true, { 234, 236, 232 },
-		mask, maskTranslate
+	Gear::EntitySystem::SetPhysics(m_ID, true, 10.0f, 10.0f, 0.3f, 0.3f);
+	Gear::EntitySystem::SetPixelCollision(
+		m_ID, {234, 236, 232}, mask, maskTranslate,
+		{ {-0.1f, -0.2f}, {0.1f, -0.2f}, {0.0f, -0.2f} }
 	);
 
 	//Subscpribe EventChannel

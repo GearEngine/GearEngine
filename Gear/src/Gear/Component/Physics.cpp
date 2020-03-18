@@ -19,20 +19,22 @@ namespace Gear {
 
 	bool Physics2D::JudgePixelCollision()
 	{
-		auto pixel = Coord2DManger::Get()->GetPixel_From_TextureLocal_With_WorldPosition
-		//TODO : Y offset must not hard cording
-		(m_PixelCollisionTargetTexture, glm::vec2(m_TargetPos->x, m_TargetPos->y - 0.2f), m_PixelCollisionTargetTextureTranslate);
-
-		if (pixel.r == m_TargetPixel.r && pixel.g == m_TargetPixel.g && pixel.b == m_TargetPixel.b)
-			return true;
+		for (auto& offset : m_PixelCollisionOffsetVector)
+		{
+			auto pixel = Coord2DManger::Get()->GetPixel_From_TextureLocal_With_WorldPosition
+				(m_PixelCollisionTargetTexture, glm::vec2(m_TargetPos->x + offset.first, m_TargetPos->y + offset.second), m_PixelCollisionTargetTextureTranslate);
+			if (pixel.r == m_TargetPixel.r && pixel.g == m_TargetPixel.g && pixel.b == m_TargetPixel.b)
+				return true;
+		}
 		return false;
 	}
 
-	void Physics2D::ActivatePixelCollision(const glm::vec3 & targetPixel, Ref<Texture2D> collisionTargetTexture, const glm::mat4& textureTranslate)
+	void Physics2D::ActivatePixelCollision(const glm::vec3 & targetPixel, Ref<Texture2D> collisionTargetTexture, const glm::mat4& textureTranslate, const std::vector<std::pair<float, float>>& offsets)
 	{
 		m_TargetPixel = targetPixel;
 		m_PixelCollisionTargetTexture = collisionTargetTexture;
 		m_PixelCollisionTargetTextureTranslate = textureTranslate;
+		m_PixelCollisionOffsetVector = offsets;
 		m_ActivatedPixelCollision = true;
 	}
 

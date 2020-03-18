@@ -23,9 +23,11 @@ public:
 
 		Gear::Scene* scene = new Gear::Scene("InGameScene");
 		scene->PushOverlay(m_ImGuilayer);
-		scene->PushLayer(new MaskLayer());
-		scene->PushLayer(new InGameLayer());
 		scene->PushLayer(new TerrainLayer());
+		scene->PushLayer(new InGameLayer());
+
+		Mask::SetMask("Terrain_Mask", { 0.0f, -0.5f, 0.0f }, { 20.0f, 20.0f });
+		Camera::SetCamera((float)Gear::WINDOW_WIDTH, (float)Gear::WINDOW_HEIGHT);
 
 		Gear::SceneManager::Get()->AddScene(scene->GetName(), scene);
 		Gear::SceneManager::Get()->changeScene("InGameScene");

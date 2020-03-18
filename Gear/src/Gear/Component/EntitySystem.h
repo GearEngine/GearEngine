@@ -68,11 +68,9 @@ namespace Gear {
 		static void SetAnimator(int entityID, const std::initializer_list < std::pair<const EnumType, Ref<Animation2D>>>& animationList);
 		static void SetTransform(int entityID, const glm::vec3& position, const float rotation, const glm::vec2& scale);
 		static void SetSoundPlayer(int entityID, const std::initializer_list<std::pair<const EnumType, std::pair<Ref<Sound>, SoundChannel>>>& sounds);
-		static void SetPhysics(int entityID, bool activateGravity = false, float gravity = 1.0f, 
-			float limitGravityAccelation = 0.0f,  float friction = 0.2f, float elastics = 0.3f, 
-			bool activatePixelCollision = false, const glm::vec3& targetPixel = {1.0f, 1.0f, 1.0f}, 
-			Ref<Texture2D> targetTexture = nullptr, const glm::mat4& targetTextureTranslate = glm::mat4{ 1.0f });
-
+		static void SetPhysics(int entityID, bool activateGravity = false, float gravity = 1.0f, float limitGravityAccelation = 0.0f,  float friction = 0.2f, float elastics = 0.3f);
+		static void SetPixelCollision(int entityID, const glm::vec3& targetPixel, Ref<Texture2D> targetTexture, const glm::mat4& targetTextureTranslate, std::vector<std::pair<float, float>> offsets);
+		
 		static Ref<Transform2D> GetTransform2DComponent(int entityID);
 		static Ref<Physics> GetPhysicsComponent(int entityID);
 		static Ref<FSM> GetFSMComponent(int entityID);

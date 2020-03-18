@@ -18,38 +18,31 @@ public:
 
 private:
 	float m_Radius = 20.0f;
-	Gear::Ref<Gear::Texture2D> m_Mask;
 	Gear::Ref<Gear::Texture2D> m_Terrian;
-
-	glm::mat4 m_TerrainTranslate;
-	glm::vec3 m_TerrainPosition = { 0.0f, -5.0f, 0.0f };
-	glm::vec2 m_TerrainScale;
 
 	glm::vec2 m_Mouse;
 	glm::vec2 m_MouseOnWorld;
 	glm::vec2 m_MouseToLocalTexture;
 	glm::vec3 m_Pixel;
-
 };
 
-class MaskLayer : public Gear::Layer
+class Mask
 {
 public:
-	MaskLayer();
-	virtual ~MaskLayer() = default;
+	static void SetMask(std::string maskName, const glm::vec3& position, const glm::vec2& scale);
+	
+public:
+	static Gear::Ref<Gear::Texture2D> s_Mask;
+	static glm::mat4 s_MaskTranslate;
+};
 
-	virtual void OnAttach() override;
-	virtual void OnDetach() override;
-
-	void OnUpdate(Gear::Timestep ts) override;
-	virtual void OnImGuiRender() override;
-	void OnEvent(Gear::Event& e) override;
-
-private:
-	Gear::OrthographicCameraController m_CameraController;
-	Gear::Ref<Gear::Texture2D> m_Mask;
-
-	glm::mat4 m_MaskTranslate;
-	glm::vec3 m_MaskPosition = { 0.0f, -5.0f, -0.5f };
-	glm::vec2 m_MaskScale;
+class Camera
+{
+public:
+	static Gear::OrthographicCameraController s_CameraController;
+	
+public:
+	static void SetCamera(float windowWidth, float windowHeight, bool rotate = false);
+	static void OnUpdate(Gear::Timestep ts);
+	static void OnEvent(Gear::Event& e);
 };

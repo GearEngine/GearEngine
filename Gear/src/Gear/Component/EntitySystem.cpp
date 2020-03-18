@@ -503,9 +503,7 @@ namespace Gear {
 		m_SoundPlayers[entityID]->RegisterSound(sounds);
 	}
 
-	void EntitySystem::SetPhysics(int entityID, bool activateGravity, float gravity, float limitGravityAccelation, float friction, 
-		float elastics, bool activatePixelCollision, const glm::vec3& targetPixel, Ref<Texture2D> targetTexture, 
-		const glm::mat4& targetTextureTranslate)
+	void EntitySystem::SetPhysics(int entityID, bool activateGravity, float gravity, float limitGravityAccelation, float friction, float elastics)
 	{
 		auto entity = m_EntityPool.find(entityID);
 		if (entity == m_EntityPool.end())
@@ -522,12 +520,27 @@ namespace Gear {
 		{
 			m_Phisics[entityID]->SetTargetPos(&m_Transforms[entityID]->m_Position);
 		}
-		m_Phisics[entityID]->RegisterBasicForce(gravity, limitGravityAccelation, friction, elastics);
-		m_Phisics[entityID]->ActivateGravity(activateGravity);
-		if (activatePixelCollision)
+		if (activateGravity)
 		{
-			m_Phisics[entityID]->ActivatePixelCollision(targetPixel, targetTexture, targetTextureTranslate);
+			m_Phisics[entityID]->ActivateGravity();
 		}
+		m_Phisics[entityID]->RegisterBasicForce(gravity, limitGravityAccelation, friction, elastics);
+	}
+
+	void EntitySystem::SetPixelCollision(int entityID, const glm::vec3 & targetPixel, Ref<Texture2D> targetTexture, const glm::mat4 & targetTextureTranslate, std::vector<std::pair<float, float>> offsets)
+	{
+		auto entity = m_EntityPool.find(entityID);
+		if (entity == m_EntityPool.end())
+		{
+			GR_CORE_WARN("{0} entity doesn't exist!", entityID);
+			return;
+		}
+		if (!m_Phisics[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have Physics component!", entityID);
+			return;
+		}
+		m_Phisics[entityID]->ActivatePixelCollision(targetPixel, targetTexture, targetTextureTranslate, offsets);
 	}
 
 	Ref<Transform2D> EntitySystem::GetTransform2DComponent(int entityID)
