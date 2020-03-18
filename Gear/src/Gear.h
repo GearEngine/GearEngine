@@ -28,4 +28,5 @@
 // ------------------------------------- 
 
 #include "Gear/Manager/SceneManager.h"
+#include "Gear/Manager/CoordManager.h"
 #include "Gear/Manager/Sound.h"

@@ -85,17 +85,6 @@ namespace Gear {
 		
 	}
 
-	std::tuple<int, int, int> Renderer2D::getPixel(int x, int y)
-	{
-		unsigned char* data = new unsigned char[1];
-
-		glReadPixels(x, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-		std::tuple<int, int, int> ret = { data[0], data[1], data[2] };
-
-		return ret;
-	}
-
 	void Renderer2D::DrawTextureWithMask(const glm::mat4 & translate, const Ref<Texture>& texture, const Ref<Texture>& mask)
 	{
 		texture->Bind(0);

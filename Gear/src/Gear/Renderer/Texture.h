@@ -1,8 +1,5 @@
 #pragma once
 
-#include <string>
-#include "Gear/Core/Core.h"
-
 namespace Gear {
 
 	class Texture
