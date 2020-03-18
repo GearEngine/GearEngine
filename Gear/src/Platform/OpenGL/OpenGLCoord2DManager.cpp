@@ -5,13 +5,13 @@
 
 namespace Gear {
 
-	glm::vec4 OpenGLCoord2DManager::GetPixel_From_WorldPosition(glm::vec2 worldPosition)
+	glm::vec4 OpenGLCoord2DManager::GetPixel_From_WorldPosition(const glm::vec2& worldPosition)
 	{
 		glm::vec2 screenPosition = GetScreenPosition_From_WorldPosition(worldPosition);
 		return GetPixel_From_ScreenPosition(screenPosition);
 	}
 
-	glm::vec4 OpenGLCoord2DManager::GetPixel_From_ScreenPosition(glm::vec2 screenPosition)
+	glm::vec4 OpenGLCoord2DManager::GetPixel_From_ScreenPosition(const glm::vec2& screenPosition)
 	{
 		glm::vec4 pixel;
 		unsigned char pixelBuffer[4];
@@ -23,7 +23,7 @@ namespace Gear {
 		return pixel;
 	}
 
-	glm::vec2 OpenGLCoord2DManager::GetWorldPosition_From_ScreenPosition(glm::vec2 screenPosition)
+	glm::vec2 OpenGLCoord2DManager::GetWorldPosition_From_ScreenPosition(const glm::vec2& screenPosition)
 	{
 		glm::vec3 worldPosition;
 		auto& camera = m_CameraController->GetCamera();
@@ -36,25 +36,35 @@ namespace Gear {
 		worldPosition.x += cameraPos.x - m_AspectRatio * m_CameraController->GetZoomLevel();
 		worldPosition.y += cameraPos.y - 1.0f * m_CameraController->GetZoomLevel();
 
-		return worldPosition;
+		return { worldPosition.x, worldPosition.y };
 	}
 
-	glm::vec2 OpenGLCoord2DManager::GetScreenPosition_From_WorldPosition(glm::vec2 worldPosition)
+	glm::vec2 OpenGLCoord2DManager::GetScreenPosition_From_WorldPosition(const glm::vec2& worldPosition)
 	{
 		auto& camera = m_CameraController->GetCamera();
 		glm::vec3 screenPosition = camera.GetViewProjectionMatrix() * glm::vec4({ worldPosition, 0.0f, 1.0f});
 		
-		return screenPosition;
+		return { screenPosition.x, screenPosition.y };
 	}
 
-	glm::vec2 OpenGLCoord2DManager::GetTextureLocalPosition_From_WorlPosition(glm::vec2 worldPosition, Ref<Texture2D> texture)
+	glm::vec2 OpenGLCoord2DManager::GetTextureLocalPosition_From_ScreenPosition(const glm::vec2& screenPosition, const glm::mat4& textureTranslate)
 	{
-		return glm::vec2();
+		auto worldPosition = GetWorldPosition_From_ScreenPosition(screenPosition);
+		return GetTextureLocalPosition_From_WorlPosition(worldPosition, textureTranslate);
 	}
 
-	glm::vec2 OpenGLCoord2DManager::GetTextureLocalPosition_From_ScreenPosition(glm::vec2 screenPosition, Ref<Texture2D> texture)
+	glm::vec2 OpenGLCoord2DManager::GetTextureLocalPosition_From_WorlPosition(const glm::vec2& worldPosition, const glm::mat4& textureTranslate)
 	{
-		return glm::vec2();
+		glm::vec3 localPosition;
+		auto inverse = glm::inverse(textureTranslate);
+		localPosition = inverse * glm::vec4(worldPosition, 0.0f, 1.0f);
+
+		localPosition.x += 0.5;
+		localPosition.y += 0.5;
+
+		return { localPosition.x, localPosition.y };
 	}
+
+	
 
 }

@@ -9,8 +9,9 @@ InGameLayer::InGameLayer()
 	worm1({ 0.0f, 0.0f, 0.1f }, 0.0f, { 1.0f, 1.0f }), 
 	worm2({ -1.0f, 4.0f, 0.1f }, 0.0f, { 1.0f, 1.0f })
 {
-	Gear::EntitySystem::InActivateComponent(worm1.GetID(), { {Gear::ComponentID::Controller} });
-	Gear::EntitySystem::InActivateComponent(worm2.GetID(), { {Gear::ComponentID::Controller} });
+	Gear::EntitySystem::InActivateComponent(worm0.GetID(), { {Gear::ComponentID::Controller} });
+	Gear::EntitySystem::InActivateComponent(worm1.GetID(), { {Gear::ComponentID::Controller}});
+	//Gear::EntitySystem::InActivateComponent(worm2.GetID(), { {Gear::ComponentID::Physics} });
 	
 	Gear::EventSystem::UnSubscribeChannel(worm1.GetID(), EventChannel::Explosion);
 	Gear::EventSystem::UnSubscribeChannel(worm2.GetID(), EventChannel::Explosion);

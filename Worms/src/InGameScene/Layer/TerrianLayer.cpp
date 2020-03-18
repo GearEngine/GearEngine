@@ -33,10 +33,13 @@ MaskLayer::MaskLayer()
 	m_Mask = Gear::TextureStorage::GetTexture2D("Terrian_Mask");
 	m_Terrian = Gear::TextureStorage::GetTexture2D("Terrian");
 
-	m_Scale = { m_Terrian->GetWidth() / 20.0f , m_Terrian->GetHeight() / 20.0f };
+	m_MaskScale = { m_Terrian->GetWidth() / 20.0f , m_Terrian->GetHeight() / 20.0f };
 
-	m_Translate = glm::translate(glm::mat4(1.0f), m_Position)
-		* glm::scale(glm::mat4(1.0f), { m_Scale.x, m_Scale.y, 1.0f });
+	m_MaskTranslate = glm::translate(glm::mat4(1.0f), m_MaskPosition)
+		* glm::scale(glm::mat4(1.0f), { m_MaskScale.x, m_MaskScale.y, 1.0f });
+
+	Gear::Coord2DManger::Get()->SetCamera(&m_CameraController);
+	Gear::Coord2DManger::Get()->SetResolution(Gear::WINDOW_WIDTH, Gear::WINDOW_HEIGHT);
 }
 
 void MaskLayer::OnAttach()
@@ -47,29 +50,6 @@ void MaskLayer::OnDetach()
 {
 }
 
-void MaskLayer::MouseOnWorld()
-{
-	m_Mouse = { Gear::Input::GetMouseX(), 720.0f - Gear::Input::GetMouseY() };
-	m_MouseOnWorld = glm::inverse(m_CameraController.GetCamera().GetViewProjectionMatrix()) * glm::vec4(m_Mouse, 0.0f, 1.0f);
-
-	m_MouseOnWorld.x /= Gear::WINDOW_WIDTH * 0.5;
-	m_MouseOnWorld.y /= Gear::WINDOW_HEIGHT * 0.5;
-
-	auto CameraPos = m_CameraController.GetCamera().GetPosition();
-	m_MouseOnWorld.x += CameraPos.x - 1.77777f * m_CameraController.GetZoomLevel();
-	m_MouseOnWorld.y += CameraPos.y - 1.0f * m_CameraController.GetZoomLevel();
-
-}
-
-void MaskLayer::WorldToLocal()
-{
-	auto inverse = glm::inverse(m_Translate);
-	m_MouseToLocalTexture = inverse * glm::vec4(m_MouseOnWorld, 0.0f, 1.0f);
-
-	m_MouseToLocalTexture.x += 0.5;
-	m_MouseToLocalTexture.y += 0.5;
-}
-
 void MaskLayer::OnUpdate(Gear::Timestep ts)
 {
 	m_CameraController.OnUpdate(ts);
@@ -77,15 +57,17 @@ void MaskLayer::OnUpdate(Gear::Timestep ts)
 	Gear::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 	Gear::RenderCommand::Clear();
 
-	MouseOnWorld();
-	WorldToLocal();
+	m_Mouse = { Gear::Input::GetMouseX(), 720.0f - Gear::Input::GetMouseY() };
+	m_MouseOnWorld = Gear::Coord2DManger::Get()->GetWorldPosition_From_ScreenPosition(m_Mouse);
+	m_MouseToLocalTexture = Gear::Coord2DManger::Get()->GetTextureLocalPosition_From_WorlPosition(m_MouseOnWorld, m_MaskTranslate);
+
 	if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT))
 	{
 		DestroyMask(m_MouseToLocalTexture.x, m_MouseToLocalTexture.y, m_Radius);
 	}
 
 	Gear::Renderer2D::BeginScene(m_CameraController.GetCamera());
-	Gear::Renderer2D::DrawTextureWithMask(m_Translate, m_Terrian, m_Mask);
+	Gear::Renderer2D::DrawTextureWithMask(m_MaskTranslate, m_Terrian, m_Mask);
 }
 
 void MaskLayer::OnImGuiRender()

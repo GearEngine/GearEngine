@@ -13,7 +13,7 @@ namespace Gear {
 		return s_Inst;
 	}
 
-	void Coord2DManger::init()
+	void Coord2DManger::Init()
 	{
 		GR_CORE_ASSERT(!s_Inst, "Coord2DManager aleady initiated!");
 
@@ -22,11 +22,25 @@ namespace Gear {
 		case RendererAPI::API::None:
 			GR_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
 			s_Inst = nullptr;
+			return;
 		case RendererAPI::API::OpenGL:
 			s_Inst = new OpenGLCoord2DManager;
+			return;
 		}
 		GR_CORE_ASSERT(false, "Unknown RendererAPI!");
 		s_Inst = nullptr;
+	}
+
+	void Coord2DManger::Destroy()
+	{
+		if (s_Inst)
+			delete s_Inst;
+	}
+
+	void Coord2DManger::SetResolution(float windowWidth, float windowHeight) 
+	{ 
+		m_WindowResolution = { windowWidth, windowHeight }; 
+		m_AspectRatio = windowWidth / windowHeight;
 	}
 
 }

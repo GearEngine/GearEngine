@@ -9,17 +9,18 @@ namespace Gear {
 	{
 	public:
 		static Coord2DManger* Get();
-		static void init();
+		static void Init();
+		static void Destroy();
 
 		inline void SetCamera(OrthographicCameraController* cameraController) { m_CameraController = cameraController; }
-		inline void SetResolution(float windowWidth, float windowHeight) { m_WindowResolution = { windowWidth, windowHeight }; }
+		void SetResolution(float windowWidth, float windowHeight);
 
-		virtual glm::vec4 GetPixel_From_WorldPosition(glm::vec2 worldPosition) = 0;
-		virtual glm::vec4 GetPixel_From_ScreenPosition(glm::vec2 worldPosition) = 0;
-		virtual glm::vec2 GetWorldPosition_From_ScreenPosition(glm::vec2 screenPosition) = 0;
-		virtual glm::vec2 GetScreenPosition_From_WorldPosition(glm::vec2 worldPosition) = 0;
-		virtual glm::vec2 GetTextureLocalPosition_From_WorlPosition(glm::vec2 worldPosition, Ref<Texture2D> texture) = 0;
-		virtual glm::vec2 GetTextureLocalPosition_From_ScreenPosition(glm::vec2 worldPosition, Ref<Texture2D> texture) = 0;
+		virtual glm::vec4 GetPixel_From_WorldPosition(const glm::vec2& worldPosition) = 0;
+		virtual glm::vec4 GetPixel_From_ScreenPosition(const glm::vec2& worldPosition) = 0;
+		virtual glm::vec2 GetWorldPosition_From_ScreenPosition(const glm::vec2& screenPosition) = 0;
+		virtual glm::vec2 GetScreenPosition_From_WorldPosition(const glm::vec2& worldPosition) = 0;
+		virtual glm::vec2 GetTextureLocalPosition_From_WorlPosition(const glm::vec2& worldPosition, const glm::mat4& textureTranslate) = 0;
+		virtual glm::vec2 GetTextureLocalPosition_From_ScreenPosition(const glm::vec2& worldPosition, const glm::mat4& textureTranslate) = 0;
 
 	protected:
 		OrthographicCameraController* m_CameraController = nullptr;

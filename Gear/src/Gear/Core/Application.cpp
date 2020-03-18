@@ -5,6 +5,7 @@
 
 #include "Gear/Renderer/Renderer.h"
 #include "Gear/Manager/Sound.h"
+#include "Gear/Manager/CoordManager.h"
 #include "Gear/Component/EntitySystem.h"
 
 #include <GLFW/glfw3.h>
@@ -28,6 +29,7 @@ namespace Gear {
 
 		m_ImGuilayer = new ImGuiLayer;
 		EntitySystem::Init();
+		Coord2DManger::Init();
 	}
 
 	Application::~Application()
@@ -38,6 +40,7 @@ namespace Gear {
 		SceneManager::Destory();
 		EntitySystem::Shutdown();
 		SoundSystem::Destroy();
+		Coord2DManger::Destroy();
 	}
 
 	void Application::OnEvent(Event & e)
