@@ -13,6 +13,7 @@ namespace Gear {
 		static void Destroy();
 
 		inline void SetCamera(OrthographicCameraController* cameraController) { m_CameraController = cameraController; }
+		inline OrthographicCameraController* GetCamera() { return m_CameraController; }
 		void SetResolution(float windowWidth, float windowHeight);
 
 		virtual glm::vec4 GetPixel_From_WorldPosition(const glm::vec2& worldPosition) = 0;

@@ -6,6 +6,7 @@ namespace EventChannel
 	{
 		Explosion,
 		WormMove,
-		MouseMove
+		MouseMove,
+		MouseClick
 	};
 }

@@ -11,7 +11,7 @@ namespace Gear {
 		~SceneManager();
 
 	public:
-		void AddScene(const std::string& name, Scene* scene);
+		void AddScene(Scene* scene);
 		void EraseScene(const std::string& sceneName);
 
 		void ScenePush(const std::string& name);
@@ -36,6 +36,5 @@ namespace Gear {
 		Scene* m_CurrentScene;
 		static SceneManager* s_Instance;
 	};
-
 
 }

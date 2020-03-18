@@ -23,8 +23,9 @@ namespace Gear {
 		m_SceneStoradge.clear();
 	}
 
-	void SceneManager::AddScene(const std::string& name, Scene * scene)
+	void SceneManager::AddScene(Scene * scene)
 	{
+		auto name = scene->GetName();
 		auto target = m_SceneStoradge.find(name);
 		if (target == m_SceneStoradge.end())
 		{
