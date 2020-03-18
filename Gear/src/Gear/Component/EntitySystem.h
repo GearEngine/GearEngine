@@ -8,6 +8,7 @@
 #include "Transform.h"
 #include "Controller.h"
 #include "Drawer.h"
+#include "Timer.h"
 #include "EventSystem.h"
 
 namespace Gear {
@@ -23,6 +24,7 @@ namespace Gear {
 			Physics,
 			SoundPlayer,
 			Transform,
+			Timer,
 			ComponentMax
 		};
 	}
@@ -42,6 +44,7 @@ namespace Gear {
 		static void UpdatePhysics2D(int entityID, Timestep ts);
 		static void UpdateTransform2D(int entityID, Timestep ts);
 		static void UpdateAnimator2D(int entityID, Timestep ts);
+		static void UpdateTimer(int entityID, Timestep ts);
 
 		//user interface
 	public:
@@ -74,6 +77,7 @@ namespace Gear {
 		static Ref<Physics2D> GetPhysics2D(int entityID);
 		static Ref<SoundPlayer> GetSoundPlayer(int entityID);
 		static Ref<Controller> GetController(int entityID);
+		static Ref<Timer> GetTimer(int entityID);
 
 	private:
 		static int s_EntityID;
@@ -92,6 +96,7 @@ namespace Gear {
 		static std::vector<Ref<Transform2D>>	m_Transforms;
 		static std::vector<Ref<Drawer2D>>		m_Drawer;
 		static std::vector<Ref<Physics2D>>		m_Phisics;
+		static std::vector<Ref<Timer>>			m_Timers;
 
 		friend class Application;
 		friend class EventSystem;

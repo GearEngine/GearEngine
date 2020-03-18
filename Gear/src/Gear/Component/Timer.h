@@ -26,6 +26,8 @@ namespace Gear {
 		bool m_OnProgress = false;
 		bool m_OnPause = false;
 		bool m_OnExpired = false;
+
+		friend class EntitySystem;
 	};
 
 

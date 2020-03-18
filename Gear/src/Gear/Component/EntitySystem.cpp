@@ -17,7 +17,7 @@ namespace Gear {
 	std::vector<Ref<Transform2D>>	EntitySystem::m_Transforms = std::vector<Ref<Transform2D>>();
 	std::vector<Ref<Drawer2D>>		EntitySystem::m_Drawer = std::vector<Ref<Drawer2D>>();
 	std::vector<Ref<Physics2D>>		EntitySystem::m_Phisics = std::vector<Ref<Physics2D>>();
-
+	std::vector<Ref<Timer>>			EntitySystem::m_Timers = std::vector<Ref<Timer>>();
 
 	void EntitySystem::Init()
 	{
@@ -28,6 +28,7 @@ namespace Gear {
 		m_Phisics.resize(10000);
 		m_SoundPlayers.resize(10000);
 		m_Transforms.resize(10000);
+		m_Timers.resize(10000);
 	}
 
 	void EntitySystem::Shutdown()
@@ -42,6 +43,7 @@ namespace Gear {
 		m_Phisics.clear();
 		m_SoundPlayers.clear();
 		m_Transforms.clear();
+		m_Timers.clear();
 
 		EventSystem::Shutdown();
 	}
@@ -57,6 +59,7 @@ namespace Gear {
 			//Event Handle
 			EventHandle(entity.second);
 
+			UpdateTimer(id, ts);
 			UpdateController(id, ts);
 			UpdateFSM(id, ts);
 			UpdateTransform2D(id, ts);
@@ -121,7 +124,7 @@ namespace Gear {
 		{
 			return;
 		}
-		
+		m_SoundPlayers[entityID]->Update(ts);
 	}
 
 	void EntitySystem::UpdateDrawer2D(int entityID, Timestep ts)
@@ -130,7 +133,8 @@ namespace Gear {
 		{
 			return;
 		}
-		
+		m_Drawer[entityID]->m_Translate = m_Transforms[entityID]->GetTranslate();
+		m_Drawer[entityID]->m_Animation = m_Animators[entityID]->GetCurrentAnimation();
 	}
 
 	void EntitySystem::UpdatePhysics2D(int entityID, Timestep ts)
@@ -148,7 +152,6 @@ namespace Gear {
 		{
 			return;
 		}
-		m_Drawer[entityID]->m_Translate = m_Transforms[entityID]->GetTranslate();
 	}
 
 	void EntitySystem::UpdateAnimator2D(int entityID, Timestep ts)
@@ -158,7 +161,15 @@ namespace Gear {
 			return;
 		}
 		m_Animators[entityID]->Update(ts);
-		m_Drawer[entityID]->m_Animation = m_Animators[entityID]->GetCurrentAnimation();
+	}
+
+	void EntitySystem::UpdateTimer(int entityID, Timestep ts)
+	{
+		if (!m_Timers[entityID] || !m_Timers[entityID]->m_OnActivate)
+		{
+			return;
+		}
+		m_Timers[entityID]->Update(ts);
 	}
 
 
@@ -275,8 +286,6 @@ namespace Gear {
 			GR_CORE_WARN("{0} entity doesn't exist!", entityID);
 		}
 	}
-	
-
 
 	void EntitySystem::AttachComponent(int entityID, const std::vector<ComponentID::ID>& components)
 	{
@@ -304,6 +313,9 @@ namespace Gear {
 				break;
 			case ComponentID::ID::Transform:	
 				if (!m_Transforms[entityID]) m_Transforms[entityID].reset(new Transform2D());
+				break;
+			case ComponentID::ID::Timer:
+				if (!m_Timers[entityID]) m_Timers[entityID].reset(new Timer());
 				break;
 			}
 		}
@@ -336,6 +348,9 @@ namespace Gear {
 			case ComponentID::ID::Transform:
 				m_Transforms[entityID].reset();
 				break;
+			case ComponentID::ID::Timer:
+				m_Timers[entityID].reset();
+				break;
 			}
 		}
 	}
@@ -367,6 +382,9 @@ namespace Gear {
 			case ComponentID::ID::Transform:
 				if (!m_Transforms[entityID]) m_Transforms[entityID]->m_OnActivate = true;
 				break;
+			case ComponentID::ID::Timer:
+				if (!m_Timers[entityID]) m_Timers[entityID]->m_OnActivate = true;
+				break;
 			}
 		}
 	}
@@ -397,6 +415,9 @@ namespace Gear {
 				break;
 			case ComponentID::ID::Transform:
 				if (m_Transforms[entityID]) m_Transforms[entityID]->m_OnActivate = false;
+				break;
+			case ComponentID::ID::Timer:
+				if (m_Timers[entityID]) m_Timers[entityID]->m_OnActivate = false;
 				break;
 			}
 		}
@@ -573,6 +594,14 @@ namespace Gear {
 		return m_Controllers[entityID];
 	}
 
-	
+	Ref<Timer> EntitySystem::GetTimer(int entityID)
+	{
+		if (!m_Timers[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have Timer component!", entityID);
+			return nullptr;
+		}
+		return m_Timers[entityID];
+	}
 
 }
