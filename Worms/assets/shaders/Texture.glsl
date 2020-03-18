@@ -45,5 +45,7 @@ void main()
 		color = texture(u_Texture, v_TexCoord) * u_Color;
 		if(color.a < 0.1)
 			discard;
+		if(color.x == 0 && color.y == 0 && color.z == 0)
+			discard;
 	}
 }
