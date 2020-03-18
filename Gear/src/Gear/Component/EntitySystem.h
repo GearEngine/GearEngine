@@ -68,7 +68,7 @@ namespace Gear {
 		static void SetAnimator(int entityID, const std::initializer_list < std::pair<const EnumType, Ref<Animation2D>>>& animationList);
 		static void SetTransform(int entityID, const glm::vec3& position, const float rotation, const glm::vec2& scale);
 		static void SetSoundPlayer(int entityID, const std::initializer_list<std::pair<const EnumType, std::pair<Ref<Sound>, SoundChannel>>>& sounds);
-		static void SetPhysics(int entityID, bool activateGravity = false, float gravity = 1.0f, float friction = 0.2f, float elastics = 0.3f);
+		static void SetPhysics(int entityID, bool activateGravity = false, float gravity = 1.0f, float limitGravityAccelation = 0.0f,  float friction = 0.2f, float elastics = 0.3f);
 
 		static Ref<Transform2D> GetTransform2DComponent(int entityID);
 		static Ref<Physics> GetPhysicsComponent(int entityID);

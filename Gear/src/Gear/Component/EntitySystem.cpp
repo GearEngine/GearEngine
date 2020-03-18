@@ -503,7 +503,7 @@ namespace Gear {
 		m_SoundPlayers[entityID]->RegisterSound(sounds);
 	}
 
-	void EntitySystem::SetPhysics(int entityID, bool activateGravity, float gravity, float friction, float elastics)
+	void EntitySystem::SetPhysics(int entityID, bool activateGravity, float gravity, float limitGravityAccelation, float friction, float elastics)
 	{
 		auto entity = m_EntityPool.find(entityID);
 		if (entity == m_EntityPool.end())
@@ -520,8 +520,8 @@ namespace Gear {
 		{
 			m_Phisics[entityID]->SetTargetPos(&m_Transforms[entityID]->m_Position);
 		}
-		m_Phisics[entityID]->RegisterBasicForce(gravity, friction, elastics);
-		m_Phisics[entityID]->SetGravity(activateGravity);
+		m_Phisics[entityID]->RegisterBasicForce(gravity, limitGravityAccelation, friction, elastics);
+		m_Phisics[entityID]->ActiveGravity(activateGravity);
 	}
 
 	Ref<Transform2D> EntitySystem::GetTransform2DComponent(int entityID)

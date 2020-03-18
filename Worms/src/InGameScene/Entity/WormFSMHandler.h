@@ -55,7 +55,7 @@ class OnIdleHandler : public Gear::FSM::InputHandler
 			Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnMove);
 			return WormState::OnMove;
 		}
-
+		Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({0.0f, 0.0f});
 		return WormState::OnIdle;
 	}
 };

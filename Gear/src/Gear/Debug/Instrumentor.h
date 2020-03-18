@@ -123,7 +123,7 @@ namespace Gear {
 	};
 }
 
-#define GR_PROFILE 1
+#define GR_PROFILE 0
 #if GR_PROFILE
 #define GR_PROFILE_BEGIN_SESSION(name, filepath) ::Gear::Instrumentor::Get().BeginSession(name, filepath)
 #define GR_PROFILE_END_SESSION() ::Gear::Instrumentor::Get().EndSession()

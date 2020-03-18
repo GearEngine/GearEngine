@@ -86,7 +86,9 @@ namespace Gear {
 				}
 				m_ImGuilayer->End();
 			}
+			int a = 3;
 			m_Window->OnUpdate();
+			a = 4;
 		}
 	}
 

@@ -15,7 +15,7 @@ Worm::Worm(const glm::vec3& position, const float rotation, const glm::vec2 scal
 		Gear::ComponentID::Animantor,	Gear::ComponentID::Drawer,
 		Gear::ComponentID::Controller,	Gear::ComponentID::Transform,
 		Gear::ComponentID::Physics,		Gear::ComponentID::SoundPlayer,
-		Gear::ComponentID::FSM
+		Gear::ComponentID::FSM,			Gear::ComponentID::Timer
 	});
 
 	//Set Component specific
@@ -41,7 +41,7 @@ Worm::Worm(const glm::vec3& position, const float rotation, const glm::vec2 scal
 		{ WormCommand::SetTimer4, GR_KEY_4},		{ WormCommand::SetTimer5, GR_KEY_5}
 	});
 
-	Gear::EntitySystem::SetPhysics(m_ID, true);
+	Gear::EntitySystem::SetPhysics(m_ID, true, 10.0f, 50.0f, 0.3f, 0.3f);
 
 	//Subscpribe EventChannel
 	Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Explosion);
