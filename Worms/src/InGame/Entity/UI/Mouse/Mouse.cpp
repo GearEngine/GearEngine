@@ -5,8 +5,6 @@
 #include "MouseFSMHandler.h"
 #include "MouseEventHandler.h"
 
-#include "GLFW/include/GLFW/glfw3.h"
-
 namespace InGame {
 
 	Mouse::Mouse(const InitiateData & initData)
@@ -37,18 +35,18 @@ namespace InGame {
 			{ GameState::OnPrepareRun, nullptr },
 		});
 
-		auto runningHandler = new MouseOnGameRunningHandler;
 		Gear::EntitySystem::SetFSM(m_ID, {
 			{ GameState::OnItemWindow,		new MouseOnItemWindowHandler },
 			{ GameState::OnQuitWindow,		new MouseOnQuitWindowHandler  },
 			{ GameState::OnWindowSelect,	new MouseOnWindowSelectHandler },
-			{ GameState::OnRunning, runningHandler },	{ GameState::OnWormsDying, runningHandler },
-			{ GameState::OnStart, runningHandler },		{ GameState::OnPrepareRun, runningHandler },
+			{ GameState::OnRunning,			new MouseOnGameRunningHandler },	
+			{ GameState::OnWormsDying,		new MouseOnGameRunningHandler },
+			{ GameState::OnStart,			new MouseOnGameRunningHandler },		
+			{ GameState::OnPrepareRun,		new MouseOnGameRunningHandler }
 		});
 
 		Gear::EntitySystem::SetController(m_ID, {
 			{ MOUSE_CLICKTYPE, GR_MOUSE_BUTTON_LEFT}, { MOUSE_CLICKTYPE, GR_MOUSE_BUTTON_RIGHT},
-			{ 1, MOUSEMOVE_COMMAND }
 		});
 
 		//Subscpribe EventChannel
@@ -62,17 +60,6 @@ namespace InGame {
 
 	void Mouse::OnUpdate(Gear::Timestep ts)
 	{
-		auto[x, y] = Gear::Input::GetMousePosition();
-
-		if (x != m_MiddlePosition.first || y != m_MiddlePosition.second)
-		{
-			float dx = m_MiddlePosition.first - x;
-			float dy = m_MiddlePosition.second - y;
-			auto event = Gear::CreateRef<Gear::EntityEvent>(EventType::MouseMove, MouseMoveData(dx, dy));
-			Gear::EventSystem::DispatchEvent(EventChannel::MouseMove, event);
-		}
-
-		glfwSetCursorPos((GLFWwindow*)m_Window, m_MiddlePosition.first, m_MiddlePosition.second);
 	}
 
 }

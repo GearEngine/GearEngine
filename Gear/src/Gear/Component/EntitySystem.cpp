@@ -92,7 +92,7 @@ namespace Gear {
 			return;
 
 		auto& event = entity->m_EventQueue.front();
-		EntityEventType type = event->Type;
+		EntityEventType type = event.Type;
 
 		if (entity->m_EventHandler.find(type) == entity->m_EventHandler.end())
 		{
@@ -100,7 +100,7 @@ namespace Gear {
 			entity->m_EventQueue.pop();
 			return;
 		}
-		entity->m_EventHandler[type]->Handle(event->Data, entity->m_EntityID);
+		entity->m_EventHandler[type]->Handle(event.Data, entity->m_EntityID);
 		entity->m_EventQueue.pop();
 	}
 
@@ -119,7 +119,15 @@ namespace Gear {
 		{
 			return;
 		}
-		m_FSMs[entityID]->Handle(entityID, m_Controllers[entityID]->GetCommand());
+
+		if (m_Controllers[entityID])
+		{
+			m_FSMs[entityID]->Handle(entityID, m_Controllers[entityID]->GetCommand());
+		}
+		else
+		{
+			m_FSMs[entityID]->Handle(entityID, Controller::s_None);
+		}
 	}
 
 	void EntitySystem::UpdateSoundPlayer(int entityID, Timestep ts)

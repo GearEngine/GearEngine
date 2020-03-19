@@ -7,6 +7,7 @@ namespace InGame {
 		: Gear::Layer("UILayer")
 	{
 		m_Camera.reset(new Camera(initData.WindowWidth, initData.WindowHeight));
+		m_Mouse.reset(new Mouse(initData));
 	}
 
 	void UILayer::OnAttach()

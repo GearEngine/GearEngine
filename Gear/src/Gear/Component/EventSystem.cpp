@@ -38,7 +38,7 @@ namespace Gear {
 		GR_CORE_WARN("{0} entity doesn't subscribe {1} channel", entityID, m_Channel);
 	}
 
-	void EventChannel::DispatchEvent(Ref<EntityEvent> event)
+	void EventChannel::DispatchEvent(const EntityEvent& event)
 	{
 		for (auto& entity : m_Subscriber)
 		{
@@ -87,7 +87,7 @@ namespace Gear {
 		findChannel->second->UnSubscribe(entityID);
 	}
 
-	void EventSystem::DispatchEvent(ChannelType channel, Ref<EntityEvent> event)
+	void EventSystem::DispatchEvent(ChannelType channel, const EntityEvent& event)
 	{
 		auto findChannel = s_Channels.find(channel);
 		if (findChannel == s_Channels.end())

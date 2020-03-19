@@ -4,16 +4,7 @@
 namespace Gear {
 
 	using ChannelType = unsigned int;
-	using EntityEventType = unsigned int;
-
-	struct EntityEvent
-	{
-		EntityEvent(EntityEventType type, const std::any& data)
-			: Type(type), Data(data)
-		{}
-		EntityEventType Type;
-		std::any Data;
-	};
+	
 
 	class EventHandler
 	{
@@ -30,7 +21,7 @@ namespace Gear {
 		void Subscribe(int entityID);
 		void UnSubscribe(int entityID);
 
-		void DispatchEvent(Ref<EntityEvent> event);
+		void DispatchEvent(const EntityEvent& event);
 
 	private:
 		ChannelType m_Channel;
@@ -47,7 +38,7 @@ namespace Gear {
 		static void CreateChannel(ChannelType channel);
 		static void SubscribeChannel(int entityID, ChannelType channel);
 		static void UnSubscribeChannel(int entityID, ChannelType channel);
-		static void DispatchEvent(ChannelType channel, Ref<EntityEvent> event);
+		static void DispatchEvent(ChannelType channel, const EntityEvent& event);
 		static void RegisterEventHandler(int entityID, ChannelType channel, Ref<EventHandler> handler);
 
 	private:

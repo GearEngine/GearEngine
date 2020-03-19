@@ -29,13 +29,11 @@ namespace Gear {
 		inline void ActivateMouseMove() { m_ActivatedMouse = true; }
 		inline const Command& GetCommand() const { return m_Command; }
 
-		void MouseUpdate(Timestep ts);
-
 	private:
 		bool m_ActivatedMouse = false;
 
 		std::vector<Command> m_Commands;
-		Command m_None = { -1, -1 };
+		static Command s_None;
 		Command m_Command;
 
 		std::pair<float, float> m_PrevMousePos = {0.0f, 0.0f};

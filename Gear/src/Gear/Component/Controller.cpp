@@ -4,23 +4,18 @@
 
 namespace Gear {
 
+	Command Controller::s_None = { 0xffffffb, 0xffffffb };
+
 	Controller::~Controller()
 	{
 	}
 
 	void Controller::Update(Timestep ts)
 	{
-		m_Command = m_None;
-		MouseUpdate(ts);
+		m_Command = s_None;
 
 		for (auto& command : m_Commands)
 		{
-			if (command.Keycode == MOUSEMOVE_COMMAND)
-			{
-				m_Command.KeyType = command.KeyType;
-				break;
-			}
-
 			if (command.KeyType == MOUSE_CLICKTYPE)
 			{
 				if (Gear::Input::IsMouseButtonPressed(command.Keycode))
@@ -29,36 +24,15 @@ namespace Gear {
 					break;
 				}
 			}
-
-			if (Gear::Input::IsKeyPressd(command.Keycode))
+			else 
 			{
-				m_Command = command;
-				break;
+				if (Gear::Input::IsKeyPressd(command.Keycode))
+				{
+					m_Command = command;
+					break;
+				}
 			}
-
-			
 		}
 	}
-	void Controller::MouseUpdate(Timestep ts)
-	{
-		auto currentMousePos = Gear::Input::GetMousePosition();
-		currentMousePos.second = 720 - currentMousePos.second;
 
-		if (m_PrevMousePos.first == 0.0f && m_PrevMousePos.second == 0.0f)
-		{
-			m_PrevMousePos = currentMousePos;
-			return;
-		}
-
-		if (currentMousePos != m_PrevMousePos)
-		{
-			m_Command.Keycode = MOUSEMOVE_COMMAND;
-			m_Command.MouseMove = { 
-				currentMousePos.first - m_PrevMousePos.first, 
-				currentMousePos.second - m_PrevMousePos.second 
-			};
-			m_PrevMousePos = currentMousePos;
-		}
-
-	}
 }

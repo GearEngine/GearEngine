@@ -6,6 +6,7 @@ namespace InGame {
 	{
 		enum : unsigned int
 		{
+			World,
 			Explosion,
 			WormMove,
 			MouseMove,

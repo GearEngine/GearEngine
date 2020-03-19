@@ -16,34 +16,33 @@ namespace InGame {
 		m_ID = Gear::EntitySystem::CreateEntity(true);
 
 		Gear::EntitySystem::AttachComponent(m_ID, {
-			Gear::ComponentID::Transform,	Gear::ComponentID::Controller,
-			Gear::ComponentID::FSM,			Gear::ComponentID::Physics,
-			Gear::ComponentID::Timer
+			Gear::ComponentID::Transform,	Gear::ComponentID::FSM,			
+			Gear::ComponentID::Physics,		Gear::ComponentID::Timer
 		});
 
 		//Set Component specific
 		Gear::EntitySystem::SetTransform(m_ID, m_CameraController->GetCamera().GetPosition(), 0.0f, glm::vec2(1.0f, 1.0f));
-		
-		Gear::EntitySystem::SetController(m_ID, {
-			{ CameraCommand::MouseMove, MOUSEMOVE_COMMAND }
-		});
 
 		Gear::EntitySystem::SetPhysics(m_ID);
 
 		Gear::EntitySystem::SetFSM(m_ID, {
-			{ CameraState::OnFlowing, new CameraOnFlowingHandler }, { CameraState::OnMoveWithMouse, new CameraOnMoveWithMouseHandler },
-			{ CameraState::OnStop, new CameraOnStopHandler }
+			{ CameraState::OnFlowing, new CameraOnFlowingHandler }, { CameraState::OnStop, new CameraOnStopHandler }
 		});
 
 		//Subscpribe EventChannel
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Explosion);
+		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::MouseMove);
+
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::Explosion, Gear::CreateRef<CameraExplosionEventHandler>());
+		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::MouseMove, Gear::CreateRef<CameraMouseMoveEventHandler>());
+		
 	}
 
 	Camera::~Camera()
 	{
 		delete m_CameraController;
 		Gear::EventSystem::UnSubscribeChannel(m_ID, EventChannel::Explosion);
+		Gear::EventSystem::UnSubscribeChannel(m_ID, EventChannel::MouseMove);
 		Gear::EntitySystem::DeleteEntity(m_ID);
 	}
 
