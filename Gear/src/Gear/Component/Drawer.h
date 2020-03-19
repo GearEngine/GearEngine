@@ -2,6 +2,7 @@
 #include "Component.h"
 #include <glm/glm.hpp>
 #include "Gear/Renderer/Texture.h"
+#include "Texturer.h"
 
 namespace Gear {
 
@@ -19,11 +20,19 @@ namespace Gear {
 	private:
 
 		virtual void Update(Timestep ts) override;
-		void Render();
+		virtual void Render() override;
+		void RenderAnimation();
+		void RenderTexutre();
 
 		glm::mat4 m_Translate;
 		glm::vec4 m_TintColor;
+
 		Ref<class Animation2D> m_Animation;
+
+		BlendType::Type type;
+		Ref<Texture2D> m_Texture;
+		Ref<Texture2D> m_Blending;
+		Ref<Texture2D> m_Mask;
 
 		friend class EntitySystem;
 	};

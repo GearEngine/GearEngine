@@ -9,6 +9,7 @@
 #include "Controller.h"
 #include "Drawer.h"
 #include "Timer.h"
+#include "Texturer.h"
 #include "EventSystem.h"
 
 namespace Gear {
@@ -25,6 +26,7 @@ namespace Gear {
 			SoundPlayer,
 			Transform,
 			Timer,
+			Texturer,
 			ComponentMax
 		};
 	}
@@ -45,6 +47,7 @@ namespace Gear {
 		static void UpdateTransform2D(int entityID, Timestep ts);
 		static void UpdateAnimator2D(int entityID, Timestep ts);
 		static void UpdateTimer(int entityID, Timestep ts);
+		static void UpdateTexturer2D(int entityID, Timestep ts);
 
 		//user interface
 	public:
@@ -70,7 +73,8 @@ namespace Gear {
 		static void SetSoundPlayer(int entityID, const std::initializer_list<std::pair<const EnumType, std::pair<Ref<Sound>, SoundChannel>>>& sounds);
 		static void SetPhysics(int entityID, bool activateGravity = false, float gravity = 1.0f, float limitGravityAccelation = 0.0f,  float friction = 0.2f, float elastics = 0.3f);
 		static void SetPixelCollision(int entityID, const glm::vec3& targetPixel, Ref<Texture2D> targetTexture, const glm::mat4& targetTextureTranslate, std::vector<std::pair<float, float>> offsets);
-		
+		static void SetTexturer(int entityID, BlendType::Type type, Ref<Texture2D> texture, Ref<Texture2D> mask = nullptr, Ref<Texture2D> blending = nullptr);
+
 		static Ref<Transform2D> GetTransform2DComponent(int entityID);
 		static Ref<Physics> GetPhysicsComponent(int entityID);
 		static Ref<FSM> GetFSMComponent(int entityID);
@@ -79,6 +83,7 @@ namespace Gear {
 		static Ref<SoundPlayer> GetSoundPlayer(int entityID);
 		static Ref<Controller> GetController(int entityID);
 		static Ref<Timer> GetTimer(int entityID);
+		static Ref<Texturer2D> GetTexturer(int entityID);
 
 	private:
 		static int s_EntityID;
@@ -98,6 +103,7 @@ namespace Gear {
 		static std::vector<Ref<Drawer2D>>		m_Drawer;
 		static std::vector<Ref<Physics2D>>		m_Phisics;
 		static std::vector<Ref<Timer>>			m_Timers;
+		static std::vector<Ref<Texturer2D>>		m_Texturer;
 
 		friend class Application;
 		friend class EventSystem;

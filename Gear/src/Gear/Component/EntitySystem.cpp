@@ -18,6 +18,7 @@ namespace Gear {
 	std::vector<Ref<Drawer2D>>		EntitySystem::m_Drawer = std::vector<Ref<Drawer2D>>();
 	std::vector<Ref<Physics2D>>		EntitySystem::m_Phisics = std::vector<Ref<Physics2D>>();
 	std::vector<Ref<Timer>>			EntitySystem::m_Timers = std::vector<Ref<Timer>>();
+	std::vector<Ref<Texturer2D>>	EntitySystem::m_Texturer = std::vector<Ref<Texturer2D>>();
 
 	void EntitySystem::Init()
 	{
@@ -29,6 +30,7 @@ namespace Gear {
 		m_SoundPlayers.resize(10000);
 		m_Transforms.resize(10000);
 		m_Timers.resize(10000);
+		m_Texturer.resize(10000);
 	}
 
 	void EntitySystem::Shutdown()
@@ -44,6 +46,7 @@ namespace Gear {
 		m_SoundPlayers.clear();
 		m_Transforms.clear();
 		m_Timers.clear();
+		m_Texturer.clear();
 
 		EventSystem::Shutdown();
 	}
@@ -64,6 +67,7 @@ namespace Gear {
 			UpdateFSM(id, ts);
 			UpdateTransform2D(id, ts);
 			UpdatePhysics2D(id, ts);
+			UpdateTexturer2D(id, ts);
 			UpdateAnimator2D(id, ts);
 			UpdateSoundPlayer(id, ts);
 			UpdateDrawer2D(id, ts);
@@ -129,12 +133,35 @@ namespace Gear {
 
 	void EntitySystem::UpdateDrawer2D(int entityID, Timestep ts)
 	{
-		if (!m_Drawer[entityID] && !m_Drawer[entityID]->m_OnActivate)
+		auto& drawer = m_Drawer[entityID];
+		if (!drawer && !drawer->m_OnActivate)
 		{
 			return;
 		}
-		m_Drawer[entityID]->m_Translate = m_Transforms[entityID]->GetTranslate();
-		m_Drawer[entityID]->m_Animation = m_Animators[entityID]->GetCurrentAnimation();
+		if (m_Transforms[entityID])
+		{
+			drawer->m_Translate = m_Transforms[entityID]->GetTranslate();
+		}
+		if (m_Animators[entityID])
+		{
+			drawer->m_Animation = m_Animators[entityID]->GetCurrentAnimation();
+			return;
+		}
+
+		auto& texturer = m_Texturer[entityID];
+		if (texturer)
+		{
+			drawer->m_Texture = texturer->m_Texture;
+			switch (texturer->m_RenderType)
+			{
+			case BlendType::Masking:
+				drawer->m_Mask = texturer->m_Mask;
+				break;
+			case BlendType::Blending:
+				drawer->m_Blending = texturer->m_BlendTexture;
+				break;
+			}
+		}
 	}
 
 	void EntitySystem::UpdatePhysics2D(int entityID, Timestep ts)
@@ -172,7 +199,14 @@ namespace Gear {
 		m_Timers[entityID]->Update(ts);
 	}
 
-
+	void EntitySystem::UpdateTexturer2D(int entityID, Timestep ts)
+	{
+		if (!m_Texturer[entityID] || !m_Texturer[entityID]->m_OnActivate)
+		{
+			return;
+		}
+		m_Texturer[entityID]->Update(ts);
+	}
 
 	int EntitySystem::CreateEntity(bool activate)
 	{
@@ -280,6 +314,7 @@ namespace Gear {
 			m_Phisics[entityID].reset();
 			m_SoundPlayers[entityID].reset();
 			m_Transforms[entityID].reset();
+			m_Texturer[entityID].reset();
 		}
 		else
 		{
@@ -317,6 +352,9 @@ namespace Gear {
 			case ComponentID::ID::Timer:
 				if (!m_Timers[entityID]) m_Timers[entityID].reset(new Timer());
 				break;
+			case ComponentID::ID::Texturer:
+				if (!m_Texturer[entityID]) m_Texturer[entityID].reset(new Texturer2D());
+				break;
 			}
 		}
 	}
@@ -350,6 +388,9 @@ namespace Gear {
 				break;
 			case ComponentID::ID::Timer:
 				m_Timers[entityID].reset();
+				break;
+			case ComponentID::ID::Texturer:
+				m_Texturer[entityID].reset();
 				break;
 			}
 		}
@@ -385,6 +426,9 @@ namespace Gear {
 			case ComponentID::ID::Timer:
 				if (!m_Timers[entityID]) m_Timers[entityID]->m_OnActivate = true;
 				break;
+			case ComponentID::ID::Texturer:
+				if (!m_Texturer[entityID]) m_Texturer[entityID]->m_OnActivate = true;
+				break;
 			}
 		}
 	}
@@ -418,6 +462,9 @@ namespace Gear {
 				break;
 			case ComponentID::ID::Timer:
 				if (m_Timers[entityID]) m_Timers[entityID]->m_OnActivate = false;
+				break;
+			case ComponentID::ID::Texturer:
+				if (!m_Texturer[entityID]) m_Texturer[entityID]->m_OnActivate = false;
 				break;
 			}
 		}
@@ -543,6 +590,23 @@ namespace Gear {
 		m_Phisics[entityID]->ActivatePixelCollision(targetPixel, targetTexture, targetTextureTranslate, offsets);
 	}
 
+	void EntitySystem::SetTexturer(int entityID, BlendType::Type type, Ref<Texture2D> texture, Ref<Texture2D> mask, Ref<Texture2D> blending)
+	{
+		auto entity = m_EntityPool.find(entityID);
+		if (entity == m_EntityPool.end())
+		{
+			GR_CORE_WARN("{0} entity doesn't exist!", entityID);
+			return;
+		}
+		if (!m_Phisics[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have Physics component!", entityID);
+			return;
+		}
+		m_Texturer[entityID]->RegisterTexture(type, texture, mask, blending);
+
+	}
+
 	Ref<Transform2D> EntitySystem::GetTransform2DComponent(int entityID)
 	{
 		if (!m_Transforms[entityID])
@@ -621,6 +685,16 @@ namespace Gear {
 			return nullptr;
 		}
 		return m_Timers[entityID];
+	}
+
+	Ref<Texturer2D> EntitySystem::GetTexturer(int entityID)
+	{
+		if (!m_Texturer[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have Timer component!", entityID);
+			return nullptr;
+		}
+		return m_Texturer[entityID];
 	}
 
 }
