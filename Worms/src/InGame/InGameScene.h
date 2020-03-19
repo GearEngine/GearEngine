@@ -12,7 +12,6 @@ namespace InGame {
 
 	class InGameScene : public Gear::Scene
 	{
-
 	public:
 		InGameScene(const std::string& name, Gear::Layer* imGuiLayer, const InitiateData& initData)
 			: Gear::Scene(name)
@@ -22,7 +21,6 @@ namespace InGame {
 			PushLayer(new BackGroundLayer(initData));
 			PushLayer(new ObjectLayer(initData));
 		}
-
 	};
 
 }

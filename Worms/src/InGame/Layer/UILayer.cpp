@@ -18,6 +18,7 @@ namespace InGame {
 
 	void UILayer::OnUpdate(Gear::Timestep ts)
 	{
+		m_Camera->OnUpdate(ts);
 	}
 
 	void UILayer::OnImGuiRender()
@@ -26,6 +27,7 @@ namespace InGame {
 
 	void UILayer::OnEvent(Gear::Event & e)
 	{
+		m_Camera->OnEvent(e);
 	}
 
 }

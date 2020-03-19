@@ -6,7 +6,7 @@ namespace InGame {
 
 	Gear::Ref<WormExplosionEventHandler> Worm::s_ExplosionHandler = Gear::CreateRef<WormExplosionEventHandler>();
 
-	Worm::Worm(const glm::vec3& position, const float rotation, const glm::vec2 scale)
+	Worm::Worm(const glm::vec3& position, const float rotation, const glm::vec2 scale, const InitiateData& initData)
 	{
 		//Create Entity
 		m_ID = Gear::EntitySystem::CreateEntity(true);
@@ -44,8 +44,14 @@ namespace InGame {
 
 		Gear::EntitySystem::SetPhysics(m_ID, true, 10.0f, 10.0f, 0.3f, 0.3f);
 		
+		auto mask = Gear::TextureStorage::GetTexture2D(initData.MapName + "Mask");
+		int width = mask->GetWidth();
+		int height = mask->GetHeight();
+		auto maskTranslate = glm::translate(glm::mat4(1.0f), initData.MapPosition)
+			* glm::scale(glm::mat4(1.0f), { width / initData.MapReductionRatio  , height/ initData.MapReductionRatio , 1.0f });
+
 		Gear::EntitySystem::SetPixelCollision(
-			m_ID, { 234, 236, 232 }, Mask::s_Mask, Mask::s_MaskTranslate,
+			m_ID, { 234, 236, 232 }, mask, maskTranslate,
 			{ {-0.1f, -0.2f}, {0.1f, -0.2f}, {0.0f, -0.2f} }
 		);
 

@@ -6,12 +6,13 @@ namespace InGame {
 	{
 		InitiateData() = default;
 
-		float WindowWidth;
-		float WindowHeight;
-		int nWorm;
+		float WindowWidth = Gear::WINDOW_WIDTH;
+		float WindowHeight = Gear::WINDOW_HEIGHT;
+		int nWorm = 3;
 
-		std::string m_MapName;
-
+		std::string MapName = "Terrain";
+		glm::vec3 MapPosition = {0.0f, 0.0f, -0.1f};
+		float MapReductionRatio = 20.0f;
 	};
 
 }

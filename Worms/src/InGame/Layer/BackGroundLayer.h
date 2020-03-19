@@ -19,7 +19,7 @@ namespace InGame {
 		virtual void OnImGuiRender() override;
 		void OnEvent(Gear::Event& e) override;
 
-		void DestroyMask(float x, float y, float radius);
+		//void DestroyMask(float x, float y, float radius);
 
 	private:
 		Gear::Ref<Terrain> m_Terrian;

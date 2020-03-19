@@ -39,21 +39,21 @@ namespace Gear {
 
 	void Drawer2D::RenderTexutre()
 	{
-		switch (type)
+		switch (m_RenderType)
 		{
-		case Gear::BlendType::Normal:
+		case RenderType::Normal:
 			Renderer2D::DrawQuad(m_Translate, m_Texture);
 			break;
-		case Gear::BlendType::Blending:
+		case RenderType::Blending:
 			GR_CORE_ASSERT(false, "{DrawerCompoenent::Blending Currently not supported!}");
 			break;
-		case Gear::BlendType::Masking:
+		case RenderType::Masking:
 			Renderer2D::DrawTextureWithMask(m_Translate, m_Texture, m_Mask);
 			break;
-		case Gear::BlendType::Batch:
+		case RenderType::Batch:
 			GR_CORE_ASSERT(false, "{DrawerCompoenent::Batch Currently not supported!}");
 			break;
-		case Gear::BlendType::Tiling:
+		case RenderType::Tiling:
 			GR_CORE_ASSERT(false, "{DrawerCompoenent::Tiling Currently not supported!}");
 			break;
 		}

@@ -19,7 +19,7 @@ namespace InGame {
 		void OnEvent(Gear::Event& e) override;
 
 	private:
-		std::vector<Gear::Ref<Worm>> womrs;
+		std::vector<Gear::Ref<Worm>> worms;
 	};
 
 }

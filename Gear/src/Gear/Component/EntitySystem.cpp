@@ -152,12 +152,13 @@ namespace Gear {
 		if (texturer)
 		{
 			drawer->m_Texture = texturer->m_Texture;
-			switch (texturer->m_RenderType)
+			drawer->m_RenderType = texturer->m_RenderType;
+			switch (drawer->m_RenderType)
 			{
-			case BlendType::Masking:
+			case RenderType::Masking:
 				drawer->m_Mask = texturer->m_Mask;
 				break;
-			case BlendType::Blending:
+			case RenderType::Blending:
 				drawer->m_Blending = texturer->m_BlendTexture;
 				break;
 			}
@@ -590,7 +591,7 @@ namespace Gear {
 		m_Phisics[entityID]->ActivatePixelCollision(targetPixel, targetTexture, targetTextureTranslate, offsets);
 	}
 
-	void EntitySystem::SetTexturer(int entityID, BlendType::Type type, Ref<Texture2D> texture, Ref<Texture2D> mask, Ref<Texture2D> blending)
+	void EntitySystem::SetTexturer(int entityID, RenderType::Type type, Ref<Texture2D> texture, Ref<Texture2D> mask, Ref<Texture2D> blending)
 	{
 		auto entity = m_EntityPool.find(entityID);
 		if (entity == m_EntityPool.end())
@@ -598,7 +599,7 @@ namespace Gear {
 			GR_CORE_WARN("{0} entity doesn't exist!", entityID);
 			return;
 		}
-		if (!m_Phisics[entityID])
+		if (!m_Texturer[entityID])
 		{
 			GR_CORE_WARN("{0} entity doesn't have Physics component!", entityID);
 			return;

@@ -4,9 +4,8 @@
 namespace InGame {
 
 	BackGroundLayer::BackGroundLayer(const InitiateData& initData)
-		: Layer("BackGroundLayer")
+		: Layer("BackGroundLayer"), m_Terrian(new Terrain(initData))
 	{
-		m_Terrian = Gear::TextureStorage::GetTexture2D("Terrain");
 	}
 
 	void BackGroundLayer::OnAttach()
@@ -21,32 +20,31 @@ namespace InGame {
 	{
 		m_Mouse = { Gear::Input::GetMouseX(), 720.0f - Gear::Input::GetMouseY() };
 		m_MouseOnWorld = Gear::Coord2DManger::Get()->GetWorldPosition_From_ScreenPosition(m_Mouse);
-		m_MouseToLocalTexture = Gear::Coord2DManger::Get()->GetTextureLocalPosition_From_WorlPosition(m_MouseOnWorld, Mask::s_MaskTranslate);
+		//m_MouseToLocalTexture = Gear::Coord2DManger::Get()->GetTextureLocalPosition_From_WorlPosition(m_MouseOnWorld, Mask::s_MaskTranslate);
 
-		if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT))
+		/*if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT))
 		{
 			DestroyMask(m_MouseToLocalTexture.x, m_MouseToLocalTexture.y, m_Radius);
-		}
+		}*/
 		Gear::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Gear::RenderCommand::Clear();
-
-		Gear::Renderer2D::BeginScene(Camera::s_CameraController->GetCamera());
-		Gear::Renderer2D::DrawTextureWithMask(Mask::s_MaskTranslate, m_Terrian, Mask::s_Mask);
+		
+		Gear::Renderer2D::BeginScene(Gear::Coord2DManger::Get()->GetCamera()->GetCamera());
 	}
 
 	void BackGroundLayer::OnImGuiRender()
 	{
 		ImGui::Text("MousePosition		x : %f \t y : %f", m_Mouse.x, m_Mouse.y);
 		ImGui::Text("MouseWorldPosition x : %f \t y : %f", m_MouseOnWorld.x, m_MouseOnWorld.y);
-		ImGui::Text("MouseLocalPosition x : %f \t y : %f", m_MouseToLocalTexture.x, m_MouseToLocalTexture.y);
-		ImGui::DragFloat("Set Explosion radius", &m_Radius, 1.0f, 0.0f, 100.0f);
+		//ImGui::Text("MouseLocalPosition x : %f \t y : %f", m_MouseToLocalTexture.x, m_MouseToLocalTexture.y);
+		//ImGui::DragFloat("Set Explosion radius", &m_Radius, 1.0f, 0.0f, 100.0f);
 	}
 
 	void BackGroundLayer::OnEvent(Gear::Event & e)
 	{
 	}
 
-	void BackGroundLayer::DestroyMask(float x, float y, float radius)
+	/*void BackGroundLayer::DestroyMask(float x, float y, float radius)
 	{
 		int _width = Mask::s_Mask->GetWidth();
 		int _height = Mask::s_Mask->GetHeight();
@@ -76,6 +74,6 @@ namespace InGame {
 			}
 		}
 		Mask::s_Mask->SetData(_data, _width * _height * 4);
-	}
+	}*/
 
 }

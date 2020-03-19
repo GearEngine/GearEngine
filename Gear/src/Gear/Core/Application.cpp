@@ -80,6 +80,8 @@ namespace Gear {
 					for (Layer* layer : *m_CurScene)
 						layer->OnUpdate(timestep);
 				}
+				EntitySystem::Update(timestep);
+				EntitySystem::Render();
 
 				m_ImGuilayer->Begin();
 				{

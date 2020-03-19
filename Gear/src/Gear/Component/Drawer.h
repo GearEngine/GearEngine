@@ -29,7 +29,7 @@ namespace Gear {
 
 		Ref<class Animation2D> m_Animation;
 
-		BlendType::Type type;
+		RenderType::Type m_RenderType;
 		Ref<Texture2D> m_Texture;
 		Ref<Texture2D> m_Blending;
 		Ref<Texture2D> m_Mask;
