@@ -30,8 +30,8 @@ namespace InGame {
 		Gear::EntitySystem::SetTransform(m_ID, position, rotation, scale);
 
 		Gear::EntitySystem::SetFSM(m_ID, {
-			{ WormState::OnMove, new OnMoveHandler }, { WormState::OnUseItem, new OnUseItemHandler },
-			{ WormState::OnIdle, new OnIdleHandler }
+			{ WormState::OnMove, new WormOnMoveHandler }, { WormState::OnUseItem, new WormOnUseItemHandler },
+			{ WormState::OnIdle, new WormOnIdleHandler }
 			});
 
 		Gear::EntitySystem::SetController(m_ID, {
@@ -41,7 +41,7 @@ namespace InGame {
 			{ WormCommand::UseItem, GR_KEY_SPACE},		{ WormCommand::SetTimer1, GR_KEY_1},
 			{ WormCommand::SetTimer2, GR_KEY_2},		{ WormCommand::SetTimer3, GR_KEY_3},
 			{ WormCommand::SetTimer4, GR_KEY_4},		{ WormCommand::SetTimer5, GR_KEY_5}
-			});
+		});
 
 		Gear::EntitySystem::SetPhysics(m_ID, true, 10.0f, 10.0f, 0.3f, 0.3f);
 		

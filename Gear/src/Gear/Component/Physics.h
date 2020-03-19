@@ -28,8 +28,10 @@ namespace Gear {
 		inline void SetExternalVector(const glm::vec2& externalVector) { m_ExternalVector = externalVector; }
 		inline void SetTargetPos(glm::vec3* targetPos) { m_TargetPos = targetPos; }
 		void TargetUpdate(Timestep ts);
+		void FollowTarget();
 
 	private:
+		bool m_ActivatedFlow = false;
 		bool m_ActivatedGravity = false;
 		bool m_ActivatedPixelCollision = false;
 

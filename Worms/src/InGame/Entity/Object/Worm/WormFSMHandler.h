@@ -2,7 +2,7 @@
 
 namespace InGame {
 
-	class OnMoveHandler : public Gear::FSM::InputHandler
+	class WormOnMoveHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
@@ -24,7 +24,7 @@ namespace InGame {
 		}
 	};
 
-	class OnDyeHandler : public Gear::FSM::InputHandler
+	class WormOnDyeHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
@@ -32,7 +32,7 @@ namespace InGame {
 		}
 	};
 
-	class OnAirHandler : public Gear::FSM::InputHandler
+	class WormOnAirHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
@@ -40,7 +40,7 @@ namespace InGame {
 		}
 	};
 
-	class OnIdleHandler : public Gear::FSM::InputHandler
+	class WormOnIdleHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
@@ -61,7 +61,7 @@ namespace InGame {
 		}
 	};
 
-	class OnReadyItemUseHandler : public Gear::FSM::InputHandler
+	class WormOnReadyItemUseHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
@@ -69,7 +69,7 @@ namespace InGame {
 		}
 	};
 
-	class OnUseItemHandler : public Gear::FSM::InputHandler
+	class WormOnUseItemHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
@@ -77,7 +77,7 @@ namespace InGame {
 		}
 	};
 
-	class OnReadyJumpHandler : public Gear::FSM::InputHandler
+	class WormOnReadyJumpHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
@@ -85,7 +85,7 @@ namespace InGame {
 		}
 	};
 
-	class OnAirItemUseHandler : public Gear::FSM::InputHandler
+	class WormOnAirItemUseHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
@@ -93,7 +93,7 @@ namespace InGame {
 		}
 	};
 
-	class OnTurnOverHandler : public Gear::FSM::InputHandler
+	class WormOnTurnOverHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
@@ -101,7 +101,7 @@ namespace InGame {
 		}
 	};
 
-	class OnDamagedHandler : public Gear::FSM::InputHandler
+	class WormOnDamagedHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{

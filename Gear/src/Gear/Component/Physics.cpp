@@ -66,4 +66,8 @@ namespace Gear {
 		}
 	}
 
+	void Physics2D::FollowTarget()
+	{
+	}
+
 }

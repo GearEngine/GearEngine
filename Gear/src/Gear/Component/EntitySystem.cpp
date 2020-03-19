@@ -134,7 +134,11 @@ namespace Gear {
 	void EntitySystem::UpdateDrawer2D(int entityID, Timestep ts)
 	{
 		auto& drawer = m_Drawer[entityID];
-		if (!drawer && !drawer->m_OnActivate)
+		if (!drawer)
+		{
+			return;
+		}
+		if (!drawer->m_OnActivate)
 		{
 			return;
 		}
@@ -608,7 +612,7 @@ namespace Gear {
 
 	}
 
-	Ref<Transform2D> EntitySystem::GetTransform2DComponent(int entityID)
+	Ref<Transform2D> EntitySystem::GetTransform2D(int entityID)
 	{
 		if (!m_Transforms[entityID])
 		{
@@ -618,17 +622,7 @@ namespace Gear {
 		return m_Transforms[entityID];
 	}
 
-	Ref<Physics> EntitySystem::GetPhysicsComponent(int entityID)
-	{
-		if (!m_Phisics[entityID])
-		{
-			GR_CORE_WARN("{0} entity doesn't have Physics component!", entityID);
-			return nullptr;
-		}
-		return m_Phisics[entityID];
-	}
-
-	Ref<FSM> EntitySystem::GetFSMComponent(int entityID)
+	Ref<FSM> EntitySystem::GetFSM(int entityID)
 	{
 		if (!m_FSMs[entityID])
 		{

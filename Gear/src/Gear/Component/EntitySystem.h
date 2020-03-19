@@ -75,15 +75,14 @@ namespace Gear {
 		static void SetPixelCollision(int entityID, const glm::vec3& targetPixel, Ref<Texture2D> targetTexture, const glm::mat4& targetTextureTranslate, std::vector<std::pair<float, float>> offsets);
 		static void SetTexturer(int entityID, RenderType::Type type, Ref<Texture2D> texture, Ref<Texture2D> mask = nullptr, Ref<Texture2D> blending = nullptr);
 
-		static Ref<Transform2D> GetTransform2DComponent(int entityID);
-		static Ref<Physics> GetPhysicsComponent(int entityID);
-		static Ref<FSM> GetFSMComponent(int entityID);
-		static Ref<Animator2D> GetAnimator2D(int entityID);
-		static Ref<Physics2D> GetPhysics2D(int entityID);
-		static Ref<SoundPlayer> GetSoundPlayer(int entityID);
-		static Ref<Controller> GetController(int entityID);
-		static Ref<Timer> GetTimer(int entityID);
-		static Ref<Texturer2D> GetTexturer(int entityID);
+		static Ref<Transform2D>		GetTransform2D(int entityID);
+		static Ref<FSM>				GetFSM(int entityID);
+		static Ref<Animator2D>		GetAnimator2D(int entityID);
+		static Ref<Physics2D>		GetPhysics2D(int entityID);
+		static Ref<SoundPlayer>		GetSoundPlayer(int entityID);
+		static Ref<Controller>		GetController(int entityID);
+		static Ref<Timer>			GetTimer(int entityID);
+		static Ref<Texturer2D>		GetTexturer(int entityID);
 
 	private:
 		static int s_EntityID;

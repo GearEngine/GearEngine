@@ -12,7 +12,6 @@ namespace InGame {
 
 	private:
 		int m_ID;
-		Gear::Ref<TerrainExplosionEventHandler> m_ExplosionHandler;
 	};
 
 }

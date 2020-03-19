@@ -11,7 +11,7 @@ namespace InGame {
 
 			auto explosion = std::any_cast<ExplosionData>(data);
 
-			auto transformComponent = Gear::EntitySystem::GetTransform2DComponent(entityID);
+			auto transformComponent = Gear::EntitySystem::GetTransform2D(entityID);
 			auto entityPosition = transformComponent->GetPosition();
 
 			float distance = std::powf((explosion.Position.x - entityPosition.x), 2) + std::powf((explosion.Position.y - entityPosition.y), 2);

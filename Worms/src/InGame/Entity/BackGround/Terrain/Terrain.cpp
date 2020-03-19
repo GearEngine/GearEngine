@@ -4,7 +4,6 @@
 namespace InGame {
 
 	Terrain::Terrain(const InitiateData& initData)
-		: m_ExplosionHandler(new TerrainExplosionEventHandler)
 	{
 		//Create Entity
 		m_ID = Gear::EntitySystem::CreateEntity(true);
@@ -27,7 +26,7 @@ namespace InGame {
 		Gear::EntitySystem::SetTexturer(m_ID, Gear::RenderType::Masking, map, mask);
 
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Explosion);
-		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::Explosion, m_ExplosionHandler);
+		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::Explosion, Gear::CreateRef<TerrainExplosionEventHandler>());
 	}
 
 	Terrain::~Terrain()
