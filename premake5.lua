@@ -159,6 +159,9 @@ project "Worms"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+	pchheader "wmpch.h"
+	pchsource "Worms/src/wmpch.cpp"
+
 	files
 	{
 		"%{prj.name}/src/**.h",

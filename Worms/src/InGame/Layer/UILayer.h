@@ -1,5 +1,4 @@
 #pragma once
-#include "Gear.h"
 
 #include "InGame/Entity/UI/Camera/Camera.h"
 #include "InGame/Data/InitiateData.h"

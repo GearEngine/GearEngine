@@ -1,9 +1,5 @@
 #pragma once
 
-#include "Gear.h"
-
-#include "Data/InitiateData.h"
-
 #include "InGame/Layer/BackGroundLayer.h"
 #include "InGame/Layer/ObjectLayer.h"
 #include "InGame/Layer/UILayer.h"

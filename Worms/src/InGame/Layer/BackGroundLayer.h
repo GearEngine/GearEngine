@@ -1,5 +1,4 @@
 #pragma once
-#include "Gear.h"
 
 #include "InGame/Entity/BackGround/Terrain/Terrain.h"
 #include "InGame/Data/InitiateData.h"

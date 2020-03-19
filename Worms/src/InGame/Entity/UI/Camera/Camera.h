@@ -1,5 +1,4 @@
 #pragma once
-#include "Gear.h"
 
 namespace InGame {
 
@@ -14,6 +13,10 @@ namespace InGame {
 	public:
 		void OnUpdate(Gear::Timestep ts);
 		void OnEvent(Gear::Event& e);
+
+	private:
+		int m_ID;
+
 	};
 
 }

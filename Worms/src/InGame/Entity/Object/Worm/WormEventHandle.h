@@ -1,5 +1,4 @@
 #pragma once
-#include "Gear.h"
 #include "InGame/Data/EventData.h"
 
 namespace InGame {

@@ -55,13 +55,13 @@ void Sandbox2D::OnUpdate(Gear::Timestep ts)
 		velocity = 0.0f;
 	wormsPosition.y -= velocity;*/
 
-	auto color = Gear::Renderer2D::getPixel((int)WindowWomrsPosition.x, (int)WindowWomrsPosition.y - 30);
+	/*auto color = Gear::Renderer2D::getPixel((int)WindowWomrsPosition.x, (int)WindowWomrsPosition.y - 30);
 	auto[r, g, b] = color;
 	if (r != 25 && g != 25 && b != 25) 
 	{
 		wormsPosition.y += velocity;
 		velocity = 0;
-	}
+	}*/
 
 
 

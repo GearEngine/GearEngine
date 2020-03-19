@@ -1,6 +1,4 @@
 #pragma once
-#include "Gear.h"
-
 #include "InGame/Data/InitiateData.h"
 #include "TerrainEventHandler.h"
 

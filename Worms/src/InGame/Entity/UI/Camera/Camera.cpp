@@ -1,3 +1,4 @@
+#include "wmpch.h"
 #include "Camera.h"
 
 namespace InGame {
@@ -7,6 +8,13 @@ namespace InGame {
 		m_CameraController = new Gear::OrthographicCameraController(windowWidth / windowHeight, rotate);
 		Gear::Coord2DManger::Get()->SetCamera(m_CameraController);
 		Gear::Coord2DManger::Get()->SetResolution(windowWidth, windowHeight);
+		
+		//Create Entity
+		//m_ID = Gear::EntitySystem::CreateEntity(true);
+
+		//Subscpribe EventChannel
+		//Gear::EventSystem::SubscribeChannel(m_ID, EventChannel)
+
 	}
 
 	Camera::~Camera()

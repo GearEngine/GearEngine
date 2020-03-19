@@ -1,4 +1,3 @@
-#include "Gear.h"
 #include "WormEnum.h"
 
 namespace InGame {

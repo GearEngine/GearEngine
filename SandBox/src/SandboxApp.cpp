@@ -19,7 +19,7 @@ public:
 		Gear::Scene* scene = new Gear::Scene("SampleScene");
 		scene->PushOverlay(m_ImGuilayer);
 		scene->PushLayer(new Sandbox2D());
-		Gear::SceneManager::Get()->AddScene(scene->GetName(), scene);
+		Gear::SceneManager::Get()->AddScene(scene);
 
 		Gear::SceneManager::Get()->changeScene("SampleScene");
 	}

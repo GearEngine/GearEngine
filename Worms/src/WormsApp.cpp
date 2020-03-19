@@ -1,7 +1,6 @@
-#include <Gear.h>
+#include "wmpch.h"
 #include <Gear/Core/EntryPoint.h>
 
-#include "EventChannel.h"
 #include "InGame/InGameScene.h"
 
 class Worms : public Gear::Application
@@ -42,3 +41,9 @@ Gear::Application* Gear::CreateApplication()
 {
 	return new Worms();
 }
+
+//Create Entity Order
+//Create Entity
+//Attach Component
+//Set Component specific
+//Subscpribe EventChannel

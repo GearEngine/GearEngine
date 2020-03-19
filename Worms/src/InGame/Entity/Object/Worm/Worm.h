@@ -1,5 +1,5 @@
 #pragma once
-#include "Gear.h"
+
 #include "WormEventHandle.h"
 #include "InGame/Data/InitiateData.h"
 

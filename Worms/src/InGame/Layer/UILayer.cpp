@@ -1,3 +1,4 @@
+#include "wmpch.h"
 #include "UILayer.h"
 
 namespace InGame {

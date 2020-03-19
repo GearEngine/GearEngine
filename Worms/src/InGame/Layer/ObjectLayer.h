@@ -1,5 +1,5 @@
 #pragma once
-#include "Gear.h"
+
 #include "InGame/Entity/Object/Worm/Worm.h"
 #include "InGame/Data/InitiateData.h"
 
