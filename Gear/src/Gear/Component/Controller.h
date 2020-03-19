@@ -15,8 +15,9 @@ namespace Gear {
 		int Keycode;
 		glm::vec2 MouseMove;
 	};
-	#define MOUSEMOVE_COMMAND 0xffffff
 
+	#define MOUSEMOVE_COMMAND 0xffffff
+	#define MOUSE_CLICKTYPE   0xfffffc
 	class Controller : public Component
 	{
 	public:

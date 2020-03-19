@@ -333,7 +333,7 @@ namespace Gear {
 		{
 			switch (id)
 			{
-			case ComponentID::ID::Animantor:   
+			case ComponentID::ID::Animator:   
 				if (!m_Animators[entityID]) m_Animators[entityID].reset(new Animator2D());
 				break;
 			case ComponentID::ID::Controller:	
@@ -370,7 +370,7 @@ namespace Gear {
 		{
 			switch (id)
 			{
-			case ComponentID::ID::Animantor:
+			case ComponentID::ID::Animator:
 				m_Animators[entityID].reset();
 				break;
 			case ComponentID::ID::Controller:
@@ -407,7 +407,7 @@ namespace Gear {
 		{
 			switch (id)
 			{
-			case ComponentID::ID::Animantor:
+			case ComponentID::ID::Animator:
 				if (!m_Animators[entityID]) m_Animators[entityID]->m_OnActivate = true;
 				break;
 			case ComponentID::ID::Controller:
@@ -444,7 +444,7 @@ namespace Gear {
 		{
 			switch (component)
 			{
-			case ComponentID::ID::Animantor:
+			case ComponentID::ID::Animator:
 				if (m_Animators[entityID]) m_Animators[entityID]->m_OnActivate = false;
 				break;
 			case ComponentID::ID::Controller:

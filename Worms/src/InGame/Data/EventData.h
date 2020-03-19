@@ -7,6 +7,9 @@ namespace InGame {
 		enum : unsigned int
 		{
 			Explosion,
+			WormMove,
+			MouseMove,
+			MouseClick
 		};
 	}
 
@@ -19,6 +22,14 @@ namespace InGame {
 		glm::vec2 Position;
 		float radius;
 		float Power;
+	};
+
+	struct MouseMoveData
+	{
+		MouseMoveData(float _dx, float _dy)
+			: dx(_dx), dy(_dy)
+		{}
+		float dx, dy;
 	};
 
 }

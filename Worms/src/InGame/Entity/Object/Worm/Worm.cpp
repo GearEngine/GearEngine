@@ -14,7 +14,7 @@ namespace InGame {
 
 		//Attach Component
 		Gear::EntitySystem::AttachComponent(m_ID, {
-			Gear::ComponentID::Animantor,	Gear::ComponentID::Drawer,
+			Gear::ComponentID::Animator,	Gear::ComponentID::Drawer,
 			Gear::ComponentID::Controller,	Gear::ComponentID::Transform,
 			Gear::ComponentID::Physics,		Gear::ComponentID::SoundPlayer,
 			Gear::ComponentID::FSM,			Gear::ComponentID::Timer

@@ -36,6 +36,9 @@ namespace Gear {
 		if (!m_OnAnimation)
 			return;
 
+		if (m_Fps == 0.0f)
+			return;
+
 		pastTime += ts;
 		if (m_Fps <= pastTime)
 		{

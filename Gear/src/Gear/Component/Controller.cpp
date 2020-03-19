@@ -21,11 +21,22 @@ namespace Gear {
 				break;
 			}
 
+			if (command.KeyType == MOUSE_CLICKTYPE)
+			{
+				if (Gear::Input::IsMouseButtonPressed(command.Keycode))
+				{
+					m_Command = command;
+					break;
+				}
+			}
+
 			if (Gear::Input::IsKeyPressd(command.Keycode))
 			{
 				m_Command = command;
 				break;
 			}
+
+			
 		}
 	}
 	void Controller::MouseUpdate(Timestep ts)

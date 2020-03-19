@@ -18,7 +18,7 @@ namespace Gear {
 	{
 		enum ID : unsigned int
 		{
-			Animantor,
+			Animator,
 			Controller,
 			Drawer,
 			FSM,

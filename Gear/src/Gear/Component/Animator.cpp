@@ -65,7 +65,10 @@ namespace Gear {
 
 	void Animator2D::Update(Timestep ts)
 	{
-		m_CurrentAnimation->Update(ts);
+		if (m_CurrentAnimation)
+		{
+			m_CurrentAnimation->Update(ts);
+		}
 	}
 	void Animator2D::RegisterAnimation(const std::initializer_list<std::pair<const EnumType, Ref<Animation2D>>>& animationList)
 	{

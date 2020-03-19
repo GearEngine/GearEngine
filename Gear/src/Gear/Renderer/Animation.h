@@ -48,7 +48,7 @@ namespace Gear {
 		bool m_Loop = false;
 		bool m_OnAnimation = false;
 
-		float m_Fps;
+		float m_Fps = 0.0f;
 		Ref<FrameTexture2D> m_Sprite;
 
 		uint32_t m_MaxFrameX;
