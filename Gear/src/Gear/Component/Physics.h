@@ -22,11 +22,13 @@ namespace Gear {
 		void RegisterBasicForce(float gravity, float gravityAccelationLimit, float friction, float elastics);
 		void ActivatePixelCollision(const glm::vec3& targetPixel, Ref<Texture2D> collisionTargetTexture, const glm::mat4& textureTranslate, const std::vector<std::pair<float, float>>& offsets);
 		bool JudgePixelCollision();
+		void checkMoveLimit();
 
 	public:
 		inline void ActivateGravity() { m_ActivatedGravity = true; }
 		inline void SetExternalVector(const glm::vec2& externalVector) { m_ExternalVector = externalVector; }
 		inline void SetTargetPos(glm::vec3* targetPos) { m_TargetPos = targetPos; }
+		void ActivateMoveLimit(const FRect& moveLimit);
 		void TargetUpdate(Timestep ts);
 		void FollowTarget();
 
@@ -34,12 +36,15 @@ namespace Gear {
 		bool m_ActivatedFlow = false;
 		bool m_ActivatedGravity = false;
 		bool m_ActivatedPixelCollision = false;
+		bool m_ActivatedMoveLimitation = false;
 
 		glm::vec2 m_ExternalVector;
 		glm::vec3* m_TargetPos = nullptr;
 		glm::vec3 m_TargetPixel;
 		glm::mat4 m_PixelCollisionTargetTextureTranslate;
 		std::vector<std::pair<float, float>> m_PixelCollisionOffsetVector;
+		FRect m_MoveLimit;
+
 
 		float m_Gravity;
 		float m_Friction;

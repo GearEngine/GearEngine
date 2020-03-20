@@ -29,6 +29,26 @@ namespace Gear {
 		return false;
 	}
 
+	void Physics2D::checkMoveLimit()
+	{
+		if (m_TargetPos->x < m_MoveLimit.Left)
+		{
+			m_TargetPos->x = m_MoveLimit.Left;
+		}
+		if (m_TargetPos->x > m_MoveLimit.Right)
+		{
+			m_TargetPos->x = m_MoveLimit.Right;
+		}
+		if (m_TargetPos->y < m_MoveLimit.Bottom)
+		{				 
+			m_TargetPos->y = m_MoveLimit.Bottom;
+		}				 
+		if (m_TargetPos->y > m_MoveLimit.Top)
+		{				 
+			m_TargetPos->y = m_MoveLimit.Top;
+		}
+	}
+
 	void Physics2D::ActivatePixelCollision(const glm::vec3 & targetPixel, Ref<Texture2D> collisionTargetTexture, const glm::mat4& textureTranslate, const std::vector<std::pair<float, float>>& offsets)
 	{
 		m_TargetPixel = targetPixel;
@@ -36,6 +56,12 @@ namespace Gear {
 		m_PixelCollisionTargetTextureTranslate = textureTranslate;
 		m_PixelCollisionOffsetVector = offsets;
 		m_ActivatedPixelCollision = true;
+	}
+
+	void Physics2D::ActivateMoveLimit(const FRect & moveLimit)
+	{
+		m_MoveLimit = moveLimit;
+		m_ActivatedMoveLimitation = true;
 	}
 
 	void Physics2D::TargetUpdate(Timestep ts)
@@ -54,7 +80,7 @@ namespace Gear {
 		m_ExternalVector.y -= m_GravityAccelation;
 
 		m_TargetPos->x += m_ExternalVector.x * ts;
-		m_TargetPos->y += m_ExternalVector.y * ts;
+		m_TargetPos->y += m_ExternalVector.y * ts;		
 
 		if (m_ActivatedPixelCollision)
 		{
@@ -63,6 +89,11 @@ namespace Gear {
 				m_TargetPos->y -= m_ExternalVector.y * ts;
 				m_GravityAccelation = 0.0f;
 			}
+		}
+
+		if (m_ActivatedMoveLimitation)
+		{
+			checkMoveLimit();
 		}
 	}
 

@@ -18,6 +18,7 @@
 #include <unordered_set>
 
 #include "Gear/Core/Log.h"
+#include "Gear/Core/Util.h"
 #include "Gear/Debug/Instrumentor.h"
 #include "Gear/Core/Timestep.h"
 

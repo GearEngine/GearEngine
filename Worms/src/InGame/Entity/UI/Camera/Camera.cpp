@@ -6,12 +6,12 @@
 
 namespace InGame {
 
-	Camera::Camera(float windowWidth, float windowHeight, bool rotate)
+	Camera::Camera(const InitiateData& initData)
 	{
-		m_CameraController = new Gear::OrthographicCameraController(windowWidth / windowHeight, rotate);
+		m_CameraController = new Gear::OrthographicCameraController(initData.WindowWidth / initData.WindowHeight);
 		Gear::Coord2DManger::Get()->SetCamera(m_CameraController);
-		Gear::Coord2DManger::Get()->SetResolution(windowWidth, windowHeight);
-		
+		Gear::Coord2DManger::Get()->SetResolution(initData.WindowWidth, initData.WindowHeight);
+
 		//Create Entity
 		m_ID = Gear::EntitySystem::CreateEntity(true);
 
@@ -24,6 +24,8 @@ namespace InGame {
 		Gear::EntitySystem::SetTransform(m_ID, m_CameraController->GetCamera().GetPosition(), 0.0f, glm::vec2(1.0f, 1.0f));
 
 		Gear::EntitySystem::SetPhysics(m_ID);
+		Gear::EntitySystem::SetMoveLimit(m_ID, initData.CameraLimit);
+
 
 		Gear::EntitySystem::SetFSM(m_ID, {
 			{ CameraState::OnFlowing, new CameraOnFlowingHandler }, { CameraState::OnStop, new CameraOnStopHandler }

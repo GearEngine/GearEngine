@@ -24,7 +24,6 @@ namespace Gear {
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
 		GR_PROFILE_FUNCTION();
-
 		Init(props);
 	}
 

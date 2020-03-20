@@ -6,7 +6,7 @@
 #include "Gear/Core/Log.h"
 
 #include "Gear/Core/Timestep.h"
-
+#include "Gear/Core/Util.h"
 #include "Gear/Core/Input.h"
 #include "Gear/Core/KeyCodes.h"
 #include "Gear/Core/MouseButtonCodes.h"

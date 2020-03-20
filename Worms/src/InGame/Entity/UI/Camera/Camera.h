@@ -1,11 +1,13 @@
 #pragma once
 
+#include "InGame/Data/InitiateData.h"
+
 namespace InGame {
 
 	class Camera
 	{
 	public:
-		Camera(float windowWidth, float windowHeight, bool rotate = false);
+		Camera(const InitiateData& initData);
 		~Camera();
 
 		Gear::OrthographicCameraController* m_CameraController;

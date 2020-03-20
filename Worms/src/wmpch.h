@@ -1,5 +1,5 @@
 #pragma once
 
 #include "Gear.h"
-#include "EventChannel.h"
+#include "Common/EventChannel.h"
 #include "imgui/imgui.h"

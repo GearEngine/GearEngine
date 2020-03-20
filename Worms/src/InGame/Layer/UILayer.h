@@ -1,6 +1,5 @@
 #pragma once
 
-#include "InGame/Data/InitiateData.h"
 #include "InGame/Entity/UI/Camera/Camera.h"
 #include "InGame/Entity/UI/Mouse/Mouse.h"
 
