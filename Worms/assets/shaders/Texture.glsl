@@ -25,10 +25,10 @@ layout(location = 0) out vec4 color;
 in vec2 v_TexCoord;
 		
 uniform vec4 u_Color;
-uniform float u_TilingFactor;
 uniform sampler2D u_Texture;
 uniform sampler2D u_Mask;
 uniform int u_WithMask;
+uniform float u_TilingFactor;
 
 void main()
 {
@@ -42,10 +42,10 @@ void main()
 	}
 	else
 	{
-		color = texture(u_Texture, v_TexCoord) * u_Color;
+		color = texture(u_Texture, v_TexCoord * u_TilingFactor) * u_Color;
 		if(color.a < 0.1)
 			discard;
-		if(color.x == 0 && color.y == 0 && color.z == 0)
+		if(color.x + color.y + color.z == 0.0)
 			discard;
 	}
 }

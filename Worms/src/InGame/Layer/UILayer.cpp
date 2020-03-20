@@ -21,6 +21,10 @@ namespace InGame {
 	void UILayer::OnUpdate(Gear::Timestep ts)
 	{
 		m_Camera->OnUpdate(ts);
+		Gear::RenderCommand::SetClearColor(m_ClearColor);
+		Gear::RenderCommand::Clear();
+
+		Gear::Renderer2D::BeginScene(m_Camera->m_CameraController->GetCamera());
 	}
 
 	void UILayer::OnImGuiRender()

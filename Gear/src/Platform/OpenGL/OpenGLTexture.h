@@ -36,8 +36,8 @@ namespace Gear {
 		OpenGLFrameTexture2D(const std::string &path, int frameX, int frameY);
 		virtual ~OpenGLFrameTexture2D();
 
-		virtual uint32_t GetWidth() const override { return m_Width; }
-		virtual uint32_t GetHeight() const override { return m_Height; }
+		virtual uint32_t GetWidth() const override { return m_FrameWidth; }
+		virtual uint32_t GetHeight() const override { return m_FrameHeight; }
 
 		//TODO : implement SetData
 		virtual void SetData(void* data, int indexX, int indexY, uint32_t size) override {}

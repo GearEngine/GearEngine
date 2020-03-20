@@ -21,6 +21,7 @@ namespace InGame {
 	private:
 		Gear::Ref<Camera> m_Camera;
 		Gear::Ref<Mouse> m_Mouse;
+		glm::vec4 m_ClearColor = { 0.14117, 0.16470, 0.29019, 1.0 };
 	};
 
 }

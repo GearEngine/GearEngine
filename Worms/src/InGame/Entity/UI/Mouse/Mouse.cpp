@@ -9,12 +9,11 @@ namespace InGame {
 
 	Mouse::Mouse(const InitiateData & initData)
 	{
-		m_Window = initData.window;
 		m_MiddlePosition.first = initData.WindowWidth / 2;
 		m_MiddlePosition.second = initData.WindowHeight / 2;
 
 		m_CurrentPosition = m_MiddlePosition;
-		glfwSetCursorPos((GLFWwindow*)m_Window, m_MiddlePosition.first, m_MiddlePosition.second);
+		glfwSetCursorPos((GLFWwindow*)Gear::Application::Get().GetWindow().GetNativeWindow(), m_MiddlePosition.first, m_MiddlePosition.second);
 
 		//Create Entity
 		m_ID = Gear::EntitySystem::CreateEntity(true);

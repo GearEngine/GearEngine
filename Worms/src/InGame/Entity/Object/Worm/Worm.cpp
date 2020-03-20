@@ -52,7 +52,7 @@ namespace InGame {
 			* glm::scale(glm::mat4(1.0f), { width / initData.MapReductionRatio  , height/ initData.MapReductionRatio , 1.0f });
 
 		Gear::EntitySystem::SetPixelCollision(
-			m_ID, { 234, 236, 232 }, mask, maskTranslate,
+			m_ID, { 255, 255, 255 }, mask, maskTranslate,
 			{ {-0.1f, -0.2f}, {0.1f, -0.2f}, {0.0f, -0.2f} }
 		);
 

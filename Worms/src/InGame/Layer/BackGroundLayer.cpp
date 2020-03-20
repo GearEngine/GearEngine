@@ -6,10 +6,44 @@ namespace InGame {
 	BackGroundLayer::BackGroundLayer(const InitiateData& initData)
 		: Layer("BackGroundLayer"), m_Terrian(new Terrain(initData))
 	{
+		//Gradient Settup
+		m_Grad = Gear::TextureStorage::GetTexture2D("Grad");
+
+		float gradWidth = m_Grad->GetWidth();
+		float gradHeight = m_Grad->GetHeight();
+
+		glm::vec3 gradScale(gradWidth / initData.MapReductionRatio, gradHeight / initData.MapReductionRatio, 1.0f);
+
+		m_GradTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.2f))
+			* glm::scale(glm::mat4(1.0f), gradScale);
+
+		//water settup
+		auto waterTexture = Gear::TextureStorage::GetFrameTexture2D("Water");
+		m_Water = Gear::CreateRef<Gear::Animation2D>(waterTexture, 0.05f, true);
+
+		float waterWidth = waterTexture->GetWidth();
+		float waterHeight = waterTexture->GetHeight();
+
+		glm::vec3 waterScale(waterWidth / 20.0f, waterHeight / 20.0f, 1.0f);
+		for (int i = 0; i < 3; ++i)
+		{
+			float spare = 10.0f * i;
+			for (int j = 0; j < 20; ++j)
+			{
+				auto waterTranslate = glm::translate(glm::mat4(1.0f), 
+					glm::vec3(-60.0f + j * waterScale.x + spare, -15.6f + i * (waterScale.y * 0.4f), 1.0))
+					* glm::scale(glm::mat4(1.0f), waterScale);
+				m_WaterTranslates.push_back(waterTranslate);
+			}
+		}
+		m_WaterBottomTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -20.0f, 1.0))
+			* glm::scale(glm::mat4(1.0f), glm::vec3(100.0f, 8.0f, 1.0f));
+		m_WaterBottomColor = { 26 / 255.0f, 26 / 255.0f, 50 / 255.0f, 1.0f };
 	}
 
 	void BackGroundLayer::OnAttach()
 	{
+		m_Water->Start();
 	}
 
 	void BackGroundLayer::OnDetach()
@@ -18,26 +52,18 @@ namespace InGame {
 
 	void BackGroundLayer::OnUpdate(Gear::Timestep ts)
 	{
-		m_Mouse = { Gear::Input::GetMouseX(), 720.0f - Gear::Input::GetMouseY() };
-		m_MouseOnWorld = Gear::Coord2DManger::Get()->GetWorldPosition_From_ScreenPosition(m_Mouse);
-		//m_MouseToLocalTexture = Gear::Coord2DManger::Get()->GetTextureLocalPosition_From_WorlPosition(m_MouseOnWorld, Mask::s_MaskTranslate);
-
-		/*if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT))
+		m_Water->Update(ts);
+		Gear::Renderer2D::DrawQuad(m_GradTranslate, m_Grad);
+		Gear::Renderer2D::DrawQuad(m_WaterBottomTranslate, m_WaterBottomColor);
+		for (auto waterTranslate : m_WaterTranslates)
 		{
-			DestroyMask(m_MouseToLocalTexture.x, m_MouseToLocalTexture.y, m_Radius);
-		}*/
-		Gear::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		Gear::RenderCommand::Clear();
+			Gear::Renderer2D::DrawAnimation(waterTranslate, m_Water);
+		}
 		
-		Gear::Renderer2D::BeginScene(Gear::Coord2DManger::Get()->GetCamera()->GetCamera());
 	}
 
 	void BackGroundLayer::OnImGuiRender()
 	{
-		ImGui::Text("MousePosition		x : %f \t y : %f", m_Mouse.x, m_Mouse.y);
-		ImGui::Text("MouseWorldPosition x : %f \t y : %f", m_MouseOnWorld.x, m_MouseOnWorld.y);
-		//ImGui::Text("MouseLocalPosition x : %f \t y : %f", m_MouseToLocalTexture.x, m_MouseToLocalTexture.y);
-		//ImGui::DragFloat("Set Explosion radius", &m_Radius, 1.0f, 0.0f, 100.0f);
 	}
 
 	void BackGroundLayer::OnEvent(Gear::Event & e)

@@ -22,12 +22,19 @@ namespace InGame {
 
 	private:
 		Gear::Ref<Terrain> m_Terrian;
+		Gear::Ref<Gear::Texture2D> m_Grad;
+		Gear::Ref<Gear::Animation2D> m_Water;
 
-		glm::vec2 m_Mouse;
+		glm::mat4 m_GradTranslate;
+		glm::mat4 m_WaterBottomTranslate;
+		glm::vec4 m_WaterBottomColor;
+		std::vector<glm::mat4> m_WaterTranslates;
+
+		/*glm::vec2 m_Mouse;
 		glm::vec2 m_MouseOnWorld;
 		glm::vec2 m_MouseToLocalTexture;
 		glm::vec3 m_Pixel;
-		float m_Radius = 20.0f;
+		float m_Radius = 20.0f;*/
 	};
 
 }
