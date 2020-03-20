@@ -21,11 +21,23 @@ namespace InGame {
 		});
 
 		//Set Component specific
+		std::vector<std::pair<int, int>> birthOrder;
+		for (int i = 0; i < 40; ++i)
+		{
+			if (i < 20)
+			{
+				birthOrder.push_back({ 0, i });
+			}
+			else
+			{
+				birthOrder.push_back({ 0, 39 - i });
+			}
+		}
 		Gear::EntitySystem::SetAnimator(m_ID, {
 			{ WormState::OnMove,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnMove"), 0.02f, true)},
 			{ WormState::OnUseItem, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.02f, true)},
-			{ WormState::OnIdle,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnIdle"), 0.02f, true)}
-			});
+			{ WormState::OnIdle,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnIdle"), 0.04f, birthOrder, true)}
+		});
 
 		Gear::EntitySystem::SetTransform(m_ID, position, rotation, scale);
 
@@ -48,6 +60,7 @@ namespace InGame {
 		auto mask = Gear::TextureStorage::GetTexture2D(initData.MapName + "Mask");
 		int width = mask->GetWidth();
 		int height = mask->GetHeight();
+
 		auto maskTranslate = glm::translate(glm::mat4(1.0f), initData.MapPosition)
 			* glm::scale(glm::mat4(1.0f), { width / initData.MapReductionRatio  , height/ initData.MapReductionRatio , 1.0f });
 

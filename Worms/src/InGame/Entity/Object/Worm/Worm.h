@@ -19,5 +19,4 @@ namespace InGame {
 
 		static Gear::Ref<WormExplosionEventHandler> s_ExplosionHandler;
 	};
-
 }

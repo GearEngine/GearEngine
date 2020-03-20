@@ -10,11 +10,11 @@ namespace InGame {
 		float WindowHeight = Gear::WINDOW_HEIGHT;
 		int nWorm = 3;
 
-		std::string MapName = "Terrain";
+		std::string MapName = "City";
 		glm::vec3 MapPosition = {0.0f, -3.0f, -0.1f};
-		float MapReductionRatio = 30.0f;
+		float MapReductionRatio = 37.0f;
 
-		Gear::FRect CameraLimit = { -30.0f, 30.0f, 30.0f, -10.0f };
+		Gear::FRect CameraLimit = { -30.0f, 30.0f, 30.0f, -7.0f };
 	};
 
 }

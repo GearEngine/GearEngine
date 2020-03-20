@@ -12,7 +12,7 @@ namespace InGame {
 		float gradWidth = m_Grad->GetWidth();
 		float gradHeight = m_Grad->GetHeight();
 
-		glm::vec3 gradScale(gradWidth / initData.MapReductionRatio, gradHeight / initData.MapReductionRatio, 1.0f);
+		glm::vec3 gradScale(gradWidth / GradReductionRatio, gradHeight / GradReductionRatio, 1.0f);
 
 		m_GradTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.2f))
 			* glm::scale(glm::mat4(1.0f), gradScale);
@@ -31,12 +31,12 @@ namespace InGame {
 			for (int j = 0; j < 20; ++j)
 			{
 				auto waterTranslate = glm::translate(glm::mat4(1.0f), 
-					glm::vec3(-60.0f + j * waterScale.x + spare, -15.6f + i * (waterScale.y * 0.4f), 1.0))
+					glm::vec3(-60.0f + j * waterScale.x + spare, -13.3f + i * (waterScale.y * 0.4f), 1.0))
 					* glm::scale(glm::mat4(1.0f), waterScale);
 				m_WaterTranslates.push_back(waterTranslate);
 			}
 		}
-		m_WaterBottomTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -20.0f, 1.0))
+		m_WaterBottomTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -17.8f, 1.0))
 			* glm::scale(glm::mat4(1.0f), glm::vec3(100.0f, 8.0f, 1.0f));
 		m_WaterBottomColor = { 26 / 255.0f, 26 / 255.0f, 50 / 255.0f, 1.0f };
 	}

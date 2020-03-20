@@ -46,7 +46,7 @@ namespace Gear {
 			if (m_HasFrameOrder)
 			{
 				++m_FrameOrderIndex;
-				if (m_FrameOrderIndex > m_FrameOrder.size())
+				if (m_FrameOrderIndex >= m_FrameOrder.size())
 				{
 					if (m_Loop)
 					{
@@ -58,7 +58,9 @@ namespace Gear {
 						return;
 					}
 				}
-				auto[m_CurrentFrameX, m_CurrentFrameY] = m_FrameOrder[m_FrameOrderIndex];
+				auto[x, y] = m_FrameOrder[m_FrameOrderIndex];
+				m_CurrentFrameX = x;
+				m_CurrentFrameY = y;
 			}
 			else
 			{

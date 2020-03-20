@@ -7,9 +7,9 @@ namespace InGame {
 		: Layer("ObjectLayer")
 	{
 		worms.resize(initData.nWorm);
-		worms[0].reset(new Worm(glm::vec3(1.0f, 10.0f, 0.0f), 0.0f, glm::vec2(1.2f, 1.2f), initData));
-		worms[1].reset(new Worm(glm::vec3(2.0f, 10.0f, 0.0f), 0.0f, glm::vec2(1.2f, 1.2f), initData));
-		worms[2].reset(new Worm(glm::vec3(3.0f, 10.0f, 0.0f), 0.0f, glm::vec2(1.2f, 1.2f), initData));
+		worms[0].reset(new Worm(glm::vec3(1.0f, 10.0f, 0.0f), 0.0f, glm::vec2(1.3f, 1.3f), initData));
+		worms[1].reset(new Worm(glm::vec3(2.0f, 10.0f, 0.0f), 0.0f, glm::vec2(1.3f, 1.3f), initData));
+		worms[2].reset(new Worm(glm::vec3(3.0f, 10.0f, 0.0f), 0.0f, glm::vec2(1.3f, 1.3f), initData));
 	}
 
 	void ObjectLayer::OnAttach()
