@@ -13,6 +13,7 @@ namespace InGame {
 		std::string MapName = "City";
 		glm::vec3 MapPosition = {0.0f, -3.0f, -0.1f};
 		float MapReductionRatio = 37.0f;
+		float WindMax = 30.0f;
 
 		Gear::FRect CameraLimit = { -30.0f, 30.0f, 30.0f, -7.0f };
 	};

@@ -83,6 +83,9 @@ namespace Gear {
 				EntitySystem::Update(timestep);
 				EntitySystem::Render();
 
+				for (Layer* layer : *m_CurScene)
+					layer->LateUpdate(timestep);
+
 				m_ImGuilayer->Begin();
 				{
 					GR_PROFILE_SCOPE("LayerStack OnImGuiRender");

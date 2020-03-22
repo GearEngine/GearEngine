@@ -24,5 +24,16 @@ namespace Gear {
 		float Width, Height;
 	};
 
+	inline float GetRndFloat(float zeroToNum)
+	{
+		return rand() / (float)RAND_MAX * zeroToNum;
+	}
+
+	inline float GetRndFloatFromTo(float fromNum, float toNum)
+	{
+		if (fromNum > toNum)
+			std::swap(toNum, fromNum);
+		return rand() / (float)RAND_MAX * (toNum - fromNum) + fromNum;
+	}
 
 }
