@@ -25,7 +25,7 @@ namespace InGame {
 
 		Gear::EntitySystem::SetPhysics(m_ID);
 		Gear::EntitySystem::SetMoveLimit(m_ID, initData.CameraLimit);
-
+		Gear::EntitySystem::SetSliding(m_ID, initData.CameraSliding);
 
 		Gear::EntitySystem::SetFSM(m_ID, {
 			{ CameraState::OnFlowing, new CameraOnFlowingHandler }, { CameraState::OnStop, new CameraOnStopHandler }

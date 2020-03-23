@@ -11,6 +11,9 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
+			static bool first = false;
+			static float prevDx = 0.0f;
+			static float prevDy = 0.0f;
 			if (cmd.Keycode == GR_MOUSE_BUTTON_LEFT)
 			{
 				return GameState::OnRunning;
@@ -21,13 +24,24 @@ namespace InGame {
 				return GameState::OnRunning;
 			}
 
-			auto[x, y] = Gear::Input::GetMousePosition();
+			if (first)
+			{
+				auto[x, y] = Gear::Input::GetMousePosition();
 
-			float dx = x - 640;
-			float dy = 360 - y;
-			Gear::EventSystem::DispatchEvent(EventChannel::MouseMove, Gear::EntityEvent(EventType::MouseMove, MouseMoveData(dx, dy)));
+				float dx = x - 640;
+				float dy = 360 - y;
+				if (std::abs(dx) + std::abs(dy) != 0.0f)
+				{
+					dx = (dx + prevDx) * 0.5f;
+					dy = (dy + prevDy) * 0.5f;
+					Gear::EventSystem::DispatchEvent(EventChannel::MouseMove, Gear::EntityEvent(EventType::MouseMove, MouseMoveData(dx, dy)));
+				}
+				prevDx = dx;
+				prevDy = dy;
+			}
 
 			glfwSetCursorPos((GLFWwindow*)Gear::Application::Get().GetWindow().GetNativeWindow(), 640.0, 360.0);
+			first = true;
 
 			return GameState::OnRunning;
 		}

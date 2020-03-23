@@ -45,6 +45,7 @@ namespace InGame {
 		glm::vec3 MapPosition = {0.0f, -3.0f, ZOrder::z_Terrain};
 		float MapReductionRatio = 37.0f;
 		float WindMax = 30.0f;
+		float CameraSliding = 0.9f;
 
 		Gear::FRect WorldRect = { -70.0f, 70.0f, 70.0f, -27.0f };
 		Gear::FRect CameraLimit = { -50.0f, 50.0f, 50.0f, -7.0f };

@@ -619,6 +619,22 @@ namespace Gear {
 		m_Phisics[entityID]->ActivateMoveLimit(rect);
 	}
 
+	void EntitySystem::SetSliding(int entityID, float slidingRatio)
+	{
+		auto entity = m_EntityPool.find(entityID);
+		if (entity == m_EntityPool.end())
+		{
+			GR_CORE_WARN("{0} entity doesn't exist!", entityID);
+			return;
+		}
+		if (!m_Phisics[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have Physics component!", entityID);
+			return;
+		}
+		m_Phisics[entityID]->ActiveSliding(slidingRatio);
+	}
+
 	void EntitySystem::SetTexturer(int entityID, RenderType::Type type, Ref<Texture2D> texture, Ref<Texture2D> mask, Ref<Texture2D> blending)
 	{
 		auto entity = m_EntityPool.find(entityID);

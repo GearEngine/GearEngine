@@ -28,13 +28,16 @@ namespace Gear {
 		inline void ActivateGravity() { m_ActivatedGravity = true; }
 		inline void SetExternalVector(const glm::vec2& externalVector) { m_ExternalVector = externalVector; }
 		inline void SetTargetPos(glm::vec3* targetPos) { m_TargetPos = targetPos; }
+		inline void ActiveSliding(float slidingRatio) { m_ActivatedSlide = true, m_SlidingRatio = slidingRatio; }
 		void ActivateMoveLimit(const FRect& moveLimit);
 		void TargetUpdate(Timestep ts);
 		void FollowTarget();
+		void UpdateSliding();
 
 	private:
 		bool m_ActivatedFlow = false;
 		bool m_ActivatedGravity = false;
+		bool m_ActivatedSlide = false;
 		bool m_ActivatedPixelCollision = false;
 		bool m_ActivatedMoveLimitation = false;
 
@@ -45,11 +48,12 @@ namespace Gear {
 		std::vector<std::pair<float, float>> m_PixelCollisionOffsetVector;
 		FRect m_MoveLimit;
 
-
+		float m_Timestep;
 		float m_Gravity;
 		float m_Friction;
 		float m_Elastics;
 		float m_GravityAccelation;
+		float m_SlidingRatio;
 		float m_LimitGravityAccelation;
 
 		Ref<Texture2D> m_PixelCollisionTargetTexture;

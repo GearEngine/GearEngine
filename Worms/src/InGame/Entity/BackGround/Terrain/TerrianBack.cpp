@@ -11,8 +11,8 @@ namespace InGame {
 
 		//Attach Component
 		Gear::EntitySystem::AttachComponent(m_ID, {
-			Gear::ComponentID::Texturer, Gear::ComponentID::Drawer,
-			Gear::ComponentID::Transform,
+			Gear::ComponentID::Texturer,  Gear::ComponentID::Drawer,
+			Gear::ComponentID::Transform
 		});
 
 		//Set Component specific
@@ -28,6 +28,12 @@ namespace InGame {
 		//Subscpribe EventChannel
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::MouseMove);
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::MouseMove, Gear::CreateRef<TerrainBackEventHandler>());
+	}
+
+	TerrianBack::~TerrianBack()
+	{
+		Gear::EventSystem::UnSubscribeChannel(m_ID, EventChannel::MouseMove);
+		Gear::EntitySystem::DeleteEntity(m_ID);
 	}
 
 }

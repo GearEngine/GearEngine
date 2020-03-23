@@ -8,7 +8,7 @@ namespace InGame {
 	{
 	public:
 		TerrianBack(const InitiateData& initData);
-		
+		~TerrianBack();
 
 	private:
 		int m_ID;

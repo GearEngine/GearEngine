@@ -6,6 +6,7 @@ namespace Gear {
 
 	void Physics2D::Update(Timestep ts)
 	{
+		m_Timestep = ts;
 		TargetUpdate(ts);
 	}
 
@@ -49,6 +50,23 @@ namespace Gear {
 		}
 	}
 
+	void Physics2D::UpdateSliding()
+	{
+		if (m_ExternalVector.x + m_ExternalVector.y == 0)
+		{
+			return;
+		}
+
+		m_ExternalVector.x *= m_SlidingRatio;
+		m_ExternalVector.y *= m_SlidingRatio;
+
+		if (std::abs(m_ExternalVector.x) + std::abs(m_ExternalVector.y) < 0.05)
+		{
+			m_ExternalVector.x = 0.0f;
+			m_ExternalVector.y = 0.0f;
+		}
+	}
+
 	void Physics2D::ActivatePixelCollision(const glm::vec3 & targetPixel, Ref<Texture2D> collisionTargetTexture, const glm::mat4& textureTranslate, const std::vector<std::pair<float, float>>& offsets)
 	{
 		m_TargetPixel = targetPixel;
@@ -80,7 +98,7 @@ namespace Gear {
 		m_ExternalVector.y -= m_GravityAccelation;
 
 		m_TargetPos->x += m_ExternalVector.x * ts;
-		m_TargetPos->y += m_ExternalVector.y * ts;		
+		m_TargetPos->y += m_ExternalVector.y * ts;	
 
 		if (m_ActivatedPixelCollision)
 		{
@@ -94,6 +112,11 @@ namespace Gear {
 		if (m_ActivatedMoveLimitation)
 		{
 			checkMoveLimit();
+		}
+
+		if (m_ActivatedSlide)
+		{
+			UpdateSliding();
 		}
 	}
 
