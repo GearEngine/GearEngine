@@ -6,19 +6,19 @@ namespace InGame {
 	float BackGroundLayer::s_CurrentWind = 0.0f;
 
 	BackGroundLayer::BackGroundLayer(const InitiateData& initData)
-		: Layer("BackGroundLayer"), m_Terrian(new Terrain(initData))
+		: Layer("BackGroundLayer"), m_Terrian(new Terrain(initData)), m_TerrianBack(new TerrianBack(initData))
 	{
 		s_CurrentWind = Gear::GetRndFloatFromTo(-initData.WindMax, initData.WindMax);
 
 		GradSettup(initData);
 		WaterSettup(initData);
-		FallenLeafSettup(initData);
+		FloatingSettup(initData);
 		CloudSettup(initData);
 	}
 
 	void BackGroundLayer::OnAttach()
 	{
-		m_Water->Start();
+		m_WaterWave->Start();
 	}
 
 	void BackGroundLayer::OnDetach()
@@ -28,18 +28,20 @@ namespace InGame {
 	void BackGroundLayer::OnUpdate(Gear::Timestep ts)
 	{
 		//Update
-		m_Water->Update(ts);
 
-		//Leaf
-		for (auto& leafTexture : m_LeafTextures)
+		//Water
+		m_WaterWave->Update(ts);
+
+		//Floating
+		for (auto& floatingTexture : m_FloatingTextures)
 		{
-			leafTexture->Update(ts);
+			floatingTexture->Update(ts);
 		}
-		for (auto& leafs : m_LeafTranslates)
+		for (auto& floatings : m_FloatingTranslates)
 		{
-			for (auto& leaf : leafs)
+			for (auto& floating : floatings)
 			{
-				leaf.Update(ts);
+				floating.Update(ts);
 			}
 		}
 
@@ -57,21 +59,25 @@ namespace InGame {
 		}
 
 		//Render
-		Gear::Renderer2D::DrawQuad(m_GradTranslate, m_Grad);
-		Gear::Renderer2D::DrawQuad(m_WaterBottomTranslate, m_WaterBottomColor);
 
-		//Water
-		for (int i = 0 ; i < 75; ++i)
+		//Grad
+		Gear::Renderer2D::DrawQuad(m_GradTranslate, m_Grad);
+
+		//WaterBackGround
+		Gear::Renderer2D::DrawQuad(m_WaterBackGroundTranslate, m_WaterBackGroundmColor);
+
+		//WaterWave
+		for (int i = 0 ; i < 105; ++i)
 		{
-			Gear::Renderer2D::DrawAnimation(m_WaterTranslates[i], m_Water);
+			Gear::Renderer2D::DrawAnimation(m_WaterWaveTranslates[i], m_WaterWave);
 		}
 
-		//Leaf
+		//Floating
 		for (int i = 0; i < 10; ++i)
 		{
-			for (int j = 0; j < m_LeafTranslates[i].size(); ++j)
+			for (int j = 0; j < m_FloatingTranslates[i].size(); ++j)
 			{
-				Gear::Renderer2D::DrawAnimation(m_LeafTranslates[i][j].Translate, m_LeafTextures[i]);
+				Gear::Renderer2D::DrawAnimation(m_FloatingTranslates[i][j].Translate, m_FloatingTextures[i]);
 			}
 		}
 
@@ -83,8 +89,8 @@ namespace InGame {
 				Gear::Renderer2D::DrawAnimation(m_CloudTranslates[i][j].Translate, m_CloudTextures[i]);
 			}
 		}
-
 	}
+
 
 	void BackGroundLayer::OnImGuiRender()
 	{
@@ -97,67 +103,72 @@ namespace InGame {
 	void BackGroundLayer::GradSettup(const InitiateData& initData)
 	{
 		//Gradient Settup
-		m_Grad = Gear::TextureStorage::GetTexture2D("Grad");
+		m_Grad = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.Grad);
 
 		float gradWidth = m_Grad->GetWidth();
 		float gradHeight = m_Grad->GetHeight();
 
-		glm::vec3 gradScale(gradWidth / GradReductionRatio, gradHeight / GradReductionRatio, 1.0f);
+		glm::vec3 gradScale(gradWidth / GradReductionRatio * 2, gradHeight / GradReductionRatio, 1.0f);
 
-		m_GradTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.8f))
+		m_GradTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, ZOrder::z_Grad))
 			* glm::scale(glm::mat4(1.0f), gradScale);
+
+
+
+
 	}
 
 	void BackGroundLayer::WaterSettup(const InitiateData& initData)
 	{
 		//water settup
-		auto waterTexture = Gear::TextureStorage::GetFrameTexture2D("Water");
-		m_Water = Gear::CreateRef<Gear::Animation2D>(waterTexture, 0.05f, true);
+		auto waterTexture = Gear::TextureStorage::GetFrameTexture2D(initData.Mapinfo.Water);
+		m_WaterWave = Gear::CreateRef<Gear::Animation2D>(waterTexture, 0.05f, true);
 
 		float waterWidth = waterTexture->GetWidth();
 		float waterHeight = waterTexture->GetHeight();
 
 		glm::vec3 waterScale(waterWidth / initData.MapReductionRatio, waterHeight / initData.MapReductionRatio, 1.0f);
 
-		float spare[5] = { 3.0f, 7.0f, 4.0f, 2.0f, 5.0f };
-		float zOrder;
+		float WaterOffset[5] = { 3.0f, 1.0f, 0.0f, 2.0f, -1.0f };
+		float waterZOrder;
 		for (int i = 0; i < 5; ++i)
 		{
 			if (i < 3)
 			{
-				zOrder = 0.1f;
+				waterZOrder = ZOrder::z_WaterWaveF;
 			}
 			else
 			{
-				zOrder = -0.5f;
+				waterZOrder = ZOrder::z_WaterWaveB;
 			}
-			for (int j = 0; j < 15; ++j)
+			for (int j = 0; j < 21; ++j)
 			{
 				auto waterTranslate = glm::translate(glm::mat4(1.0f),
-					glm::vec3(-50.0f + j * waterScale.x + spare[i], -13.3f + i * (waterScale.y * 0.5f), zOrder))
+					glm::vec3(initData.WorldRect.Left + j * waterScale.x + WaterOffset[i], -13.3f + i * (waterScale.y * 0.5f), waterZOrder))
 					* glm::scale(glm::mat4(1.0f), waterScale);
-				m_WaterTranslates.push_back(waterTranslate);
+				m_WaterWaveTranslates.push_back(waterTranslate);
 			}
 		}
-		m_WaterBottomTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -15.0f, -0.7f))
-			* glm::scale(glm::mat4(1.0f), glm::vec3(100.0f, 7.5f, 1.0f));
-		m_WaterBottomColor = { 50 / 255.0f, 59 / 255.0f, 126 / 255.0f, 1.0f };
+		m_WaterBackGroundTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -15.0f, ZOrder::z_WatterBackGround))
+			* glm::scale(glm::mat4(1.0f), glm::vec3(140.0f, 7.5f, 1.0f));
+		m_WaterBackGroundmColor = initData.Mapinfo.WaterRGB;
 	}
 
-	void BackGroundLayer::FallenLeafSettup(const InitiateData& initData)
+	void BackGroundLayer::FloatingSettup(const InitiateData& initData)
 	{
-		m_LeafTextures.resize(10);
-		m_LeafTranslates.resize(10);
+		m_FloatingTextures.resize(10);
+		m_FloatingTranslates.resize(10);
 		auto leaf = Gear::TextureStorage::GetFrameTexture2D("FallenLeaf");
 		for (int i = 0; i < 10; ++i)
 		{
-			m_LeafTextures[i] = Gear::CreateRef<Gear::Animation2D>(leaf, 0.05f, true);
-			m_LeafTextures[i]->SetFrameY(i * 10);
-			m_LeafTextures[i]->Resume();
+			m_FloatingTextures[i] = Gear::CreateRef<Gear::Animation2D>(leaf, 0.05f, true);
+			m_FloatingTextures[i]->SetFrameY(i * 10);
+			m_FloatingTextures[i]->Resume();
 			for (int j = 0; j < 10; ++j)
 			{
-				m_LeafTranslates[i].push_back(Leaf( glm::vec3( Gear::GetRndFloatFromTo(-50.0f, 50.f), Gear::GetRndFloatFromTo(-11.0f, 15.0f), -0.6f ), glm::vec3( 0.6f, 0.6f, 1.0f ), Gear::GetRndFloatFromTo(0.3f, 0.9f)));
-				m_LeafTranslates[i][j].RenewWind(s_CurrentWind);
+				m_FloatingTranslates[i].push_back(FloatingMatter(glm::vec3(Gear::GetRndFloatFromTo(initData.WorldRect.Left, initData.WorldRect.Right), Gear::GetRndFloatFromTo(-11.0f, 9.0f), ZOrder::z_FloatingMatter),
+					glm::vec3( 0.6f, 0.6f, 1.0f ), Gear::GetRndFloatFromTo(0.3f, 0.9f), initData.WorldRect));
+				m_FloatingTranslates[i][j].RenewWind(s_CurrentWind);
 			}
 		}
 	}
@@ -191,14 +202,28 @@ namespace InGame {
 		m_CloudTextures[1] = Gear::CreateRef<Gear::Animation2D>(cloudMiddle, 0.05f, frameOrder, true);
 		m_CloudTextures[2] = Gear::CreateRef<Gear::Animation2D>(cloudLarge, 0.05f, frameOrder, true);
 
+		float zOrder;
 		for (int i = 0; i < 3; ++i)
 		{
-			m_CloudTranslates[i].resize(6);
+			m_CloudTranslates[i].resize(8);
 			m_CloudTextures[i]->Start();
-			for (int j = 0; j < 6; ++j)
+			if (i == 0)
 			{
-				float yPos = 14.0f + i * 0.7 + Gear::GetRndFloat(0.3f);
-				m_CloudTranslates[i][j] = Cloud(glm::vec3(Gear::GetRndFloatFromTo(-50.0f, 50.0f), yPos, -0.5f - i * 0.01f), glm::vec3(width[i] / initData.MapReductionRatio, height[i] / initData.MapReductionRatio, 1.0f), Gear::GetRndFloatFromTo(-15.0f, 15.0f));
+				zOrder = ZOrder::z_CloudSmall;
+			}
+			if (i == 1)
+			{
+				zOrder = ZOrder::z_CloudMiddle;
+			}
+			if (i == 2)
+			{
+				zOrder = ZOrder::z_CloudLarge;
+			}
+			for (int j = 0; j < 8; ++j)
+			{
+				float yPos = 9.0f + i * 0.7f + Gear::GetRndFloat(0.5f);
+				m_CloudTranslates[i][j] = Cloud(glm::vec3(Gear::GetRndFloatFromTo(initData.WorldRect.Left, initData.WorldRect.Right), yPos, zOrder),
+					glm::vec3(width[i] / initData.MapReductionRatio, height[i] / initData.MapReductionRatio, 1.0f), Gear::GetRndFloatFromTo(-15.0f, 15.0f), initData.WorldRect);
 				m_CloudTranslates[i][j].RenewWind(s_CurrentWind);
 			}
 		}
@@ -236,7 +261,7 @@ namespace InGame {
 		Mask::s_Mask->SetData(_data, _width * _height * 4);
 	}*/
 
-	void Leaf::Update(Gear::Timestep ts)
+	void FloatingMatter::Update(Gear::Timestep ts)
 	{
 		Position.x += (Wind * WindResistance) * ts;
 		if(WindResistance < 0.4f)
@@ -244,18 +269,18 @@ namespace InGame {
 		else
 			Position.y -= (Gravity * 0.4f) * ts;
 
-		if (Position.x < -50.0f)
+		if (Position.x < WorldRect.Left)
 		{
-			Position.x = 50.0f;
+			Position.x = WorldRect.Right;
 		}
-		else if (Position.x > 50.0f)
+		else if (Position.x > WorldRect.Right)
 		{
-			Position.x = -50.0f;
+			Position.x = WorldRect.Left;
 		}
 
 		if (Position.y < -11.0f)
 		{
-			Position.y = 15.0f;
+			Position.y = 9.0f;
 		}
 
 		Translate = glm::translate(glm::mat4(1.0f), Position)
@@ -266,13 +291,13 @@ namespace InGame {
 	{
 		Position.x += (Wind + BasicMove) * ts * 0.1f;
 
-		if (Position.x > 50.0f)
+		if (Position.x > WorldRect.Right)
 		{
-			Position.x = -50.f;
+			Position.x = WorldRect.Left;
 		}
-		else if (Position.x < -50.0f)
+		else if (Position.x < WorldRect.Left)
 		{
-			Position.x = 50.0f;
+			Position.x = WorldRect.Right;
 		}
 		Translate = glm::translate(glm::mat4(1.0f), Position)
 			* glm::scale(glm::mat4(1.0f), Scale);

@@ -1,5 +1,6 @@
 #include "wmpch.h"
 #include "Terrain.h"
+#include "TerrainEventHandler.h"
 
 namespace InGame {
 
@@ -14,8 +15,8 @@ namespace InGame {
 			Gear::ComponentID::Transform
 		});
 
-		auto map = Gear::TextureStorage::GetTexture2D(initData.MapName);
-		auto mask = Gear::TextureStorage::GetTexture2D(initData.MapName + "Mask");
+		auto map = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName);
+		auto mask = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName + "Mask");
 		int width = map->GetWidth();
 		int height = map->GetHeight();
 
@@ -25,6 +26,7 @@ namespace InGame {
 
 		Gear::EntitySystem::SetTexturer(m_ID, Gear::RenderType::Masking, map, mask);
 
+		//Subscpribe EventChannel
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Explosion);
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::Explosion, Gear::CreateRef<TerrainExplosionEventHandler>());
 	}

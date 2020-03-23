@@ -1,15 +1,16 @@
 #pragma once
 
 #include "InGame/Entity/BackGround/Terrain/Terrain.h"
+#include "InGame/Entity/BackGround/Terrain/TerrianBack.h"
 #include "InGame/Data/InitiateData.h"
 
 namespace InGame {
 
-	struct Leaf
+	struct FloatingMatter
 	{
-		Leaf() {}
-		Leaf(const glm::vec3& position, const glm::vec3& scale, float windResistance)
-			: Position(position), Scale(scale), WindResistance(windResistance)
+		FloatingMatter() {}
+		FloatingMatter(const glm::vec3& position, const glm::vec3& scale, float windResistance, const Gear::FRect& worldRect)
+			: Position(position), Scale(scale), WindResistance(windResistance), WorldRect(worldRect)
 		{}
 		glm::vec3 Position;
 		glm::mat4 Translate;
@@ -18,6 +19,7 @@ namespace InGame {
 		const float Gravity = 5.0f;
 		float Wind;
 		float WindResistance;
+		Gear::FRect WorldRect;
 
 		void Update(Gear::Timestep ts);
 		inline void RenewWind(const float wind) { Wind = wind;  }
@@ -26,8 +28,8 @@ namespace InGame {
 	struct Cloud
 	{
 		Cloud() {}
-		Cloud(const glm::vec3& position, const glm::vec3& scale, float basicMove)
-			: Position(position), Scale(scale), BasicMove(basicMove)
+		Cloud(const glm::vec3& position, const glm::vec3& scale, float basicMove, const Gear::FRect& worldRect)
+			: Position(position), Scale(scale), BasicMove(basicMove), WorldRect(worldRect)
 		{}
 
 		glm::vec3 Position;
@@ -36,6 +38,7 @@ namespace InGame {
 		
 		float BasicMove;
 		float Wind;
+		Gear::FRect WorldRect;
 
 		void Update(Gear::Timestep ts);
 		inline void RenewWind(float wind) { Wind = wind; }
@@ -59,24 +62,24 @@ namespace InGame {
 	private:
 		void GradSettup(const InitiateData& initData);
 		void WaterSettup(const InitiateData& initData);
-		void FallenLeafSettup(const InitiateData& initData);
+		void FloatingSettup(const InitiateData& initData);
 		void CloudSettup(const InitiateData& initData);
 
 	private:
 		static float s_CurrentWind;		//wind -30 ~ 30
 
 		Gear::Ref<Terrain> m_Terrian;
+		Gear::Ref<TerrianBack> m_TerrianBack;
 		Gear::Ref<Gear::Texture2D> m_Grad;
-		Gear::Ref<Gear::Texture2D> m_TerrainBack;
-		Gear::Ref<Gear::Animation2D> m_Water;
-		std::vector<Gear::Ref<Gear::Animation2D>> m_LeafTextures;
+		Gear::Ref<Gear::Animation2D> m_WaterWave;
+		std::vector<Gear::Ref<Gear::Animation2D>> m_FloatingTextures;
 		std::vector<Gear::Ref<Gear::Animation2D>> m_CloudTextures; // 0 Back, 1 middle, 2 frontSmall
 
 		glm::mat4 m_GradTranslate;
-		glm::mat4 m_WaterBottomTranslate;
-		glm::vec4 m_WaterBottomColor;
-		std::vector<glm::mat4> m_WaterTranslates;
-		std::vector<std::vector<Leaf>> m_LeafTranslates;
+		glm::mat4 m_WaterBackGroundTranslate;
+		glm::vec4 m_WaterBackGroundmColor;
+		std::vector<glm::mat4> m_WaterWaveTranslates;
+		std::vector<std::vector<FloatingMatter>> m_FloatingTranslates;
 		std::vector<std::vector<Cloud>> m_CloudTranslates;
 	};
 

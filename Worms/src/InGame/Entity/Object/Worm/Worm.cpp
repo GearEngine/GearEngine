@@ -57,7 +57,7 @@ namespace InGame {
 
 		Gear::EntitySystem::SetPhysics(m_ID, true, 10.0f, 10.0f, 0.3f, 0.3f);
 		
-		auto mask = Gear::TextureStorage::GetTexture2D(initData.MapName + "Mask");
+		auto mask = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName + "Mask");
 		int width = mask->GetWidth();
 		int height = mask->GetHeight();
 
