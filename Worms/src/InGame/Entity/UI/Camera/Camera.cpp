@@ -38,7 +38,7 @@ namespace InGame {
 
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::Explosion, Gear::CreateRef<CameraExplosionEventHandler>());
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::MouseMove, Gear::CreateRef<CameraMouseMoveEventHandler>());
-		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::World, Gear::CreateRef<>)
+		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::World, Gear::CreateRef<CameraWorldEventHandler>());
 	}
 
 	Camera::~Camera()

@@ -15,7 +15,8 @@ namespace InGame {
 			OnReadyJump,
 			OnAirItemUse,
 			OnTurnOver,
-			OnDamaged
+			OnDamaged,
+			OnReady
 		};
 	}
 
@@ -35,7 +36,7 @@ namespace InGame {
 			SetTimer3,
 			SetTimer4,
 			SetTimer5,
-			ChangeWorm
+			ChangeWorm,
 		};
 	}
 

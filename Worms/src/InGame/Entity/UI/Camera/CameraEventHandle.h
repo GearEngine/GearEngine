@@ -18,6 +18,8 @@ namespace InGame {
 		{
 			auto mouseMoveData = std::any_cast<MouseMoveData>(data);
 			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
+			physics->PauseFollowingTarget();
+
 			physics->SetExternalVector(glm::vec2(mouseMoveData.dx, mouseMoveData.dy));
 		}
 	};
@@ -27,7 +29,7 @@ namespace InGame {
 		inline virtual void Handle(std::any data, int entityID) override
 		{
 			auto worldData = std::any_cast<WorldData>(data);
-			if (worldData.DataType == WorldDataType::NewStart)
+			if (worldData.DataType == WorldDataType::NewFollow)
 			{
 				if (worldData.EntityID == -1)
 				{
@@ -35,9 +37,12 @@ namespace InGame {
 				}
 				else
 				{
-					auto physics = 
-				}
+					auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
+					auto targetTransform = Gear::EntitySystem::GetTransform2D(worldData.EntityID);
 
+					physics->SetFollowTarget(&targetTransform->GetPosition());
+					physics->ActivateFollowTarget();
+				}
 			}
 		}
 	};

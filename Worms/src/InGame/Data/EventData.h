@@ -17,7 +17,9 @@ namespace InGame {
 	enum WorldDataType : unsigned int
 	{
 		NewStart,
-		OnExitMenu
+		OnExitMenu,
+		ReFollow,
+		NewFollow
 	};
 
 	struct ExplosionData

@@ -18,13 +18,14 @@ namespace Gear {
 	public:
 		virtual ~FSM();
 
-	private:
+	public:
 		FSM() = default;
 		virtual void Update(Timestep ts) override;
 
 		void RegisterFSM(const std::initializer_list<std::pair<const EnumType, InputHandler*>>& handlers);
 		void Handle(int entityID, const Command& cmd);
 		inline EnumType GetCurrentState() const { return m_CurrentState; }
+		inline void SetCurrentState(EnumType state) { m_CurrentState = state; }
 
 	private:
 		std::vector<EnumType> m_States;

@@ -8,8 +8,6 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
-
 			return CameraState::OnFlowing;
 		}
 	};

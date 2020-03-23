@@ -2,6 +2,7 @@
 
 #include "InGame/Entity/UI/Camera/Camera.h"
 #include "InGame/Entity/UI/Mouse/Mouse.h"
+#include "InGame/Entity/World/World.h"
 
 namespace InGame {
 
@@ -21,6 +22,7 @@ namespace InGame {
 	private:
 		Gear::Ref<Camera> m_Camera;
 		Gear::Ref<Mouse> m_Mouse;
+		Gear::Ref<World> m_World;
 		glm::vec4 m_ClearColor = { 0.14117, 0.16470, 0.29019, 1.0 };
 	};
 

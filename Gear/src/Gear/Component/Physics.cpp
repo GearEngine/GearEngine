@@ -67,6 +67,11 @@ namespace Gear {
 		}
 	}
 
+	void Physics2D::SetFollowTarget(glm::vec3 * followTargetPos)
+	{
+		m_FollowTarget = followTargetPos;
+	}
+
 	void Physics2D::ActivatePixelCollision(const glm::vec3 & targetPixel, Ref<Texture2D> collisionTargetTexture, const glm::mat4& textureTranslate, const std::vector<std::pair<float, float>>& offsets)
 	{
 		m_TargetPixel = targetPixel;
@@ -94,11 +99,16 @@ namespace Gear {
 			{
 				m_GravityAccelation += m_Gravity * ts;
 			}
+			m_ExternalVector.y -= m_GravityAccelation;
 		}
-		m_ExternalVector.y -= m_GravityAccelation;
+
+		if (m_ActivatedFollowTarget)
+		{
+			UpdateFollow();
+		}
 
 		m_TargetPos->x += m_ExternalVector.x * ts;
-		m_TargetPos->y += m_ExternalVector.y * ts;	
+		m_TargetPos->y += m_ExternalVector.y * ts;
 
 		if (m_ActivatedPixelCollision)
 		{
@@ -108,6 +118,7 @@ namespace Gear {
 				m_GravityAccelation = 0.0f;
 			}
 		}
+
 
 		if (m_ActivatedMoveLimitation)
 		{
@@ -120,8 +131,16 @@ namespace Gear {
 		}
 	}
 
-	void Physics2D::FollowTarget()
+	void Physics2D::UpdateFollow()
 	{
+		if (!m_FollowTarget)
+		{
+			GR_CORE_WARN("On Physics2D::UpdateFollow : There is no Follow Target!");
+			return;
+		}
+
+		m_ExternalVector.x = (m_FollowTarget->x - m_TargetPos->x) * 5;
+		m_ExternalVector.y = (m_FollowTarget->y - m_TargetPos->y) * 5;
 	}
 
 }

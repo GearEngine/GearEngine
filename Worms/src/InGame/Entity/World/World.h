@@ -1,11 +1,13 @@
 #pragma once
 
+#include "InGame/Data/InitiateData.h"
+
 namespace InGame {
 
 	class World 
 	{
 	public:
-		World();
+		World(const InitiateData& initData);
 		~World();
 
 		void Update(Gear::Timestep ts);

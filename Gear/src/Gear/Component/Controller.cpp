@@ -12,8 +12,6 @@ namespace Gear {
 
 	void Controller::Update(Timestep ts)
 	{
-		m_Command = s_None;
-
 		for (auto& command : m_Commands)
 		{
 			if (command.KeyType == MOUSE_CLICKTYPE)

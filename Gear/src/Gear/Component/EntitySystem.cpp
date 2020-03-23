@@ -91,17 +91,21 @@ namespace Gear {
 		if (entity->m_EventQueue.empty())
 			return;
 
-		auto& event = entity->m_EventQueue.front();
-		EntityEventType type = event.Type;
-
-		if (entity->m_EventHandler.find(type) == entity->m_EventHandler.end())
+		while (!entity->m_EventQueue.empty())
 		{
-			GR_CORE_WARN("Entity NO.{0} has no event:{1} Handler", entity->m_EntityID, type);
+			auto& event = entity->m_EventQueue.front();
+			EntityEventType type = event.Type;
+
+			if (entity->m_EventHandler.find(type) == entity->m_EventHandler.end())
+			{
+				GR_CORE_WARN("Entity NO.{0} has no event:{1} Handler", entity->m_EntityID, type);
+				entity->m_EventQueue.pop();
+				continue;
+			}
+			entity->m_EventHandler[type]->Handle(event.Data, entity->m_EntityID);
 			entity->m_EventQueue.pop();
-			return;
 		}
-		entity->m_EventHandler[type]->Handle(event.Data, entity->m_EntityID);
-		entity->m_EventQueue.pop();
+		
 	}
 
 	void EntitySystem::UpdateController(int entityID, Timestep ts)
@@ -123,6 +127,7 @@ namespace Gear {
 		if (m_Controllers[entityID])
 		{
 			m_FSMs[entityID]->Handle(entityID, m_Controllers[entityID]->GetCommand());
+			m_Controllers[entityID]->ResetCommand();
 		}
 		else
 		{
@@ -416,31 +421,31 @@ namespace Gear {
 			switch (id)
 			{
 			case ComponentID::ID::Animator:
-				if (!m_Animators[entityID]) m_Animators[entityID]->m_OnActivate = true;
+				if (m_Animators[entityID]) m_Animators[entityID]->m_OnActivate = true;
 				break;
 			case ComponentID::ID::Controller:
-				if (!m_Controllers[entityID]) m_Controllers[entityID]->m_OnActivate = true;
+				if (m_Controllers[entityID]) m_Controllers[entityID]->m_OnActivate = true;
 				break;
 			case ComponentID::ID::Drawer:
-				if (!m_Drawer[entityID]) m_Drawer[entityID]->m_OnActivate = true;
+				if (m_Drawer[entityID]) m_Drawer[entityID]->m_OnActivate = true;
 				break;
 			case ComponentID::ID::FSM:
-				if (!m_FSMs[entityID]) m_FSMs[entityID]->m_OnActivate = true;
+				if (m_FSMs[entityID]) m_FSMs[entityID]->m_OnActivate = true;
 				break;
 			case ComponentID::ID::Physics:
-				if (!m_Phisics[entityID]) m_Phisics[entityID]->m_OnActivate = true;
+				if (m_Phisics[entityID]) m_Phisics[entityID]->m_OnActivate = true;
 				break;
 			case ComponentID::ID::SoundPlayer:
-				if (!m_SoundPlayers[entityID]) m_SoundPlayers[entityID]->m_OnActivate = true;
+				if (m_SoundPlayers[entityID]) m_SoundPlayers[entityID]->m_OnActivate = true;
 				break;
 			case ComponentID::ID::Transform:
-				if (!m_Transforms[entityID]) m_Transforms[entityID]->m_OnActivate = true;
+				if (m_Transforms[entityID]) m_Transforms[entityID]->m_OnActivate = true;
 				break;
 			case ComponentID::ID::Timer:
-				if (!m_Timers[entityID]) m_Timers[entityID]->m_OnActivate = true;
+				if (m_Timers[entityID]) m_Timers[entityID]->m_OnActivate = true;
 				break;
 			case ComponentID::ID::Texturer:
-				if (!m_Texturer[entityID]) m_Texturer[entityID]->m_OnActivate = true;
+				if (m_Texturer[entityID]) m_Texturer[entityID]->m_OnActivate = true;
 				break;
 			}
 		}

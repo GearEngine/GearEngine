@@ -28,6 +28,7 @@ namespace Gear {
 		inline void RegisterCommand(const std::initializer_list<Command>& commands) { m_Commands = commands; }
 		inline void ActivateMouseMove() { m_ActivatedMouse = true; }
 		inline const Command& GetCommand() const { return m_Command; }
+		inline void ResetCommand() { m_Command = s_None; }
 
 	private:
 		bool m_ActivatedMouse = false;

@@ -8,6 +8,7 @@ namespace InGame {
 	{
 		m_Camera.reset(new Camera(initData));
 		m_Mouse.reset(new Mouse(initData));
+		m_World.reset(new World(initData));
 	}
 
 	void UILayer::OnAttach()

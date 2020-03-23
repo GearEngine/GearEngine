@@ -1,6 +1,8 @@
 #include "wmpch.h"
 #include "ObjectLayer.h"
 
+#include "InGame/Entity/Object/Worm/WormEnum.h"
+
 namespace InGame {
 
 	int ObjectLayer::m_nWorms = 0;
@@ -12,10 +14,9 @@ namespace InGame {
 	{
 		m_nWorms = initData.nWorm;
 		m_Worms.resize(m_nWorms);
-		m_Worms[0].reset(new Worm(glm::vec3(1.0f, 10.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
-		m_Worms[1].reset(new Worm(glm::vec3(2.0f, 10.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
-		m_Worms[2].reset(new Worm(glm::vec3(3.0f, 10.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
-	
+		m_Worms[0].reset(new Worm(glm::vec3(1.0f, 3.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
+		m_Worms[1].reset(new Worm(glm::vec3(2.0f, 3.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
+		m_Worms[2].reset(new Worm(glm::vec3(3.0f, 3.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
 
 		m_Transceiver = Gear::EntitySystem::CreateEntity(true);
 
@@ -25,6 +26,10 @@ namespace InGame {
 
 	void ObjectLayer::OnAttach()
 	{
+		for (auto e : m_Worms)
+		{
+			Gear::EntitySystem::ActivateComponent(e->GetID(), { Gear::ComponentID::Physics });
+		}
 	}
 
 	void ObjectLayer::OnDetach()
@@ -42,7 +47,9 @@ namespace InGame {
 				if (i == m_CurrentActiveWorm)
 				{
 					Gear::EntitySystem::ActivateComponent(m_Worms[i]->GetID(), { {Gear::ComponentID::Controller} });
-					Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, m_Worms[i]->GetID()));
+					auto FSM = Gear::EntitySystem::GetFSM(m_Worms[i]->GetID());
+					FSM->SetCurrentState(WormState::OnReady);
+					Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, m_Worms[i]->GetID())));
 				}
 				else
 				{

@@ -6,8 +6,8 @@ namespace InGame {
 
 		enum : unsigned int
 		{
-			OnRunning,
 			OnStart,
+			OnRunning,
 			OnWormsDying,
 			OnPrepareRun,
 			OnWindowSelect,

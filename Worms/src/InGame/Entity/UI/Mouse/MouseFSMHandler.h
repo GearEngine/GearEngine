@@ -36,6 +36,7 @@ namespace InGame {
 					dy = (dy + prevDy) * 0.5f;
 					Gear::EventSystem::DispatchEvent(EventChannel::MouseMove, Gear::EntityEvent(EventType::MouseMove, MouseMoveData(dx, dy)));
 				}
+				
 				prevDx = dx;
 				prevDy = dy;
 			}

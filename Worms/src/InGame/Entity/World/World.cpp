@@ -6,7 +6,7 @@
 
 namespace InGame {
 
-	World::World()
+	World::World(const InitiateData& initData)
 	{
 		//Create Entity
 		m_ID = Gear::EntitySystem::CreateEntity(true);
@@ -24,11 +24,11 @@ namespace InGame {
 
 		//Subscpribe EventChannel
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::MouseClick);
-
 	}
 
 	World::~World()
 	{
+		Gear::EventSystem::UnSubscribeChannel(m_ID, EventChannel::MouseClick);
 		Gear::EntitySystem::DeleteEntity(m_ID);
 	}
 
