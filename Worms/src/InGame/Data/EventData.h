@@ -14,6 +14,12 @@ namespace InGame {
 		};
 	}
 
+	enum WorldDataType : unsigned int
+	{
+		NewStart,
+		OnExitMenu
+	};
+
 	struct ExplosionData
 	{
 		ExplosionData(const glm::vec2 position, float radius, float power)
@@ -31,6 +37,16 @@ namespace InGame {
 			: dx(_dx), dy(_dy)
 		{}
 		float dx, dy;
+	};
+
+	struct WorldData
+	{
+		WorldData(WorldDataType dataType, int entityID = -1)
+			: DataType(dataType), EntityID(entityID)
+		{}
+
+		WorldDataType DataType;
+		int EntityID;
 	};
 
 }

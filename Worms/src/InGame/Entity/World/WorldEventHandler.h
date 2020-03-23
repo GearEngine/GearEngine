@@ -1,13 +1,17 @@
 #pragma once
 
+#include "WorldState.h"
+
 namespace InGame {
 
-	class MouseEventHandler : public Gear::EventHandler
+	class WorldEventHandler : public Gear::EventHandler
 	{
 		inline virtual void Handle(std::any data, int entityID) override
 		{
 			GR_TRACE("No.{0} Entity Mouse event", entityID);
+
 		}
 	};
+
 
 }

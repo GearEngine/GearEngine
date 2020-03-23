@@ -18,8 +18,28 @@ namespace InGame {
 		virtual void OnImGuiRender() override;
 		void OnEvent(Gear::Event& e) override;
 
+	public:
+		static void ChangeWorm();
+
 	private:
-		std::vector<Gear::Ref<Worm>> worms;
+		std::vector<Gear::Ref<Worm>> m_Worms;
+		static int m_CurrentActiveWorm;
+		static int m_nWorms;
+		static bool m_turnChanged;
+
+		int m_Transceiver; // Entity
+	};
+
+	class Transceiver : public Gear::EventHandler
+	{
+		inline virtual void Handle(std::any data, int entityID) override
+		{
+			auto worldData = std::any_cast<WorldData>(data);
+			if (worldData.DataType == WorldDataType::NewStart)
+			{
+				ObjectLayer::ChangeWorm();
+			}
+		}
 	};
 
 }

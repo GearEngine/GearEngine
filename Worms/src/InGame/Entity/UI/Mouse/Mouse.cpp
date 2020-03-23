@@ -28,20 +28,20 @@ namespace InGame {
 		//Set Component specific
 		auto& cursor = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Cursor"), 0.0f, true);
 		Gear::EntitySystem::SetAnimator(m_ID, {
-			{ GameState::OnItemWindow,  cursor },	{ GameState::OnQuitWindow,	cursor  },
-			{ GameState::OnWindowSelect,cursor },	{ GameState::OnRunning,		nullptr },
-			{ GameState::OnWormsDying, nullptr },	{ GameState::OnStart,		nullptr },
-			{ GameState::OnPrepareRun, nullptr },
+			{ WorldState::OnItemWindow,  cursor },	{ WorldState::OnQuitWindow,	cursor  },
+			{ WorldState::OnWindowSelect,cursor },	{ WorldState::OnRunning,		nullptr },
+			{ WorldState::OnWormsDying, nullptr },	{ WorldState::OnStart,		nullptr },
+			{ WorldState::OnPrepareRun, nullptr },
 		});
 
 		Gear::EntitySystem::SetFSM(m_ID, {
-			{ GameState::OnItemWindow,		new MouseOnItemWindowHandler },
-			{ GameState::OnQuitWindow,		new MouseOnQuitWindowHandler  },
-			{ GameState::OnWindowSelect,	new MouseOnWindowSelectHandler },
-			{ GameState::OnRunning,			new MouseOnGameRunningHandler },	
-			{ GameState::OnWormsDying,		new MouseOnGameRunningHandler },
-			{ GameState::OnStart,			new MouseOnGameRunningHandler },		
-			{ GameState::OnPrepareRun,		new MouseOnGameRunningHandler }
+			{ WorldState::OnItemWindow,		new MouseOnItemWindowHandler },
+			{ WorldState::OnQuitWindow,		new MouseOnQuitWindowHandler  },
+			{ WorldState::OnWindowSelect,	new MouseOnWindowSelectHandler },
+			{ WorldState::OnRunning,			new MouseOnGameRunningHandler },	
+			{ WorldState::OnWormsDying,		new MouseOnGameRunningHandler },
+			{ WorldState::OnStart,			new MouseOnGameRunningHandler },		
+			{ WorldState::OnPrepareRun,		new MouseOnGameRunningHandler }
 		});
 
 		Gear::EntitySystem::SetController(m_ID, {

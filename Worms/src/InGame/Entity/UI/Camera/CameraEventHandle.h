@@ -22,5 +22,24 @@ namespace InGame {
 		}
 	};
 
+	class CameraWorldEventHandler : public Gear::EventHandler
+	{
+		inline virtual void Handle(std::any data, int entityID) override
+		{
+			auto worldData = std::any_cast<WorldData>(data);
+			if (worldData.DataType == WorldDataType::NewStart)
+			{
+				if (worldData.EntityID == -1)
+				{
+					return;
+				}
+				else
+				{
+					auto physics = 
+				}
+
+			}
+		}
+	};
 
 }

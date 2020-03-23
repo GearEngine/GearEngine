@@ -34,10 +34,11 @@ namespace InGame {
 		//Subscpribe EventChannel
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Explosion);
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::MouseMove);
+		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::World);
 
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::Explosion, Gear::CreateRef<CameraExplosionEventHandler>());
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::MouseMove, Gear::CreateRef<CameraMouseMoveEventHandler>());
-		
+		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::World, Gear::CreateRef<>)
 	}
 
 	Camera::~Camera()

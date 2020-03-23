@@ -1,6 +1,6 @@
 #pragma once
 
-#include "InGame/GameState.h"
+#include "InGame/Entity/World/WorldState.h"
 #include "InGame/Data/EventData.h"
 
 #include "GLFW/include/GLFW/glfw3.h"
@@ -16,12 +16,12 @@ namespace InGame {
 			static float prevDy = 0.0f;
 			if (cmd.Keycode == GR_MOUSE_BUTTON_LEFT)
 			{
-				return GameState::OnRunning;
+				return WorldState::OnRunning;
 			}
 			if (cmd.Keycode == GR_MOUSE_BUTTON_RIGHT)
 			{
 				//TODO : Add item select window
-				return GameState::OnRunning;
+				return WorldState::OnRunning;
 			}
 
 			if (first)
@@ -43,7 +43,7 @@ namespace InGame {
 			glfwSetCursorPos((GLFWwindow*)Gear::Application::Get().GetWindow().GetNativeWindow(), 640.0, 360.0);
 			first = true;
 
-			return GameState::OnRunning;
+			return WorldState::OnRunning;
 		}
 	};
 
@@ -52,7 +52,7 @@ namespace InGame {
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 		
-			return GameState::OnItemWindow;
+			return WorldState::OnItemWindow;
 		}
 	};
 
@@ -61,7 +61,7 @@ namespace InGame {
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			
-			return GameState::OnWindowSelect;
+			return WorldState::OnWindowSelect;
 		}
 	};
 
@@ -70,7 +70,7 @@ namespace InGame {
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			
-			return GameState::OnQuitWindow;
+			return WorldState::OnQuitWindow;
 		}
 	};
 

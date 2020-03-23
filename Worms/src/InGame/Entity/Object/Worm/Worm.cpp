@@ -44,7 +44,7 @@ namespace InGame {
 		Gear::EntitySystem::SetFSM(m_ID, {
 			{ WormState::OnMove, new WormOnMoveHandler }, { WormState::OnUseItem, new WormOnUseItemHandler },
 			{ WormState::OnIdle, new WormOnIdleHandler }
-			});
+		});
 
 		Gear::EntitySystem::SetController(m_ID, {
 			{ WormCommand::BackJump, GR_KEY_BACKSPACE}, { WormCommand::ChangeWorm, GR_KEY_TAB},

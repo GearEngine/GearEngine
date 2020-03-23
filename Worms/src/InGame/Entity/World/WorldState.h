@@ -2,7 +2,7 @@
 
 namespace InGame {
 
-	namespace GameState {
+	namespace WorldState {
 
 		enum : unsigned int
 		{

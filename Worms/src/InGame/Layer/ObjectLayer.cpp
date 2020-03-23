@@ -3,13 +3,24 @@
 
 namespace InGame {
 
+	int ObjectLayer::m_nWorms = 0;
+	int ObjectLayer::m_CurrentActiveWorm = 0;
+	bool ObjectLayer::m_turnChanged = false;
+
 	ObjectLayer::ObjectLayer(const InitiateData& initData)
 		: Layer("ObjectLayer")
 	{
-		worms.resize(initData.nWorm);
-		worms[0].reset(new Worm(glm::vec3(1.0f, 10.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
-		worms[1].reset(new Worm(glm::vec3(2.0f, 10.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
-		worms[2].reset(new Worm(glm::vec3(3.0f, 10.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
+		m_nWorms = initData.nWorm;
+		m_Worms.resize(m_nWorms);
+		m_Worms[0].reset(new Worm(glm::vec3(1.0f, 10.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
+		m_Worms[1].reset(new Worm(glm::vec3(2.0f, 10.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
+		m_Worms[2].reset(new Worm(glm::vec3(3.0f, 10.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
+	
+
+		m_Transceiver = Gear::EntitySystem::CreateEntity(true);
+
+		Gear::EventSystem::SubscribeChannel(m_Transceiver, EventChannel::World);
+		Gear::EventSystem::RegisterEventHandler(m_Transceiver, EventChannel::World, Gear::CreateRef<Transceiver>());
 	}
 
 	void ObjectLayer::OnAttach()
@@ -18,13 +29,27 @@ namespace InGame {
 
 	void ObjectLayer::OnDetach()
 	{
-		worms.clear();
+		m_Worms.clear();
 	}
 
 	void ObjectLayer::OnUpdate(Gear::Timestep ts)
 	{
-		/*Gear::EntitySystem::Update(ts);
-		Gear::EntitySystem::Render();*/
+		if (m_turnChanged)
+		{
+			m_turnChanged = false;
+			for (int i = 0 ; i < m_Worms.size(); ++i)
+			{
+				if (i == m_CurrentActiveWorm)
+				{
+					Gear::EntitySystem::ActivateComponent(m_Worms[i]->GetID(), { {Gear::ComponentID::Controller} });
+					Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, m_Worms[i]->GetID()));
+				}
+				else
+				{
+					Gear::EntitySystem::InActivateComponent(m_Worms[i]->GetID(), { {Gear::ComponentID::Controller} });
+				}
+			}
+		}
 	}
 
 	void ObjectLayer::OnImGuiRender()
@@ -33,6 +58,16 @@ namespace InGame {
 
 	void ObjectLayer::OnEvent(Gear::Event & e)
 	{
+	}
+
+	void ObjectLayer::ChangeWorm()
+	{
+		m_CurrentActiveWorm++;
+		if (m_CurrentActiveWorm >= m_nWorms)
+		{
+			m_CurrentActiveWorm = 0;
+		}
+		m_turnChanged = true;
 	}
 
 }

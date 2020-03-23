@@ -49,6 +49,7 @@ namespace InGame {
 
 		Gear::FRect WorldRect = { -70.0f, 70.0f, 70.0f, -27.0f };
 		Gear::FRect CameraLimit = { -50.0f, 50.0f, 50.0f, -7.0f };
+
 	};
 
 	inline MapInfo GetMapInfo(std::string name)
