@@ -1,7 +1,6 @@
 #include "wmpch.h"
 #include "Mouse.h"
 
-#include "InGame/Data/EventData.h"
 #include "MouseFSMHandler.h"
 #include "MouseEventHandler.h"
 

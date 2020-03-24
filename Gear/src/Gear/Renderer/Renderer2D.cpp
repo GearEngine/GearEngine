@@ -15,6 +15,7 @@ namespace Gear {
 	{
 		Ref<VertexArray> QuardVertexArray;
 		Ref<Shader> TextureShader;
+		Ref<Shader> FixedShader;
 		Ref<Texture2D> WhiteTexture;
 	};
 
@@ -62,6 +63,10 @@ namespace Gear {
 		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_Texture", 0);
 		s_Data->TextureShader->SetInt("u_Mask", 1);
+
+		s_Data->FixedShader = Shader::Create("assets/shaders/Fixed.glsl");
+		s_Data->FixedShader->Bind();
+		s_Data->TextureShader->SetInt("u_Texture", 0);
 	}
 
 	void Renderer2D::Shutdown()
@@ -87,6 +92,7 @@ namespace Gear {
 
 	void Renderer2D::DrawTextureWithMask(const glm::mat4 & translate, const Ref<Texture>& texture, const Ref<Texture>& mask)
 	{
+		s_Data->TextureShader->Bind();
 		texture->Bind(0);
 		mask->Bind(1);
 
@@ -106,6 +112,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", color);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
@@ -128,6 +135,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
@@ -145,6 +153,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", color);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
@@ -160,6 +169,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
@@ -180,6 +190,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", color);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
@@ -203,6 +214,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
@@ -221,6 +233,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", color);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
@@ -234,6 +247,7 @@ namespace Gear {
 
 	void Renderer2D::DrawRotatedQuad(const glm::mat4 & translate, const Ref<Texture>& texture, const glm::vec4 & tintColor)
 	{
+		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
@@ -254,6 +268,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
@@ -276,6 +291,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
@@ -294,6 +310,7 @@ namespace Gear {
 	{
 		GR_PROFILE_FUNCTION();
 
+		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_WithMask", 0);
 		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetMat4("u_Transform", translate);
@@ -302,6 +319,19 @@ namespace Gear {
 		animation->Bind();
 		s_Data->QuardVertexArray->Bind();
 
+		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
+	}
+
+	void Renderer2D::DrawFixedQuad(const glm::mat4 & tranlate, const Ref<Texture>& texture, const glm::vec4 & tintColor)
+	{
+		GR_PROFILE_FUNCTION();
+
+		s_Data->FixedShader->Bind();
+		s_Data->FixedShader->SetMat4("u_Transform", tranlate);
+		s_Data->FixedShader->SetFloat4("u_Color", tintColor);
+
+		texture->Bind();
+		
 		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
 	}
 

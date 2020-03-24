@@ -1,7 +1,6 @@
 #pragma once
 
 #include "WorldState.h"
-#include "InGame/Data/EventData.h"
 #include "Common/EventChannel.h"
 
 namespace InGame {

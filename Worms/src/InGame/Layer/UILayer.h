@@ -3,6 +3,9 @@
 #include "InGame/Entity/UI/Camera/Camera.h"
 #include "InGame/Entity/UI/Mouse/Mouse.h"
 #include "InGame/Entity/World/World.h"
+#include "InGame/Entity/UI/Checker/Timer.h"
+#include "InGame/Entity/UI/Checker/WindChecker.h"
+#include "InGame/Entity/UI/Checker/TurnChecker.h"
 
 namespace InGame {
 
@@ -23,6 +26,10 @@ namespace InGame {
 		Gear::Ref<Camera> m_Camera;
 		Gear::Ref<Mouse> m_Mouse;
 		Gear::Ref<World> m_World;
+		Gear::Ref<Timer> m_Timer;
+		Gear::Ref<WindChecker> m_WindChecker;
+		Gear::Ref<TurnChecker> m_TurnChecker;
+
 		glm::vec4 m_ClearColor = { 0.14117, 0.16470, 0.29019, 1.0 };
 	};
 

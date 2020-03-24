@@ -12,7 +12,8 @@ namespace Gear {
 			Blending,
 			Masking,
 			Batch,
-			Tiling
+			Tiling,
+			Fixed
 		};
 
 	}

@@ -14,6 +14,7 @@ namespace InGame {
 
 	namespace ZOrder {
 
+		const float z_Checker = -0.9f;
 		const float z_Grad = -0.8f;
 		const float z_WatterBackGround = -0.7f;
 		const float z_FloatingMatter = -0.6f;
@@ -38,6 +39,7 @@ namespace InGame {
 
 		float WindowWidth = Gear::WINDOW_WIDTH;
 		float WindowHeight = Gear::WINDOW_HEIGHT;
+		float WindowAspectRatio = Gear::WINDOW_WIDTH / (float)Gear::WINDOW_HEIGHT;
 		int nWorm = 3;
 		int WormHP = 100;
 

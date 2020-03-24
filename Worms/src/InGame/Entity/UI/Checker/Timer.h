@@ -5,11 +5,12 @@ namespace InGame {
 	class Timer
 	{
 	public:
-		Timer();
+		Timer(const InitiateData& initData);
 		~Timer();
 
 	private:
 		int m_ID;
+
 	};
 
 }

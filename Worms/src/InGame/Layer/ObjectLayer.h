@@ -1,7 +1,6 @@
 #pragma once
 
 #include "InGame/Entity/Object/Worm/Worm.h"
-#include "InGame/Data/InitiateData.h"
 
 namespace InGame {
 

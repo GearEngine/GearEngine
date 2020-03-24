@@ -1,7 +1,5 @@
 #pragma once
 
-#include "InGame/Data/InitiateData.h"
-
 namespace InGame {
 
 	class Camera

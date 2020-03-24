@@ -56,6 +56,9 @@ namespace Gear {
 		case RenderType::Tiling:
 			GR_CORE_ASSERT(false, "{DrawerCompoenent::Tiling Currently not supported!}");
 			break;
+		case RenderType::Fixed:
+			Renderer2D::DrawFixedQuad(m_Translate, m_Texture);
+			break;
 		}
 	}
 }

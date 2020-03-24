@@ -2,11 +2,8 @@
 
 #include "Gear.h"
 #include "Common/EventChannel.h"
+#include "Common/Font.h"
 #include "imgui/imgui.h"
 
-namespace InGame {
-
-	const float GradReductionRatio = 30.0f;
-
-
-}
+#include "InGame/Data/InitiateData.h"
+#include "InGame/Data/EventData.h"

@@ -9,6 +9,9 @@ namespace InGame {
 		m_Camera.reset(new Camera(initData));
 		m_Mouse.reset(new Mouse(initData));
 		m_World.reset(new World(initData));
+		m_Timer.reset(new Timer(initData));
+		m_WindChecker.reset(new WindChecker(initData));
+		m_TurnChecker.reset(new TurnChecker(initData));
 	}
 
 	void UILayer::OnAttach()
@@ -30,6 +33,7 @@ namespace InGame {
 
 	void UILayer::OnImGuiRender()
 	{
+
 	}
 
 	void UILayer::OnEvent(Gear::Event & e)

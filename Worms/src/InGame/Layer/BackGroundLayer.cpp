@@ -91,7 +91,6 @@ namespace InGame {
 		}
 	}
 
-
 	void BackGroundLayer::OnImGuiRender()
 	{
 	}
@@ -108,7 +107,7 @@ namespace InGame {
 		float gradWidth = m_Grad->GetWidth();
 		float gradHeight = m_Grad->GetHeight();
 
-		glm::vec3 gradScale(gradWidth / GradReductionRatio * 2, gradHeight / GradReductionRatio, 1.0f);
+		glm::vec3 gradScale(gradWidth / 30.0f * 2, gradHeight / 30.0f, 1.0f);
 
 		m_GradTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, ZOrder::z_Grad))
 			* glm::scale(glm::mat4(1.0f), gradScale);

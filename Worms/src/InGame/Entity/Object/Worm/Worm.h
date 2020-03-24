@@ -1,7 +1,6 @@
 #pragma once
 
 #include "WormEventHandle.h"
-#include "InGame/Data/InitiateData.h"
 
 namespace InGame {
 

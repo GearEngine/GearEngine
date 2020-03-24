@@ -1,7 +1,6 @@
 #pragma once
 
 #include "InGame/Entity/World/WorldState.h"
-#include "InGame/Data/EventData.h"
 
 #include "GLFW/include/GLFW/glfw3.h"
 

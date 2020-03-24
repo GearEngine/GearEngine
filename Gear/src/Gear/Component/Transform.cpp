@@ -33,11 +33,10 @@ namespace Gear {
 		m_Scale = scale;
 	}
 
-	void Transform2D::Move(const glm::vec2 & vector, const Timestep ts)
-	{
-		//temporary
-		m_Position.x += vector.x * ts;
-		m_Position.y += vector.y * ts;
+	glm::mat4 & Transform2D::GetTranslate() 
+	{ 
+		RecalculateTranslate();  
+		return m_Translate;
 	}
 
 	void Transform2D::RecalculateTranslate()

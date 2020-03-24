@@ -2,7 +2,6 @@
 
 #include "InGame/Entity/BackGround/Terrain/Terrain.h"
 #include "InGame/Entity/BackGround/Terrain/TerrianBack.h"
-#include "InGame/Data/InitiateData.h"
 
 namespace InGame {
 

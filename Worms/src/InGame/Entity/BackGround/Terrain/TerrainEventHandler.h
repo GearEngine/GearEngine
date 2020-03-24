@@ -1,5 +1,4 @@
 #pragma once
-#include "InGame/Data/EventData.h"
 
 namespace InGame {
 
