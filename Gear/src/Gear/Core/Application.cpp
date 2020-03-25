@@ -75,24 +75,23 @@ namespace Gear {
 			{
 				m_CurScene = Gear::SceneManager::Get()->GetCurrentScene();
 				{
-					GR_PROFILE_SCOPE("LayerStack OnUpdate");
-
-					for (Layer* layer : *m_CurScene)
-						layer->OnUpdate(timestep);
+					GR_PROFILE_SCOPE("Scene OnUpdate");
+					m_CurScene->Update(timestep);
 				}
-				EntitySystem::Update(timestep);
-				EntitySystem::Render();
 
-				for (Layer* layer : *m_CurScene)
-					layer->LateUpdate(timestep);
+				if (m_CurScene->PassFirstDelay())
+				{
+					EntitySystem::Update(timestep);
+					EntitySystem::Render();
+				}
 
-				m_ImGuilayer->Begin();
+				/*m_ImGuilayer->Begin();
 				{
 					GR_PROFILE_SCOPE("LayerStack OnImGuiRender");
 					for (Layer* layer : *m_CurScene)
 						layer->OnImGuiRender();
 				}
-				m_ImGuilayer->End();
+				m_ImGuilayer->End();*/
 			}
 			m_Window->OnUpdate();
 		}

@@ -322,12 +322,12 @@ namespace Gear {
 		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
 	}
 
-	void Renderer2D::DrawFixedQuad(const glm::mat4 & tranlate, const Ref<Texture>& texture, const glm::vec4 & tintColor)
+	void Renderer2D::DrawFixedQuad(const glm::mat4 & translate, const Ref<Texture>& texture, const glm::vec4 & tintColor)
 	{
 		GR_PROFILE_FUNCTION();
 
 		s_Data->FixedShader->Bind();
-		s_Data->FixedShader->SetMat4("u_Transform", tranlate);
+		s_Data->FixedShader->SetMat4("u_Transform", translate);
 		s_Data->FixedShader->SetFloat4("u_Color", tintColor);
 
 		texture->Bind();
@@ -335,6 +335,17 @@ namespace Gear {
 		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
 	}
 
+	void Renderer2D::DrawFixedQuad(const glm::mat4 & translate, const Ref<FrameTexture2D>& frameTexture, int frameX, int frameY, const glm::vec4 & tintColor)
+	{
+		GR_PROFILE_FUNCTION();
 
+		s_Data->FixedShader->Bind();
+		s_Data->FixedShader->SetMat4("u_Transform", translate);
+		s_Data->FixedShader->SetFloat4("u_Color", tintColor);
+
+		frameTexture->Bind(frameX, frameY);
+
+		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
+	}
 
 }

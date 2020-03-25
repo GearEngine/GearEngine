@@ -74,7 +74,7 @@ namespace Gear {
 		static void SetTexturer(int entityID, RenderType::Type type, Ref<Texture2D> texture, Ref<Texture2D> mask = nullptr, Ref<Texture2D> blending = nullptr);
 		static void SetPhysics(int entityID, bool activateGravity = false, float gravity = 1.0f, float limitGravityAccelation = 0.0f,  float friction = 0.2f, float elastics = 0.3f);
 		static void SetPixelCollision(int entityID, const glm::vec3& targetPixel, Ref<Texture2D> targetTexture, const glm::mat4& targetTextureTranslate, std::vector<std::pair<float, float>> offsets);
-		static void SetMoveLimit(int entityID, const FRect& rect);
+		static void SetMoveLimit(int entityID, const Util::FRect& rect);
 		static void SetSliding(int entityID, float slidingRatio);
 
 		static Ref<Transform2D>		GetTransform2D(int entityID);

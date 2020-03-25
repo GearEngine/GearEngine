@@ -21,7 +21,7 @@ namespace InGame {
 		m_Transceiver = Gear::EntitySystem::CreateEntity(true);
 
 		Gear::EventSystem::SubscribeChannel(m_Transceiver, EventChannel::World);
-		Gear::EventSystem::RegisterEventHandler(m_Transceiver, EventChannel::World, Gear::CreateRef<Transceiver>());
+		Gear::EventSystem::RegisterEventHandler(m_Transceiver, EventChannel::World, Gear::CreateRef<ObjLayerTransceiver>());
 	}
 
 	void ObjectLayer::OnAttach()

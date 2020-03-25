@@ -1,25 +1,32 @@
 #pragma once
 
-namespace InGame {
-
-	namespace FontType
+namespace FontType
+{
+	enum Type : unsigned int
 	{
-		enum Type: unsigned int
-		{
-			ColorRed,
-			ColorBlue,
-		};
-	}
-
-	class Font
-	{
-	public:
-		static void Init();
-		static void Destroy();
-		static void printFont(const glm::vec2& startPosition, const std::string& str, FontType::Type font);
-
-	private:
-		static std::vector<Gear::FrameTexture2D> m_Fonts;
+		Red,
+		RedSmall,
+		Blue,
+		BlueSmall,
+		White,
+		WhiteSmall,
+		GraySmall,
+		RedNumber,
+		GrayNumber,
+		WhiteNumber,
+		FontEnd
 	};
-
 }
+
+class Font
+{
+public:
+	static void Init();
+	static void ShoutDown();
+	static void printFont(const glm::vec2& midPosition, const glm::vec3& scale, const std::string& str, FontType::Type font, float offset);
+
+private:
+	static std::vector<Gear::Ref<Gear::FrameTexture2D>> m_Fonts;
+	static std::unordered_map<char, int> m_Indexer;
+	static glm::vec3 m_Scale;
+};

@@ -29,6 +29,7 @@ namespace InGame {
 		Gear::RenderCommand::Clear();
 
 		Gear::Renderer2D::BeginScene(m_Camera->m_CameraController->GetCamera());
+		m_TurnChecker->Render();
 	}
 
 	void UILayer::OnImGuiRender()

@@ -81,7 +81,7 @@ namespace Gear {
 		m_ActivatedPixelCollision = true;
 	}
 
-	void Physics2D::ActivateMoveLimit(const FRect & moveLimit)
+	void Physics2D::ActivateMoveLimit(const Util::FRect & moveLimit)
 	{
 		m_MoveLimit = moveLimit;
 		m_ActivatedMoveLimitation = true;

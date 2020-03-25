@@ -98,7 +98,7 @@ namespace Gear {
 
 			if (entity->m_EventHandler.find(type) == entity->m_EventHandler.end())
 			{
-				GR_CORE_WARN("Entity NO.{0} has no event:{1} Handler", entity->m_EntityID, type);
+				//GR_CORE_TRACE("Entity NO.{0} has no event:{1} Handler", entity->m_EntityID, type);
 				entity->m_EventQueue.pop();
 				continue;
 			}
@@ -608,7 +608,7 @@ namespace Gear {
 		m_Phisics[entityID]->ActivatePixelCollision(targetPixel, targetTexture, targetTextureTranslate, offsets);
 	}
 
-	void EntitySystem::SetMoveLimit(int entityID, const FRect & rect)
+	void EntitySystem::SetMoveLimit(int entityID, const Util::FRect & rect)
 	{
 		auto entity = m_EntityPool.find(entityID);
 		if (entity == m_EntityPool.end())

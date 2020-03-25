@@ -8,6 +8,9 @@ class Worms : public Gear::Application
 public:
 	Worms()
 	{
+		//Init Font
+		Font::Init();
+
 		//Load Texture
 		Gear::TextureStorage::AddTexture2D("Grad0", Gear::Texture2D::Create("assets/textures/BackGround/Grad0.png"));
 		Gear::TextureStorage::AddTexture2D("default", Gear::Texture2D::Create("assets/textures/Checkerboard.png"));
@@ -35,9 +38,10 @@ public:
 		//Create Event Channel
 		Gear::EventSystem::CreateChannel(EventChannel::World);
 		Gear::EventSystem::CreateChannel(EventChannel::Explosion);
-		Gear::EventSystem::CreateChannel(EventChannel::WormMove);
+		Gear::EventSystem::CreateChannel(EventChannel::Worm);
 		Gear::EventSystem::CreateChannel(EventChannel::MouseMove);
 		Gear::EventSystem::CreateChannel(EventChannel::MouseClick);
+		Gear::EventSystem::CreateChannel(EventChannel::Timer);
 
 		//Temporary initData
 		InGame::InitiateData initData;
@@ -52,6 +56,7 @@ public:
 
 	~Worms()
 	{
+		Font::ShoutDown();
 	}
 };
 
@@ -60,8 +65,9 @@ Gear::Application* Gear::CreateApplication()
 	return new Worms();
 }
 
-//Create Entity Order
+//Create Specify Order
 //Create Entity
 //Attach Component
 //Set Component specific
 //Subscpribe EventChannel
+//Register Event Handler

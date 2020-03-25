@@ -19,7 +19,8 @@ namespace InGame {
 		NewStart,
 		OnExitMenu,
 		ReFollow,
-		NewFollow
+		NewFollow,
+		RunningStart
 	};
 
 	struct ExplosionData

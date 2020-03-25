@@ -3,17 +3,25 @@
 
 namespace InGame {
 
+	float BackGroundLayer::s_SettedWind = 0.0f;
 	float BackGroundLayer::s_CurrentWind = 0.0f;
+	int BackGroundLayer::s_WindMax = 0;
 
 	BackGroundLayer::BackGroundLayer(const InitiateData& initData)
 		: Layer("BackGroundLayer"), m_Terrian(new Terrain(initData)), m_TerrianBack(new TerrianBack(initData))
 	{
-		s_CurrentWind = Gear::GetRndFloatFromTo(-initData.WindMax, initData.WindMax);
+		s_WindMax = initData.WindMax;
+		ResetCurrentWind();
 
 		GradSettup(initData);
 		WaterSettup(initData);
 		FloatingSettup(initData);
 		CloudSettup(initData);
+
+		m_Transceiver = Gear::EntitySystem::CreateEntity(true);
+
+		Gear::EventSystem::SubscribeChannel(m_Transceiver, EventChannel::World);
+		Gear::EventSystem::RegisterEventHandler(m_Transceiver, EventChannel::World, Gear::CreateRef<BgLayerTransceiver>());
 	}
 
 	void BackGroundLayer::OnAttach()
@@ -27,7 +35,19 @@ namespace InGame {
 
 	void BackGroundLayer::OnUpdate(Gear::Timestep ts)
 	{
-		//Update
+		//Wind
+		if (s_SettedWind != s_CurrentWind)
+		{
+			int differency = s_SettedWind - s_CurrentWind;
+			if (std::abs(differency) <= 1)
+			{
+				s_CurrentWind = s_SettedWind;
+			}
+			else
+			{
+				s_CurrentWind += differency * 0.01;
+			}
+		}
 
 		//Water
 		m_WaterWave->Update(ts);
@@ -99,6 +119,13 @@ namespace InGame {
 	{
 	}
 
+	//void DestroyMask(float x, float y, float radius);
+
+	void BackGroundLayer::ResetCurrentWind() 
+	{ 
+		s_SettedWind = (float)Gear::Util::GetRndIntFromTo(-s_WindMax, s_WindMax); 
+	}
+
 	void BackGroundLayer::GradSettup(const InitiateData& initData)
 	{
 		//Gradient Settup
@@ -161,9 +188,8 @@ namespace InGame {
 			m_FloatingTextures[i]->Resume();
 			for (int j = 0; j < 10; ++j)
 			{
-				m_FloatingTranslates[i].push_back(FloatingMatter(glm::vec3(Gear::GetRndFloatFromTo(initData.WorldRect.Left, initData.WorldRect.Right), Gear::GetRndFloatFromTo(-11.0f, 9.0f), ZOrder::z_FloatingMatter),
-					glm::vec3( 0.6f, 0.6f, 1.0f ), Gear::GetRndFloatFromTo(0.3f, 0.9f), initData.WorldRect));
-				m_FloatingTranslates[i][j].RenewWind(s_CurrentWind);
+				m_FloatingTranslates[i].push_back(FloatingMatter(glm::vec3(Gear::Util::GetRndFloatFromTo(initData.WorldRect.Left, initData.WorldRect.Right), Gear::Util::GetRndFloatFromTo(-11.0f, 9.0f), ZOrder::z_FloatingMatter),
+					glm::vec3( 0.6f, 0.6f, 1.0f ), Gear::Util::GetRndFloatFromTo(0.3f, 0.9f), initData.WorldRect));
 			}
 		}
 	}
@@ -216,10 +242,9 @@ namespace InGame {
 			}
 			for (int j = 0; j < 8; ++j)
 			{
-				float yPos = 9.0f + i * 0.7f + Gear::GetRndFloat(0.5f);
-				m_CloudTranslates[i][j] = Cloud(glm::vec3(Gear::GetRndFloatFromTo(initData.WorldRect.Left, initData.WorldRect.Right), yPos, zOrder),
-					glm::vec3(width[i] / initData.MapReductionRatio, height[i] / initData.MapReductionRatio, 1.0f), Gear::GetRndFloatFromTo(-15.0f, 15.0f), initData.WorldRect);
-				m_CloudTranslates[i][j].RenewWind(s_CurrentWind);
+				float yPos = 9.0f + i * 0.7f + Gear::Util::GetRndFloat(0.5f);
+				m_CloudTranslates[i][j] = Cloud(glm::vec3(Gear::Util::GetRndFloatFromTo(initData.WorldRect.Left, initData.WorldRect.Right), yPos, zOrder),
+					glm::vec3(width[i] / initData.MapReductionRatio, height[i] / initData.MapReductionRatio, 1.0f), Gear::Util::GetRndFloatFromTo(-15.0f, 15.0f), initData.WorldRect);
 			}
 		}
 	}
@@ -258,7 +283,7 @@ namespace InGame {
 
 	void FloatingMatter::Update(Gear::Timestep ts)
 	{
-		Position.x += (Wind * WindResistance) * ts;
+		Position.x += (BackGroundLayer::GetCurrentWind() * WindResistance) * ts;
 		if(WindResistance < 0.4f)
 			Position.y -= (Gravity * WindResistance) * ts;
 		else
@@ -284,7 +309,7 @@ namespace InGame {
 
 	void Cloud::Update(Gear::Timestep ts)
 	{
-		Position.x += (Wind + BasicMove) * ts * 0.1f;
+		Position.x += (BackGroundLayer::GetCurrentWind() + BasicMove) * ts * 0.1f;
 
 		if (Position.x > WorldRect.Right)
 		{

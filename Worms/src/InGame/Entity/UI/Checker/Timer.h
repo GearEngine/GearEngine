@@ -10,7 +10,6 @@ namespace InGame {
 
 	private:
 		int m_ID;
-
 	};
 
 }

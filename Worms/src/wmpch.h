@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Gear.h"
+#include "Common/GameType.h"
 #include "Common/EventChannel.h"
 #include "Common/Font.h"
 #include "imgui/imgui.h"

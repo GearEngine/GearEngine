@@ -29,7 +29,7 @@ namespace InGame {
 		int m_Transceiver; // Entity
 	};
 
-	class Transceiver : public Gear::EventHandler
+	class ObjLayerTransceiver : public Gear::EventHandler
 	{
 		inline virtual void Handle(std::any data, int entityID) override
 		{

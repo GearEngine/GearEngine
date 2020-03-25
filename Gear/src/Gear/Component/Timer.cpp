@@ -8,10 +8,11 @@ namespace Gear {
 		if (!m_OnProgress || m_OnPause)
 			return;
 
-		m_PastTime += ts;
-		if (m_SettedTime <= m_PastTime)
+		m_ElapsedTime += ts;
+		m_Tick = ts;
+		if (m_SettedTime <= m_ElapsedTime)
 		{
-			m_PastTime = 0.0f;
+			m_ElapsedTime = m_SettedTime;
 			m_OnProgress = false;
 			m_OnPause = false;
 			m_OnExpired = true;
@@ -26,7 +27,7 @@ namespace Gear {
 
 	void Timer::Start()
 	{
-		m_PastTime = 0.0f;
+		m_ElapsedTime = 0.0f;
 		m_OnProgress = true;
 		m_OnExpired = false;
 		m_OnPause = false;
@@ -34,7 +35,7 @@ namespace Gear {
 
 	void Timer::Stop()
 	{
-		m_PastTime = 0.0f;
+		m_ElapsedTime = 0.0f;
 		m_OnProgress = false;
 		m_OnPause = false;
 		m_OnExpired = true;

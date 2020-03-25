@@ -34,7 +34,7 @@ namespace Gear {
 		inline void InActivateFollowTarget() { m_ActivatedFollowTarget = false; m_FollowTarget = nullptr; }
 		inline void PauseFollowingTarget() { m_ActivatedFollowTarget = false; }
 
-		void ActivateMoveLimit(const FRect& moveLimit);
+		void ActivateMoveLimit(const Util::FRect& moveLimit);
 		void TargetUpdate(Timestep ts);
 		void UpdateSliding();
 		void UpdateFollow();
@@ -54,7 +54,7 @@ namespace Gear {
 		glm::vec3 m_TargetPixel;
 		glm::mat4 m_PixelCollisionTargetTextureTranslate;
 		std::vector<std::pair<float, float>> m_PixelCollisionOffsetVector;
-		FRect m_MoveLimit;
+		Util::FRect m_MoveLimit;
 
 		float m_Timestep;
 		float m_Gravity;

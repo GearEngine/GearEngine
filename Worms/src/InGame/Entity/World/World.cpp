@@ -2,12 +2,19 @@
 #include "World.h"
 
 #include "WorldEventHandler.h"
-#include "WorldFSMHandler.h"
 
 namespace InGame {
 
+	float World::s_LimitTurnTime = 0;
+	int World::s_LimitSuddenDeathTurn = 0;
+	int World::s_CurrentTurn = 0;
+
 	World::World(const InitiateData& initData)
 	{
+		s_LimitSuddenDeathTurn = initData.LimitSuddenDeathTurn;
+		s_LimitTurnTime = initData.LimitTurnTime;
+		s_CurrentTurn = 0;
+
 		//Create Entity
 		m_ID = Gear::EntitySystem::CreateEntity(true);
 

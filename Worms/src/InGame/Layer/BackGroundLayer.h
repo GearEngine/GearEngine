@@ -8,7 +8,7 @@ namespace InGame {
 	struct FloatingMatter
 	{
 		FloatingMatter() {}
-		FloatingMatter(const glm::vec3& position, const glm::vec3& scale, float windResistance, const Gear::FRect& worldRect)
+		FloatingMatter(const glm::vec3& position, const glm::vec3& scale, float windResistance, const Gear::Util::FRect& worldRect)
 			: Position(position), Scale(scale), WindResistance(windResistance), WorldRect(worldRect)
 		{}
 		glm::vec3 Position;
@@ -16,18 +16,16 @@ namespace InGame {
 		glm::vec3 Scale;
 
 		const float Gravity = 5.0f;
-		float Wind;
 		float WindResistance;
-		Gear::FRect WorldRect;
+		Gear::Util::FRect WorldRect;
 
 		void Update(Gear::Timestep ts);
-		inline void RenewWind(const float wind) { Wind = wind;  }
 	};
 
 	struct Cloud
 	{
 		Cloud() {}
-		Cloud(const glm::vec3& position, const glm::vec3& scale, float basicMove, const Gear::FRect& worldRect)
+		Cloud(const glm::vec3& position, const glm::vec3& scale, float basicMove, const Gear::Util::FRect& worldRect)
 			: Position(position), Scale(scale), BasicMove(basicMove), WorldRect(worldRect)
 		{}
 
@@ -36,11 +34,9 @@ namespace InGame {
 		glm::vec3 Scale;
 		
 		float BasicMove;
-		float Wind;
-		Gear::FRect WorldRect;
+		Gear::Util::FRect WorldRect;
 
 		void Update(Gear::Timestep ts);
-		inline void RenewWind(float wind) { Wind = wind; }
 	};
 
 
@@ -58,6 +54,9 @@ namespace InGame {
 		void OnEvent(Gear::Event& e) override;
 
 		//void DestroyMask(float x, float y, float radius);
+		inline static void ResetCurrentWind();
+		inline static int GetCurrentWind() { return s_CurrentWind; }
+
 	private:
 		void GradSettup(const InitiateData& initData);
 		void WaterSettup(const InitiateData& initData);
@@ -66,6 +65,8 @@ namespace InGame {
 
 	private:
 		static float s_CurrentWind;		//wind -30 ~ 30
+		static float s_SettedWind;
+		static int s_WindMax;
 
 		Gear::Ref<Terrain> m_Terrian;
 		Gear::Ref<TerrianBack> m_TerrianBack;
@@ -80,6 +81,20 @@ namespace InGame {
 		std::vector<glm::mat4> m_WaterWaveTranslates;
 		std::vector<std::vector<FloatingMatter>> m_FloatingTranslates;
 		std::vector<std::vector<Cloud>> m_CloudTranslates;
+
+		int m_Transceiver; // Entity
+	};
+
+	class BgLayerTransceiver : public Gear::EventHandler
+	{
+		inline virtual void Handle(std::any data, int entityID) override
+		{
+			auto worldData = std::any_cast<WorldData>(data);
+			if (worldData.DataType == WorldDataType::NewStart)
+			{
+				BackGroundLayer::ResetCurrentWind();
+			}
+		}
 	};
 
 }
