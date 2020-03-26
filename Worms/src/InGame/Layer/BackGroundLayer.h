@@ -55,7 +55,8 @@ namespace InGame {
 
 		//void DestroyMask(float x, float y, float radius);
 		inline static void ResetCurrentWind() { s_SettedWind = (float)Gear::Util::GetRndIntFromTo(-s_WindMax, s_WindMax); }
-		inline static int GetCurrentWind() { return s_CurrentWind; }
+	
+		inline static float GetCurrentWind() { return s_CurrentWind; }
 
 	private:
 		void GradSettup(const InitiateData& initData);

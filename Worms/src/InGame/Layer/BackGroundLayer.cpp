@@ -38,8 +38,8 @@ namespace InGame {
 		//Wind
 		if (s_SettedWind != s_CurrentWind)
 		{
-			int differency = s_SettedWind - s_CurrentWind;
-			if (std::abs(differency) <= 1)
+			float differency = s_SettedWind - s_CurrentWind;
+			if (std::abs(differency) <= 0.03)
 			{
 				s_CurrentWind = s_SettedWind;
 			}

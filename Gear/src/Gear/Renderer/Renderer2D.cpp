@@ -89,7 +89,6 @@ namespace Gear {
 		});
 		s_Data.QuardVertexArray->AddVertexBuffer(squareVB);
 
-
 		s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVertices];
 		s_Data.QuardVertexBatchBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
 		s_Data.QuardVertexBatchBuffer->SetLayout({

@@ -17,6 +17,9 @@ namespace InGame {
 		virtual void OnImGuiRender() override;
 		void OnEvent(Gear::Event& e) override;
 
+	private:
+		void HandleTurnChange();
+
 	public:
 		static void ChangeWorm();
 

@@ -41,21 +41,7 @@ namespace InGame {
 	{
 		if (m_turnChanged)
 		{
-			m_turnChanged = false;
-			for (int i = 0 ; i < m_Worms.size(); ++i)
-			{
-				if (i == m_CurrentActiveWorm)
-				{
-					Gear::EntitySystem::ActivateComponent(m_Worms[i]->GetID(), { {Gear::ComponentID::Controller} });
-					auto FSM = Gear::EntitySystem::GetFSM(m_Worms[i]->GetID());
-					FSM->SetCurrentState(WormState::OnReady);
-					Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, m_Worms[i]->GetID())));
-				}
-				else
-				{
-					Gear::EntitySystem::InActivateComponent(m_Worms[i]->GetID(), { {Gear::ComponentID::Controller} });
-				}
-			}
+			HandleTurnChange();
 		}
 	}
 
@@ -65,6 +51,25 @@ namespace InGame {
 
 	void ObjectLayer::OnEvent(Gear::Event & e)
 	{
+	}
+
+	void ObjectLayer::HandleTurnChange()
+	{
+		m_turnChanged = false;
+		for (int i = 0; i < m_Worms.size(); ++i)
+		{
+			if (i == m_CurrentActiveWorm)
+			{
+				Gear::EntitySystem::ActivateComponent(m_Worms[i]->GetID(), { {Gear::ComponentID::Controller} });
+				auto FSM = Gear::EntitySystem::GetFSM(m_Worms[i]->GetID());
+				FSM->SetCurrentState(WormState::OnReady);
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, m_Worms[i]->GetID())));
+			}
+			else
+			{
+				Gear::EntitySystem::InActivateComponent(m_Worms[i]->GetID(), { {Gear::ComponentID::Controller} });
+			}
+		}
 	}
 
 	void ObjectLayer::ChangeWorm()

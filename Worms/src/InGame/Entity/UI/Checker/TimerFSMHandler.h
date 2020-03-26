@@ -26,7 +26,7 @@ namespace InGame {
 			Font::printFont(glm::vec2(-0.894f, positionY), glm::vec3(0.009f * 4, 0.02f * 4, ZOrder::z_Font), std::to_string(int(World::s_LimitTurnTime)), FontType::GrayNumber, 0.037f);
 
 			auto timer = Gear::EntitySystem::GetTimer(entityID);
-			if (timer->isExpired())
+			if (timer->isExpired() && onTimerFixed)
 			{
 				onTimerFixed = false;
 				timer->SetTimer(3.0f);
