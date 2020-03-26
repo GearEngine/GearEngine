@@ -30,6 +30,7 @@ namespace InGame {
 
 		Gear::Renderer2D::BeginScene(m_Camera->m_CameraController->GetCamera());
 		m_TurnChecker->Render();
+		m_WindChecker->Render(ts);
 	}
 
 	void UILayer::OnImGuiRender()

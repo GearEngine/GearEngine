@@ -2,7 +2,8 @@
 
 namespace ZOrder {
 
-	const float z_Font = -0.91f;
+	const float z_Font = -0.92f;
+	const float z_CheckerImg = -0.91f;
 	const float z_Checker = -0.9f;
 	const float z_Grad = -0.8f;
 	const float z_WatterBackGround = -0.7f;

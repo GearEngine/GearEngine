@@ -121,11 +121,6 @@ namespace InGame {
 
 	//void DestroyMask(float x, float y, float radius);
 
-	void BackGroundLayer::ResetCurrentWind() 
-	{ 
-		s_SettedWind = (float)Gear::Util::GetRndIntFromTo(-s_WindMax, s_WindMax); 
-	}
-
 	void BackGroundLayer::GradSettup(const InitiateData& initData)
 	{
 		//Gradient Settup

@@ -54,7 +54,7 @@ namespace InGame {
 		void OnEvent(Gear::Event& e) override;
 
 		//void DestroyMask(float x, float y, float radius);
-		inline static void ResetCurrentWind();
+		inline static void ResetCurrentWind() { s_SettedWind = (float)Gear::Util::GetRndIntFromTo(-s_WindMax, s_WindMax); }
 		inline static int GetCurrentWind() { return s_CurrentWind; }
 
 	private:

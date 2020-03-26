@@ -39,5 +39,8 @@ namespace Gear {
 	
 		static void DrawFixedQuad(const glm::mat4& translate, const Ref<Texture>& texture, const glm::vec4& tintColor = glm::vec4(1.0f));
 		static void DrawFixedQuad(const glm::mat4& translate, const Ref<FrameTexture2D>& frameTexture, int frameX, int frameY, const glm::vec4& tintColor = glm::vec4(1.0f));
+		
+		static void DrawFixedAnimation(const glm::mat4& translate, const Ref<Animation2D>& animation, const glm::vec4& tintColor = glm::vec4(1.0f));
+		//static void DrawFixedAnimationWithMask(const glm::mat4& textureTranslate, const Ref<Animation2D>& animation, const glm::mat4& maskTranslate, const Ref<Texture>& mask, const glm::vec4& tintColor = glm::vec4(1.0f));
 	};
 }

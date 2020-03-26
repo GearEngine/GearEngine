@@ -66,7 +66,8 @@ namespace Gear {
 
 		s_Data->FixedShader = Shader::Create("assets/shaders/Fixed.glsl");
 		s_Data->FixedShader->Bind();
-		s_Data->TextureShader->SetInt("u_Texture", 0);
+		s_Data->FixedShader->SetInt("u_Texture", 0);
+		//s_Data->FixedShader->SetInt("u_Mask", 1);
 	}
 
 	void Renderer2D::Shutdown()
@@ -332,6 +333,7 @@ namespace Gear {
 
 		texture->Bind();
 		
+		s_Data->QuardVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
 	}
 
@@ -340,12 +342,44 @@ namespace Gear {
 		GR_PROFILE_FUNCTION();
 
 		s_Data->FixedShader->Bind();
+		//s_Data->FixedShader->SetInt("u_WithMask", 0);
 		s_Data->FixedShader->SetMat4("u_Transform", translate);
 		s_Data->FixedShader->SetFloat4("u_Color", tintColor);
 
 		frameTexture->Bind(frameX, frameY);
 
+		s_Data->QuardVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
 	}
+
+	void Renderer2D::DrawFixedAnimation(const glm::mat4& translate, const Ref<Animation2D>& animation, const glm::vec4& tintColor)
+	{
+		GR_PROFILE_FUNCTION();
+
+		s_Data->FixedShader->Bind();
+		//s_Data->FixedShader->SetInt("u_WithMask", 0);
+		s_Data->FixedShader->SetFloat4("u_Color", tintColor);
+		s_Data->FixedShader->SetMat4("u_Transform", translate);
+
+		animation->Bind();
+
+		s_Data->QuardVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
+	}
+
+	/*void Renderer2D::DrawFixedAnimationWithMask(const glm::mat4 & textureTranslate, const Ref<Animation2D>& animation, const glm::mat4 & maskTranslate, const Ref<Texture>& mask, const glm::vec4 & tintColor)
+	{
+		s_Data->FixedShader->Bind();
+		s_Data->FixedShader->SetInt("u_WithMask", 1);
+		s_Data->FixedShader->SetFloat4("u_Color", tintColor);
+		s_Data->FixedShader->SetMat4("u_MaskCoord", maskTranslate);
+		s_Data->FixedShader->SetMat4("u_Transform", textureTranslate);
+
+		animation->Bind(0);
+		mask->Bind(1);
+
+		s_Data->QuardVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuardVertexArray);
+	}*/
 
 }
