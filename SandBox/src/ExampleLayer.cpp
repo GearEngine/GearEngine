@@ -8,7 +8,7 @@ public:
 	ExampleLayer()
 		: Layer("Example"), m_CameraController(1280.0f / 720.0f)
 	{
-		//triangle
+		/*//triangle
 		//1. Create VertexArray
 		m_VertexArray = Gear::VertexArray::Create();
 		//2. define vertices, Indices
@@ -22,7 +22,7 @@ public:
 		};
 		//3. Create VertexBuffer
 		Gear::Ref<Gear::VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(Gear::VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer = Gear::VertexBuffer::Create(vertices, sizeof(vertices)));
 		vertexBuffer->SetLayout({
 			{Gear::ShaderDataType::Float3, "a_Position"},
 			{Gear::ShaderDataType::Float4, "a_Color"},
@@ -30,7 +30,7 @@ public:
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 		//4. Create IndexBuffer
 		Gear::Ref<Gear::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Gear::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		indexBuffer = Gear::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 		//5. define shader
 		std::string vertexSrc = R"(
@@ -83,7 +83,7 @@ public:
 		};
 		//3. Create VertexBuffer
 		Gear::Ref<Gear::VertexBuffer> squareVB;
-		squareVB.reset(Gear::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		squareVB = Gear::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 		squareVB->SetLayout({
 			{Gear::ShaderDataType::Float3, "a_Position"},
 			{Gear::ShaderDataType::Float2, "a_TexCoord"}
@@ -91,7 +91,7 @@ public:
 		m_SqaureVA->AddVertexBuffer(squareVB);
 		//4. Create IndexBuffer
 		Gear::Ref<Gear::IndexBuffer> squreIB;
-		squreIB.reset(Gear::IndexBuffer::Create(squreIndices, sizeof(squreIndices) / sizeof(uint32_t)));
+		squreIB = Gear::IndexBuffer::Create(squreIndices, sizeof(squreIndices) / sizeof(uint32_t));
 		m_SqaureVA->SetIndexBuffer(squreIB);
 		//5. define shader
 		std::string flatColorShadervertexSrc = R"(
@@ -132,7 +132,7 @@ public:
 		m_ChernoLogoTexture = Gear::Texture2D::Create("assets/textures/ChernoLogo.png");
 
 		std::dynamic_pointer_cast<Gear::OpenGLShader>(textureShader)->Bind();
-		std::dynamic_pointer_cast<Gear::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Gear::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);*/
 	}
 
 	void OnUpdate(Gear::Timestep ts) override

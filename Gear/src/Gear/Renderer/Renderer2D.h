@@ -42,5 +42,9 @@ namespace Gear {
 		
 		static void DrawFixedAnimation(const glm::mat4& translate, const Ref<Animation2D>& animation, const glm::vec4& tintColor = glm::vec4(1.0f));
 		//static void DrawFixedAnimationWithMask(const glm::mat4& textureTranslate, const Ref<Animation2D>& animation, const glm::mat4& maskTranslate, const Ref<Texture>& mask, const glm::vec4& tintColor = glm::vec4(1.0f));
+	
+		//Batch
+		static void BatchDrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
+		static void Flush();
 	};
 }

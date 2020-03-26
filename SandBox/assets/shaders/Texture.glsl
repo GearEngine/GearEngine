@@ -8,6 +8,7 @@ layout(location = 1) in vec2 a_TexCoord;
 
 uniform mat4 u_ViewProjection;
 uniform mat4 u_Transform;
+uniform int u_Flat;
 
 out vec2 v_TexCoord;
 
@@ -25,15 +26,27 @@ layout(location = 0) out vec4 color;
 in vec2 v_TexCoord;
 		
 uniform vec4 u_Color;
+uniform sampler2D u_Texture;
+uniform sampler2D u_Mask;
+uniform int u_WithMask;
 uniform float u_TilingFactor;
-uniform sampler2D u_Texture0;
-uniform sampler2D u_Texture1;
-uniform sampler2D u_Texture2;
 
 void main()
 {
-	color = texture(u_Texture0, vec2(v_TexCoord.x, v_TexCoord.y) ) * u_Color;
-	if(color.a == 0)
-		discard;
-
+	if(u_WithMask == 1)
+	{
+		vec4 maskColor;
+		maskColor = texture(u_Mask, v_TexCoord);
+		color = texture(u_Texture, v_TexCoord);
+		if(maskColor.x == 0 && maskColor.y == 0 && maskColor.z == 0)
+			discard;
+	}
+	else
+	{
+		color = texture(u_Texture, v_TexCoord * u_TilingFactor) * u_Color;
+		if(color.a < 0.1)
+			discard;
+		if(color.x + color.y + color.z == 0.0)
+			discard;
+	}
 }

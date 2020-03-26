@@ -9,14 +9,14 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Sandbox2D.h"
-
+#include "SampleScene.h"
 
 class Sandbox : public Gear::Application
 {
 public:
 	Sandbox()
 	{
-		Gear::Scene* scene = new Gear::Scene("SampleScene");
+		Gear::Scene* scene = new SampleScene("SampleScene");
 		scene->PushOverlay(m_ImGuilayer);
 		scene->PushLayer(new Sandbox2D());
 		Gear::SceneManager::Get()->AddScene(scene);

@@ -16,7 +16,7 @@ namespace Gear {
 		void PopOverlay(Layer* overlay);
 
 		virtual void Update(Timestep ts) = 0;
-		virtual bool PassFirstDelay() = 0;
+		virtual bool PassFirstDelay() { return true; };
 		
 		inline std::string GetName() const { return m_Name; }
 
