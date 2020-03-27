@@ -1,7 +1,6 @@
 #include "wmpch.h"
 #include "Worm.h"
 
-#include "WormFSMHandler.h"
 #include "WormStatusHandler.h"
 #include "InGame/Entity/Object/Item/ItemEnum.h"
 
@@ -9,8 +8,10 @@ namespace InGame {
 
 	Gear::Ref<WormExplosionEventHandler> Worm::s_ExplosionHandler = Gear::CreateRef<WormExplosionEventHandler>();
 
-	Worm::Worm(const glm::vec3& position, const float rotation, const glm::vec2 scale, const InitiateData& initData)
+	Worm::Worm(int count, const InitiateData& initData)
 	{
+		auto wormData = initData.Worms[count];
+
 		//Create Entity
 		m_ID = Gear::EntitySystem::CreateEntity(true);
 
@@ -20,10 +21,11 @@ namespace InGame {
 			Gear::ComponentID::Controller,	Gear::ComponentID::Transform,
 			Gear::ComponentID::Physics,		Gear::ComponentID::SoundPlayer,
 			Gear::ComponentID::FSM,			Gear::ComponentID::Timer,
-			//Gear::ComponentID::Status
+			Gear::ComponentID::Status
 		});
 
 		//Set Component specific
+		//Set Animator
 		std::vector<std::pair<int, int>> birthAniOrder;
 		for (int i = 0; i < 40; ++i)
 		{
@@ -42,14 +44,17 @@ namespace InGame {
 			{ WormState::OnIdle,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnIdle"), 0.04f, birthAniOrder, true)}
 		});
 
-		Gear::EntitySystem::SetTransform(m_ID, position, rotation, scale);
+		//Set Transform
+		Gear::EntitySystem::SetTransform(m_ID, wormData.StartPosition, 0.0f, initData.WormScale);
 
+		//Set FSM
 		Gear::EntitySystem::SetFSM(m_ID, {
 			{ WormState::OnMove, new WormOnMoveHandler },	{ WormState::OnUseItem, new WormOnUseItemHandler },
 			{ WormState::OnIdle, new WormOnIdleHandler },	{ WormState::OnTurnOver, new WormOnTurnOverHandler },
 			{ WormState::OnReady, new WormOnReadyHandler }	
 		});
 
+		//Set Controller
 		Gear::EntitySystem::SetController(m_ID, {
 			{ WormCommand::BackJump, GR_KEY_BACKSPACE },{ WormCommand::ChangeWorm, GR_KEY_TAB},
 			{ WormCommand::Up, GR_KEY_UP },				{ WormCommand::Down, GR_KEY_DOWN},
@@ -60,6 +65,7 @@ namespace InGame {
 			{ WormCommand::ChangeWorm, GR_KEY_Z }
 		});
 
+		//Set physics
 		Gear::EntitySystem::SetPhysics(m_ID, true, 10.0f, 10.0f, 0.3f, 0.3f);
 		
 		auto mask = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName + "Mask");
@@ -74,15 +80,35 @@ namespace InGame {
 			{ {-0.1f, -0.2f}, {0.1f, -0.2f}, {0.0f, -0.2f} }
 		);
 
-		/*Gear::EntitySystem::SetStatus(m_ID, {
-			{ WormStat::Name, "Worm0"}, { WormStat::Team, "MyTeam"}, { WormStat::Hp, initData.WormHP },
-			{ WormStat::FireAngleVector , glm::vec2(0.70710678f, 0.70710678f) }, { WormStat::FirePower, 0.0f},
-			{ WormStat::SelectedItem, ItemName::Bazooka },
+		//Set status
+		Gear::EntitySystem::SetStatus(m_ID, {
+			{ WormInfo::Stat::Name, wormData.WormName}, { WormInfo::Stat::TeamColor, wormData.TeamColor }, { WormInfo::Stat::TeamName, wormData.TeamName }, 
+			{ WormInfo::Stat::Hp, initData.WormHP }, { WormInfo::Stat::FireAngleVector , glm::vec2(0.70710678f, 0.70710678f) }, 
+			{ WormInfo::Stat::FirePower, 0.0f}, { WormInfo::Stat::SelectedItem, ItemName::Bazooka }, 
+			{ WormInfo::Stat::NameBorderOffset, 1.26f }, { WormInfo::Stat::HpBorderOffset, 0.7f }, { WormInfo::Stat::ZRenderOffset, wormData.AdditionalZRenderOffset }
 		});
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {
-			{ WormStatusHandleType::DisplayName, Gear::CreateRef<WormDisplayNameHanlder>() }, { WormStatusHandleType::DisplayHp, Gear::CreateRef<WormDisplayHpHanlder>() }
-		});*/
+			{ WormStatusHandleType::DisplayName, Gear::CreateRef<WormDisplayNameHanlder>() }, 
+			{ WormStatusHandleType::DisplayHp, Gear::CreateRef<WormDisplayHpHanlder>() },
+		});
+
+		auto NameBorder = Gear::TextureStorage::GetTexture2D("WormNameBorder");
+		float nameBorderWidth = NameBorder->GetWidth();
+		float nameBorderHeight = NameBorder->GetHeight();
+		float nameBorderWidthUnit = nameBorderWidth / (initData.MapReductionRatio * 3);
+		float nameBorderHeightUnit = nameBorderHeight / (initData.MapReductionRatio * 3);
+		auto status = Gear::EntitySystem::GetStatus(m_ID);
+		status->PushNeedHandleData(WormStatusHandleType::DisplayName, 
+			Gear::Status::StatHandleData(WormDenoteData(nameBorderWidthUnit, nameBorderHeightUnit, NameBorder)));
+		
+		auto hpBorder = Gear::TextureStorage::GetTexture2D("WormHpBorder");
+		float hpBorderWidth = hpBorder->GetWidth();
+		float hpBorderHeight = hpBorder->GetHeight();
+		float hpBorderWidthUnit = hpBorderWidth / (initData.MapReductionRatio * 3);
+		float hpBorderHeightUnit = hpBorderHeight / (initData.MapReductionRatio * 3);
+		status->PushNeedHandleData(WormStatusHandleType::DisplayHp,
+			Gear::Status::StatHandleData(WormDenoteData(hpBorderWidthUnit, hpBorderHeightUnit, hpBorder)));
 
 		//Subscpribe EventChannel
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Explosion);

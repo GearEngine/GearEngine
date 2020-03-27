@@ -12,7 +12,7 @@ namespace InGame {
 		float borderWidth = m_Border->GetWidth();
 		float borderHeight = m_Border->GetHeight()* initData.WindowAspectRatio;
 
-		glm::vec3 position( 0.8f, -0.83f, ZOrder::z_Checker);
+		glm::vec3 position( 0.8f, -0.83f, ZOrder::z_FlatChecker);
 		glm::vec3 scale(borderWidth / 1900.0f, borderHeight / 1900.0f, 1.0f);
 		m_BorderTranslate = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), scale);
 	
@@ -21,13 +21,13 @@ namespace InGame {
 		float leftWidth = left->GetWidth();
 		float leftHeight = left->GetHeight();
 
-		glm::vec3 leftPosition(0.711f, -0.83f, ZOrder::z_CheckerImg);
+		glm::vec3 leftPosition(0.711f, -0.83f, ZOrder::z_FlatCheckerImg);
 		glm::vec3 leftScale(borderWidth / 4000.0f, borderHeight / 2500.0f, 1.0f);
 		m_LeftTranslate = glm::translate(glm::mat4(1.0f), leftPosition) * glm::scale(glm::mat4(1.0f), leftScale);
 		m_LeftWind = Gear::Animation2D::Create(left, 0.02f, true);
 
 		auto right = Gear::TextureStorage::GetFrameTexture2D("WindRight");
-		glm::vec3 rightPosition(0.889f, -0.83f, ZOrder::z_CheckerImg);
+		glm::vec3 rightPosition(0.889f, -0.83f, ZOrder::z_FlatCheckerImg);
 		m_RightTranslate = glm::translate(glm::mat4(1.0f), rightPosition) * glm::scale(glm::mat4(1.0f), leftScale);
 		m_RightWind = Gear::Animation2D::Create(right, 0.02f, true);
 
@@ -45,8 +45,8 @@ namespace InGame {
 		m_maskHeightUnit = maskHeight / 270.0f;
 
 		glm::vec3 maskScale(m_maskWidthUnit, m_maskHeightUnit, 1.0f);
-		glm::vec3 leftMaskPosition(m_LeftMaskBasis, -0.83f, ZOrder::z_Font);
-		glm::vec3 rightMaskPosition(m_RightMaskBasis, -0.83f, ZOrder::z_Font);
+		glm::vec3 leftMaskPosition(m_LeftMaskBasis, -0.83f, ZOrder::z_FlatFont);
+		glm::vec3 rightMaskPosition(m_RightMaskBasis, -0.83f, ZOrder::z_FlatFont);
 
 		m_BasicLeftMaskTranslate = glm::translate(glm::mat4(1.0f), leftMaskPosition) * glm::scale(glm::mat4(1.0f), maskScale);
 		m_BasicRightMaskTranslate = glm::translate(glm::mat4(1.0f), rightMaskPosition) * glm::scale(glm::mat4(1.0f), maskScale);
@@ -81,7 +81,7 @@ namespace InGame {
 	{
 		if (m_CurrentWind < 0.0f)
 		{
-			m_LeftMaskTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(m_LeftMaskBasis + 0.088f * m_CurrentWind / m_WindMax, -0.83f, ZOrder::z_Font)) *
+			m_LeftMaskTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(m_LeftMaskBasis + 0.088f * m_CurrentWind / m_WindMax, -0.83f, ZOrder::z_FlatFont)) *
 				glm::scale(glm::mat4(1.0f), glm::vec3(m_maskWidthUnit * (1.0f + m_CurrentWind / m_WindMax), m_maskHeightUnit, 1.0f));
 
 		}
@@ -96,7 +96,7 @@ namespace InGame {
 	{
 		if (m_CurrentWind > 0.0f)
 		{
-			m_RightMaskTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(m_RightMaskBasis + 0.088f * m_CurrentWind / m_WindMax, -0.83f, ZOrder::z_Font)) *
+			m_RightMaskTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(m_RightMaskBasis + 0.088f * m_CurrentWind / m_WindMax, -0.83f, ZOrder::z_FlatFont)) *
 				glm::scale(glm::mat4(1.0f), glm::vec3(m_maskWidthUnit * (1.0f - m_CurrentWind / m_WindMax), m_maskHeightUnit, 1.0f));
 
 		}

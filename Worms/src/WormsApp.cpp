@@ -23,6 +23,8 @@ public:
 		Gear::TextureStorage::AddTexture2D("WindCheckerBorder", Gear::Texture2D::Create("assets/textures/UI/WindCheckerBorder.png"));
 		Gear::TextureStorage::AddTexture2D("TurnCheckerBorder", Gear::Texture2D::Create("assets/textures/UI/TurnCheckerBorder.png"));
 		Gear::TextureStorage::AddTexture2D("WindMask", Gear::Texture2D::Create("assets/textures/UI/WindMask.png"));
+		Gear::TextureStorage::AddTexture2D("WormNameBorder", Gear::Texture2D::Create("assets/textures/UI/WormNameBorder.png"));
+		Gear::TextureStorage::AddTexture2D("WormHpBorder", Gear::Texture2D::Create("assets/textures/UI/WormHpBorder.png"));
 
 		Gear::TextureStorage::AddFrameTexture2D("BlueWater", Gear::FrameTexture2D::Create("assets/textures/BackGround/BlueWaterWave.png", 1, 12));
 		Gear::TextureStorage::AddFrameTexture2D("Cursor", Gear::FrameTexture2D::Create("assets/textures/Cursor.png", 5, 1));
@@ -49,6 +51,25 @@ public:
 		//Temporary initData
 		InGame::InitiateData initData;
 		initData.Mapinfo = InGame::GetMapInfo("City");
+		std::string names[] = { "Sunwoo", "Younghwan", "TaeHwan", "Meongchorriya", "Chanho..TT", "Junsoo"};
+		for (int i = 0; i < 6; ++i)
+		{
+			InGame::WormSpecific worm;
+			if (i < 3)
+			{
+				worm.TeamColor = InGame::WormInfo::ETeamColor::Blue;
+				worm.TeamName = "Kyung";
+			}
+			else
+			{
+				worm.TeamColor = InGame::WormInfo::ETeamColor::Red;
+				worm.TeamName = "Il";
+			}
+			worm.WormName = names[i];
+			worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(-25.0f, 25.0f), 4.0f, ZOrder::z_Worm);
+			worm.AdditionalZRenderOffset = i * 0.02f;
+			initData.Worms.push_back(worm);
+		}
 
 		//Create InGame Scene
 		Gear::SceneManager::Get()->AddScene(new InGame::InGameScene("InGameScene", m_ImGuilayer, initData));

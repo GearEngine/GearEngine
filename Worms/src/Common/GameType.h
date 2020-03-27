@@ -2,9 +2,9 @@
 
 namespace ZOrder {
 
-	const float z_Font = -0.92f;
-	const float z_CheckerImg = -0.91f;
-	const float z_Checker = -0.9f;
+	const float z_FlatFont = -0.92f;
+	const float z_FlatCheckerImg = -0.91f;
+	const float z_FlatChecker = -0.9f;
 	const float z_Grad = -0.8f;
 	const float z_WatterBackGround = -0.7f;
 	const float z_FloatingMatter = -0.6f;
@@ -16,10 +16,13 @@ namespace ZOrder {
 	const float z_Terrain = -0.1f;
 	const float z_TerrainMask = -0.1f;
 	const float z_Object = 0.0f;
-	const float z_Worm = 0.1f;
-	const float z_WaterWaveF = 0.2f;
-	const float z_ItemSelect = 0.8f;
-	const float z_ExitMenu = 0.85f;
-	const float z_Cursor = 0.9f;
+	const float z_ItemSelect = 0.1f;
+	const float z_ExitMenu = 0.2f;
+	const float z_Checker = 0.3f;
+	const float z_CheckerImg = 0.31f;
+	const float z_Font = 0.32f;
+	const float z_Worm = 0.33f;
+	const float z_WaterWaveF = 0.34f;
+	const float z_Cursor = 0.99f;
 
 }

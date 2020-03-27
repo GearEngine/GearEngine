@@ -7,7 +7,7 @@ namespace InGame {
 	class Worm
 	{
 	public:
-		Worm(const glm::vec3& position, const float rotation, const glm::vec2 scale, const InitiateData& initData);
+		Worm(int count, const InitiateData& initData);
 		~Worm();
 
 		void Update(Gear::Timestep ts);

@@ -6,15 +6,20 @@ namespace Gear {
 	class Status : public Component
 	{
 	public:
+		Status() = default;
 		Status(int id)
 			: Component(id)
 		{}
+
 		virtual ~Status() = default;
 
 		struct StatHandleData
 		{
-			std::any data;
-			bool handled = false;
+			StatHandleData(const std::any& data)
+				: Data(data)
+			{}
+			std::any Data;
+			bool Handled = false;
 		};
 
 		class StatusHandler
@@ -32,7 +37,10 @@ namespace Gear {
 		inline auto& GetStat(EnumType stat) { return m_StatList[stat]; }
 		void SetStat(EnumType stat, const std::any& data);
 
-		inline void PushNeedHandleData(EnumType type, const StatHandleData& data) { m_NeedHandleList.push_back({ type, data }); }
+		inline void PushNeedHandleData(EnumType type, const StatHandleData& data) 
+		{
+			m_NeedHandleList.push_back({ type, data });
+		}
 
 	private:
 		std::unordered_map<EnumType, std::any> m_StatList;

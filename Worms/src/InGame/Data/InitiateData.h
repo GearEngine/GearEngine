@@ -12,6 +12,40 @@ namespace InGame {
 		glm::vec4 WaterRGB;
 	};
 
+	namespace WormInfo {
+
+		enum Stat : unsigned int
+		{
+			Name,
+			TeamName,
+			TeamColor,
+			Hp,
+			SelectedItem,
+			FireAngleVector,
+			FirePower,
+			NameBorderOffset,
+			HpBorderOffset,
+			ZRenderOffset,
+			StatEnd
+		};
+
+		enum ETeamColor : unsigned int
+		{
+			Red = Stat::StatEnd,
+			Blue,
+		};
+
+	}
+
+	struct WormSpecific
+	{
+		WormInfo::ETeamColor TeamColor;
+		std::string TeamName;
+		std::string WormName;
+		glm::vec3 StartPosition;
+		float AdditionalZRenderOffset;
+	};
+
 	struct InitiateData
 	{
 		InitiateData() = default;
@@ -23,17 +57,19 @@ namespace InGame {
 		float LimitTurnTime = 15.0f;
 		int LimitSuddenDeathTurn = 10;
 		
-		int nWorm = 3;
 		int WormHP = 100;
 
 		MapInfo Mapinfo;
 		glm::vec3 MapPosition = {0.0f, -3.0f, ZOrder::z_Terrain};
+		glm::vec2 WormScale = { 1.5f, 1.5f };
 		float MapReductionRatio = 37.0f;
 		int WindMax = 30;
 		float CameraSliding = 0.9f;
 
 		Gear::Util::FRect WorldRect = { -70.0f, 70.0f, 70.0f, -27.0f };
 		Gear::Util::FRect CameraLimit = { -50.0f, 50.0f, 50.0f, -7.0f };
+
+		std::vector<WormSpecific> Worms;
 
 	};
 

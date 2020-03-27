@@ -387,6 +387,21 @@ namespace Gear {
 		RenderCommand::DrawIndexed(s_Data.QuardVertexArray);
 	}
 
+	void Renderer2D::DrawFrameQuad(const glm::mat4 & translate, const Ref<FrameTexture2D>& frameTexture, int frameX, int frameY, const glm::vec4 & tintColor)
+	{
+		GR_PROFILE_FUNCTION();
+
+		s_Data.TextureShader->Bind();
+		s_Data.TextureShader->SetInt("u_WithMask", 0);
+		s_Data.TextureShader->SetMat4("u_Transform", translate);
+		s_Data.TextureShader->SetFloat4("u_Color", tintColor);
+
+		frameTexture->Bind(frameX, frameY);
+		s_Data.QuardVertexArray->Bind();
+
+		RenderCommand::DrawIndexed(s_Data.QuardVertexArray);
+	}
+
 	void Renderer2D::DrawFixedQuad(const glm::mat4 & translate, const Ref<Texture>& texture, const glm::vec4 & tintColor)
 	{
 		GR_PROFILE_FUNCTION();

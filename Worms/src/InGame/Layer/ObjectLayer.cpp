@@ -12,11 +12,12 @@ namespace InGame {
 	ObjectLayer::ObjectLayer(const InitiateData& initData)
 		: Layer("ObjectLayer")
 	{
-		m_nWorms = initData.nWorm;
+		m_nWorms = initData.Worms.size();
 		m_Worms.resize(m_nWorms);
-		m_Worms[0].reset(new Worm(glm::vec3(1.0f, 3.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
-		m_Worms[1].reset(new Worm(glm::vec3(2.0f, 3.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
-		m_Worms[2].reset(new Worm(glm::vec3(3.0f, 3.0f, ZOrder::z_Worm), 0.0f, glm::vec2(1.3f, 1.3f), initData));
+		for (int i = 0; i < m_Worms.size(); ++i)
+		{
+			m_Worms[i].reset(new Worm(i, initData));
+		}
 
 		m_Transceiver = Gear::EntitySystem::CreateEntity(true);
 

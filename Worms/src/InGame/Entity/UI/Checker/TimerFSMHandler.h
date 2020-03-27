@@ -12,8 +12,8 @@
 
 namespace InGame {
 
-	const glm::vec3 g_TimerUpPos(-0.91f, -0.84f, ZOrder::z_Checker);
-	const glm::vec3 g_TimerDownPos(-0.91f, -1.3f, ZOrder::z_Checker);
+	const glm::vec3 g_TimerUpPos(-0.91f, -0.84f, ZOrder::z_FlatChecker);
+	const glm::vec3 g_TimerDownPos(-0.91f, -1.3f, ZOrder::z_FlatChecker);
 	
 	class TimerOnStartHandler : public Gear::FSM::InputHandler
 	{
@@ -23,7 +23,7 @@ namespace InGame {
 
 			auto transform = Gear::EntitySystem::GetTransform2D(entityID);
 			auto positionY = transform->GetPosition().y;
-			Font::printFont(glm::vec2(-0.894f, positionY), glm::vec3(0.009f * 4, 0.02f * 4, ZOrder::z_Font), std::to_string(int(World::s_LimitTurnTime)), FontType::GrayNumber, 0.037f);
+			Font::PrintFont(glm::vec3(-0.894f, positionY, ZOrder::z_FlatFont), glm::vec3(0.009f * 4, 0.02f * 4, 1.0f), std::to_string(int(World::s_LimitTurnTime)), FontType::GrayNumber, 0.037f);
 
 			auto timer = Gear::EntitySystem::GetTimer(entityID);
 			if (timer->isExpired() && onTimerFixed)
@@ -58,7 +58,7 @@ namespace InGame {
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			auto timer = Gear::EntitySystem::GetTimer(entityID);
-			Font::printFont(glm::vec2(-0.894f, -0.84f), glm::vec3(0.009f * 4, 0.02f * 4, ZOrder::z_Font), std::to_string(int(World::s_LimitTurnTime)), FontType::GrayNumber, 0.037f);
+			Font::PrintFont(glm::vec3(-0.894f, -0.84f, ZOrder::z_FlatFont), glm::vec3(0.009f * 4, 0.02f * 4, 1.0f), std::to_string(int(World::s_LimitTurnTime)), FontType::GrayNumber, 0.037f);
 			if (timer->isExpired())
 			{
 				Gear::EventSystem::DispatchEvent(EventType::World, Gear::EntityEvent(EventType::World, WorldData(RunningStart)));
@@ -102,11 +102,11 @@ namespace InGame {
 
 			if (onRed)
 			{
-				Font::printFont(glm::vec2(-0.894f, -0.84f), glm::vec3(0.009f * 4, 0.02f * 4, ZOrder::z_Font), std::to_string(remainTime), FontType::RedNumber, 0.037f);
+				Font::PrintFont(glm::vec3(-0.894f, -0.84f, ZOrder::z_FlatFont), glm::vec3(0.009f * 4, 0.02f * 4, 1.0f), std::to_string(remainTime), FontType::RedNumber, 0.037f);
 			}
 			else
 			{
-				Font::printFont(glm::vec2(-0.894f, -0.84f), glm::vec3(0.009f * 4, 0.02f * 4, ZOrder::z_Font), std::to_string(remainTime), FontType::WhiteNumber, 0.037f);
+				Font::PrintFont(glm::vec3(-0.894f, -0.84f, ZOrder::z_FlatFont), glm::vec3(0.009f * 4, 0.02f * 4, 1.0f), std::to_string(remainTime), FontType::WhiteNumber, 0.037f);
 			}
 
 			if (timer->isExpired())
@@ -145,7 +145,7 @@ namespace InGame {
 				auto positionY = transform->GetPosition().y;
 				if (positionY > -1.3f)
 				{
-					Font::printFont(glm::vec2(-0.894f, positionY), glm::vec3(0.009f * 4, 0.02f * 4, ZOrder::z_Font), "0", FontType::RedNumber, 0.037f);
+					Font::PrintFont(glm::vec3(-0.894f, positionY, ZOrder::z_FlatFont), glm::vec3(0.009f * 4, 0.02f * 4, 1.0f), "0", FontType::RedNumber, 0.037f);
 					physics->SetExternalVector(glm::vec2(0.0f, -0.7f));
 				}
 				else

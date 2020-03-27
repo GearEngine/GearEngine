@@ -53,7 +53,7 @@ void Font::ShoutDown()
 	m_Indexer.clear();
 }
 
-void Font::printFont(const glm::vec2 & midPosition, const glm::vec3& scale, const std::string & str, FontType::Type font, float offset)
+void Font::PrintFont(const glm::vec3 & midPosition, const glm::vec3& scale, const std::string & str, FontType::Type font, float offset, bool fixed)
 {
 	int len = str.length();
 	float spaceOfLetter = -(len * 0.5) * offset;
@@ -65,9 +65,16 @@ void Font::printFont(const glm::vec2 & midPosition, const glm::vec3& scale, cons
 			{
 				spaceOfLetter += offset;
 			}
-			glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(midPosition.x + spaceOfLetter, midPosition.y, ZOrder::z_Font))
+			glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(midPosition.x + spaceOfLetter, midPosition.y, midPosition.z))
 				* glm::scale(glm::mat4(1.0f), scale);
-			Gear::Renderer2D::DrawFixedQuad(trans, m_Fonts[font], 0, 9 - (str[i] - '0'));
+			if (fixed)
+			{
+				Gear::Renderer2D::DrawFixedQuad(trans, m_Fonts[font], 0, 9 - (str[i] - '0'));
+			}
+			else
+			{
+				Gear::Renderer2D::DrawFrameQuad(trans, m_Fonts[font], 0, 9 - (str[i] - '0'));
+			}
 		}
 	}
 	else
@@ -79,16 +86,24 @@ void Font::printFont(const glm::vec2 & midPosition, const glm::vec3& scale, cons
 				if (str[i] == ' ')
 				{
 					spaceOfLetter += offset * 0.5f;
+					continue;
 				}
 				else
 				{
 					spaceOfLetter += offset;
 				}
 			}
-			glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(midPosition.x + spaceOfLetter, midPosition.y, ZOrder::z_Font))
+			glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(midPosition.x + spaceOfLetter, midPosition.y, midPosition.z))
 				* glm::scale(glm::mat4(1.0f), scale);
 			
-			Gear::Renderer2D::DrawFixedQuad(trans, m_Fonts[font], 0, 159 - m_Indexer[str[i]]);
+			if (fixed)
+			{
+				Gear::Renderer2D::DrawFixedQuad(trans, m_Fonts[font], 0, 159 - m_Indexer[str[i]]);
+			}
+			else
+			{
+				Gear::Renderer2D::DrawFrameQuad(trans, m_Fonts[font], 0, 159 - m_Indexer[str[i]]);
+			}
 		}
 	}
 }

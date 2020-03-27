@@ -10,7 +10,7 @@ namespace Gear {
 			for (auto needHandle = m_NeedHandleList.begin(); needHandle != m_NeedHandleList.end(); )
 			{
 				m_StatusHandlers[needHandle->first]->Handle(m_ID, needHandle->second, m_StatList);
-				if (needHandle->second.handled)
+				if (needHandle->second.Handled)
 				{
 					needHandle = m_NeedHandleList.erase(needHandle);
 				}
