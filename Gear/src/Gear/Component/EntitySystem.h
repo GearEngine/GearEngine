@@ -11,6 +11,7 @@
 #include "Timer.h"
 #include "Texturer.h"
 #include "EventSystem.h"
+#include "Status.h"
 
 namespace Gear {
 
@@ -27,6 +28,7 @@ namespace Gear {
 			Transform,
 			Timer,
 			Texturer,
+			Status,
 			ComponentMax
 		};
 	}
@@ -48,6 +50,7 @@ namespace Gear {
 		static void UpdateAnimator2D(int entityID, Timestep ts);
 		static void UpdateTimer(int entityID, Timestep ts);
 		static void UpdateTexturer2D(int entityID, Timestep ts);
+		static void UpdateStatus(int entityID, Timestep ts);
 
 		//user interface
 	public:
@@ -72,6 +75,9 @@ namespace Gear {
 		static void SetTransform(int entityID, const glm::vec3& position, const float rotation, const glm::vec2& scale);
 		static void SetSoundPlayer(int entityID, const std::initializer_list<std::pair<const EnumType, std::pair<Ref<Sound>, SoundChannel>>>& sounds);
 		static void SetTexturer(int entityID, RenderType::Type type, Ref<Texture2D> texture, Ref<Texture2D> mask = nullptr, Ref<Texture2D> blending = nullptr);
+		static void SetStatus(int entityID, const std::initializer_list<std::pair<const std::string, std::any>>& statlist);
+		static void SetStatusHanlder(int entityID, const std::initializer_list<std::pair<const EnumType, Ref<Status::StatusHandler>>>& handlers);
+
 		static void SetPhysics(int entityID, bool activateGravity = false, float gravity = 1.0f, float limitGravityAccelation = 0.0f,  float friction = 0.2f, float elastics = 0.3f);
 		static void SetPixelCollision(int entityID, const glm::vec3& targetPixel, Ref<Texture2D> targetTexture, const glm::mat4& targetTextureTranslate, std::vector<std::pair<float, float>> offsets);
 		static void SetMoveLimit(int entityID, const Util::FRect& rect);
@@ -85,6 +91,7 @@ namespace Gear {
 		static Ref<Controller>		GetController(int entityID);
 		static Ref<Timer>			GetTimer(int entityID);
 		static Ref<Texturer2D>		GetTexturer(int entityID);
+		static Ref<Status>			GetStatus(int entityID);
 
 	private:
 		static int s_EntityID;
@@ -105,6 +112,7 @@ namespace Gear {
 		static std::vector<Ref<Physics2D>>		m_Phisics;
 		static std::vector<Ref<Timer>>			m_Timers;
 		static std::vector<Ref<Texturer2D>>		m_Texturer;
+		static std::vector<Ref<Status>>			m_Status;
 
 		friend class Application;
 		friend class EventSystem;

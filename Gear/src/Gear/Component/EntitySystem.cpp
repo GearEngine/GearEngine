@@ -19,6 +19,7 @@ namespace Gear {
 	std::vector<Ref<Physics2D>>		EntitySystem::m_Phisics = std::vector<Ref<Physics2D>>();
 	std::vector<Ref<Timer>>			EntitySystem::m_Timers = std::vector<Ref<Timer>>();
 	std::vector<Ref<Texturer2D>>	EntitySystem::m_Texturer = std::vector<Ref<Texturer2D>>();
+	std::vector<Ref<Status>>		EntitySystem::m_Status = std::vector<Ref<Status>>();
 
 	void EntitySystem::Init()
 	{
@@ -31,6 +32,7 @@ namespace Gear {
 		m_Transforms.resize(10000);
 		m_Timers.resize(10000);
 		m_Texturer.resize(10000);
+		m_Status.resize(10000);
 	}
 
 	void EntitySystem::Shutdown()
@@ -47,6 +49,7 @@ namespace Gear {
 		m_Transforms.clear();
 		m_Timers.clear();
 		m_Texturer.clear();
+		m_Status.clear();
 
 		EventSystem::Shutdown();
 	}
@@ -67,6 +70,7 @@ namespace Gear {
 			UpdateFSM(id, ts);
 			UpdateTransform2D(id, ts);
 			UpdatePhysics2D(id, ts);
+			UpdateStatus(id, ts);
 			UpdateTexturer2D(id, ts);
 			UpdateAnimator2D(id, ts);
 			UpdateSoundPlayer(id, ts);
@@ -226,6 +230,15 @@ namespace Gear {
 		m_Texturer[entityID]->Update(ts);
 	}
 
+	void EntitySystem::UpdateStatus(int entityID, Timestep ts)
+	{
+		if (!m_Status[entityID] || !m_Status[entityID]->m_OnActivate)
+		{
+			return;
+		}
+		m_Status[entityID]->Update(ts);
+	}
+
 	int EntitySystem::CreateEntity(bool activate)
 	{
 		int entityID;
@@ -333,6 +346,7 @@ namespace Gear {
 			m_SoundPlayers[entityID].reset();
 			m_Transforms[entityID].reset();
 			m_Texturer[entityID].reset();
+			m_Status[entityID].reset();
 		}
 		else
 		{
@@ -373,6 +387,9 @@ namespace Gear {
 			case ComponentID::ID::Texturer:
 				if (!m_Texturer[entityID]) m_Texturer[entityID].reset(new Texturer2D());
 				break;
+			case ComponentID::ID::Status:
+				if (!m_Status[entityID]) m_Status[entityID].reset(new Status());
+				break;
 			}
 		}
 	}
@@ -409,6 +426,9 @@ namespace Gear {
 				break;
 			case ComponentID::ID::Texturer:
 				m_Texturer[entityID].reset();
+				break;
+			case ComponentID::ID::Status:
+				m_Status[entityID].reset();
 				break;
 			}
 		}
@@ -447,6 +467,9 @@ namespace Gear {
 			case ComponentID::ID::Texturer:
 				if (m_Texturer[entityID]) m_Texturer[entityID]->m_OnActivate = true;
 				break;
+			case ComponentID::ID::Status:
+				if (m_Status[entityID]) m_Status[entityID]->m_OnActivate = true;
+				break;
 			}
 		}
 	}
@@ -483,6 +506,9 @@ namespace Gear {
 				break;
 			case ComponentID::ID::Texturer:
 				if (!m_Texturer[entityID]) m_Texturer[entityID]->m_OnActivate = false;
+				break;
+			case ComponentID::ID::Status:
+				if (!m_Status[entityID]) m_Status[entityID]->m_OnActivate = false;
 				break;
 			}
 		}
@@ -657,6 +683,38 @@ namespace Gear {
 
 	}
 
+	void EntitySystem::SetStatus(int entityID, const std::initializer_list<std::pair<const std::string, std::any>>& statuslist)
+	{
+		auto entity = m_EntityPool.find(entityID);
+		if (entity == m_EntityPool.end())
+		{
+			GR_CORE_WARN("{0} entity doesn't exist!", entityID);
+			return;
+		}
+		if (!m_Status[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have Status component!", entityID);
+			return;
+		}
+		m_Status[entityID]->RegisterStatus(statuslist);
+	}
+
+	void EntitySystem::SetStatusHanlder(int entityID, const std::initializer_list<std::pair<const EnumType, Ref<Status::StatusHandler>>>& handlers)
+	{
+		auto entity = m_EntityPool.find(entityID);
+		if (entity == m_EntityPool.end())
+		{
+			GR_CORE_WARN("{0} entity doesn't exist!", entityID);
+			return;
+		}
+		if (!m_Status[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have Status component!", entityID);
+			return;
+		}
+		m_Status[entityID]->RegisterStatusHandler(handlers);
+	}
+
 	Ref<Transform2D> EntitySystem::GetTransform2D(int entityID)
 	{
 		if (!m_Transforms[entityID])
@@ -735,6 +793,16 @@ namespace Gear {
 			return nullptr;
 		}
 		return m_Texturer[entityID];
+	}
+
+	Ref<Status> EntitySystem::GetStatus(int entityID)
+	{
+		if (!m_Status[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have Status component!", entityID);
+			return nullptr;
+		}
+		return m_Status[entityID];
 	}
 
 }
