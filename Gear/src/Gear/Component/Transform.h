@@ -6,11 +6,19 @@ namespace Gear {
 
 	class Transform : public Component
 	{
+	protected:
+		Transform(int id)
+			: Component(id)
+		{}
 	};
 
 	class Transform2D : public Transform
 	{
 	public:
+		Transform2D(int id)
+			: Transform(id)
+		{
+		}
 		virtual ~Transform2D();
 
 	public:

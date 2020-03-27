@@ -8,12 +8,18 @@ namespace Gear {
 
 	class Physics : public Component
 	{
-
+	public:
+		Physics(int id)
+			: Component(id)
+		{}
 	};
 
 	class Physics2D : public Physics
 	{
 	public:
+		Physics2D(int id)
+			: Physics(id)
+		{}
 		virtual ~Physics2D() = default;
 
 	private:
@@ -48,9 +54,9 @@ namespace Gear {
 		bool m_ActivatedMoveLimitation = false;
 		bool m_ActivatedFollowTarget = false;
 
-		glm::vec2 m_ExternalVector;
 		glm::vec3* m_TargetPos = nullptr;
 		const glm::vec3* m_FollowTarget = nullptr;
+		glm::vec2 m_ExternalVector = { 0.0f, 0.0f };
 		glm::vec3 m_TargetPixel;
 		glm::mat4 m_PixelCollisionTargetTextureTranslate;
 		std::vector<std::pair<float, float>> m_PixelCollisionOffsetVector;
@@ -60,7 +66,7 @@ namespace Gear {
 		float m_Gravity;
 		float m_Friction;
 		float m_Elastics;
-		float m_GravityAccelation;
+		float m_GravityAccelation = 0.0f;
 		float m_SlidingRatio;
 		float m_LimitGravityAccelation;
 

@@ -6,7 +6,9 @@ namespace Gear {
 	{
 		friend class EntitySystem;
 	protected:
-		Component() = default;
+		Component(int id)
+			: m_ID(id)
+		{}
 		virtual ~Component() = default;
 
 	private:
@@ -15,6 +17,9 @@ namespace Gear {
 		inline void InActivate() { m_OnActivate = false; }
 		inline void Activate() { m_OnActivate = true; }
 		inline bool IsActivate() { return m_OnActivate; }
+
+	protected:
+		int m_ID;
 
 	private:
 		bool m_OnActivate = true;

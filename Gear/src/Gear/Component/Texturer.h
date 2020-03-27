@@ -21,12 +21,20 @@ namespace Gear {
 
 	class Texturer : public Component
 	{
-
+	protected:
+		Texturer(int id)
+			: Component(id)
+		{}
 
 	};
 
 	class Texturer2D : public Texturer
 	{
+	public:
+		Texturer2D(int id)
+			: Texturer(id)
+		{}
+
 	private:
 		virtual void Update(Timestep ts) override;
 		virtual void RegisterTexture(RenderType::Type renderType, Ref<Texture2D> texture, Ref<Texture2D> m_Mask = nullptr , Ref<Texture2D> m_BlendTexture = nullptr);

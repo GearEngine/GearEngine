@@ -7,6 +7,10 @@ namespace Gear {
 
 	class Animator : public Component
 	{
+	protected:
+		Animator(int id)
+			: Component(id)
+		{}
 	private:
 		virtual void PlayAnimation(EnumType name) = 0;
 		virtual void PauseAnimation() = 0;
@@ -17,6 +21,9 @@ namespace Gear {
 	class Animator2D : public Animator
 	{
 	public:
+		Animator2D(int id)
+			: Animator(id)
+		{}
 		virtual ~Animator2D();
 
 	private:

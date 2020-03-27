@@ -8,6 +8,10 @@ namespace Gear {
 
 	class Drawer : public Component
 	{
+	protected:
+		Drawer(int id)
+			: Component(id)
+		{}
 	private:
 		virtual void Render() = 0;
 	};
@@ -15,6 +19,9 @@ namespace Gear {
 	class Drawer2D : public Drawer
 	{
 	public:
+		Drawer2D(int id)
+			: Drawer(id)
+		{}
 		virtual ~Drawer2D();
 
 	private:

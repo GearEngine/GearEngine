@@ -19,7 +19,9 @@ namespace Gear {
 		virtual ~FSM();
 
 	public:
-		FSM() = default;
+		FSM(int id)
+			: Component(id)
+		{}
 		virtual void Update(Timestep ts) override;
 
 		void RegisterFSM(const std::initializer_list<std::pair<const EnumType, InputHandler*>>& handlers);

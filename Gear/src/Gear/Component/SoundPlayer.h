@@ -8,6 +8,9 @@ namespace Gear {
 	class SoundPlayer : public Component
 	{
 	public:
+		SoundPlayer(int id)
+			: Component(id)
+		{}
 		virtual ~SoundPlayer();
 
 	private:

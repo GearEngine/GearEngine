@@ -40,5 +40,30 @@ namespace InGame {
 		};
 	}
 
+	namespace WormStat {
+
+		enum : unsigned int
+		{
+			Name,
+			Team,
+			Hp,
+			SelectedItem,
+			FireAngleVector,
+			FirePower
+		};
+	}
+
+	namespace WormStatusHandleType {
+
+		enum : unsigned int
+		{
+			DisplayName,
+			DisplayHp,
+			Damaged,
+			FireAngle,
+			FirePower
+		};
+	}
+
 }
 

@@ -6,6 +6,10 @@ namespace Gear {
 
 	class Timer : public Component
 	{
+	public:
+		Timer(int id)
+			: Component(id)
+		{}
 	private:
 		virtual void Update(Timestep ts);
 

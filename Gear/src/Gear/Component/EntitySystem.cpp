@@ -361,34 +361,34 @@ namespace Gear {
 			switch (id)
 			{
 			case ComponentID::ID::Animator:   
-				if (!m_Animators[entityID]) m_Animators[entityID].reset(new Animator2D());
+				if (!m_Animators[entityID]) m_Animators[entityID].reset(new Animator2D(entityID));
 				break;
 			case ComponentID::ID::Controller:	
-				if (!m_Controllers[entityID]) m_Controllers[entityID].reset(new Controller());
+				if (!m_Controllers[entityID]) m_Controllers[entityID].reset(new Controller(entityID));
 				break;
 			case ComponentID::ID::Drawer:		
-				if (!m_Drawer[entityID]) m_Drawer[entityID].reset(new Drawer2D());
+				if (!m_Drawer[entityID]) m_Drawer[entityID].reset(new Drawer2D(entityID));
 				break;
 			case ComponentID::ID::FSM:			
-				if (!m_FSMs[entityID]) m_FSMs[entityID].reset(new FSM());
+				if (!m_FSMs[entityID]) m_FSMs[entityID].reset(new FSM(entityID));
 				break;
 			case ComponentID::ID::Physics:		
-				if (!m_Phisics[entityID]) m_Phisics[entityID].reset(new Physics2D());
+				if (!m_Phisics[entityID]) m_Phisics[entityID].reset(new Physics2D(entityID));
 				break;
 			case ComponentID::ID::SoundPlayer:	
-				if (!m_SoundPlayers[entityID]) m_SoundPlayers[entityID].reset(new SoundPlayer());
+				if (!m_SoundPlayers[entityID]) m_SoundPlayers[entityID].reset(new SoundPlayer(entityID));
 				break;
 			case ComponentID::ID::Transform:	
-				if (!m_Transforms[entityID]) m_Transforms[entityID].reset(new Transform2D());
+				if (!m_Transforms[entityID]) m_Transforms[entityID].reset(new Transform2D(entityID));
 				break;
 			case ComponentID::ID::Timer:
-				if (!m_Timers[entityID]) m_Timers[entityID].reset(new Timer());
+				if (!m_Timers[entityID]) m_Timers[entityID].reset(new Timer(entityID));
 				break;
 			case ComponentID::ID::Texturer:
-				if (!m_Texturer[entityID]) m_Texturer[entityID].reset(new Texturer2D());
+				if (!m_Texturer[entityID]) m_Texturer[entityID].reset(new Texturer2D(entityID));
 				break;
 			case ComponentID::ID::Status:
-				if (!m_Status[entityID]) m_Status[entityID].reset(new Status());
+				if (!m_Status[entityID]) m_Status[entityID].reset(new Status(entityID));
 				break;
 			}
 		}
@@ -683,7 +683,7 @@ namespace Gear {
 
 	}
 
-	void EntitySystem::SetStatus(int entityID, const std::initializer_list<std::pair<const std::string, std::any>>& statuslist)
+	void EntitySystem::SetStatus(int entityID, const std::initializer_list<std::pair<const EnumType, std::any>>& statuslist)
 	{
 		auto entity = m_EntityPool.find(entityID);
 		if (entity == m_EntityPool.end())

@@ -21,6 +21,9 @@ namespace Gear {
 	class Controller : public Component
 	{
 	public:
+		Controller(int id)
+			: Component(id)
+		{}
 		virtual ~Controller();
 
 	private:

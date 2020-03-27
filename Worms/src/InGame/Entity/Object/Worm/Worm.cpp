@@ -2,6 +2,8 @@
 #include "Worm.h"
 
 #include "WormFSMHandler.h"
+#include "WormStatusHandler.h"
+#include "InGame/Entity/Object/Item/ItemEnum.h"
 
 namespace InGame {
 
@@ -17,26 +19,27 @@ namespace InGame {
 			Gear::ComponentID::Animator,	Gear::ComponentID::Drawer,
 			Gear::ComponentID::Controller,	Gear::ComponentID::Transform,
 			Gear::ComponentID::Physics,		Gear::ComponentID::SoundPlayer,
-			Gear::ComponentID::FSM,			Gear::ComponentID::Timer
+			Gear::ComponentID::FSM,			Gear::ComponentID::Timer,
+			//Gear::ComponentID::Status
 		});
 
 		//Set Component specific
-		std::vector<std::pair<int, int>> birthOrder;
+		std::vector<std::pair<int, int>> birthAniOrder;
 		for (int i = 0; i < 40; ++i)
 		{
 			if (i < 20)
 			{
-				birthOrder.push_back({ 0, i });
+				birthAniOrder.push_back({ 0, i });
 			}
 			else
 			{
-				birthOrder.push_back({ 0, 39 - i });
+				birthAniOrder.push_back({ 0, 39 - i });
 			}
 		}
 		Gear::EntitySystem::SetAnimator(m_ID, {
 			{ WormState::OnMove,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnMove"), 0.02f, true)},
 			{ WormState::OnUseItem, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.02f, true)},
-			{ WormState::OnIdle,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnIdle"), 0.04f, birthOrder, true)}
+			{ WormState::OnIdle,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnIdle"), 0.04f, birthAniOrder, true)}
 		});
 
 		Gear::EntitySystem::SetTransform(m_ID, position, rotation, scale);
@@ -71,12 +74,21 @@ namespace InGame {
 			{ {-0.1f, -0.2f}, {0.1f, -0.2f}, {0.0f, -0.2f} }
 		);
 
+		/*Gear::EntitySystem::SetStatus(m_ID, {
+			{ WormStat::Name, "Worm0"}, { WormStat::Team, "MyTeam"}, { WormStat::Hp, initData.WormHP },
+			{ WormStat::FireAngleVector , glm::vec2(0.70710678f, 0.70710678f) }, { WormStat::FirePower, 0.0f},
+			{ WormStat::SelectedItem, ItemName::Bazooka },
+		});
+
+		Gear::EntitySystem::SetStatusHanlder(m_ID, {
+			{ WormStatusHandleType::DisplayName, Gear::CreateRef<WormDisplayNameHanlder>() }, { WormStatusHandleType::DisplayHp, Gear::CreateRef<WormDisplayHpHanlder>() }
+		});*/
+
 		//Subscpribe EventChannel
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Explosion);
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::Explosion, s_ExplosionHandler);
 
 		Gear::EntitySystem::InActivateComponent(m_ID, { Gear::ComponentID::Physics });
-
 	}
 
 	Worm::~Worm()
