@@ -115,6 +115,7 @@ namespace InGame {
 				timer->Start();
 				onRed = false;
 				onPressing = false;
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::PrepareNextPhase)));
 				return WorldState::OnPrepareNextPhase;
 			}
 			else

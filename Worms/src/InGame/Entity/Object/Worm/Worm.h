@@ -1,6 +1,6 @@
 #pragma once
 
-#include "WormEventHandle.h"
+#include "WormStatusHandler.h"
 
 namespace InGame {
 
@@ -16,6 +16,7 @@ namespace InGame {
 	private:
 		int m_ID;
 
-		static Gear::Ref<WormExplosionEventHandler> s_ExplosionHandler;
+		static Gear::Ref<WormExplosionEventHandler> s_ExplosionEventHandler;
+		static Gear::Ref<WormWorldEventHandler> s_WorldEventHandler;
 	};
 }

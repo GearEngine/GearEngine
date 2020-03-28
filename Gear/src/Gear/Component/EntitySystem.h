@@ -83,6 +83,8 @@ namespace Gear {
 		static void SetMoveLimit(int entityID, const Util::FRect& rect);
 		static void SetSliding(int entityID, float slidingRatio);
 
+		static bool IsComponenetActivate(int entityID, ComponentID::ID componentID);
+
 		static Ref<Transform2D>		GetTransform2D(int entityID);
 		static Ref<FSM>				GetFSM(int entityID);
 		static Ref<Animator2D>		GetAnimator2D(int entityID);

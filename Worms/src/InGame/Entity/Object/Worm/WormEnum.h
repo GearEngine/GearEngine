@@ -6,17 +6,19 @@ namespace InGame {
 
 		enum : unsigned int
 		{
+			OnNotMyTurn,
+			OnReady,
+			OnStart,
 			OnMove,
-			OnDye,
 			OnIdle,
 			OnReadyItemUse,
 			OnUseItem,
 			OnAir,
 			OnReadyJump,
 			OnAirItemUse,
-			OnTurnOver,
 			OnDamaged,
-			OnReady
+			OnDye,
+			OnTurnOver
 		};
 	}
 

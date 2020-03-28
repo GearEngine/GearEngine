@@ -1,12 +1,12 @@
 #include "wmpch.h"
 #include "Worm.h"
 
-#include "WormStatusHandler.h"
 #include "InGame/Entity/Object/Item/ItemEnum.h"
 
 namespace InGame {
 
-	Gear::Ref<WormExplosionEventHandler> Worm::s_ExplosionHandler = Gear::CreateRef<WormExplosionEventHandler>();
+	Gear::Ref<WormExplosionEventHandler> Worm::s_ExplosionEventHandler = Gear::CreateRef<WormExplosionEventHandler>();
+	Gear::Ref<WormWorldEventHandler> Worm::s_WorldEventHandler = Gear::CreateRef<WormWorldEventHandler>();
 
 	Worm::Worm(int count, const InitiateData& initData)
 	{
@@ -41,8 +41,10 @@ namespace InGame {
 		Gear::EntitySystem::SetAnimator(m_ID, {
 			{ WormState::OnMove,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnMove"), 0.02f, true)},
 			{ WormState::OnUseItem, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.02f, true)},
-			{ WormState::OnIdle,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnIdle"), 0.04f, birthAniOrder, true)}
+			{ WormState::OnIdle,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnIdle"), 0.04f, birthAniOrder, true)},
+			{ WormState::OnNotMyTurn,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnIdle"), 0.04f, birthAniOrder, true)}
 		});
+
 
 		//Set Transform
 		Gear::EntitySystem::SetTransform(m_ID, wormData.StartPosition, 0.0f, initData.WormScale);
@@ -51,7 +53,7 @@ namespace InGame {
 		Gear::EntitySystem::SetFSM(m_ID, {
 			{ WormState::OnMove, new WormOnMoveHandler },	{ WormState::OnUseItem, new WormOnUseItemHandler },
 			{ WormState::OnIdle, new WormOnIdleHandler },	{ WormState::OnTurnOver, new WormOnTurnOverHandler },
-			{ WormState::OnReady, new WormOnReadyHandler }	
+			{ WormState::OnReady, new WormOnReadyHandler }, { WormState::OnNotMyTurn, new WormOnNotMyTurnHandler }
 		});
 
 		//Set Controller
@@ -112,7 +114,9 @@ namespace InGame {
 
 		//Subscpribe EventChannel
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Explosion);
-		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::Explosion, s_ExplosionHandler);
+		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::World);
+		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::Explosion, s_ExplosionEventHandler);
+		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::World, s_WorldEventHandler);
 
 		Gear::EntitySystem::InActivateComponent(m_ID, { Gear::ComponentID::Physics });
 	}

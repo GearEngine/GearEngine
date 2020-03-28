@@ -666,6 +666,45 @@ namespace Gear {
 		m_Phisics[entityID]->ActiveSliding(slidingRatio);
 	}
 
+	bool EntitySystem::IsComponenetActivate(int entityID, ComponentID::ID componentID)
+	{
+		switch (componentID)
+		{
+		case Gear::ComponentID::Animator:
+			if (m_Animators[entityID]) return m_Animators[entityID]->IsActivate();
+			break;
+		case Gear::ComponentID::Controller:
+			if (m_Controllers[entityID]) return m_Controllers[entityID]->IsActivate();
+			break;
+		case Gear::ComponentID::Drawer:
+			if (m_Drawer[entityID]) return m_Drawer[entityID]->IsActivate();
+			break;
+		case Gear::ComponentID::FSM:
+			if (m_FSMs[entityID]) return m_FSMs[entityID]->IsActivate();
+			break;
+		case Gear::ComponentID::Physics:
+			if (m_Phisics[entityID]) return m_Phisics[entityID]->IsActivate();
+			break;
+		case Gear::ComponentID::SoundPlayer:
+			if (m_SoundPlayers[entityID]) return m_SoundPlayers[entityID]->IsActivate();
+			break;
+		case Gear::ComponentID::Transform:
+			if (m_Transforms[entityID]) return m_Transforms[entityID]->IsActivate();
+			break;
+		case Gear::ComponentID::Timer:
+			if (m_Timers[entityID]) return m_Timers[entityID]->IsActivate();
+			break;
+		case Gear::ComponentID::Texturer:
+			if (m_Texturer[entityID]) return m_Texturer[entityID]->IsActivate();
+			break;
+		case Gear::ComponentID::Status:
+			if (m_Status[entityID]) return m_Status[entityID]->IsActivate();
+			break;
+		}
+		GR_CORE_WARN("{0} entity has no {1} component!", entityID, componentID);
+		return false;
+	}
+
 	void EntitySystem::SetTexturer(int entityID, RenderType::Type type, Ref<Texture2D> texture, Ref<Texture2D> mask, Ref<Texture2D> blending)
 	{
 		auto entity = m_EntityPool.find(entityID);

@@ -1,4 +1,5 @@
 #pragma once
+#include "WormEnum.h"
 
 namespace InGame {
 
@@ -18,6 +19,25 @@ namespace InGame {
 			if (distance < powf(explosion.radius, 2))
 			{
 				GR_TRACE("No.{0} Entity Damaged by explosion", entityID);
+			}
+		}
+	};
+
+	class WormWorldEventHandler : public Gear::EventHandler
+	{
+		inline virtual void Handle(std::any data, int entityID) override
+		{
+			GR_TRACE("No.{0} Entity get World event", entityID);
+
+			auto worldData = std::any_cast<WorldData>(data);
+
+			if (worldData.DataType == WorldDataType::PrepareNextPhase)
+			{
+				if (!Gear::EntitySystem::IsComponenetActivate(entityID, Gear::ComponentID::Controller))
+					return;
+
+				auto FSM = Gear::EntitySystem::GetFSM(entityID);
+				FSM->SetCurrentState(WormState::OnTurnOver);
 			}
 		}
 	};

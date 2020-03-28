@@ -1,4 +1,4 @@
-#include "WormEnum.h"
+#include "WormEventHandle.h"
 
 namespace InGame {
 
@@ -105,6 +105,16 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
+			auto statusCompoenent = Gear::EntitySystem::GetStatus(entityID);
+			auto& hpOffsetData = statusCompoenent->GetStat(WormInfo::HpBorderOffset);
+			auto& nameOffsetData = statusCompoenent->GetStat(WormInfo::NameBorderOffset);
+
+			float hpOffset = std::any_cast<float>(hpOffsetData) + 0.5f;
+			float nameOffset = std::any_cast<float>(hpOffsetData) + 0.5f;
+
+			statusCompoenent->SetStat(WormInfo::HpBorderOffset, hpOffset);
+			statusCompoenent->SetStat(WormInfo::NameBorderOffset, nameOffset);
+
 			return WormState::OnTurnOver;
 		}
 	};
@@ -135,6 +145,16 @@ namespace InGame {
 			}
 			Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 0.0f, 0.0f });
 			return WormState::OnReady;
+		}
+	};
+
+	class WormOnNotMyTurnHandler : public Gear::FSM::InputHandler
+	{
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
+			physics->SetExternalVector(glm::vec2(0.0f, 0.0f));
+			return WormState::OnNotMyTurn;
 		}
 	};
 

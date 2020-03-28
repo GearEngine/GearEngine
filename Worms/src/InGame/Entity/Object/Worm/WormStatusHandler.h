@@ -66,7 +66,6 @@ namespace InGame {
 			Gear::Renderer2D::DrawQuad(position, glm::vec2(denoteData.TextureWidthUnit, denoteData.TextureHeightUnit), denoteData.Border);
 
 			position.x += 0.15f;
-			position.y += 0.04f;
 			position.z = ZOrder::z_Font + additionalZOffset;
 
 			WormInfo::ETeamColor teamColor = std::any_cast<WormInfo::ETeamColor>(statlist[WormInfo::TeamColor]);

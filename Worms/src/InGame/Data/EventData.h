@@ -20,6 +20,7 @@ namespace InGame {
 		OnExitMenu,
 		ReFollow,
 		NewFollow,
+		PrepareNextPhase,
 		RunningStart
 	};
 
