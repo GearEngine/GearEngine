@@ -18,6 +18,13 @@ namespace InGame {
 				timersTimer->SetTimer(0.7f);
 				timersTimer->Start();
 			}			
+			if (worldData.DataType == WorldDataType::RunningStart)
+			{
+				auto timer = Gear::EntitySystem::GetTimer(entityID);
+				Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnRunning);
+				timer->SetTimer(World::s_LimitTurnTime);
+				timer->Start();
+			}
 		}
 	};
 

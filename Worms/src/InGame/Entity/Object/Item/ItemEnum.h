@@ -8,8 +8,8 @@ namespace InGame {
 		{
 			Bazooka,
 			ShotGun,
-			Grenade
+			Grenade,
+			ItemMax
 		};
 	}
-
 }

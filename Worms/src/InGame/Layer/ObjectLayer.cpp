@@ -5,19 +5,34 @@
 
 namespace InGame {
 
-	int ObjectLayer::m_nWorms = 0;
-	int ObjectLayer::m_CurrentActiveWorm = 0;
-	bool ObjectLayer::m_turnChanged = false;
+	std::unordered_map<std::string, std::vector<Gear::Ref<Worm>>> ObjectLayer::s_Worms = std::unordered_map<std::string, std::vector<Gear::Ref<Worm>>>();
+	std::unordered_map<std::string, TeamInfo> ObjectLayer:: s_TeamInfo = std::unordered_map<std::string, TeamInfo>();
+	std::unordered_map<std::string, TeamInfo>::iterator ObjectLayer:: s_TeamIter = std::unordered_map<std::string, TeamInfo>::iterator();
+	std::unordered_map<std::string, int> ObjectLayer::s_WormTurnIndex = std::unordered_map<std::string, int>();
+
+	int ObjectLayer::s_curWorm = 0;
+	int ObjectLayer::s_CurrentActivatedWormID = -1;
+	bool ObjectLayer::s_turnChanged = false;
 
 	ObjectLayer::ObjectLayer(const InitiateData& initData)
 		: Layer("ObjectLayer")
 	{
-		m_nWorms = initData.Worms.size();
-		m_Worms.resize(m_nWorms);
-		for (int i = 0; i < m_Worms.size(); ++i)
+		for (int i = 0; i < initData.Teams.size(); ++i)
 		{
-			m_Worms[i].reset(new Worm(i, initData));
+			std::vector<Gear::Ref<Worm>> worms;
+
+			s_TeamInfo.insert({ initData.Teams[i].TeamName, initData.Teams[i] });
+			worms.resize(initData.Teams[i].worms.size());
+
+			for (int j = 0; j < initData.Teams[i].worms.size(); ++j)
+			{
+				worms[j].reset(new Worm(i, j, initData));
+			}
+			s_Worms.insert({ initData.Teams[i].TeamName , worms });
+			s_WormTurnIndex.insert({ initData.Teams[i].TeamName, 0 });
 		}
+		s_TeamIter = s_TeamInfo.begin();
+
 
 		m_Transceiver = Gear::EntitySystem::CreateEntity(true);
 
@@ -27,20 +42,19 @@ namespace InGame {
 
 	void ObjectLayer::OnAttach()
 	{
-		for (auto e : m_Worms)
-		{
-			Gear::EntitySystem::ActivateComponent(e->GetID(), { Gear::ComponentID::Physics });
-		}
 	}
 
 	void ObjectLayer::OnDetach()
 	{
-		m_Worms.clear();
+		s_Worms.clear();
+		s_TeamInfo.clear();
+		s_CurrentActivatedWormID = -1;
+		s_WormTurnIndex.clear();
 	}
 
 	void ObjectLayer::OnUpdate(Gear::Timestep ts)
 	{
-		if (m_turnChanged)
+		if (s_turnChanged)
 		{
 			HandleTurnChange();
 		}
@@ -56,31 +70,56 @@ namespace InGame {
 
 	void ObjectLayer::HandleTurnChange()
 	{
-		m_turnChanged = false;
-		for (int i = 0; i < m_Worms.size(); ++i)
-		{
-			if (i == m_CurrentActiveWorm)
-			{
-				Gear::EntitySystem::ActivateComponent(m_Worms[i]->GetID(), { {Gear::ComponentID::Controller} });
-				auto FSM = Gear::EntitySystem::GetFSM(m_Worms[i]->GetID());
-				FSM->SetCurrentState(WormState::OnReady);
-				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, m_Worms[i]->GetID())));
-			}
-			else
-			{
-				Gear::EntitySystem::InActivateComponent(m_Worms[i]->GetID(), { {Gear::ComponentID::Controller} });
-			}
-		}
+		s_turnChanged = false;
+	
+		Gear::EntitySystem::ActivateComponent(s_CurrentActivatedWormID, { {Gear::ComponentID::Controller} });
+
+		auto FSM = Gear::EntitySystem::GetFSM(s_CurrentActivatedWormID);
+		auto status = Gear::EntitySystem::GetStatus(s_CurrentActivatedWormID);
+		status->SetNeedHandleData(WormStatusHandleType::Display, true);
+		status->SetNeedHandleData(WormStatusHandleType::WaitingDisplay, false);
+		FSM->SetCurrentState(WormState::OnWaiting);
+
+		std::string curWormName = s_TeamInfo[s_TeamIter->first].worms[s_curWorm].Name;
+		std::pair<std::string, std::string> ChangedWormData = { s_TeamIter->first, curWormName };
+
+		Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, ChangedWormData, s_CurrentActivatedWormID)));
 	}
 
 	void ObjectLayer::ChangeWorm()
 	{
-		m_CurrentActiveWorm++;
-		if (m_CurrentActiveWorm >= m_nWorms)
+		if (s_CurrentActivatedWormID != -1)
 		{
-			m_CurrentActiveWorm = 0;
+			Gear::EntitySystem::GetFSM(s_CurrentActivatedWormID)->SetCurrentState(WormState::OnNotMyTurn);
 		}
-		m_turnChanged = true;
+		while (1)
+		{
+			s_TeamIter++;
+			if (s_TeamIter == s_TeamInfo.end())
+			{
+				s_TeamIter = s_TeamInfo.begin();
+			}
+			if (s_TeamIter->second.TotalWormHp != 0)
+			{
+				break;
+			}
+		}
+		s_curWorm;
+		while (1)
+		{
+			s_curWorm = ++s_WormTurnIndex[s_TeamIter->first];
+			if (s_curWorm >= s_Worms[s_TeamIter->first].size())
+			{
+				s_curWorm = 0;
+			}
+			s_CurrentActivatedWormID = s_Worms[s_TeamIter->first][s_curWorm]->GetID();
+			int hp = std::any_cast<int>(Gear::EntitySystem::GetStatus(s_CurrentActivatedWormID)->GetStat(WormInfo::Hp));
+			if (hp != 0)
+			{
+				break;
+			}
+		}
+		s_turnChanged = true;
 	}
 
 }

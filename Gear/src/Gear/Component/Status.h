@@ -15,11 +15,12 @@ namespace Gear {
 
 		struct StatHandleData
 		{
-			StatHandleData(const std::any& data)
-				: Data(data)
+			StatHandleData(const std::any& data, bool paused = false)
+				: Data(data), Paused(paused)
 			{}
 			std::any Data;
 			bool Handled = false;
+			bool Paused;
 		};
 
 		class StatusHandler
@@ -36,6 +37,9 @@ namespace Gear {
 		inline auto& GetStatusList() { return m_StatList; }
 		inline auto& GetStat(EnumType stat) { return m_StatList[stat]; }
 		void SetStat(EnumType stat, const std::any& data);
+
+		void PopNeedHandleData(EnumType type);
+		void SetNeedHandleData(EnumType type, bool pause, bool handled = false);
 
 		inline void PushNeedHandleData(EnumType type, const StatHandleData& data) 
 		{

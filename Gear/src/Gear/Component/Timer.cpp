@@ -5,11 +5,11 @@ namespace Gear {
 
 	void Timer::Update(Timestep ts)
 	{
+		m_Tick = ts;
 		if (!m_OnProgress || m_OnPause)
 			return;
 
 		m_ElapsedTime += ts;
-		m_Tick = ts;
 		if (m_SettedTime <= m_ElapsedTime)
 		{
 			m_ElapsedTime = m_SettedTime;

@@ -24,10 +24,15 @@ namespace InGame {
 		static void ChangeWorm();
 
 	private:
-		std::vector<Gear::Ref<Worm>> m_Worms;
-		static int m_CurrentActiveWorm;
-		static int m_nWorms;
-		static bool m_turnChanged;
+		//for turn count
+		static std::unordered_map<std::string, std::vector<Gear::Ref<Worm>>> s_Worms;
+		static std::unordered_map<std::string, TeamInfo> s_TeamInfo;
+		static std::unordered_map<std::string, TeamInfo>::iterator s_TeamIter;
+
+		static std::unordered_map<std::string, int> s_WormTurnIndex;
+		static bool s_turnChanged;
+		static int s_CurrentActivatedWormID;
+		static int s_curWorm;
 
 		int m_Transceiver; // Entity
 	};

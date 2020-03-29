@@ -8,13 +8,11 @@ namespace InGame {
 		{
 			if (cmd.KeyType == WormCommand::Left)
 			{
-				//GR_TRACE("{0}entity(Worm) On Move state have Left Command! ", entityID);
 				Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ -1.0f, 0.0f });
 				return WormState::OnMove;
 			}
 			if (cmd.KeyType == WormCommand::Right)
 			{
-				//GR_TRACE("{0}entity(Worm) On Move state have Right Command! ", entityID);
 				Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 1.0f, 0.0f });
 				return WormState::OnMove;
 			}
@@ -46,20 +44,17 @@ namespace InGame {
 		{
 			if (cmd.KeyType == WormCommand::Left)
 			{
-				//GR_TRACE("{0}entity(Worm) On idle state have Left Command! ", entityID);
 				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnMove);
 				return WormState::OnMove;
 			}
 			if (cmd.KeyType == WormCommand::Right)
 			{
-				//GR_TRACE("{0}entity(Worm) On idle state have Right Command! ", entityID);
 				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnMove);
 				return WormState::OnMove;
 			}
 			//temporary
 			if (cmd.KeyType == WormCommand::ChangeWorm)
 			{
-				//GR_TRACE("{0}entity(Worm) state have Turnover Command! ", entityID);
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
 				return WormState::OnTurnOver;
 			}
@@ -105,16 +100,9 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			auto statusCompoenent = Gear::EntitySystem::GetStatus(entityID);
-			auto& hpOffsetData = statusCompoenent->GetStat(WormInfo::HpBorderOffset);
-			auto& nameOffsetData = statusCompoenent->GetStat(WormInfo::NameBorderOffset);
-
-			float hpOffset = std::any_cast<float>(hpOffsetData) + 0.5f;
-			float nameOffset = std::any_cast<float>(hpOffsetData) + 0.5f;
-
-			statusCompoenent->SetStat(WormInfo::HpBorderOffset, hpOffset);
-			statusCompoenent->SetStat(WormInfo::NameBorderOffset, nameOffset);
-
+			Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+			Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 0.0f, 0.0f });
+			Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnIdle);
 			return WormState::OnTurnOver;
 		}
 	};
@@ -131,20 +119,37 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
+			Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 0.0f, 0.0f });
+			return WormState::OnReady;
+		}
+	};
+
+	class WormOnWaitingHandler : public Gear::FSM::InputHandler
+	{
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			if (cmd.Keycode != 0xffffffb)
+			{
+				auto& status = Gear::EntitySystem::GetStatus(entityID);
+				status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(0.5f));
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::RunningStart, entityID)));
+			}
 			if (cmd.KeyType == WormCommand::Left)
 			{
-				GR_TRACE("{0}entity(Worm) On idle state have Left Command! ", entityID);
 				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnMove);
 				return WormState::OnMove;
 			}
 			if (cmd.KeyType == WormCommand::Right)
 			{
-				GR_TRACE("{0}entity(Worm) On idle state have Right Command! ", entityID);
 				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnMove);
 				return WormState::OnMove;
 			}
+			if (cmd.KeyType == WormCommand::Jump)
+			{
+				return WormState::OnReadyJump;
+			}
 			Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 0.0f, 0.0f });
-			return WormState::OnReady;
+			return WormState::OnWaiting;
 		}
 	};
 

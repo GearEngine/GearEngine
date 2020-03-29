@@ -28,22 +28,34 @@ namespace InGame {
 			ZRenderOffset,
 			StatEnd
 		};
+		
+	}
 
-		enum ETeamColor : unsigned int
+	namespace TeamColor {
+
+		enum Color : unsigned int
 		{
-			Red = Stat::StatEnd,
+			Red = WormInfo::Stat::StatEnd,
 			Blue,
 		};
-
 	}
 
 	struct WormSpecific
 	{
-		WormInfo::ETeamColor TeamColor;
-		std::string TeamName;
-		std::string WormName;
+		std::string Name;
 		glm::vec3 StartPosition;
+		int Hp;
 		float AdditionalZRenderOffset;
+	};
+
+	struct TeamInfo
+	{
+		int nWorm = 0;
+		int TotalWormHp = 0;
+		std::string TeamName;
+		TeamColor::Color TeamColor;
+		std::vector<WormSpecific> worms;
+		Gear::Ref<Gear::Texture2D> TeamIcon;
 	};
 
 	struct InitiateData
@@ -57,7 +69,7 @@ namespace InGame {
 		float LimitTurnTime = 15.0f;
 		int LimitSuddenDeathTurn = 10;
 		
-		int WormHP = 100;
+		int WormMaxHP = 100;
 
 		MapInfo Mapinfo;
 		glm::vec3 MapPosition = {0.0f, -3.0f, ZOrder::z_Terrain};
@@ -69,8 +81,8 @@ namespace InGame {
 		Gear::Util::FRect WorldRect = { -70.0f, 70.0f, 70.0f, -27.0f };
 		Gear::Util::FRect CameraLimit = { -50.0f, 50.0f, 50.0f, -7.0f };
 
-		std::vector<WormSpecific> Worms;
-
+		std::vector<TeamInfo> Teams;
+		int nTotalWorms = 0;
 	};
 
 	inline MapInfo GetMapInfo(std::string name)
@@ -92,5 +104,5 @@ namespace InGame {
 		GR_ASSERT(find, "Map Loading Fail!, There is no {0} Map", name);
 		return ret;
 	}
-
 }
+

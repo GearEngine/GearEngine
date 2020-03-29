@@ -18,4 +18,28 @@ namespace InGame {
 
 	}
 
+	namespace WorldInfo {
+
+		enum : unsigned int
+		{
+			CurrnetTeam,
+			CurrentWorm,
+			CurrentTeamColor,
+
+			WaitingTimeBorderOffset,
+			TeamInfo,
+			DyeInfo
+		};
+	}
+
+	namespace WorldStatusHandleType	{
+
+		enum : unsigned int
+		{
+			DisplayWaitingCount
+
+		};
+
+	}
+
 }

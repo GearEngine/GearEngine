@@ -8,9 +8,10 @@ namespace InGame {
 	Gear::Ref<WormExplosionEventHandler> Worm::s_ExplosionEventHandler = Gear::CreateRef<WormExplosionEventHandler>();
 	Gear::Ref<WormWorldEventHandler> Worm::s_WorldEventHandler = Gear::CreateRef<WormWorldEventHandler>();
 
-	Worm::Worm(int count, const InitiateData& initData)
+	Worm::Worm(int teamNumber, int wormNumber, const InitiateData& initData)
 	{
-		auto wormData = initData.Worms[count];
+		auto teamData = initData.Teams[teamNumber];
+		auto wormData = initData.Teams[teamNumber].worms[wormNumber];
 
 		//Create Entity
 		m_ID = Gear::EntitySystem::CreateEntity(true);
@@ -51,6 +52,7 @@ namespace InGame {
 
 		//Set FSM
 		Gear::EntitySystem::SetFSM(m_ID, {
+			{ WormState::OnWaiting, new WormOnWaitingHandler },
 			{ WormState::OnMove, new WormOnMoveHandler },	{ WormState::OnUseItem, new WormOnUseItemHandler },
 			{ WormState::OnIdle, new WormOnIdleHandler },	{ WormState::OnTurnOver, new WormOnTurnOverHandler },
 			{ WormState::OnReady, new WormOnReadyHandler }, { WormState::OnNotMyTurn, new WormOnNotMyTurnHandler }
@@ -66,6 +68,7 @@ namespace InGame {
 			{ WormCommand::SetTimer4, GR_KEY_4 },		{ WormCommand::SetTimer5, GR_KEY_5},
 			{ WormCommand::ChangeWorm, GR_KEY_Z }
 		});
+		Gear::EntitySystem::InActivateComponent(m_ID, { Gear::ComponentID::Controller });
 
 		//Set physics
 		Gear::EntitySystem::SetPhysics(m_ID, true, 10.0f, 10.0f, 0.3f, 0.3f);
@@ -84,15 +87,16 @@ namespace InGame {
 
 		//Set status
 		Gear::EntitySystem::SetStatus(m_ID, {
-			{ WormInfo::Stat::Name, wormData.WormName}, { WormInfo::Stat::TeamColor, wormData.TeamColor }, { WormInfo::Stat::TeamName, wormData.TeamName }, 
-			{ WormInfo::Stat::Hp, initData.WormHP }, { WormInfo::Stat::FireAngleVector , glm::vec2(0.70710678f, 0.70710678f) }, 
+			{ WormInfo::Stat::Name, wormData.Name}, { WormInfo::Stat::TeamColor, teamData.TeamColor }, { WormInfo::Stat::TeamName, teamData.TeamName }, 
+			{ WormInfo::Stat::Hp, wormData.Hp }, { WormInfo::Stat::FireAngleVector , glm::vec2(0.70710678f, 0.70710678f) }, 
 			{ WormInfo::Stat::FirePower, 0.0f}, { WormInfo::Stat::SelectedItem, ItemName::Bazooka }, 
 			{ WormInfo::Stat::NameBorderOffset, 1.26f }, { WormInfo::Stat::HpBorderOffset, 0.7f }, { WormInfo::Stat::ZRenderOffset, wormData.AdditionalZRenderOffset }
 		});
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {
-			{ WormStatusHandleType::DisplayName, Gear::CreateRef<WormDisplayNameHanlder>() }, 
-			{ WormStatusHandleType::DisplayHp, Gear::CreateRef<WormDisplayHpHanlder>() },
+			{ WormStatusHandleType::Display, Gear::CreateRef<WormDisplayHanlder>() }, 
+			{ WormStatusHandleType::WaitingDisplay, Gear::CreateRef<WormWaitingDisplayHanlder>()},
+			{ WormStatusHandleType::DisplayPosChange, Gear::CreateRef<WormChangeDisplayPosHanlder>()}
 		});
 
 		auto NameBorder = Gear::TextureStorage::GetTexture2D("WormNameBorder");
@@ -100,25 +104,24 @@ namespace InGame {
 		float nameBorderHeight = NameBorder->GetHeight();
 		float nameBorderWidthUnit = nameBorderWidth / (initData.MapReductionRatio * 3);
 		float nameBorderHeightUnit = nameBorderHeight / (initData.MapReductionRatio * 3);
-		auto status = Gear::EntitySystem::GetStatus(m_ID);
-		status->PushNeedHandleData(WormStatusHandleType::DisplayName, 
-			Gear::Status::StatHandleData(WormDenoteData(nameBorderWidthUnit, nameBorderHeightUnit, NameBorder)));
-		
+
 		auto hpBorder = Gear::TextureStorage::GetTexture2D("WormHpBorder");
 		float hpBorderWidth = hpBorder->GetWidth();
 		float hpBorderHeight = hpBorder->GetHeight();
 		float hpBorderWidthUnit = hpBorderWidth / (initData.MapReductionRatio * 3);
 		float hpBorderHeightUnit = hpBorderHeight / (initData.MapReductionRatio * 3);
-		status->PushNeedHandleData(WormStatusHandleType::DisplayHp,
-			Gear::Status::StatHandleData(WormDenoteData(hpBorderWidthUnit, hpBorderHeightUnit, hpBorder)));
+
+		auto status = Gear::EntitySystem::GetStatus(m_ID);
+		WormDenoteData denoteData(nameBorderWidthUnit, nameBorderHeightUnit, NameBorder, hpBorderWidthUnit, hpBorderHeightUnit, hpBorder);
+
+		status->PushNeedHandleData(WormStatusHandleType::Display, Gear::Status::StatHandleData(denoteData));
+		status->PushNeedHandleData(WormStatusHandleType::WaitingDisplay, Gear::Status::StatHandleData(denoteData, true));
 
 		//Subscpribe EventChannel
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Explosion);
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::World);
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::Explosion, s_ExplosionEventHandler);
-		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::World, s_WorldEventHandler);
-
-		Gear::EntitySystem::InActivateComponent(m_ID, { Gear::ComponentID::Physics });
+		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::World, s_WorldEventHandler);
 	}
 
 	Worm::~Worm()

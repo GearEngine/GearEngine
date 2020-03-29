@@ -29,7 +29,7 @@ namespace InGame {
 			if (timer->isExpired() && onTimerFixed)
 			{
 				onTimerFixed = false;
-				timer->SetTimer(3.0f);
+				timer->SetTimer(5.0f);
 				timer->Start();
 				return WorldState::OnPrepareRun;
 			}
@@ -62,8 +62,6 @@ namespace InGame {
 			if (timer->isExpired())
 			{
 				Gear::EventSystem::DispatchEvent(EventType::World, Gear::EntityEvent(EventType::World, WorldData(RunningStart)));
-				timer->SetTimer(World::s_LimitTurnTime);
-				timer->Start();
 				return WorldState::OnRunning;
 			}
 			else

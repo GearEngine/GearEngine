@@ -1,8 +1,6 @@
 #include "wmpch.h"
 #include "World.h"
 
-#include "WorldEventHandler.h"
-
 namespace InGame {
 
 	float World::s_LimitTurnTime = 0;
@@ -20,7 +18,7 @@ namespace InGame {
 
 		//Attach Component
 		Gear::EntitySystem::AttachComponent(m_ID, {
-			Gear::ComponentID::FSM
+			Gear::ComponentID::FSM,	Gear::ComponentID::Status, Gear::ComponentID::Timer
 		});
 
 		//Set Component specific
@@ -29,8 +27,22 @@ namespace InGame {
 			{ WorldState::OnQuitWindow, new WorldOnQuitWindowHandler},	{ WorldState::OnRunning, new WorldOnRunningHandler},
 		});
 
+		Gear::EntitySystem::SetStatus(m_ID, {
+			{ WorldInfo::CurrentWorm, std::string("") }, { WorldInfo::DyeInfo, std::stack<int>()},
+			{ WorldInfo::CurrnetTeam, std::string("") }, { WorldInfo::CurrentTeamColor, TeamColor::Blue }
+		});
+
+		Gear::EntitySystem::SetStatusHanlder(m_ID, {
+			{ WorldStatusHandleType::DisplayWaitingCount, Gear::CreateRef<WorldDisplayWaitingCountHandler>() },
+		});
+
+		auto status = Gear::EntitySystem::GetStatus(m_ID);
+		status->PushNeedHandleData(WorldStatusHandleType::DisplayWaitingCount, Gear::Status::StatHandleData(5.0f, true));
+
 		//Subscpribe EventChannel
-		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::MouseClick);
+		//Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::MouseClick);
+		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::World);
+		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::World, Gear::CreateRef<WorldEventHandler>());
 	}
 
 	World::~World()

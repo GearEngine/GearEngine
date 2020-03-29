@@ -9,6 +9,12 @@ namespace Gear {
 		{
 			for (auto needHandle = m_NeedHandleList.begin(); needHandle != m_NeedHandleList.end(); )
 			{
+				if (needHandle->second.Paused)
+				{
+					needHandle++;
+					continue;
+				}
+
 				m_StatusHandlers[needHandle->first]->Handle(m_ID, needHandle->second, m_StatList);
 				if (needHandle->second.Handled)
 				{
@@ -21,6 +27,38 @@ namespace Gear {
 			}
 		}
 	}
+
+	void Status::PopNeedHandleData(EnumType type)
+	{
+		if (m_NeedHandleList.size())
+		{
+			for (auto needHandle = m_NeedHandleList.begin(); needHandle != m_NeedHandleList.end(); needHandle++)
+			{
+				if (needHandle->first == type)
+				{
+					m_NeedHandleList.erase(needHandle);
+					return;
+				}
+			}
+		}
+	}
+
+	void Status::SetNeedHandleData(EnumType type, bool pause, bool handled)
+	{
+		if (m_NeedHandleList.size())
+		{
+			for (auto needHandle = m_NeedHandleList.begin(); needHandle != m_NeedHandleList.end(); needHandle++)
+			{
+				if (needHandle->first == type)
+				{
+					needHandle->second.Paused = pause;
+					needHandle->second.Handled = handled;
+					return;
+				}
+			}
+		}
+	}
+
 
 	void Status::RegisterStatus(const std::initializer_list<std::pair<const EnumType, std::any>>& statlist)
 	{

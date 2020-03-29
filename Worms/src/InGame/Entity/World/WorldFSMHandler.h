@@ -1,19 +1,10 @@
 #pragma once
 
-#include "WorldState.h"
-#include "Common/EventChannel.h"
+#include "WorldEventHandler.h"
 
 namespace InGame {
 
-	/*
-	OnRunning,
-	OnStart,
-	OnWormsDying,
-	OnPrepareRun,
-	OnWindowSelect,
-	OnItemWindow,
-	OnQuitWindow
-	*/
+	
 
 	class WorldOnStartHandler : public Gear::FSM::InputHandler
 	{

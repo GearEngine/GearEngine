@@ -7,7 +7,7 @@ namespace InGame {
 	class Worm
 	{
 	public:
-		Worm(int count, const InitiateData& initData);
+		Worm(int teamNumber, int wormNumber, const InitiateData& initData);
 		~Worm();
 
 		void Update(Gear::Timestep ts);

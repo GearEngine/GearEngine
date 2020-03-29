@@ -25,6 +25,7 @@ public:
 		Gear::TextureStorage::AddTexture2D("WindMask", Gear::Texture2D::Create("assets/textures/UI/WindMask.png"));
 		Gear::TextureStorage::AddTexture2D("WormNameBorder", Gear::Texture2D::Create("assets/textures/UI/WormNameBorder.png"));
 		Gear::TextureStorage::AddTexture2D("WormHpBorder", Gear::Texture2D::Create("assets/textures/UI/WormHpBorder.png"));
+		Gear::TextureStorage::AddTexture2D("WaitingTimeBorder", Gear::Texture2D::Create("assets/textures/UI/WaitingTimeBorder.png"));
 
 		Gear::TextureStorage::AddFrameTexture2D("BlueWater", Gear::FrameTexture2D::Create("assets/textures/BackGround/BlueWaterWave.png", 1, 12));
 		Gear::TextureStorage::AddFrameTexture2D("Cursor", Gear::FrameTexture2D::Create("assets/textures/Cursor.png", 5, 1));
@@ -52,23 +53,33 @@ public:
 		InGame::InitiateData initData;
 		initData.Mapinfo = InGame::GetMapInfo("City");
 		std::string names[] = { "Sunwoo", "Younghwan", "TaeHwan", "Meongchorriya", "Chanho..TT", "Junsoo"};
-		for (int i = 0; i < 6; ++i)
+		
+		InGame::TeamInfo team1;
+		InGame::TeamInfo team2;
+		team1.TeamName = "Kyung";
+		team1.TeamColor = InGame::TeamColor::Blue;
+		team1.nWorm = 3;
+		team2.TeamName = "Il";
+		team2.TeamColor = InGame::TeamColor::Red;
+		team2.nWorm = 3;
+		initData.Teams.push_back(team1);
+		initData.Teams.push_back(team2);
+
+		for (int i = 0; i < initData.Teams.size(); ++i)
 		{
-			InGame::WormSpecific worm;
-			if (i < 3)
+			for (int j = 0; j < initData.Teams[i].nWorm; ++j)
 			{
-				worm.TeamColor = InGame::WormInfo::ETeamColor::Blue;
-				worm.TeamName = "Kyung";
+				InGame::WormSpecific worm;
+				int flatIndex = i * initData.Teams.size() + j;
+				worm.Name = names[i * initData.Teams.size() + j];
+				worm.AdditionalZRenderOffset = flatIndex * 0.02f;
+				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(-25.0f, 25.0f), 4.0f, ZOrder::z_Worm);
+				worm.Hp = initData.WormMaxHP;
+
+				initData.Teams[i].TotalWormHp += worm.Hp;
+				initData.Teams[i].worms.push_back(worm);
+				initData.nTotalWorms++;
 			}
-			else
-			{
-				worm.TeamColor = InGame::WormInfo::ETeamColor::Red;
-				worm.TeamName = "Il";
-			}
-			worm.WormName = names[i];
-			worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(-25.0f, 25.0f), 4.0f, ZOrder::z_Worm);
-			worm.AdditionalZRenderOffset = i * 0.02f;
-			initData.Worms.push_back(worm);
 		}
 
 		//Create InGame Scene

@@ -8,6 +8,7 @@ namespace InGame {
 		{
 			OnNotMyTurn,
 			OnReady,
+			OnWaiting,
 			OnStart,
 			OnMove,
 			OnIdle,
@@ -46,8 +47,9 @@ namespace InGame {
 
 		enum : unsigned int
 		{
-			DisplayName,
-			DisplayHp,
+			Display,
+			WaitingDisplay,
+			DisplayPosChange,
 			Damaged,
 			FireAngle,
 			FirePower

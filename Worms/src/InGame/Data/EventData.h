@@ -10,7 +10,7 @@ namespace InGame {
 			Explosion,
 			WormMove,
 			MouseMove,
-			MouseClick
+			MouseClick,
 		};
 	}
 
@@ -45,11 +45,12 @@ namespace InGame {
 
 	struct WorldData
 	{
-		WorldData(WorldDataType dataType, int entityID = -1)
-			: DataType(dataType), EntityID(entityID)
+		WorldData(WorldDataType dataType, const std::any& data = 0, int entityID = -1)
+			: DataType(dataType), Data(data), EntityID(entityID)
 		{}
 
 		WorldDataType DataType;
+		std::any Data;
 		int EntityID;
 	};
 
