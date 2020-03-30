@@ -29,15 +29,18 @@ namespace InGame {
 
 		Gear::EntitySystem::SetStatus(m_ID, {
 			{ WorldInfo::CurrentWorm, std::string("") }, { WorldInfo::DyeInfo, std::stack<int>()},
-			{ WorldInfo::CurrnetTeam, std::string("") }, { WorldInfo::CurrentTeamColor, TeamColor::Blue }
+			{ WorldInfo::CurrnetTeam, std::string("") }, { WorldInfo::CurrentTeamColor, TeamColor::Blue },
+			{ WorldInfo::TeamInfo, initData.Teams },	 { WorldInfo::TeamInfoBlink, false }
 		});
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {
 			{ WorldStatusHandleType::DisplayWaitingCount, Gear::CreateRef<WorldDisplayWaitingCountHandler>() },
+			{ WorldStatusHandleType::DisplayTeamInfo, Gear::CreateRef<WorldDisplayTeamInfoHandler>() }
 		});
 
 		auto status = Gear::EntitySystem::GetStatus(m_ID);
-		status->PushNeedHandleData(WorldStatusHandleType::DisplayWaitingCount, Gear::Status::StatHandleData(5.0f, true));
+		status->PushNeedHandleData(WorldStatusHandleType::DisplayTeamInfo,
+			Gear::Status::StatHandleData(WorldTeamInfoDenoteData(Gear::TextureStorage::GetTexture2D("WormNameBorder"))));
 
 		//Subscpribe EventChannel
 		//Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::MouseClick);

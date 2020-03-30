@@ -28,6 +28,7 @@ namespace InGame {
 
 			WaitingTimeBorderOffset,
 			TeamInfo,
+			TeamInfoBlink,
 			DyeInfo
 		};
 	}
@@ -36,8 +37,8 @@ namespace InGame {
 
 		enum : unsigned int
 		{
-			DisplayWaitingCount
-
+			DisplayWaitingCount,
+			DisplayTeamInfo
 		};
 
 	}

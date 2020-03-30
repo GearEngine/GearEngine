@@ -26,6 +26,11 @@ public:
 		Gear::TextureStorage::AddTexture2D("WormNameBorder", Gear::Texture2D::Create("assets/textures/UI/WormNameBorder.png"));
 		Gear::TextureStorage::AddTexture2D("WormHpBorder", Gear::Texture2D::Create("assets/textures/UI/WormHpBorder.png"));
 		Gear::TextureStorage::AddTexture2D("WaitingTimeBorder", Gear::Texture2D::Create("assets/textures/UI/WaitingTimeBorder.png"));
+		Gear::TextureStorage::AddTexture2D("Japan", Gear::Texture2D::Create("assets/textures/UI/Japan.png"));
+		Gear::TextureStorage::AddTexture2D("USA", Gear::Texture2D::Create("assets/textures/UI/USA.png"));
+		Gear::TextureStorage::AddTexture2D("RedHpBar", Gear::Texture2D::Create("assets/textures/UI/RedHp.png"));
+		Gear::TextureStorage::AddTexture2D("BlueHpBar", Gear::Texture2D::Create("assets/textures/UI/BlueHp.png"));
+		Gear::TextureStorage::AddTexture2D("WhiteHpBar", Gear::Texture2D::Create("assets/textures/UI/WhiteHp.png"));
 
 		Gear::TextureStorage::AddFrameTexture2D("BlueWater", Gear::FrameTexture2D::Create("assets/textures/BackGround/BlueWaterWave.png", 1, 12));
 		Gear::TextureStorage::AddFrameTexture2D("Cursor", Gear::FrameTexture2D::Create("assets/textures/Cursor.png", 5, 1));
@@ -59,9 +64,11 @@ public:
 		team1.TeamName = "Kyung";
 		team1.TeamColor = InGame::TeamColor::Blue;
 		team1.nWorm = 3;
+		team1.TeamIcon = Gear::TextureStorage::GetTexture2D("Japan");
 		team2.TeamName = "Il";
 		team2.TeamColor = InGame::TeamColor::Red;
 		team2.nWorm = 3;
+		team2.TeamIcon = Gear::TextureStorage::GetTexture2D("USA");
 		initData.Teams.push_back(team1);
 		initData.Teams.push_back(team2);
 
@@ -75,11 +82,12 @@ public:
 				worm.AdditionalZRenderOffset = flatIndex * 0.02f;
 				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(-25.0f, 25.0f), 4.0f, ZOrder::z_Worm);
 				worm.Hp = initData.WormMaxHP;
-
+				
 				initData.Teams[i].TotalWormHp += worm.Hp;
 				initData.Teams[i].worms.push_back(worm);
 				initData.nTotalWorms++;
 			}
+			initData.Teams[i].CurrentTotalWormHp = initData.Teams[i].TotalWormHp;
 		}
 
 		//Create InGame Scene

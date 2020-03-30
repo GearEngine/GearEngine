@@ -51,6 +51,7 @@ namespace InGame {
 	struct TeamInfo
 	{
 		int nWorm = 0;
+		int CurrentTotalWormHp = 0;
 		int TotalWormHp = 0;
 		std::string TeamName;
 		TeamColor::Color TeamColor;

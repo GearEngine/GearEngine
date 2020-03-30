@@ -15,13 +15,13 @@ namespace Gear {
 					continue;
 				}
 
-				m_StatusHandlers[needHandle->first]->Handle(m_ID, needHandle->second, m_StatList);
 				if (needHandle->second.Handled)
 				{
 					needHandle = m_NeedHandleList.erase(needHandle);
 				}
 				else
 				{
+					m_StatusHandlers[needHandle->first]->Handle(m_ID, needHandle->second, m_StatList);
 					needHandle++;
 				}
 			}

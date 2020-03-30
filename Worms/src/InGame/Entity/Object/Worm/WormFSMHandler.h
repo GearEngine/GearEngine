@@ -132,7 +132,7 @@ namespace InGame {
 			{
 				auto& status = Gear::EntitySystem::GetStatus(entityID);
 				status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(0.5f));
-				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::RunningStart, entityID)));
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::RunningStart, 0, entityID)));
 			}
 			if (cmd.KeyType == WormCommand::Left)
 			{

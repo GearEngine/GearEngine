@@ -33,6 +33,7 @@ namespace Gear {
 		struct WindowData {
 			std::string Title;
 			unsigned int Width, Height;
+			bool FullScreen;
 			bool VSync;
 
 			EventCallbackFn EventCallback;

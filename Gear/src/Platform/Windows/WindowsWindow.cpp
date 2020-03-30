@@ -41,7 +41,7 @@ namespace Gear {
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
-
+		m_Data.FullScreen = props.FullScreen;
 
 		GR_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
@@ -55,7 +55,14 @@ namespace Gear {
 
 		{
 			GR_PROFILE_SCOPE("glfwCreateWindow");
-			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+			if (props.FullScreen)
+			{
+				m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), glfwGetPrimaryMonitor(), nullptr);
+			}
+			else
+			{
+				m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+			}
 			++s_GLFWWindowCount;
 		}
 

@@ -1,7 +1,7 @@
 #include "wmpch.h"
 #include "Timer.h"
 
-#include "TimerFSMHandler.h"
+#include "TimerStatusHandler.h"
 
 namespace InGame {
 
@@ -12,7 +12,8 @@ namespace InGame {
 		Gear::EntitySystem::AttachComponent(m_ID, {
 			Gear::ComponentID::Transform, Gear::ComponentID::Drawer,
 			Gear::ComponentID::Physics,   Gear::ComponentID::Texturer,
-			Gear::ComponentID::Timer,	  Gear::ComponentID::FSM
+			Gear::ComponentID::Timer,	  Gear::ComponentID::FSM,
+			Gear::ComponentID::Status
 		});
 
 		auto timerBoarder = Gear::TextureStorage::GetTexture2D("TimerBorder");
@@ -31,6 +32,17 @@ namespace InGame {
 			{ WorldState::OnPrepareRun, new TimerOnPrepareRunHandler },
 			{ WorldState::OnPrepareNextPhase, new TimerOnPrepareNextPhaseHandler },
 			{ WorldState::OnStart, new TimerOnStartHandler }
+		});
+
+		Gear::EntitySystem::SetStatus(m_ID, {
+			{ TimerInfo::TimerUpPosition, g_TimerUpPos},
+			{ TimerInfo::TimerDownPosition, g_TimerDownPos},
+			{ TimerInfo::TimerCurrentPosition, g_TimerDownPos},
+		});
+
+		Gear::EntitySystem::SetStatusHanlder(m_ID, {
+			{ TimerStatusHandleType::MoveUp, Gear::CreateRef<TimerUpHandler>()},
+			{ TimerStatusHandleType::MoveDown, Gear::CreateRef<TimerDownHandler>()}
 		});
 
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::World);

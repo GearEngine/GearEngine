@@ -11,10 +11,11 @@ namespace Gear {
 		std::string Title;
 		unsigned int Width;
 		unsigned int Height;
+		bool FullScreen;
 
-		WindowProps(const std::string& title = "Gear Engine",
-			unsigned int width = WINDOW_WIDTH, unsigned int height = WINDOW_HEIGHT)
-			: Title(title), Width(width), Height(height)
+		WindowProps(const std::string& title = "Worms Amageddon",
+			unsigned int width = WINDOW_WIDTH, unsigned int height = WINDOW_HEIGHT, bool fullScreen = true)
+			: Title(title), Width(width), Height(height), FullScreen(fullScreen)
 		{}
 	};
 

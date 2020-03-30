@@ -25,6 +25,7 @@ namespace InGame {
 
 		float m_LeftMaskBasis = 0.711f;
 		float m_RightMaskBasis = 0.889f;
+		float WindYPost = -0.95f;
 		float m_maskWidthUnit;
 		float m_maskHeightUnit;
 		float m_WindMax;

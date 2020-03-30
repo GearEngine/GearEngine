@@ -36,10 +36,15 @@ namespace InGame {
 				if (!Gear::EntitySystem::IsComponenetActivate(entityID, Gear::ComponentID::Controller))
 					return;
 
-				Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WormState::OnTurnOver);
+				auto FSM = Gear::EntitySystem::GetFSM(entityID);
+				auto prevState = FSM->GetCurrentState();
+				FSM->SetCurrentState(WormState::OnTurnOver);
+
 				auto status = Gear::EntitySystem::GetStatus(entityID);
 				status->SetNeedHandleData(WormStatusHandleType::Display, false);
-				status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(-0.2f));
+
+				if(prevState != WormState::OnWaiting)
+					status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(-0.2f));
 			}
 		}
 	};
