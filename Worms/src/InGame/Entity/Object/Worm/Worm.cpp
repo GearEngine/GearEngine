@@ -39,12 +39,15 @@ namespace InGame {
 				birthAniOrder.push_back({ 0, 39 - i });
 			}
 		}
+		Gear::Ref<Gear::Animation2D> empty;
 		Gear::EntitySystem::SetAnimator(m_ID, {
-			{ WormState::OnRightFlatBreath, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatBreath"), 0.02f, birthAniOrder, true)},
-			{ WormState::OnLeftFlatBreath,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatBreath"), 0.02f, birthAniOrder, true)},
-			
-			{ WormState::OnLeftFlatMove,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatWork"), 0.02f, true)},
+			{ WormState::OnNotMyTurn,		empty },
+			{ WormState::OnTurnOver,		empty },
+
+			{ WormState::OnRightFlatBreath, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatBreath"), 0.02f, birthAniOrder, true) },
+			{ WormState::OnLeftFlatBreath,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatBreath"), 0.02f, birthAniOrder, true) },
 			{ WormState::OnRightFlatMove,   Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatWork"), 0.02f, true)},
+			{ WormState::OnLeftFlatMove,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatWork"), 0.02f, true)},
 			
 			{ WormState::OnUseItem,			Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.02f, true)},
 		});
@@ -57,6 +60,7 @@ namespace InGame {
 			{ WormState::OnWaiting, new WormOnWaitingHandler }, { WormState::OnNotMyTurn, new WormOnNotMyTurnHandler },
 			{ WormState::OnLeftFlatBreath, new WormOnLeftFlatBreathHandler }, { WormState::OnRightFlatBreath, new WormOnRightFlatBreathHandler },
 			{ WormState::OnLeftFlatMove, new WormOnLeftFlatMoveHandler },	{ WormState::OnRightFlatMove, new WormOnRightFlatMoveHandler },
+			{ WormState::OnTurnOver, new WormOnTurnOverHandler },
 		});
 
 		//Set Controller
@@ -91,7 +95,8 @@ namespace InGame {
 			{ WormInfo::Stat::Name, wormData.Name}, { WormInfo::Stat::TeamColor, teamData.TeamColor }, { WormInfo::Stat::TeamName, teamData.TeamName }, 
 			{ WormInfo::Stat::Hp, wormData.Hp }, { WormInfo::Stat::FireAngleVector , glm::vec2(0.70710678f, 0.70710678f) }, 
 			{ WormInfo::Stat::FirePower, 0.0f}, { WormInfo::Stat::SelectedItem, ItemName::Bazooka }, 
-			{ WormInfo::Stat::NameBorderOffset, 1.26f }, { WormInfo::Stat::HpBorderOffset, 0.7f }, { WormInfo::Stat::ZRenderOffset, wormData.AdditionalZRenderOffset }
+			{ WormInfo::Stat::NameBorderOffset, 1.26f }, { WormInfo::Stat::HpBorderOffset, 0.7f }, { WormInfo::Stat::ZRenderOffset, wormData.AdditionalZRenderOffset },
+			{ WormInfo::Stat::Direction, wormData.Direction}
 		});
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {
@@ -123,6 +128,20 @@ namespace InGame {
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::World);
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::Explosion, s_ExplosionEventHandler);
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::World, s_WorldEventHandler);
+
+		auto animator = Gear::EntitySystem::GetAnimator2D(m_ID);
+		switch (wormData.Direction)
+		{
+		case WormInfo::Direction::LeftFlat:
+			animator->SetCurrentAnimation(WormState::OnLeftFlatBreath);
+			animator->PlayAnimation(WormState::OnLeftFlatBreath);
+			break;
+		case WormInfo::Direction::RightFlat:
+			animator->SetCurrentAnimation(WormState::OnRightFlatBreath);
+			animator->PlayAnimation(WormState::OnRightFlatBreath);
+			break;
+		}
+		
 	}
 
 	Worm::~Worm()

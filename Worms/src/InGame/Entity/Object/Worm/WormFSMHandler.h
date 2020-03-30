@@ -18,7 +18,7 @@ namespace InGame {
 			}
 			Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 0.0f, 0.0f });
 			Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnLeftFlatBreath);
-			return WormState::OnLeftFlatMove;
+			return WormState::OnLeftFlatBreath;
 		}
 	};
 
@@ -134,10 +134,9 @@ namespace InGame {
 		{
 			Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
 			Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 0.0f, 0.0f });
-			Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnLeftFlatBreath);
 			Gear::EntitySystem::GetStatus(entityID)->PopNeedHandleData(WormStatusHandleType::WaitingDisplay);
 
-			return WormState::OnTurnOver;
+			return WormState::OnNotMyTurn;
 		}
 	};
 

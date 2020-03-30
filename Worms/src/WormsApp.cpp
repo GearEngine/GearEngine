@@ -46,8 +46,8 @@ public:
 		
 		Gear::TextureStorage::AddFrameTexture2D("LeftFlatWork", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftFlatWork.png", 1, 15));
 		Gear::TextureStorage::AddFrameTexture2D("RightFlatWork", Gear::FrameTexture2D::Create("assets/textures/Worm/RightFlatWork.png", 1, 15));
-		Gear::TextureStorage::AddFrameTexture2D("LeftFlatBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftFlatBreath.png", 1, 15));
-		Gear::TextureStorage::AddFrameTexture2D("RightFlatBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/RightFlatBreath.png", 1, 15));
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftFlatBreath.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/RightFlatBreath.png", 1, 20));
 	
 		//animation
 		std::vector<std::pair<int, int>> orderVector;
@@ -107,7 +107,8 @@ public:
 				worm.AdditionalZRenderOffset = flatIndex * 0.02f;
 				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(-25.0f, 25.0f), 4.0f, ZOrder::z_Worm);
 				worm.Hp = initData.WormMaxHP;
-				
+				worm.Direction = Gear::Util::GetRndInt(2);
+
 				initData.Teams[i].TotalWormHp += worm.Hp;
 				initData.Teams[i].worms.push_back(worm);
 				initData.nTotalWorms++;

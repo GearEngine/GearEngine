@@ -25,6 +25,26 @@ namespace InGame {
 
 	class WormWorldEventHandler : public Gear::EventHandler
 	{
+		inline void handleAnimator(int entityID, unsigned int prevState)
+		{
+			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			switch (prevState)
+			{
+			case WormState::OnLeftFlatBreath:
+				animator->PlayAnimation(WormState::OnLeftFlatBreath);
+				break;
+			case WormState::OnRightFlatBreath:
+				animator->PlayAnimation(WormState::OnRightFlatBreath);
+				break;
+			case WormState::OnLeftFlatMove:
+				animator->PlayAnimation(WormState::OnLeftFlatBreath);
+				break;
+			case WormState::OnRightFlatMove:
+				animator->PlayAnimation(WormState::OnRightFlatBreath);
+				break;
+			}
+		}
+
 		inline virtual void Handle(std::any data, int entityID) override
 		{
 			GR_TRACE("No.{0} Entity get World event", entityID);
@@ -38,6 +58,8 @@ namespace InGame {
 
 				auto FSM = Gear::EntitySystem::GetFSM(entityID);
 				auto prevState = FSM->GetCurrentState();
+				handleAnimator(entityID, prevState);
+
 				FSM->SetCurrentState(WormState::OnTurnOver);
 
 				auto status = Gear::EntitySystem::GetStatus(entityID);

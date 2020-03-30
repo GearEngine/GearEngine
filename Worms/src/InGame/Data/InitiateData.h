@@ -26,9 +26,19 @@ namespace InGame {
 			NameBorderOffset,
 			HpBorderOffset,
 			ZRenderOffset,
-			StatEnd
+			StatEnd, 
+			Direction
 		};
 		
+		enum Direction : unsigned int
+		{
+			LeftFlat,
+			RightFlat,
+			LeftUp,
+			RightUp,
+			LeftDown,
+			RightDown
+		};
 	}
 
 	namespace TeamColor {
@@ -45,6 +55,7 @@ namespace InGame {
 		std::string Name;
 		glm::vec3 StartPosition;
 		int Hp;
+		unsigned int Direction;
 		float AdditionalZRenderOffset;
 	};
 
