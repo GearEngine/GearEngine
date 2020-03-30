@@ -51,6 +51,11 @@ namespace Gear {
 		m_CurrentAnimation->Resume();
 	}
 
+	bool Animator2D::loopCompleted()
+	{
+		return m_CurrentAnimation->isCompleteOneLoop();
+	}
+
 	void Animator2D::SetFrameX(int frameX)
 	{
 		m_CurrentAnimation->Pause();

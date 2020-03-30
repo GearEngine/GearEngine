@@ -31,12 +31,10 @@ public:
 		Gear::TextureStorage::AddTexture2D("RedHpBar", Gear::Texture2D::Create("assets/textures/UI/RedHp.png"));
 		Gear::TextureStorage::AddTexture2D("BlueHpBar", Gear::Texture2D::Create("assets/textures/UI/BlueHp.png"));
 		Gear::TextureStorage::AddTexture2D("WhiteHpBar", Gear::Texture2D::Create("assets/textures/UI/WhiteHp.png"));
-
+		
 		Gear::TextureStorage::AddFrameTexture2D("BlueWater", Gear::FrameTexture2D::Create("assets/textures/BackGround/BlueWaterWave.png", 1, 12));
 		Gear::TextureStorage::AddFrameTexture2D("Cursor", Gear::FrameTexture2D::Create("assets/textures/Cursor.png", 5, 1));
-		Gear::TextureStorage::AddFrameTexture2D("OnMove", Gear::FrameTexture2D::Create("assets/textures/wwalk.png", 1, 15));
 		Gear::TextureStorage::AddFrameTexture2D("OnUseItem", Gear::FrameTexture2D::Create("assets/textures/wairbakd.png", 1, 10));
-		Gear::TextureStorage::AddFrameTexture2D("OnIdle", Gear::FrameTexture2D::Create("assets/textures/wbrth1.png", 1, 20));
 		Gear::TextureStorage::AddFrameTexture2D("FallenLeaf", Gear::FrameTexture2D::Create("assets/textures/BackGround/FallenLeaf.png", 1, 128));
 		Gear::TextureStorage::AddFrameTexture2D("CloudLarge", Gear::FrameTexture2D::Create("assets/textures/BackGround/CloudLarge.png", 1, 20));
 		Gear::TextureStorage::AddFrameTexture2D("CloudMiddle", Gear::FrameTexture2D::Create("assets/textures/BackGround/CloudMiddle.png", 1, 20));
@@ -46,6 +44,11 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RedFollowArrow", Gear::FrameTexture2D::Create("assets/textures/UI/RedFollowingArrow.png", 1, 16));
 		Gear::TextureStorage::AddFrameTexture2D("BlueFollowArrow", Gear::FrameTexture2D::Create("assets/textures/UI/BlueFollowingArrow.png", 1, 16));
 		
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatWork", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftFlatWork.png", 1, 15));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatWork", Gear::FrameTexture2D::Create("assets/textures/Worm/RightFlatWork.png", 1, 15));
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftFlatBreath.png", 1, 15));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/RightFlatBreath.png", 1, 15));
+	
 		//animation
 		std::vector<std::pair<int, int>> orderVector;
 		for (int i = 0; i < 32; ++i)
@@ -99,8 +102,8 @@ public:
 			for (int j = 0; j < initData.Teams[i].nWorm; ++j)
 			{
 				InGame::WormSpecific worm;
-				int flatIndex = i * initData.Teams.size() + j;
-				worm.Name = names[i * initData.Teams.size() + j];
+				int flatIndex = i * initData.Teams[i].nWorm + j;
+				worm.Name = names[i * initData.Teams[i].nWorm + j];
 				worm.AdditionalZRenderOffset = flatIndex * 0.02f;
 				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(-25.0f, 25.0f), 4.0f, ZOrder::z_Worm);
 				worm.Hp = initData.WormMaxHP;

@@ -38,6 +38,7 @@ namespace Gear {
 		virtual void PauseAnimation() override;
 		virtual void StopAnimation() override;
 		virtual void ResumeAnimation() override;
+		bool loopCompleted();
 
 		void SetFrameX(int frameX);
 		void SetFrameY(int frameY);
@@ -45,6 +46,7 @@ namespace Gear {
 	private:
 		std::unordered_map<EnumType, Ref<Animation2D>> m_AnimationList;
 		Ref<Animation2D> m_CurrentAnimation;
+		bool CompleteOneLoop = false;
 
 		friend class EntitySystem;
 	};

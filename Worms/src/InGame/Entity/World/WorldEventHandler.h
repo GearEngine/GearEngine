@@ -17,7 +17,7 @@ namespace InGame {
 				glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.8f, ZOrder::z_FlatChecker))
 				* glm::scale(glm::mat4(1.0f), glm::vec3(width / 1500.0f, height / 1500.0f, 1.0f));
 
-			WaitingTimeFontPosition = glm::vec3(0.0f, 0.8f, ZOrder::z_FlatFont);
+			WaitingTimeFontPosition = glm::vec3(0.05f, 0.8f, ZOrder::z_FlatFont);
 		}
 
 		glm::mat4 WaitingTimeBorderTranslate;

@@ -9,6 +9,9 @@ namespace InGame {
 		inline void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
 		{
 			auto printData = std::any_cast<WorldDenoteData>(data.Data);
+			static const float blinkDelay = 0.5f;
+			static float elapsedTime = 0.0f;
+			static bool onWhite = false;
 
 			std::string outputStr = std::any_cast<std::string>(statlist[WorldInfo::CurrnetTeam]);
 			float remainTime = Gear::EntitySystem::GetTimer(entityID)->GetRemainTime();
@@ -18,18 +21,33 @@ namespace InGame {
 
 			Gear::Renderer2D::DrawFixedQuad(printData.WaitingTimeBorderTranslate, printData.WaitingTimeBorder);
 
-			switch (teamColor)
+			elapsedTime += Gear::EntitySystem::GetTimer(entityID)->GetTick();
+			if (elapsedTime > blinkDelay)
 			{
-			case InGame::TeamColor::Red:
-				Font::PrintFont(printData.WaitingTimeFontPosition, glm::vec3(0.05f, 0.05f, 1.0f), outputStr, FontType::RedSmall, 0.2f);
-				break;
-			case InGame::TeamColor::Blue:
-				Font::PrintFont(printData.WaitingTimeFontPosition, glm::vec3(0.05f, 0.05f, 1.0f), outputStr, FontType::BlueSmall, 0.02f);
-				break;
+				onWhite = !onWhite;
+				elapsedTime = 0.0f;
 			}
 
+			if (onWhite)
+			{
+				Font::PrintFont(printData.WaitingTimeFontPosition, glm::vec3(0.05f, 0.07f, 1.0f), outputStr, FontType::WhiteSmall, 0.03f);
+			}
+			else 
+			{
+				switch (teamColor)
+				{
+				case InGame::TeamColor::Red:
+					Font::PrintFont(printData.WaitingTimeFontPosition, glm::vec3(0.05f, 0.07f, 1.0f), outputStr, FontType::RedSmall, 0.03f);
+					break;
+				case InGame::TeamColor::Blue:
+					Font::PrintFont(printData.WaitingTimeFontPosition, glm::vec3(0.05f, 0.07f, 1.0f), outputStr, FontType::BlueSmall, 0.03f);
+					break;
+				}
+			}
+			
 			if (remainTime == 0.0f)
 			{
+				onWhite = false;
 				data.Handled = true;
 			}
 		}

@@ -2,23 +2,43 @@
 
 namespace InGame {
 
-	class WormOnMoveHandler : public Gear::FSM::InputHandler
+	class WormOnLeftFlatMoveHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			if (cmd.KeyType == WormCommand::Left)
 			{
 				Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ -1.0f, 0.0f });
-				return WormState::OnMove;
+				return WormState::OnLeftFlatMove;
 			}
 			if (cmd.KeyType == WormCommand::Right)
 			{
 				Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 1.0f, 0.0f });
-				return WormState::OnMove;
+				return WormState::OnRightFlatMove;
 			}
 			Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 0.0f, 0.0f });
-			Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnIdle);
-			return WormState::OnIdle;
+			Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnLeftFlatBreath);
+			return WormState::OnLeftFlatMove;
+		}
+	};
+
+	class WormOnRightFlatMoveHandler : public Gear::FSM::InputHandler
+	{
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			if (cmd.KeyType == WormCommand::Left)
+			{
+				Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ -1.0f, 0.0f });
+				return WormState::OnLeftFlatMove;
+			}
+			if (cmd.KeyType == WormCommand::Right)
+			{
+				Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 1.0f, 0.0f });
+				return WormState::OnRightFlatMove;
+			}
+			Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 0.0f, 0.0f });
+			Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnRightFlatBreath);
+			return WormState::OnRightFlatBreath;
 		}
 	};
 
@@ -26,7 +46,7 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			return WormState::OnIdle;
+			return WormState::OnDye;
 		}
 	};
 
@@ -34,33 +54,45 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			return WormState::OnIdle;
+			return WormState::OnAir;
 		}
 	};
 
-	class WormOnIdleHandler : public Gear::FSM::InputHandler
+	class WormOnLeftFlatBreathHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			if (cmd.KeyType == WormCommand::Left)
 			{
-				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnMove);
-				return WormState::OnMove;
+				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnLeftFlatMove);
+				return WormState::OnLeftFlatMove;
 			}
 			if (cmd.KeyType == WormCommand::Right)
 			{
-				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnMove);
-				return WormState::OnMove;
+				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnRightFlatMove);
+				return WormState::OnRightFlatMove;
 			}
-			//temporary
-			if (cmd.KeyType == WormCommand::ChangeWorm)
+			Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 0.0f, 0.0f });
+			return WormState::OnLeftFlatBreath;
+		}
+	};
+	class WormOnRightFlatBreathHandler : public Gear::FSM::InputHandler
+	{
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			if (cmd.KeyType == WormCommand::Left)
 			{
-				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
-				return WormState::OnTurnOver;
+				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnLeftFlatMove);
+				return WormState::OnLeftFlatMove;
+			}
+			if (cmd.KeyType == WormCommand::Right)
+			{
+				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnRightFlatMove);
+				return WormState::OnRightFlatMove;
 			}
 
 			Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 0.0f, 0.0f });
-			return WormState::OnIdle;
+			return WormState::OnRightFlatBreath;
 		}
 	};
 
@@ -68,7 +100,7 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			return WormState::OnIdle;
+			return WormState::OnLeftFlatBreath;
 		}
 	};
 
@@ -76,7 +108,7 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			return WormState::OnIdle;
+			return WormState::OnLeftFlatBreath;
 		}
 	};
 
@@ -84,7 +116,7 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			return WormState::OnIdle;
+			return WormState::OnLeftFlatBreath;
 		}
 	};
 
@@ -92,7 +124,7 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			return WormState::OnIdle;
+			return WormState::OnLeftFlatBreath;
 		}
 	};
 
@@ -102,7 +134,7 @@ namespace InGame {
 		{
 			Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
 			Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 0.0f, 0.0f });
-			Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnIdle);
+			Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnLeftFlatBreath);
 			Gear::EntitySystem::GetStatus(entityID)->PopNeedHandleData(WormStatusHandleType::WaitingDisplay);
 
 			return WormState::OnTurnOver;
@@ -113,7 +145,7 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			return WormState::OnIdle;
+			return WormState::OnDamaged;
 		}
 	};
 
@@ -138,13 +170,13 @@ namespace InGame {
 			}
 			if (cmd.KeyType == WormCommand::Left)
 			{
-				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnMove);
-				return WormState::OnMove;
+				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnLeftFlatMove);
+				return WormState::OnLeftFlatMove;
 			}
 			if (cmd.KeyType == WormCommand::Right)
 			{
-				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnMove);
-				return WormState::OnMove;
+				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnRightFlatMove);
+				return WormState::OnRightFlatMove;
 			}
 			if (cmd.KeyType == WormCommand::Jump)
 			{

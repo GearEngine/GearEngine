@@ -40,22 +40,23 @@ namespace InGame {
 			}
 		}
 		Gear::EntitySystem::SetAnimator(m_ID, {
-			{ WormState::OnMove,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnMove"), 0.02f, true)},
-			{ WormState::OnUseItem, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.02f, true)},
-			{ WormState::OnIdle,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnIdle"), 0.04f, birthAniOrder, true)},
-			{ WormState::OnNotMyTurn,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnIdle"), 0.04f, birthAniOrder, true)}
+			{ WormState::OnRightFlatBreath, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatBreath"), 0.02f, birthAniOrder, true)},
+			{ WormState::OnLeftFlatBreath,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatBreath"), 0.02f, birthAniOrder, true)},
+			
+			{ WormState::OnLeftFlatMove,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatWork"), 0.02f, true)},
+			{ WormState::OnRightFlatMove,   Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatWork"), 0.02f, true)},
+			
+			{ WormState::OnUseItem,			Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.02f, true)},
 		});
-
-
+		
 		//Set Transform
 		Gear::EntitySystem::SetTransform(m_ID, wormData.StartPosition, 0.0f, initData.WormScale);
 
 		//Set FSM
 		Gear::EntitySystem::SetFSM(m_ID, {
-			{ WormState::OnWaiting, new WormOnWaitingHandler },
-			{ WormState::OnMove, new WormOnMoveHandler },	{ WormState::OnUseItem, new WormOnUseItemHandler },
-			{ WormState::OnIdle, new WormOnIdleHandler },	{ WormState::OnTurnOver, new WormOnTurnOverHandler },
-			{ WormState::OnReady, new WormOnReadyHandler }, { WormState::OnNotMyTurn, new WormOnNotMyTurnHandler }
+			{ WormState::OnWaiting, new WormOnWaitingHandler }, { WormState::OnNotMyTurn, new WormOnNotMyTurnHandler },
+			{ WormState::OnLeftFlatBreath, new WormOnLeftFlatBreathHandler }, { WormState::OnRightFlatBreath, new WormOnRightFlatBreathHandler },
+			{ WormState::OnLeftFlatMove, new WormOnLeftFlatMoveHandler },	{ WormState::OnRightFlatMove, new WormOnRightFlatMoveHandler },
 		});
 
 		//Set Controller

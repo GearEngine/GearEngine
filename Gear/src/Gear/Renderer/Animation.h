@@ -33,6 +33,7 @@ namespace Gear {
 		virtual void Stop() override;
 		virtual void Pause() override;
 		virtual void Resume() override;
+		inline bool isCompleteOneLoop() { return m_CompleteOneLoop; }
 
 		void SetFrameX(uint32_t frameX);
 		void SetFrameY(uint32_t frameY);
@@ -47,6 +48,7 @@ namespace Gear {
 	private:
 		bool m_Loop = false;
 		bool m_OnAnimation = false;
+		bool m_CompleteOneLoop = false;
 
 		float m_Fps = 0.0f;
 		Ref<FrameTexture2D> m_Sprite;

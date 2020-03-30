@@ -74,7 +74,7 @@ namespace InGame {
 
 		MapInfo Mapinfo;
 		glm::vec3 MapPosition = {0.0f, -3.0f, ZOrder::z_Terrain};
-		glm::vec2 WormScale = { 1.5f, 1.5f };
+		glm::vec2 WormScale = { 0.7f, 0.7f };
 		float MapReductionRatio = 37.0f;
 		int WindMax = 30;
 		float CameraSliding = 0.9f;

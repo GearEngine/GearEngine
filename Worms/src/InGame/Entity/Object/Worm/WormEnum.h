@@ -10,8 +10,15 @@ namespace InGame {
 			OnReady,
 			OnWaiting,
 			OnStart,
-			OnMove,
-			OnIdle,
+
+			OnLeftFlatMove, OnRightFlatMove,
+			OnLeftUpMove,   OnRightUpMove,
+			OnLeftDownMove, OnRightDownMove,
+
+			OnLeftFlatBreath,	OnRightFlatBreath,
+			OnLeftUpBreath,		OnRightUpBreath, 
+			OnLeftDownBreath,	OnRightDownBreath,
+
 			OnReadyItemUse,
 			OnUseItem,
 			OnAir,

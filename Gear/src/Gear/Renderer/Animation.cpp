@@ -40,6 +40,7 @@ namespace Gear {
 			return;
 
 		pastTime += ts;
+		m_CompleteOneLoop = false;
 		if (m_Fps <= pastTime)
 		{
 			pastTime = 0.0f;
@@ -48,6 +49,7 @@ namespace Gear {
 				++m_FrameOrderIndex;
 				if (m_FrameOrderIndex >= m_FrameOrder.size())
 				{
+					m_CompleteOneLoop = true;
 					if (m_Loop)
 					{
 						m_FrameOrderIndex = 0;
@@ -72,6 +74,7 @@ namespace Gear {
 				}
 				else if(m_CurrentFrameY >= m_MaxFrameY && m_CurrentFrameX >= m_MaxFrameX - 1)
 				{
+					m_CompleteOneLoop = true;
 					if (m_Loop)
 					{
 						m_CurrentFrameX = 0;
