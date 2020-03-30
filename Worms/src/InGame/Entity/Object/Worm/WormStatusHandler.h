@@ -73,10 +73,12 @@ namespace InGame {
 		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
 		{
 			//time check
+
 			static const float blinkDelay = 0.5f;
 			static float elapsedTime = 0.0f;
 			static bool onWhite = false;
-			elapsedTime += Gear::EntitySystem::GetTimer(entityID)->GetTick();
+			auto timer = Gear::EntitySystem::GetTimer(entityID);
+			elapsedTime += timer->GetTick();
 			if (blinkDelay < elapsedTime)
 			{
 				elapsedTime = 0.0f;
@@ -114,6 +116,33 @@ namespace InGame {
 			namePosition.y += 0.04f;
 			namePosition.z = ZOrder::z_Font + additionalZOffset;
 			
+			//FlowingArrow
+			glm::mat4 arrowTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(originPosition.x, originPosition.y + hpOffset + 1.8f, ZOrder::z_FollowArrow)) *
+				glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.4f, 1.0f));
+			
+			{
+				switch (teamColor)
+				{
+				case InGame::TeamColor::Red:
+				{
+					auto redArrow = Gear::TextureStorage::GetAnimation2D("RedFollowArrow");
+					redArrow->Resume();
+					redArrow->Update(timer->GetTick());
+					Gear::Renderer2D::DrawAnimation(arrowTranslate, redArrow);
+				}
+					break;
+				case InGame::TeamColor::Blue:
+				{
+					auto blueArrow = Gear::TextureStorage::GetAnimation2D("BlueFollowArrow");
+					blueArrow->Resume();
+					blueArrow->Update(timer->GetTick());
+					Gear::Renderer2D::DrawAnimation(arrowTranslate, blueArrow);
+					Gear::Renderer2D::DrawAnimation(arrowTranslate, blueArrow);
+				}
+					break;
+				}
+			}
+
 			if (onWhite)
 			{
 				Font::PrintFont(hpPosition, glm::vec3(0.5f, 0.5f, 1.0f), std::to_string(hp), FontType::WhiteSmall, 0.3f, false);

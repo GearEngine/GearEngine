@@ -23,6 +23,7 @@ namespace ZOrder {
 	const float z_Font = 0.32f;
 	const float z_WaterWaveF = 0.34f;
 	const float z_Worm = 0.7f;
+	const float z_FollowArrow = 0.75f;
 	const float z_Cursor = 0.99f;
 
 }

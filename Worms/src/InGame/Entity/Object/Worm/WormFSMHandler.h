@@ -103,6 +103,8 @@ namespace InGame {
 			Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
 			Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVector({ 0.0f, 0.0f });
 			Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnIdle);
+			Gear::EntitySystem::GetStatus(entityID)->PopNeedHandleData(WormStatusHandleType::WaitingDisplay);
+
 			return WormState::OnTurnOver;
 		}
 	};

@@ -97,7 +97,7 @@ namespace InGame {
 
 					if (onWhite)
 					{
-						Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.04f, 1.0f), teamName, FontType::WhiteSmall, 0.02f);
+						Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::WhiteSmall, 0.02f);
 						Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("WhiteHpBar"));
 					}
 					else
@@ -105,11 +105,11 @@ namespace InGame {
 						switch (teamColor)
 						{
 						case InGame::TeamColor::Red:
-							Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.04f, 1.0f), teamName, FontType::RedSmall, 0.02f);
+							Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::RedSmall, 0.02f);
 							Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("RedHpBar"));
 							break;
 						case InGame::TeamColor::Blue:
-							Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.04f, 1.0f), teamName, FontType::BlueSmall, 0.02f);
+							Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::BlueSmall, 0.02f);
 							Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("BlueHpBar"));
 							break;
 						}
@@ -120,11 +120,11 @@ namespace InGame {
 					switch (teamColor)
 					{
 					case InGame::TeamColor::Red:
-						Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.04f, 1.0f), teamName, FontType::RedSmall, 0.02f);
+						Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::RedSmall, 0.02f);
 						Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("RedHpBar"));
 						break;
 					case InGame::TeamColor::Blue:
-						Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.04f, 1.0f), teamName, FontType::BlueSmall, 0.02f);
+						Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::BlueSmall, 0.02f);
 						Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("BlueHpBar"));
 						break;
 					}

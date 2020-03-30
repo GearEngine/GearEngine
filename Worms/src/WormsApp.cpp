@@ -43,7 +43,29 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("CloudSmall", Gear::FrameTexture2D::Create("assets/textures/BackGround/CloudSmall.png", 1, 20));
 		Gear::TextureStorage::AddFrameTexture2D("WindLeft", Gear::FrameTexture2D::Create("assets/textures/UI/WindLeft.png", 1, 8));
 		Gear::TextureStorage::AddFrameTexture2D("WindRight", Gear::FrameTexture2D::Create("assets/textures/UI/WindRight.png", 1, 8));
-
+		Gear::TextureStorage::AddFrameTexture2D("RedFollowArrow", Gear::FrameTexture2D::Create("assets/textures/UI/RedFollowingArrow.png", 1, 16));
+		Gear::TextureStorage::AddFrameTexture2D("BlueFollowArrow", Gear::FrameTexture2D::Create("assets/textures/UI/BlueFollowingArrow.png", 1, 16));
+		
+		//animation
+		std::vector<std::pair<int, int>> orderVector;
+		for (int i = 0; i < 32; ++i)
+		{
+			if (i < 16) 
+			{
+				orderVector.push_back({ 0, i });
+			}
+			else
+			{
+				orderVector.push_back({ 0, 31 - i });
+			}
+		}
+		auto redArrow = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RedFollowArrow"), 0.02f, orderVector, true);
+		auto blueArrow = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("BlueFollowArrow"), 0.02f, orderVector, true);
+		redArrow->Start();
+		blueArrow->Start();
+		Gear::TextureStorage::AddAnimation("RedFollowArrow", redArrow);
+		Gear::TextureStorage::AddAnimation("BlueFollowArrow", blueArrow);
+		
 		//Load Sound
 		
 		//Create Event Channel
@@ -61,11 +83,11 @@ public:
 		
 		InGame::TeamInfo team1;
 		InGame::TeamInfo team2;
-		team1.TeamName = "Kyung";
+		team1.TeamName = "IL";
 		team1.TeamColor = InGame::TeamColor::Blue;
 		team1.nWorm = 3;
 		team1.TeamIcon = Gear::TextureStorage::GetTexture2D("Japan");
-		team2.TeamName = "Il";
+		team2.TeamName = "KYUNG";
 		team2.TeamColor = InGame::TeamColor::Red;
 		team2.nWorm = 3;
 		team2.TeamIcon = Gear::TextureStorage::GetTexture2D("USA");

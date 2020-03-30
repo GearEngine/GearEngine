@@ -12,7 +12,7 @@
 
 namespace InGame {
 
-	const glm::vec3 g_TimerUpPos(-0.91f, -0.87f, ZOrder::z_FlatChecker);
+	const glm::vec3 g_TimerUpPos(-0.91f, -0.89f, ZOrder::z_FlatChecker);
 	const glm::vec3 g_TimerDownPos(-0.91f, -1.3f, ZOrder::z_FlatChecker);
 
 	namespace TimerInfo {
