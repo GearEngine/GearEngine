@@ -26,11 +26,14 @@ namespace Gear {
 		virtual glm::vec4 GetPixel_From_TextureLocal_With_WorldPosition(Ref<Texture2D> texture, const glm::vec2& worldPosition, const glm::mat4& textureTranslate) = 0;
 		virtual glm::vec4 GetPixel_From_TextureLocal_With_ScreenPosition(Ref<Texture2D> texture, const glm::vec2& screenPosition, const glm::mat4& textureTranslate) = 0;
 		virtual glm::vec4 GetPixel_From_TextureLocal_With_TextureLocalPosition(Ref<Texture2D> texture, const glm::vec2& textureLocalPosition) = 0;
+		virtual glm::vec3 GetPixel_From_TextureLocal_With_TextureRealPosition(Ref<Texture2D> texture, const std::pair<int, int>& textureRealPosition) = 0;
 
 	protected:
 		OrthographicCameraController* m_CameraController = nullptr;
 		glm::vec2 m_WindowResolution;
 		float m_AspectRatio;
+
+
 
 	private:
 		static Coord2DManger* s_Inst;

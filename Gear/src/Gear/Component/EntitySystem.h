@@ -79,7 +79,7 @@ namespace Gear {
 		static void SetStatusHanlder(int entityID, const std::initializer_list<std::pair<const EnumType, Ref<Status::StatusHandler>>>& handlers);
 
 		static void SetPhysics(int entityID, bool activateGravity = false, float gravity = 1.0f, float limitGravityAccelation = 0.0f,  float friction = 0.2f, float elastics = 0.3f);
-		static void SetPixelCollision(int entityID, const glm::vec3& targetPixel, Ref<Texture2D> targetTexture, const glm::mat4& targetTextureTranslate, std::vector<std::pair<float, float>> offsets);
+		static void SetPixelCollision(int entityID, const glm::vec3& targetPixel, Ref<Texture2D> targetTexture, const glm::mat4& targetTextureTranslate, const std::initializer_list<std::pair<const std::string, Ref<Physics2D::PixelCollisionHander>>>& handlers);
 		static void SetMoveLimit(int entityID, const Util::FRect& rect);
 		static void SetSliding(int entityID, float slidingRatio);
 

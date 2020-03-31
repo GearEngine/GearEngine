@@ -22,15 +22,36 @@ namespace Gear {
 		{}
 		virtual ~Physics2D() = default;
 
+		class PixelCollisionHander
+		{
+		public:
+			virtual void Handle(int entitID) = 0;
+			void init(Ref<Texture2D> targetTexutre, glm::vec3* targetPos, glm::vec2* externalVector, glm::mat4* pixelCollisionTargetTextureTranslate, float* gravityAccelation, const glm::vec3& targetPixelColor);
+		
+		protected:
+			Ref<Texture2D> m_TargetTexture;
+			float m_TargetTextureWidth;
+			float m_TargetTextureHeight;
+			class Coord2DManger* s_CoordManager;
+
+			glm::vec3 m_TargetPixelColor;
+			glm::vec3* m_TargetPos;
+			glm::vec2* m_ExternalVector;
+			glm::mat4* m_PixelCollisionTargetTextureTranslate;
+			float* m_GravityAccelation;
+		};
+
 	private:
-		virtual void Update(Timestep ts) override;
+		virtual void Update(Timestep ts) override {};
+		void Update(int entityID, Timestep ts);
 		
 		void RegisterBasicForce(float gravity, float gravityAccelationLimit, float friction, float elastics);
-		void ActivatePixelCollision(const glm::vec3& targetPixel, Ref<Texture2D> collisionTargetTexture, const glm::mat4& textureTranslate, const std::vector<std::pair<float, float>>& offsets);
-		bool JudgePixelCollision();
 		void checkMoveLimit();
+		void UpdateSliding();
+		void UpdateFollow();
 
 	public:
+		void ActivatePixelCollision(const glm::vec3& targetPixel, Ref<Texture2D> collisionTargetTexture, const glm::mat4& textureTranslate, const std::initializer_list<std::pair<const std::string, Ref<Physics2D::PixelCollisionHander>>>& handlers);
 		inline void ActivateGravity() { m_ActivatedGravity = true; }
 		inline void InActivateGravity() { m_ActivatedGravity = false; }
 		inline void SetExternalVector(const glm::vec2& externalVector) { m_ExternalVector = externalVector; }
@@ -39,14 +60,14 @@ namespace Gear {
 		inline void ActivateFollowTarget() { m_ActivatedFollowTarget = true; }
 		inline void InActivateFollowTarget() { m_ActivatedFollowTarget = false; m_FollowTarget = nullptr; }
 		inline void PauseFollowingTarget() { m_ActivatedFollowTarget = false; }
-
+		inline void SetPixelCollisionHandler(const std::string& name) { m_PixelCollisionHandlerName = name; }
+		
 		void ActivateMoveLimit(const Util::FRect& moveLimit);
-		void TargetUpdate(Timestep ts);
-		void UpdateSliding();
-		void UpdateFollow();
 		void SetFollowTarget(glm::vec3* followTargetPos);
 
 	private:
+		int m_PixelCollisionResult = 0;
+
 		bool m_ActivatedFlow = false;
 		bool m_ActivatedGravity = false;
 		bool m_ActivatedSlide = false;
@@ -57,11 +78,15 @@ namespace Gear {
 		glm::vec3* m_TargetPos = nullptr;
 		const glm::vec3* m_FollowTarget = nullptr;
 		glm::vec2 m_ExternalVector = { 0.0f, 0.0f };
+
+		//For pixelCollision
 		glm::vec3 m_TargetPixel;
 		glm::mat4 m_PixelCollisionTargetTextureTranslate;
-		std::vector<std::pair<float, float>> m_PixelCollisionOffsetVector;
-		Util::FRect m_MoveLimit;
+		std::unordered_map<std::string, Ref<PixelCollisionHander>> m_PixelCollisionHandlers;
+		std::string m_PixelCollisionHandlerName;
+		Ref<Texture2D> m_PixelCollisionTargetTexture;
 
+		Util::FRect m_MoveLimit;
 		float m_Timestep;
 		float m_Gravity;
 		float m_Friction;
@@ -69,8 +94,6 @@ namespace Gear {
 		float m_GravityAccelation = 0.0f;
 		float m_SlidingRatio;
 		float m_LimitGravityAccelation;
-
-		Ref<Texture2D> m_PixelCollisionTargetTexture;
 
 		friend class EntitySystem;
 	};

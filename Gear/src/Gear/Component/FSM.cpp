@@ -29,6 +29,10 @@ namespace Gear {
 
 	void FSM::Handle(int entityID, const Command& cmd)
 	{
+		if (m_Handlers.find(m_CurrentState) == m_Handlers.end())
+		{
+			return;
+		}
 		m_CurrentState = m_Handlers[m_CurrentState]->Handle(entityID, cmd);
 	}
 }

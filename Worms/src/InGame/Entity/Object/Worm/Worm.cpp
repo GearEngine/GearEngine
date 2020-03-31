@@ -2,6 +2,7 @@
 #include "Worm.h"
 
 #include "InGame/Entity/Object/Item/ItemEnum.h"
+#include "WormPixelCollisionHandler.h"
 
 namespace InGame {
 
@@ -45,9 +46,18 @@ namespace InGame {
 			{ WormState::OnTurnOver,		empty },
 
 			{ WormState::OnRightFlatBreath, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatBreath"), 0.02f, birthAniOrder, true) },
-			{ WormState::OnLeftFlatBreath,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatBreath"), 0.02f, birthAniOrder, true) },
-			{ WormState::OnRightFlatMove,   Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatWork"), 0.02f, true)},
-			{ WormState::OnLeftFlatMove,    Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatWork"), 0.02f, true)},
+			{ WormState::OnRightUpBreath, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpBreath"), 0.02f, birthAniOrder, true) },
+			{ WormState::OnRightDownBreath, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownBreath"), 0.02f, birthAniOrder, true) },
+			{ WormState::OnLeftFlatBreath, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatBreath"), 0.02f, birthAniOrder, true) },
+			{ WormState::OnLeftUpBreath, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpBreath"), 0.02f, birthAniOrder, true) },
+			{ WormState::OnLeftDownBreath, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownBreath"), 0.02f, birthAniOrder, true) },
+			
+			{ WormState::OnRightFlatMove,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatWalk"), 0.02f, true) },
+			{ WormState::OnRightUpMove,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpWalk"), 0.02f, true) },
+			{ WormState::OnRightDownMove,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownWalk"), 0.02f, true) },
+			{ WormState::OnLeftFlatMove,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatWalk"), 0.02f, true) },
+			{ WormState::OnLeftUpMove,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpWalk"), 0.02f, true) },
+			{ WormState::OnLeftDownMove,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownWalk"), 0.02f, true) },
 			
 			{ WormState::OnUseItem,			Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.02f, true)},
 		});
@@ -55,12 +65,20 @@ namespace InGame {
 		//Set Transform
 		Gear::EntitySystem::SetTransform(m_ID, wormData.StartPosition, 0.0f, initData.WormScale);
 
+		auto LeftBreathHandler = new WormOnLeftBreathHandler;
+		auto RightBreathHandler = new WormOnRightBreathHandler;
+		auto LeftMoveHandler = new WormOnLeftMoveHandler;
+		auto RightMoveHandler = new WormOnRightMoveHandler;
+
 		//Set FSM
 		Gear::EntitySystem::SetFSM(m_ID, {
 			{ WormState::OnWaiting, new WormOnWaitingHandler }, { WormState::OnNotMyTurn, new WormOnNotMyTurnHandler },
-			{ WormState::OnLeftFlatBreath, new WormOnLeftFlatBreathHandler }, { WormState::OnRightFlatBreath, new WormOnRightFlatBreathHandler },
-			{ WormState::OnLeftFlatMove, new WormOnLeftFlatMoveHandler },	{ WormState::OnRightFlatMove, new WormOnRightFlatMoveHandler },
-			{ WormState::OnTurnOver, new WormOnTurnOverHandler },
+			{ WormState::OnLeftFlatBreath, LeftBreathHandler }, { WormState::OnLeftUpBreath, LeftBreathHandler }, { WormState::OnLeftDownBreath, LeftBreathHandler },	
+			{ WormState::OnRightFlatBreath, RightBreathHandler }, { WormState::OnRightUpBreath, RightBreathHandler }, { WormState::OnRightDownBreath, RightBreathHandler },	
+			{ WormState::OnLeftFlatMove, LeftMoveHandler }, { WormState::OnLeftUpMove, LeftMoveHandler }, { WormState::OnLeftDownMove, LeftMoveHandler },
+			{ WormState::OnRightFlatMove, RightMoveHandler }, { WormState::OnRightUpMove, RightMoveHandler }, { WormState::OnRightDownMove, RightMoveHandler },
+			
+			{ WormState::OnAir, new WormOnAirHandler }, { WormState::OnTurnOver, new WormOnTurnOverHandler }
 		});
 
 		//Set Controller
@@ -77,6 +95,7 @@ namespace InGame {
 
 		//Set physics
 		Gear::EntitySystem::SetPhysics(m_ID, true, 10.0f, 10.0f, 0.3f, 0.3f);
+		auto physics = Gear::EntitySystem::GetPhysics2D(m_ID);
 		
 		auto mask = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName + "Mask");
 		int width = mask->GetWidth();
@@ -84,11 +103,13 @@ namespace InGame {
 
 		auto maskTranslate = glm::translate(glm::mat4(1.0f), initData.MapPosition)
 			* glm::scale(glm::mat4(1.0f), { width / initData.MapReductionRatio  , height/ initData.MapReductionRatio , 1.0f });
-
-		Gear::EntitySystem::SetPixelCollision(
-			m_ID, { 255, 255, 255 }, mask, maskTranslate,
-			{ {-0.1f, -0.2f}, {0.1f, -0.2f}, {0.0f, -0.2f} }
-		);
+		Gear::EntitySystem::SetPixelCollision( m_ID, { 255, 255, 255 }, mask, maskTranslate, {
+			{ "Generall", Gear::CreateRef<WormGenerallPCHandler>() },
+			{ "LeftMove", Gear::CreateRef<WormLeftMovePCHandler>() },
+			{ "RightMove", Gear::CreateRef<WormRightMovePCHandler>() },
+		});
+		
+		physics->SetPixelCollisionHandler("Generall");
 
 		//Set status
 		Gear::EntitySystem::SetStatus(m_ID, {

@@ -4,10 +4,45 @@
 
 namespace Gear {
 
-	void Physics2D::Update(Timestep ts)
+	void Physics2D::Update(int entityID, Timestep ts)
 	{
 		m_Timestep = ts;
-		TargetUpdate(ts);
+		
+		if (!m_TargetPos)
+			return;
+
+		if (m_ActivatedGravity)
+		{
+			//LimitGravityAccelation 0 is no limit
+			if (m_GravityAccelation < m_LimitGravityAccelation || m_LimitGravityAccelation == 0.0f)
+			{
+				m_GravityAccelation += m_Gravity * ts;
+			}
+			m_ExternalVector.y -= m_GravityAccelation;
+		}
+
+		if (m_ActivatedFollowTarget)
+		{
+			UpdateFollow();
+		}
+
+		m_TargetPos->x += m_ExternalVector.x * ts;
+		m_TargetPos->y += m_ExternalVector.y * ts;
+
+		if (m_ActivatedPixelCollision)
+		{
+			m_PixelCollisionHandlers[m_PixelCollisionHandlerName]->Handle(entityID);
+		}
+
+		if (m_ActivatedMoveLimitation)
+		{
+			checkMoveLimit();
+		}
+
+		if (m_ActivatedSlide)
+		{
+			UpdateSliding();
+		}
 	}
 
 	void Physics2D::RegisterBasicForce(float gravity, float limitGravityAccelation, float friction, float elastics)
@@ -16,18 +51,6 @@ namespace Gear {
 		m_LimitGravityAccelation = limitGravityAccelation;
 		m_Friction = friction;
 		m_Elastics = elastics;
-	}
-
-	bool Physics2D::JudgePixelCollision()
-	{
-		for (auto& offset : m_PixelCollisionOffsetVector)
-		{
-			auto pixel = Coord2DManger::Get()->GetPixel_From_TextureLocal_With_WorldPosition
-				(m_PixelCollisionTargetTexture, glm::vec2(m_TargetPos->x + offset.first, m_TargetPos->y + offset.second), m_PixelCollisionTargetTextureTranslate);
-			if (pixel.r == m_TargetPixel.r && pixel.g == m_TargetPixel.g && pixel.b == m_TargetPixel.b)
-				return true;
-		}
-		return false;
 	}
 
 	void Physics2D::checkMoveLimit()
@@ -72,63 +95,24 @@ namespace Gear {
 		m_FollowTarget = followTargetPos;
 	}
 
-	void Physics2D::ActivatePixelCollision(const glm::vec3 & targetPixel, Ref<Texture2D> collisionTargetTexture, const glm::mat4& textureTranslate, const std::vector<std::pair<float, float>>& offsets)
+	void Physics2D::ActivatePixelCollision(const glm::vec3 & targetPixel, Ref<Texture2D> collisionTargetTexture, const glm::mat4& textureTranslate, const std::initializer_list<std::pair<const std::string, Ref<Physics2D::PixelCollisionHander>>>& handlers)
 	{
 		m_TargetPixel = targetPixel;
 		m_PixelCollisionTargetTexture = collisionTargetTexture;
 		m_PixelCollisionTargetTextureTranslate = textureTranslate;
-		m_PixelCollisionOffsetVector = offsets;
+		m_PixelCollisionHandlers = handlers;
 		m_ActivatedPixelCollision = true;
+
+		for (auto& handler : m_PixelCollisionHandlers)
+		{
+			handler.second->init(m_PixelCollisionTargetTexture, m_TargetPos, &m_ExternalVector, &m_PixelCollisionTargetTextureTranslate, &m_GravityAccelation, m_TargetPixel);
+		}
 	}
 
 	void Physics2D::ActivateMoveLimit(const Util::FRect & moveLimit)
 	{
 		m_MoveLimit = moveLimit;
 		m_ActivatedMoveLimitation = true;
-	}
-
-	void Physics2D::TargetUpdate(Timestep ts)
-	{
-		if (!m_TargetPos)
-			return;
-
-		if (m_ActivatedGravity)
-		{
-			//LimitGravityAccelation 0 is no limit
-			if (m_GravityAccelation < m_LimitGravityAccelation || m_LimitGravityAccelation == 0.0f)
-			{
-				m_GravityAccelation += m_Gravity * ts;
-			}
-			m_ExternalVector.y -= m_GravityAccelation;
-		}
-
-		if (m_ActivatedFollowTarget)
-		{
-			UpdateFollow();
-		}
-
-		m_TargetPos->x += m_ExternalVector.x * ts;
-		m_TargetPos->y += m_ExternalVector.y * ts;
-
-		if (m_ActivatedPixelCollision)
-		{
-			if (JudgePixelCollision())
-			{
-				m_TargetPos->y -= m_ExternalVector.y * ts;
-				m_GravityAccelation = 0.0f;
-			}
-		}
-
-
-		if (m_ActivatedMoveLimitation)
-		{
-			checkMoveLimit();
-		}
-
-		if (m_ActivatedSlide)
-		{
-			UpdateSliding();
-		}
 	}
 
 	void Physics2D::UpdateFollow()
@@ -141,6 +125,20 @@ namespace Gear {
 
 		m_ExternalVector.x = (m_FollowTarget->x - m_TargetPos->x) * 5;
 		m_ExternalVector.y = (m_FollowTarget->y - m_TargetPos->y) * 5;
+	}
+
+	void Physics2D::PixelCollisionHander::init(Ref<Texture2D> targetTexutre, glm::vec3 * targetPos, glm::vec2 * externalVector, glm::mat4 * pixelCollisionTargetTextureTranslate, float * gravityAccelation, const glm::vec3& targetPixelColor)
+	{
+		m_TargetTexture = targetTexutre;
+		m_TargetPos = targetPos;
+		m_ExternalVector = externalVector;
+		m_PixelCollisionTargetTextureTranslate = pixelCollisionTargetTextureTranslate;
+		m_GravityAccelation = gravityAccelation;
+		m_TargetPixelColor = targetPixelColor;
+
+		m_TargetTextureWidth = targetTexutre->GetWidth();
+		m_TargetTextureHeight = targetTexutre->GetHeight();
+		s_CoordManager = Coord2DManger::Get();
 	}
 
 }

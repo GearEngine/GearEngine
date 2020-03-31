@@ -19,5 +19,8 @@ namespace Gear {
 		virtual glm::vec4 GetPixel_From_TextureLocal_With_WorldPosition(Ref<Texture2D> texture, const glm::vec2& worldPosition, const glm::mat4& textureTranslate) override;
 		virtual glm::vec4 GetPixel_From_TextureLocal_With_ScreenPosition(Ref<Texture2D> texture, const glm::vec2& screenPosition, const glm::mat4& textureTranslate) override;
 		virtual glm::vec4 GetPixel_From_TextureLocal_With_TextureLocalPosition(Ref<Texture2D> texture, const glm::vec2& textureLocalPosition) override;
+		
+		virtual glm::vec3 GetPixel_From_TextureLocal_With_TextureRealPosition(Ref<Texture2D> texture, const std::pair<int, int>& textureRealPosition) override;
+	
 	};
 }

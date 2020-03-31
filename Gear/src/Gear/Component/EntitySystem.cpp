@@ -192,7 +192,7 @@ namespace Gear {
 		{
 			return;
 		}
-		m_Phisics[entityID]->Update(ts);
+		m_Phisics[entityID]->Update(entityID, ts);
 	}
 
 	void EntitySystem::UpdateTransform2D(int entityID, Timestep ts)
@@ -618,7 +618,7 @@ namespace Gear {
 		m_Phisics[entityID]->RegisterBasicForce(gravity, limitGravityAccelation, friction, elastics);
 	}
 
-	void EntitySystem::SetPixelCollision(int entityID, const glm::vec3 & targetPixel, Ref<Texture2D> targetTexture, const glm::mat4 & targetTextureTranslate, std::vector<std::pair<float, float>> offsets)
+	void EntitySystem::SetPixelCollision(int entityID, const glm::vec3 & targetPixel, Ref<Texture2D> targetTexture, const glm::mat4 & targetTextureTranslate, const std::initializer_list<std::pair<const std::string, Ref<Physics2D::PixelCollisionHander>>>& handlers)
 	{
 		auto entity = m_EntityPool.find(entityID);
 		if (entity == m_EntityPool.end())
@@ -631,7 +631,7 @@ namespace Gear {
 			GR_CORE_WARN("{0} entity doesn't have Physics component!", entityID);
 			return;
 		}
-		m_Phisics[entityID]->ActivatePixelCollision(targetPixel, targetTexture, targetTextureTranslate, offsets);
+		m_Phisics[entityID]->ActivatePixelCollision(targetPixel, targetTexture, targetTextureTranslate, handlers);
 	}
 
 	void EntitySystem::SetMoveLimit(int entityID, const Util::FRect & rect)

@@ -43,12 +43,22 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("WindRight", Gear::FrameTexture2D::Create("assets/textures/UI/WindRight.png", 1, 8));
 		Gear::TextureStorage::AddFrameTexture2D("RedFollowArrow", Gear::FrameTexture2D::Create("assets/textures/UI/RedFollowingArrow.png", 1, 16));
 		Gear::TextureStorage::AddFrameTexture2D("BlueFollowArrow", Gear::FrameTexture2D::Create("assets/textures/UI/BlueFollowingArrow.png", 1, 16));
-		
-		Gear::TextureStorage::AddFrameTexture2D("LeftFlatWork", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftFlatWork.png", 1, 15));
-		Gear::TextureStorage::AddFrameTexture2D("RightFlatWork", Gear::FrameTexture2D::Create("assets/textures/Worm/RightFlatWork.png", 1, 15));
+
+		//worm
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftFlatWalk.png", 1, 15));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftUpWalk.png", 1, 15));
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftDownWalk.png", 1, 15));
 		Gear::TextureStorage::AddFrameTexture2D("LeftFlatBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftFlatBreath.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftUpBreath.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftDownBreath.png", 1, 20));
+
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/RightFlatWalk.png", 1, 15));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/RightUpWalk.png", 1, 15));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/RightDownWalk.png", 1, 15));
 		Gear::TextureStorage::AddFrameTexture2D("RightFlatBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/RightFlatBreath.png", 1, 20));
-	
+		Gear::TextureStorage::AddFrameTexture2D("RightUpBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/RightUpBreath.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/RightDownBreath.png", 1, 20));
+
 		//animation
 		std::vector<std::pair<int, int>> orderVector;
 		for (int i = 0; i < 32; ++i)

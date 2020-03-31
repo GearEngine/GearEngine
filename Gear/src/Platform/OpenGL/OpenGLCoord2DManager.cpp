@@ -104,4 +104,27 @@ namespace Gear {
 		return pixel;
 	}
 
+	glm::vec3 OpenGLCoord2DManager::GetPixel_From_TextureLocal_With_TextureRealPosition(Ref<Texture2D> texture, const std::pair<int, int>& textureRealPosition)
+	{
+		glm::vec3 pixel;
+		int result;
+
+		unsigned int* data = (unsigned int*)texture->GetData();
+		int width = texture->GetWidth();
+		int height = texture->GetHeight();
+
+		if (textureRealPosition.first >= width || textureRealPosition.first < 0 || textureRealPosition.second >= height || textureRealPosition.second < 0)
+		{
+			return pixel = { 0.0f, 0.0f, 0.0f };
+		}
+
+		result = data[textureRealPosition.second * width + textureRealPosition.first];
+		unsigned char* divider = (unsigned char*)&result;
+		pixel.r = divider[0];
+		pixel.g = divider[1];
+		pixel.b = divider[2];
+
+		return pixel;
+	}
+
 }
