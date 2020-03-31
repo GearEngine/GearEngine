@@ -4,7 +4,7 @@
 
 namespace Gear {
 
-	Command Controller::s_None = { 0xffffffb, 0xffffffb };
+	Command Controller::s_None = { NONE_COMMAND, NONE_COMMAND };
 
 	Controller::~Controller()
 	{

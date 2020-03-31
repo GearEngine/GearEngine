@@ -26,11 +26,12 @@ namespace InGame {
 			NameBorderOffset,
 			HpBorderOffset,
 			ZRenderOffset,
-			StatEnd, 
-			Direction
+			Direction,
+			MoveSpeed,
+			StatEnd
 		};
 		
-		enum Direction : unsigned int
+		enum DirectionType : unsigned int
 		{
 			LeftFlat,
 			RightFlat,
@@ -55,7 +56,7 @@ namespace InGame {
 		std::string Name;
 		glm::vec3 StartPosition;
 		int Hp;
-		unsigned int Direction;
+		WormInfo::DirectionType Direction;
 		float AdditionalZRenderOffset;
 	};
 
@@ -78,12 +79,13 @@ namespace InGame {
 		float WindowHeight = Gear::WINDOW_HEIGHT;
 		float WindowAspectRatio = Gear::WINDOW_WIDTH / (float)Gear::WINDOW_HEIGHT;
 		
-		float LimitTurnTime = 45.0f;
+		float LimitTurnTime = 10.0f;
 		int LimitSuddenDeathTurn = 10;
 		
 		int WormMaxHP = 100;
 
 		MapInfo Mapinfo;
+		float WormMoveSpeed = 1.0f;
 		glm::vec3 MapPosition = {0.0f, -3.0f, ZOrder::z_Terrain};
 		glm::vec2 WormScale = { 0.7f, 0.7f };
 		float MapReductionRatio = 37.0f;

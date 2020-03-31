@@ -105,7 +105,7 @@ namespace Gear {
 
 		for (auto& handler : m_PixelCollisionHandlers)
 		{
-			handler.second->init(m_PixelCollisionTargetTexture, m_TargetPos, &m_ExternalVector, &m_PixelCollisionTargetTextureTranslate, &m_GravityAccelation, m_TargetPixel);
+			handler.second->init(m_PixelCollisionTargetTexture, m_TargetPos, &m_ExternalVector, &m_ActivatedGravity, &m_PixelCollisionTargetTextureTranslate, &m_GravityAccelation, m_TargetPixel);
 		}
 	}
 
@@ -127,7 +127,7 @@ namespace Gear {
 		m_ExternalVector.y = (m_FollowTarget->y - m_TargetPos->y) * 5;
 	}
 
-	void Physics2D::PixelCollisionHander::init(Ref<Texture2D> targetTexutre, glm::vec3 * targetPos, glm::vec2 * externalVector, glm::mat4 * pixelCollisionTargetTextureTranslate, float * gravityAccelation, const glm::vec3& targetPixelColor)
+	void Physics2D::PixelCollisionHander::init(Ref<Texture2D> targetTexutre, glm::vec3 * targetPos, glm::vec2 * externalVector, bool* activatedGravity, glm::mat4 * pixelCollisionTargetTextureTranslate, float * gravityAccelation, const glm::vec3& targetPixelColor)
 	{
 		m_TargetTexture = targetTexutre;
 		m_TargetPos = targetPos;
@@ -136,6 +136,7 @@ namespace Gear {
 		m_GravityAccelation = gravityAccelation;
 		m_TargetPixelColor = targetPixelColor;
 
+		m_ActivatedGravity = activatedGravity;
 		m_TargetTextureWidth = targetTexutre->GetWidth();
 		m_TargetTextureHeight = targetTexutre->GetHeight();
 		s_CoordManager = Coord2DManger::Get();

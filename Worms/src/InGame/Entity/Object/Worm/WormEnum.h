@@ -10,15 +10,8 @@ namespace InGame {
 			OnReady,
 			OnWaiting,
 			OnStart,
-
-			OnLeftFlatMove, OnRightFlatMove,
-			OnLeftUpMove,   OnRightUpMove,
-			OnLeftDownMove, OnRightDownMove,
-
-			OnLeftFlatBreath,	OnRightFlatBreath,
-			OnLeftUpBreath,		OnRightUpBreath, 
-			OnLeftDownBreath,	OnRightDownBreath,
-
+			OnMove,
+			OnBreath,
 			OnReadyItemUse,
 			OnUseItem,
 			OnAir,
@@ -26,7 +19,15 @@ namespace InGame {
 			OnAirItemUse,
 			OnDamaged,
 			OnDye,
-			OnTurnOver
+			OnTurnOver,
+
+			OnLeftFlatMove, OnRightFlatMove,
+			OnLeftUpMove, OnRightUpMove,
+			OnLeftDownMove, OnRightDownMove,
+
+			OnLeftFlatBreath, OnRightFlatBreath,
+			OnLeftUpBreath, OnRightUpBreath,
+			OnLeftDownBreath, OnRightDownBreath
 		};
 	}
 

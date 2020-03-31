@@ -26,7 +26,7 @@ namespace Gear {
 		{
 		public:
 			virtual void Handle(int entitID) = 0;
-			void init(Ref<Texture2D> targetTexutre, glm::vec3* targetPos, glm::vec2* externalVector, glm::mat4* pixelCollisionTargetTextureTranslate, float* gravityAccelation, const glm::vec3& targetPixelColor);
+			void init(Ref<Texture2D> targetTexutre, glm::vec3* targetPos, glm::vec2* externalVector, bool* activatedGravity, glm::mat4* pixelCollisionTargetTextureTranslate, float* gravityAccelation, const glm::vec3& targetPixelColor);
 		
 		protected:
 			Ref<Texture2D> m_TargetTexture;
@@ -34,6 +34,7 @@ namespace Gear {
 			float m_TargetTextureHeight;
 			class Coord2DManger* s_CoordManager;
 
+			bool* m_ActivatedGravity;
 			glm::vec3 m_TargetPixelColor;
 			glm::vec3* m_TargetPos;
 			glm::vec2* m_ExternalVector;

@@ -18,6 +18,8 @@ namespace Gear {
 
 	#define MOUSEMOVE_COMMAND 0xffffff
 	#define MOUSE_CLICKTYPE   0xfffffc
+	#define NONE_COMMAND      0xffffffb
+
 	class Controller : public Component
 	{
 	public:

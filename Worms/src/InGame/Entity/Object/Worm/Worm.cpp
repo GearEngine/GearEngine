@@ -65,19 +65,10 @@ namespace InGame {
 		//Set Transform
 		Gear::EntitySystem::SetTransform(m_ID, wormData.StartPosition, 0.0f, initData.WormScale);
 
-		auto LeftBreathHandler = new WormOnLeftBreathHandler;
-		auto RightBreathHandler = new WormOnRightBreathHandler;
-		auto LeftMoveHandler = new WormOnLeftMoveHandler;
-		auto RightMoveHandler = new WormOnRightMoveHandler;
-
 		//Set FSM
 		Gear::EntitySystem::SetFSM(m_ID, {
 			{ WormState::OnWaiting, new WormOnWaitingHandler }, { WormState::OnNotMyTurn, new WormOnNotMyTurnHandler },
-			{ WormState::OnLeftFlatBreath, LeftBreathHandler }, { WormState::OnLeftUpBreath, LeftBreathHandler }, { WormState::OnLeftDownBreath, LeftBreathHandler },	
-			{ WormState::OnRightFlatBreath, RightBreathHandler }, { WormState::OnRightUpBreath, RightBreathHandler }, { WormState::OnRightDownBreath, RightBreathHandler },	
-			{ WormState::OnLeftFlatMove, LeftMoveHandler }, { WormState::OnLeftUpMove, LeftMoveHandler }, { WormState::OnLeftDownMove, LeftMoveHandler },
-			{ WormState::OnRightFlatMove, RightMoveHandler }, { WormState::OnRightUpMove, RightMoveHandler }, { WormState::OnRightDownMove, RightMoveHandler },
-			
+			{ WormState::OnMove, new WormOnMoveHandler}, {WormState::OnBreath, new WormOnBreathHandler},			
 			{ WormState::OnAir, new WormOnAirHandler }, { WormState::OnTurnOver, new WormOnTurnOverHandler }
 		});
 
@@ -94,7 +85,7 @@ namespace InGame {
 		Gear::EntitySystem::InActivateComponent(m_ID, { Gear::ComponentID::Controller });
 
 		//Set physics
-		Gear::EntitySystem::SetPhysics(m_ID, true, 10.0f, 10.0f, 0.3f, 0.3f);
+		Gear::EntitySystem::SetPhysics(m_ID, true, 1.0f, 10.0f, 0.3f, 0.3f);
 		auto physics = Gear::EntitySystem::GetPhysics2D(m_ID);
 		
 		auto mask = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName + "Mask");
@@ -104,12 +95,11 @@ namespace InGame {
 		auto maskTranslate = glm::translate(glm::mat4(1.0f), initData.MapPosition)
 			* glm::scale(glm::mat4(1.0f), { width / initData.MapReductionRatio  , height/ initData.MapReductionRatio , 1.0f });
 		Gear::EntitySystem::SetPixelCollision( m_ID, { 255, 255, 255 }, mask, maskTranslate, {
-			{ "Generall", Gear::CreateRef<WormGenerallPCHandler>() },
-			{ "LeftMove", Gear::CreateRef<WormLeftMovePCHandler>() },
-			{ "RightMove", Gear::CreateRef<WormRightMovePCHandler>() },
+			{ "OnAir", Gear::CreateRef<WormOnAirPCHandler>() },
+			{ "Move", Gear::CreateRef<WormMovePCHandler>() },
 		});
 		
-		physics->SetPixelCollisionHandler("Generall");
+		physics->SetPixelCollisionHandler("OnAir");
 
 		//Set status
 		Gear::EntitySystem::SetStatus(m_ID, {
@@ -117,7 +107,7 @@ namespace InGame {
 			{ WormInfo::Stat::Hp, wormData.Hp }, { WormInfo::Stat::FireAngleVector , glm::vec2(0.70710678f, 0.70710678f) }, 
 			{ WormInfo::Stat::FirePower, 0.0f}, { WormInfo::Stat::SelectedItem, ItemName::Bazooka }, 
 			{ WormInfo::Stat::NameBorderOffset, 1.26f }, { WormInfo::Stat::HpBorderOffset, 0.7f }, { WormInfo::Stat::ZRenderOffset, wormData.AdditionalZRenderOffset },
-			{ WormInfo::Stat::Direction, wormData.Direction}
+			{ WormInfo::Stat::Direction, wormData.Direction}, { WormInfo::Stat::MoveSpeed, initData.WormMoveSpeed } 
 		});
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {
@@ -153,11 +143,11 @@ namespace InGame {
 		auto animator = Gear::EntitySystem::GetAnimator2D(m_ID);
 		switch (wormData.Direction)
 		{
-		case WormInfo::Direction::LeftFlat:
+		case WormInfo::DirectionType::LeftFlat:
 			animator->SetCurrentAnimation(WormState::OnLeftFlatBreath);
 			animator->PlayAnimation(WormState::OnLeftFlatBreath);
 			break;
-		case WormInfo::Direction::RightFlat:
+		case WormInfo::DirectionType::RightFlat:
 			animator->SetCurrentAnimation(WormState::OnRightFlatBreath);
 			animator->PlayAnimation(WormState::OnRightFlatBreath);
 			break;

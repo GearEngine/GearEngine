@@ -117,7 +117,7 @@ public:
 				worm.AdditionalZRenderOffset = flatIndex * 0.02f;
 				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(-25.0f, 25.0f), 4.0f, ZOrder::z_Worm);
 				worm.Hp = initData.WormMaxHP;
-				worm.Direction = Gear::Util::GetRndInt(2);
+				worm.Direction = (InGame::WormInfo::DirectionType)Gear::Util::GetRndInt(2);
 
 				initData.Teams[i].TotalWormHp += worm.Hp;
 				initData.Teams[i].worms.push_back(worm);
