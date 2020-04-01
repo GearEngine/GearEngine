@@ -28,6 +28,7 @@ namespace InGame {
 			ZRenderOffset,
 			Direction,
 			MoveSpeed,
+			MyTurn,
 			StatEnd
 		};
 		
@@ -79,7 +80,7 @@ namespace InGame {
 		float WindowHeight = Gear::WINDOW_HEIGHT;
 		float WindowAspectRatio = Gear::WINDOW_WIDTH / (float)Gear::WINDOW_HEIGHT;
 		
-		float LimitTurnTime = 10.0f;
+		float LimitTurnTime = 60.0f;
 		int LimitSuddenDeathTurn = 10;
 		
 		int WormMaxHP = 100;
@@ -87,7 +88,7 @@ namespace InGame {
 		MapInfo Mapinfo;
 		float WormMoveSpeed = 1.0f;
 		glm::vec3 MapPosition = {0.0f, -3.0f, ZOrder::z_Terrain};
-		glm::vec2 WormScale = { 0.7f, 0.7f };
+		glm::vec2 WormScale = { 1.8f, 1.8f };
 		float MapReductionRatio = 37.0f;
 		int WindMax = 30;
 		float CameraSliding = 0.9f;

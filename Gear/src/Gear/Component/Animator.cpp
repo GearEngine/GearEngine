@@ -31,7 +31,7 @@ namespace Gear {
 			GR_CORE_WARN("There is no %s animation", name);
 			return;
 		}
-
+		
 		m_CurrentAnimation = find->second;
 		m_CurrentAnimation->Start();
 	}
@@ -66,6 +66,17 @@ namespace Gear {
 	{
 		m_CurrentAnimation->Pause();
 		m_CurrentAnimation->SetFrameY(frameY);
+	}
+
+	std::pair<int, int> Animator2D::GetFrameIdx()
+	{
+		return { m_CurrentAnimation->GetFrameX(), m_CurrentAnimation->GetFrameY() };
+	}
+
+	void Animator2D::SetFrameIdx(const std::pair<int, int>& index)
+	{
+		m_CurrentAnimation->SetFrameX(index.first);
+		m_CurrentAnimation->SetFrameY(index.second);
 	}
 
 	void Animator2D::Update(Timestep ts)

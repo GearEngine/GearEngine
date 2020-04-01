@@ -44,20 +44,39 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RedFollowArrow", Gear::FrameTexture2D::Create("assets/textures/UI/RedFollowingArrow.png", 1, 16));
 		Gear::TextureStorage::AddFrameTexture2D("BlueFollowArrow", Gear::FrameTexture2D::Create("assets/textures/UI/BlueFollowingArrow.png", 1, 16));
 
-		//worm
-		Gear::TextureStorage::AddFrameTexture2D("LeftFlatWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftFlatWalk.png", 1, 15));
-		Gear::TextureStorage::AddFrameTexture2D("LeftUpWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftUpWalk.png", 1, 15));
-		Gear::TextureStorage::AddFrameTexture2D("LeftDownWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftDownWalk.png", 1, 15));
-		Gear::TextureStorage::AddFrameTexture2D("LeftFlatBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftFlatBreath.png", 1, 20));
-		Gear::TextureStorage::AddFrameTexture2D("LeftUpBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftUpBreath.png", 1, 20));
-		Gear::TextureStorage::AddFrameTexture2D("LeftDownBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/LeftDownBreath.png", 1, 20));
+		//Worm
 
-		Gear::TextureStorage::AddFrameTexture2D("RightFlatWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/RightFlatWalk.png", 1, 15));
-		Gear::TextureStorage::AddFrameTexture2D("RightUpWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/RightUpWalk.png", 1, 15));
-		Gear::TextureStorage::AddFrameTexture2D("RightDownWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/RightDownWalk.png", 1, 15));
-		Gear::TextureStorage::AddFrameTexture2D("RightFlatBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/RightFlatBreath.png", 1, 20));
-		Gear::TextureStorage::AddFrameTexture2D("RightUpBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/RightUpBreath.png", 1, 20));
-		Gear::TextureStorage::AddFrameTexture2D("RightDownBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/RightDownBreath.png", 1, 20));
+		//walk
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/Walk/LeftFlatWalk.png", 1, 15));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/Walk/LeftUpWalk.png", 1, 15));
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/Walk/LeftDownWalk.png", 1, 15));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/Walk/RightFlatWalk.png", 1, 15));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/Walk/RightUpWalk.png", 1, 15));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/Walk/RightDownWalk.png", 1, 15));
+		//Breath
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/Breath/LeftFlatBreath.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/Breath/LeftUpBreath.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/Breath/LeftDownBreath.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/Breath/RightFlatBreath.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/Breath/RightUpBreath.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownBreath", Gear::FrameTexture2D::Create("assets/textures/Worm/Breath/RightDownBreath.png", 1, 20));
+		//Jump
+		Gear::TextureStorage::AddFrameTexture2D("LeftJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftJumping.png", 1, 7));
+		Gear::TextureStorage::AddFrameTexture2D("RightJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightJumping.png", 1, 7));
+		
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatReadyJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightFlatReadyJump.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpReadyJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightUpReadyJump.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownReadyJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightDownReadyJump.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatReadyJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftFlatReadyJump.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpReadyJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftUpReadyJump.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownReadyJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftDownReadyJump.png", 1, 10));
+
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatLand", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightFlatLand.png", 1, 6));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpLand", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightUpLand.png", 1, 6));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownLand", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightDownLand.png", 1, 6));
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatLand", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftFlatLand.png", 1, 6));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpLand", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftUpLand.png", 1, 6));
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownLand", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftDownLand.png", 1, 6));
 
 		//animation
 		std::vector<std::pair<int, int>> orderVector;

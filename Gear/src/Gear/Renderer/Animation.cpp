@@ -33,6 +33,7 @@ namespace Gear {
 
 	void Animation2D::Update(Timestep ts)
 	{
+		m_CompleteOneLoop = false;
 		if (!m_OnAnimation)
 			return;
 
@@ -40,7 +41,6 @@ namespace Gear {
 			return;
 
 		pastTime += ts;
-		m_CompleteOneLoop = false;
 		if (m_Fps <= pastTime)
 		{
 			pastTime = 0.0f;

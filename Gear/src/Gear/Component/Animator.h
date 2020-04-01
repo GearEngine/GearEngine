@@ -43,6 +43,9 @@ namespace Gear {
 		void SetFrameX(int frameX);
 		void SetFrameY(int frameY);
 
+		std::pair<int, int> GetFrameIdx();
+		void SetFrameIdx(const std::pair<int, int>& index);
+
 	private:
 		std::unordered_map<EnumType, Ref<Animation2D>> m_AnimationList;
 		Ref<Animation2D> m_CurrentAnimation;
