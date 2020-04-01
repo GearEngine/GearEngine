@@ -112,43 +112,130 @@ namespace InGame {
 			int basicYOffset = 8;
 			int basicXOffset = 3;
 
-
+			bool leftRightCollision = false;
 			if (m_ExternalVector->x != 0.0f)
 			{
 				float tick = Gear::EntitySystem::GetTimer(entityID)->GetTick();
 				auto status = Gear::EntitySystem::GetStatus(entityID);
-				int xOffset = 3;
+				int xOffset = 5;
 				//right
 				if (m_ExternalVector->x > 0.0f)
 				{
-					auto rightPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX + xOffset, (int)wormOnTexturePositionY });
-					if (rightPixel == m_TargetPixelColor)
+					int yOffset = 5;
+					bool isCollion = false;
+					glm::vec3 rightPixel;
+					auto rightPixelUp = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX + xOffset, (int)wormOnTexturePositionY + yOffset });
+					if (rightPixelUp == m_TargetPixelColor)
 					{
-						m_TargetPos->x -= m_ExternalVector->x * tick * 2.0f;
-						m_ExternalVector->x = -m_ExternalVector->x * 0.9f;
+						isCollion = true;
 					}
+					auto leftDownPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX + xOffset, (int)wormOnTexturePositionY - yOffset });
+					if (leftDownPixel == m_TargetPixelColor)
+					{
+						yOffset = -yOffset;
+						isCollion = true;
+					}
+
+					if (isCollion)
+					{
+						int fixedXpos;
+						for (int i = 1; i <= 10; ++i)
+						{
+							fixedXpos = (int)wormOnTexturePositionX + (xOffset - i);
+							rightPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { fixedXpos, (int)wormOnTexturePositionY + yOffset });
+							if (rightPixel != m_TargetPixelColor)
+							{
+								float localX = (fixedXpos) / m_TargetTextureWidth - 0.5f;
+								m_TargetPos->x = (*m_PixelCollisionTargetTextureTranslate)[0][0] * localX + (*m_PixelCollisionTargetTextureTranslate)[3][0];
+								m_ExternalVector->x = -m_ExternalVector->x * 0.9f;
+								wormOnTexturePositionX -= (i * 0.5f);
+								wormOnTexturePositionX = int(wormOnTexturePositionX + 0.5f);
+								break;
+							}
+						}
+					}
+					//auto rightPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX + xOffset, (int)wormOnTexturePositionY });
+					//if (rightPixel == m_TargetPixelColor)
+					//{
+					//	//adjust Xpos
+					//	int fixedXpos;
+					//	for (int i = 1; i <= 10; ++i)
+					//	{
+					//		fixedXpos = (int)wormOnTexturePositionX + xOffset - i;
+					//		rightPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { fixedXpos, (int)wormOnTexturePositionY });
+					//		if (rightPixel != m_TargetPixelColor)
+					//		{
+					//			float localX = (fixedXpos) / m_TargetTextureWidth - 0.5f;
+					//			m_TargetPos->x = (*m_PixelCollisionTargetTextureTranslate)[0][0] * localX + (*m_PixelCollisionTargetTextureTranslate)[3][0];
+					//			m_ExternalVector->x = -m_ExternalVector->x * 0.9f;
+					//			wormOnTexturePositionX -= (i * 0.5f);
+					//			wormOnTexturePositionX = int(wormOnTexturePositionX - 0.5f);
+					//			break;
+					//		}
+					//	}
+					//}
 				}
 				//left
 				else
 				{
-					auto leftPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX - xOffset, (int)wormOnTexturePositionY });
-					if (leftPixel == m_TargetPixelColor)
+					int yOffset = 5;
+					bool isCollion = false;
+					glm::vec3 leftPixel;
+					auto leftPixelUp = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX - xOffset, (int)wormOnTexturePositionY + yOffset });
+					if (leftPixelUp == m_TargetPixelColor)
 					{
-						m_TargetPos->x += m_ExternalVector->x * tick * 2.0f;
-						m_ExternalVector->x = -m_ExternalVector->x * 0.8f;
+						isCollion = true;
 					}
+					auto leftDownPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX - xOffset, (int)wormOnTexturePositionY - yOffset });
+					if (leftDownPixel == m_TargetPixelColor)
+					{
+						yOffset = -yOffset;
+						isCollion = true;
+					}
+
+					if (isCollion)
+					{
+						int fixedXpos;
+						for (int i = 1; i <= 10; ++i)
+						{
+							fixedXpos = (int)wormOnTexturePositionX - (xOffset - i);
+							leftPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { fixedXpos, (int)wormOnTexturePositionY + yOffset });
+							if (leftPixel != m_TargetPixelColor)
+							{
+								float localX = (fixedXpos) / m_TargetTextureWidth - 0.5f;
+								m_TargetPos->x = (*m_PixelCollisionTargetTextureTranslate)[0][0] * localX + (*m_PixelCollisionTargetTextureTranslate)[3][0];
+								m_ExternalVector->x = -m_ExternalVector->x * 0.9f;
+								wormOnTexturePositionX += (i * 0.5f);
+								wormOnTexturePositionX = int(wormOnTexturePositionX + 0.5f);
+								break;
+							}
+						}
+					}
+				}
+			}
+
+			if (m_ExternalVector->y > 0.0f)
+			{
+				auto rightPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX, (int)wormOnTexturePositionY + basicYOffset });
+				if (rightPixel == m_TargetPixelColor)
+				{
+					m_ExternalVector->y = 0.0f;
+					m_ExternalVector->x = 0.0f;
+					*m_GravityAccelation = 0.0f;
 				}
 			}
 
 			//Position adjust
 			int fixedBottomPos;
 			auto midPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX, (int)wormOnTexturePositionY - basicYOffset });
+			
+			
 			if (midPixel == m_TargetPixelColor)
 			{
 				*m_GravityAccelation = 0.0f;
 				m_ExternalVector->x = 0.0f;
 				m_ExternalVector->y = 0.0f;
-				for (int i = 1; i < 50; ++i)
+				for (int i = 1; i < 40; ++i)
 				{
 					fixedBottomPos = (int)wormOnTexturePositionY - (basicYOffset - i);
 					midPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX, fixedBottomPos });

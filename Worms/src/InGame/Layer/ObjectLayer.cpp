@@ -104,7 +104,6 @@ namespace InGame {
 				break;
 			}
 		}
-		s_curWorm;
 		while (1)
 		{
 			s_curWorm = ++s_WormTurnIndex[s_TeamIter->first];
