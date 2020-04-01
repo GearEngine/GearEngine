@@ -45,7 +45,11 @@ namespace InGame {
 		{
 			jumpAniOrder.push_back({ 0, 6 - i });
 		}
-
+		std::vector<std::pair<int, int>> flipAniOrder;
+		for (int i = 0; i < 22; ++i)
+		{
+			flipAniOrder.push_back({ 0, 21 - i });
+		}
 
 		Gear::Ref<Gear::Animation2D> empty;
 		Gear::EntitySystem::SetAnimator(m_ID, {
@@ -68,6 +72,10 @@ namespace InGame {
 
 			{ WormState::OnRightJump, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightJump"), 0.1f, jumpAniOrder, false) },
 			{ WormState::OnLeftJump, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftJump"), 0.1f, jumpAniOrder, false) },
+			{ WormState::OnRightBackJump, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightJump"), 0.1f, false) },
+			{ WormState::OnLeftBackJump, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftJump"), 0.1f, false) },
+			{ WormState::OnRightBackFlip, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightBackFlip"), 0.017f, flipAniOrder, false) },
+			{ WormState::OnLeftBackFlip, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftBackFlip"), 0.017f, flipAniOrder, false) },
 
 			{ WormState::OnRightFlatJumpReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatReadyJump"), 0.03f, false)},
 			{ WormState::OnRightUpJumpReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpReadyJump"), 0.03f, false)},
@@ -94,7 +102,7 @@ namespace InGame {
 			{ WormState::OnWaiting, new WormOnWaitingHandler }, { WormState::OnNotMyTurn, new WormOnNotMyTurnHandler },
 			{ WormState::OnMove, new WormOnMoveHandler}, {WormState::OnBreath, new WormOnBreathHandler},			
 			{ WormState::OnAir, new WormOnAirHandler }, { WormState::OnTurnOver, new WormOnTurnOverHandler },
-			{ WormState::OnReadyJump, new WormOnReadyJumpHandler }
+			{ WormState::OnReadyJump, new WormOnReadyJumpHandler }, {WormState::OnReadyBackJump, new WormOnReadyBackJumpHandler}
 		});
 
 		//Set Controller

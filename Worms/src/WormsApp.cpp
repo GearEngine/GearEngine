@@ -63,6 +63,8 @@ public:
 		//Jump
 		Gear::TextureStorage::AddFrameTexture2D("LeftJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftJumping.png", 1, 7));
 		Gear::TextureStorage::AddFrameTexture2D("RightJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightJumping.png", 1, 7));
+		Gear::TextureStorage::AddFrameTexture2D("LeftBackFlip", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftBackFlip.png", 1, 22));
+		Gear::TextureStorage::AddFrameTexture2D("RightBackFlip", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightBackFlip.png", 1, 22));
 		
 		Gear::TextureStorage::AddFrameTexture2D("RightFlatReadyJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightFlatReadyJump.png", 1, 10));
 		Gear::TextureStorage::AddFrameTexture2D("RightUpReadyJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightUpReadyJump.png", 1, 10));

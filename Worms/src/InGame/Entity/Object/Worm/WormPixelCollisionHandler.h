@@ -105,15 +105,44 @@ namespace InGame {
 			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 			auto textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(*m_TargetPos, *m_PixelCollisionTargetTextureTranslate);
 
-			float realPositionX = textureLocalPosition.x * m_TargetTextureWidth;
-			float realPositionY = textureLocalPosition.y * m_TargetTextureHeight;
+			float wormOnTexturePositionX = textureLocalPosition.x * m_TargetTextureWidth;
+			float wormOnTexturePositionY = textureLocalPosition.y * m_TargetTextureHeight;
 
+			//collision judge
 			int basicYOffset = 8;
-			int basicXOffset = 4;
-			auto midPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)realPositionX, (int)realPositionY - basicYOffset });
+			int basicXOffset = 3;
+
+
+			if (m_ExternalVector->x != 0.0f)
+			{
+				float tick = Gear::EntitySystem::GetTimer(entityID)->GetTick();
+				auto status = Gear::EntitySystem::GetStatus(entityID);
+				int xOffset = 3;
+				//right
+				if (m_ExternalVector->x > 0.0f)
+				{
+					auto rightPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX + xOffset, (int)wormOnTexturePositionY });
+					if (rightPixel == m_TargetPixelColor)
+					{
+						m_TargetPos->x -= m_ExternalVector->x * tick * 2.0f;
+						m_ExternalVector->x = -m_ExternalVector->x * 0.9f;
+					}
+				}
+				//left
+				else
+				{
+					auto leftPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX - xOffset, (int)wormOnTexturePositionY });
+					if (leftPixel == m_TargetPixelColor)
+					{
+						m_TargetPos->x += m_ExternalVector->x * tick * 2.0f;
+						m_ExternalVector->x = -m_ExternalVector->x * 0.8f;
+					}
+				}
+			}
 
 			//Position adjust
 			int fixedBottomPos;
+			auto midPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX, (int)wormOnTexturePositionY - basicYOffset });
 			if (midPixel == m_TargetPixelColor)
 			{
 				*m_GravityAccelation = 0.0f;
@@ -121,25 +150,26 @@ namespace InGame {
 				m_ExternalVector->y = 0.0f;
 				for (int i = 1; i < 50; ++i)
 				{
-					fixedBottomPos = (int)realPositionY - (basicYOffset - i);
-					midPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)realPositionX, fixedBottomPos });
+					fixedBottomPos = (int)wormOnTexturePositionY - (basicYOffset - i);
+					midPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX, fixedBottomPos });
 					if (midPixel != m_TargetPixelColor)
 					{
-						float localY = (realPositionY + i - 1) / m_TargetTextureHeight - 0.5f;
+						float localY = (wormOnTexturePositionY + i - 1) / m_TargetTextureHeight - 0.5f;
 						m_TargetPos->y = (*m_PixelCollisionTargetTextureTranslate)[1][1] * localY + (*m_PixelCollisionTargetTextureTranslate)[3][1];
 						physics->InActivateGravity();
 
 						//State adjust
-						auto leftPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)realPositionX - basicXOffset,  fixedBottomPos });
-						auto rightPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)realPositionX + basicXOffset, fixedBottomPos });
+						auto leftBottomPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX - basicXOffset,  fixedBottomPos });
+						auto rightBottomPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX + basicXOffset, fixedBottomPos });
 
-						bool leftCollision = leftPixel == m_TargetPixelColor ? true : false;
-						bool rightCollision = rightPixel == m_TargetPixelColor ? true : false;
+						bool leftCollision = leftBottomPixel == m_TargetPixelColor ? true : false;
+						bool rightCollision = rightBottomPixel == m_TargetPixelColor ? true : false;
 						StateHandle(entityID, leftCollision, rightCollision);
 						break;
 					}
 				}
-			}
+			}			
+
 		}
 	};
 
@@ -212,17 +242,14 @@ namespace InGame {
 			//result
 			if (leftOffset == rightOffset)
 			{
-				GR_TRACE("Grad Flat");
 				return Pixel::Gradient::Flat;
 			}
 			if (leftOffset > rightOffset)
 			{
-				GR_TRACE("Grad TopBottom");
 				return Pixel::Gradient::TopBottom;
 			}
 			if (leftOffset < rightOffset)
 			{
-				GR_TRACE("Grad BottomTop");
 				return Pixel::Gradient::BottomTop;
 			}
 		}
@@ -278,7 +305,7 @@ namespace InGame {
 			float wormOnTexturePositionY = textureLocalPosition.y * m_TargetTextureHeight;
 
 			int basicYOffset = 8;
-
+			
 			auto midPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX, (int)wormOnTexturePositionY - basicYOffset });
 			bool midCollision = midPixel == m_TargetPixelColor ? true : false;
 

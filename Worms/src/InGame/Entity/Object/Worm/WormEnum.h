@@ -16,6 +16,7 @@ namespace InGame {
 			OnUseItem,
 			OnAir,
 			OnReadyJump,
+			OnReadyBackJump,
 			OnJump,
 			OnLand,
 			OnAirItemUse,
@@ -32,6 +33,8 @@ namespace InGame {
 			OnLeftDownBreath, OnRightDownBreath,
 
 			OnLeftJump, OnRightJump,
+			OnRightBackJump, OnLeftBackJump,
+			OnRightBackFlip, OnLeftBackFlip,
 
 			OnLeftFlatJumpReady, OnRightFlatJumpReady,
 			OnLeftUpJumpReady, OnRightUpJumpReady,

@@ -9,6 +9,7 @@ namespace InGame {
 			auto status = Gear::EntitySystem::GetStatus(entityID);
 			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			auto timer = Gear::EntitySystem::GetTimer(entityID);
 
 			if (cmd.KeyType == NONE_COMMAND)
 			{
@@ -56,10 +57,17 @@ namespace InGame {
 			}
 			if (cmd.KeyType == WormCommand::Jump)
 			{
-				auto timer = Gear::EntitySystem::GetTimer(entityID);
-				timer->SetTimer(0.1f);
+				physics->SetExternalVector(glm::vec2(0.0f, 0.0f));
+				timer->SetTimer(0.2f);
 				timer->Start();
 				return WormState::OnReadyJump;
+			}
+			if (cmd.KeyType == WormCommand::BackJump)
+			{
+				physics->SetExternalVector(glm::vec2(0.0f, 0.0f));
+				timer->SetTimer(0.2f);
+				timer->Start();
+				return WormState::OnReadyBackJump;
 			}
 
 			return WormState::OnMove;
@@ -89,6 +97,7 @@ namespace InGame {
 			auto status = Gear::EntitySystem::GetStatus(entityID);
 			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			auto timer = Gear::EntitySystem::GetTimer(entityID);
 
 			WormInfo::DirectionType dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Stat::Direction));
 			switch (dir)
@@ -129,10 +138,15 @@ namespace InGame {
 			}
 			if (cmd.KeyType == WormCommand::Jump)
 			{
-				auto timer = Gear::EntitySystem::GetTimer(entityID);
-				timer->SetTimer(0.1f);
+				timer->SetTimer(0.2f);
 				timer->Start();
 				return WormState::OnReadyJump;
+			}
+			if (cmd.KeyType == WormCommand::BackJump)
+			{
+				timer->SetTimer(0.2f);
+				timer->Start();
+				return WormState::OnReadyBackJump;
 			}
 
 			return WormState::OnBreath;
@@ -144,6 +158,7 @@ namespace InGame {
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			static bool onFirst = true;
+			static bool backJump = false;
 			static glm::vec2 externalVector(0.0f, 0.0f);
 
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
@@ -156,36 +171,56 @@ namespace InGame {
 			{
 				if (cmd.KeyType == WormCommand::Jump)
 				{
-
-
+					backJump = true;
+					if(dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat || dir == WormInfo::DirectionType::LeftUp)
+					{
+						externalVector.x = 1.3f;
+					}
+					else
+					{
+						externalVector.x = -1.3f;
+					}
 				}
 			}
 
 			if (animator->loopCompleted())
 			{
 				physics->SetPixelCollisionHandler("OnAir");
-				physics->SetExternalVector(externalVector);
 				physics->ActivateGravity();
+				physics->SetExternalVector(externalVector);
 
 				if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat || dir == WormInfo::DirectionType::LeftUp)
 				{
-					animator->PlayAnimation(WormState::OnLeftJump);
+					if (backJump)
+					{
+						animator->PlayAnimation(WormState::OnLeftBackJump);
+					}
+					else
+					{
+						animator->PlayAnimation(WormState::OnLeftJump);
+					}
 				}
 				else
 				{
-					animator->PlayAnimation(WormState::OnRightJump);
+					if (backJump)
+					{
+						animator->PlayAnimation(WormState::OnRightBackJump);
+					}
+					else 
+					{
+						animator->PlayAnimation(WormState::OnRightJump);
+					}
+					
 				}
-
 				externalVector = { 0.0f, 0.0f };
 				onFirst = true;
+				backJump = false;
 				return WormState::OnJump;
 			}
 
 			if (onFirst)
 			{
 				onFirst = false;
-				float moveSpeed = std::any_cast<float>(status->GetStat(WormInfo::MoveSpeed));
-				
 				externalVector.x = 3.4f;
 				externalVector.y = 4.0f;
 
@@ -218,6 +253,107 @@ namespace InGame {
 			return WormState::OnReadyJump;
 		}
 	};
+
+	class WormOnReadyBackJumpHandler : public Gear::FSM::InputHandler
+	{
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			static bool onFirst = true;
+			static bool backFlip = false;
+			static glm::vec2 externalVector(0.0f, 0.0f);
+
+			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			auto timer = Gear::EntitySystem::GetTimer(entityID);
+			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
+
+			if (timer->isExpired())
+			{
+				if (cmd.KeyType == WormCommand::BackJump)
+				{
+					backFlip = true;
+					if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat || dir == WormInfo::DirectionType::LeftUp)
+					{
+						externalVector.x = 0.7f;
+					}
+					else
+					{
+						externalVector.x = -0.7f;
+					}
+					externalVector.y = 6.0f;
+				}
+			}
+
+			if (animator->loopCompleted())
+			{
+				physics->SetPixelCollisionHandler("OnAir");
+				physics->ActivateGravity();
+				physics->SetExternalVector(externalVector);
+
+				if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat || dir == WormInfo::DirectionType::LeftUp)
+				{
+					if (backFlip)
+					{
+						animator->PlayAnimation(WormState::OnLeftBackFlip);
+					}
+					else
+					{
+						animator->PlayAnimation(WormState::OnLeftBackJump);
+					}
+				}
+				else
+				{
+					if (backFlip)
+					{
+						animator->PlayAnimation(WormState::OnRightBackFlip);
+					}
+					else
+					{
+						animator->PlayAnimation(WormState::OnRightBackJump);
+					}
+				}
+				externalVector = { 0.0f, 0.0f };
+				onFirst = true;
+				backFlip = false;
+				return WormState::OnJump;
+			}
+
+			if (onFirst)
+			{
+				onFirst = false;
+				externalVector.x = -1.3f;
+				externalVector.y = 4.0f;
+
+				switch (dir)
+				{
+				case WormInfo::DirectionType::LeftFlat:
+					externalVector.x = -externalVector.x;
+					animator->PlayAnimation(WormState::OnLeftFlatJumpReady);
+					break;
+				case WormInfo::DirectionType::LeftUp:
+					externalVector.x = -externalVector.x;
+					animator->PlayAnimation(WormState::OnLeftUpJumpReady);
+					break;
+				case WormInfo::DirectionType::LeftDown:
+					externalVector.x = -externalVector.x;
+					animator->PlayAnimation(WormState::OnLeftDownJumpReady);
+					break;
+				case WormInfo::DirectionType::RightFlat:
+					animator->PlayAnimation(WormState::OnRightFlatJumpReady);
+					break;
+				case WormInfo::DirectionType::RightUp:
+					animator->PlayAnimation(WormState::OnRightUpJumpReady);
+					break;
+				case WormInfo::DirectionType::RightDown:
+					animator->PlayAnimation(WormState::OnRightDownJumpReady);
+					break;
+				}
+			}
+			return WormState::OnReadyBackJump;
+		}
+	};
+
 
 	class WormOnReadyItemUseHandler : public Gear::FSM::InputHandler
 	{
@@ -331,9 +467,16 @@ namespace InGame {
 			if (cmd.KeyType == WormCommand::Jump)
 			{
 				auto timer = Gear::EntitySystem::GetTimer(entityID);
-				timer->SetTimer(0.1f);
+				timer->SetTimer(0.2f);
 				timer->Start();
 				return WormState::OnReadyJump;
+			}
+			if (cmd.KeyType == WormCommand::BackJump)
+			{
+				auto timer = Gear::EntitySystem::GetTimer(entityID);
+				timer->SetTimer(0.2f);
+				timer->Start();
+				return WormState::OnReadyBackJump;
 			}
 			return WormState::OnWaiting;
 		}
