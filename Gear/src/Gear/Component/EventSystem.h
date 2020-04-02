@@ -9,7 +9,7 @@ namespace Gear {
 	class EventHandler
 	{
 	public:
-		virtual void Handle(std::any data, int entityID) = 0;
+		virtual void Handle(std::any data, int entityID, bool& handled) = 0;
 	};
 
 	class EventChannel

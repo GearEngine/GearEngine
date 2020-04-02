@@ -45,7 +45,6 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("BlueFollowArrow", Gear::FrameTexture2D::Create("assets/textures/UI/BlueFollowingArrow.png", 1, 16));
 
 		//Worm
-
 		//walk
 		Gear::TextureStorage::AddFrameTexture2D("LeftFlatWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/Walk/LeftFlatWalk.png", 1, 15));
 		Gear::TextureStorage::AddFrameTexture2D("LeftUpWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/Walk/LeftUpWalk.png", 1, 15));
@@ -65,20 +64,46 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RightJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightJumping.png", 1, 7));
 		Gear::TextureStorage::AddFrameTexture2D("LeftBackFlip", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftBackFlip.png", 1, 22));
 		Gear::TextureStorage::AddFrameTexture2D("RightBackFlip", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightBackFlip.png", 1, 22));
-		
 		Gear::TextureStorage::AddFrameTexture2D("RightFlatReadyJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightFlatReadyJump.png", 1, 10));
 		Gear::TextureStorage::AddFrameTexture2D("RightUpReadyJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightUpReadyJump.png", 1, 10));
 		Gear::TextureStorage::AddFrameTexture2D("RightDownReadyJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightDownReadyJump.png", 1, 10));
 		Gear::TextureStorage::AddFrameTexture2D("LeftFlatReadyJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftFlatReadyJump.png", 1, 10));
 		Gear::TextureStorage::AddFrameTexture2D("LeftUpReadyJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftUpReadyJump.png", 1, 10));
 		Gear::TextureStorage::AddFrameTexture2D("LeftDownReadyJump", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftDownReadyJump.png", 1, 10));
-
 		Gear::TextureStorage::AddFrameTexture2D("RightFlatLand", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightFlatLand.png", 1, 6));
 		Gear::TextureStorage::AddFrameTexture2D("RightUpLand", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightUpLand.png", 1, 6));
 		Gear::TextureStorage::AddFrameTexture2D("RightDownLand", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/RightDownLand.png", 1, 6));
 		Gear::TextureStorage::AddFrameTexture2D("LeftFlatLand", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftFlatLand.png", 1, 6));
 		Gear::TextureStorage::AddFrameTexture2D("LeftUpLand", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftUpLand.png", 1, 6));
 		Gear::TextureStorage::AddFrameTexture2D("LeftDownLand", Gear::FrameTexture2D::Create("assets/textures/Worm/Jump/LeftDownLand.png", 1, 6));
+		//Fallen
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/LeftFlatSliding.png", 1, 3));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/LeftUpSliding.png", 1, 3));
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/LeftDownSliding.png", 1, 3));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightFlatSliding.png", 1, 3));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightUpSliding.png", 1, 3));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightDownSliding.png", 1, 3));
+		
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatStuck", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/LeftFlatStuck.png", 1, 49));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpStuck", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/LeftUpStuck.png", 1, 49));
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownStuck", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/LeftDownStuck.png", 1, 49));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatStuck", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightFlatStuck.png", 1, 49));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpStuck", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightUpStuck.png", 1, 49));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownStuck", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightDownStuck.png", 1, 49));
+
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatAfterSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/LeftFlatAfterSliding.png", 1, 22));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpAfterSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/LeftUpAfterSliding.png", 1, 22));
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownAfterSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/LeftDownAfterSliding.png", 1, 22));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatAfterSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightFlatAfterSliding.png", 1, 22));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpAfterSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightUpAfterSliding.png", 1, 22));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownAfterSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightDownAfterSliding.png", 1, 22));
+
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatAfterDamagedSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/LeftFlatAfterDamagedSliding.png", 1, 36));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpAfterDamagedSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/LeftUpAfterDamagedSliding.png", 1, 36));
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownAfterDamagedSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/LeftDownAfterDamagedSliding.png", 1, 36));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatAfterDamagedSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightFlatAfterDamagedSliding.png", 1, 36));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpAfterDamagedSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightUpAfterDamagedSliding.png", 1, 36));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownAfterDamagedSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightDownAfterDamagedSliding.png", 1, 36));
 
 		//animation
 		std::vector<std::pair<int, int>> orderVector;
@@ -136,7 +161,7 @@ public:
 				int flatIndex = i * initData.Teams[i].nWorm + j;
 				worm.Name = names[i * initData.Teams[i].nWorm + j];
 				worm.AdditionalZRenderOffset = flatIndex * 0.02f;
-				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(-25.0f, 25.0f), 4.0f, ZOrder::z_Worm);
+				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(-25.0f, 25.0f), 10.0f, ZOrder::z_Worm);
 				worm.Hp = initData.WormMaxHP;
 				worm.Direction = (InGame::WormInfo::DirectionType)Gear::Util::GetRndInt(2);
 

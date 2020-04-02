@@ -43,7 +43,7 @@ namespace Gear {
 		for (auto& entity : m_Subscriber)
 		{
 			if(entity->m_OnActivate)
-				entity->m_EventQueue.push(event);
+				entity->m_EventQueue.push_back(event);
 		}
 	}
 

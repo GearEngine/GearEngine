@@ -4,20 +4,21 @@ namespace InGame {
 
 	class CameraExplosionEventHandler : public Gear::EventHandler
 	{
-		inline virtual void Handle(std::any data, int entityID) override
+		inline virtual void Handle(std::any data, int entityID, bool& handled) override
 		{
 			GR_TRACE("No.{0} Entity get explosion event!", entityID);
-			
+			handled = true;
 		}
 	};
 
 	class CameraMouseMoveEventHandler : public Gear::EventHandler
 	{
-		inline virtual void Handle(std::any data, int entityID) override
+		inline virtual void Handle(std::any data, int entityID, bool& handled) override
 		{
 			auto mouseMoveData = std::any_cast<MouseMoveData>(data);
 			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 			physics->PauseFollowingTarget();
+			handled = true;
 
 			physics->SetExternalVector(glm::vec2(mouseMoveData.dx, mouseMoveData.dy));
 		}
@@ -25,7 +26,7 @@ namespace InGame {
 
 	class CameraWorldEventHandler : public Gear::EventHandler
 	{
-		inline virtual void Handle(std::any data, int entityID) override
+		inline virtual void Handle(std::any data, int entityID, bool& handled) override
 		{
 			auto worldData = std::any_cast<WorldData>(data);
 			if (worldData.DataType == WorldDataType::NewFollow)
@@ -42,6 +43,7 @@ namespace InGame {
 					physics->SetFollowTarget(&targetTransform->GetPosition());
 					physics->ActivateFollowTarget();
 				}
+				handled = true;
 			}
 		}
 	};

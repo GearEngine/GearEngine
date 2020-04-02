@@ -18,6 +18,10 @@ namespace Gear {
 			{
 				m_GravityAccelation += m_Gravity * ts;
 			}
+			if (m_GravityAccelation > m_LimitGravityAccelation)
+			{
+				m_GravityAccelation = m_LimitGravityAccelation;
+			}
 			m_ExternalVector.y -= m_GravityAccelation;
 		}
 

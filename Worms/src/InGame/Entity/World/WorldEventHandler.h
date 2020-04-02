@@ -76,7 +76,7 @@ namespace InGame {
 
 	class WorldEventHandler : public Gear::EventHandler
 	{
-		inline virtual void Handle(std::any data, int entityID) override
+		inline virtual void Handle(std::any data, int entityID, bool& handled) override
 		{
 			auto worldData = std::any_cast<WorldData>(data);
 			auto status = Gear::EntitySystem::GetStatus(entityID);
@@ -92,14 +92,17 @@ namespace InGame {
 				status->PushNeedHandleData(WorldStatusHandleType::DisplayWaitingCount, Gear::Status::StatHandleData(WorldDenoteData(Gear::TextureStorage::GetTexture2D("WaitingTimeBorder"))));
 				timer->SetTimer(5.0f);
 				timer->Start();
+				handled = true;
 			}
 			if (worldData.DataType == WorldDataType::RunningStart)
 			{
 				status->SetNeedHandleData(WorldStatusHandleType::DisplayWaitingCount, false, true);
+				handled = true;
 			}
 			if (worldData.DataType == WorldDataType::PrepareNextPhase)
 			{
 				status->SetStat(WorldInfo::TeamInfoBlink, false);
+				handled = true;
 			}
 		}
 	};

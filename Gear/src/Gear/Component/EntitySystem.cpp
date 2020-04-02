@@ -61,7 +61,7 @@ namespace Gear {
 		for (auto& entity : m_ActivateEntitys)
 		{
 			int id = entity.first;
-			
+
 			//Event Handle
 			EventHandle(entity.second);
 
@@ -95,21 +95,27 @@ namespace Gear {
 		if (entity->m_EventQueue.empty())
 			return;
 
-		while (!entity->m_EventQueue.empty())
+		for (auto event = entity->m_EventQueue.begin(); event != entity->m_EventQueue.end(); )
 		{
-			auto& event = entity->m_EventQueue.front();
-			EntityEventType type = event.Type;
+			EntityEventType type = event->Type;
 
+			//has no handler
 			if (entity->m_EventHandler.find(type) == entity->m_EventHandler.end())
 			{
-				//GR_CORE_TRACE("Entity NO.{0} has no event:{1} Handler", entity->m_EntityID, type);
-				entity->m_EventQueue.pop();
+				event = entity->m_EventQueue.erase(event);
 				continue;
 			}
-			entity->m_EventHandler[type]->Handle(event.Data, entity->m_EntityID);
-			entity->m_EventQueue.pop();
+
+			entity->m_EventHandler[type]->Handle(event->Data, entity->m_EntityID, event->handled);
+			if (event->handled)
+			{
+				event = entity->m_EventQueue.erase(event);
+			}
+			else
+			{
+				event++;
+			}
 		}
-		
 	}
 
 	void EntitySystem::UpdateController(int entityID, Timestep ts)
@@ -246,8 +252,8 @@ namespace Gear {
 
 		if (m_SpareIDqueue.empty())
 		{
-		 	entityID = s_EntityID++;
-			
+			entityID = s_EntityID++;
+
 			newEntity.reset(new Entity(entityID));
 
 			m_EntityPool.insert({ entityID, newEntity });
@@ -277,7 +283,7 @@ namespace Gear {
 	Ref<Entity> EntitySystem::GetEntity(int entityID)
 	{
 		auto entity = m_EntityPool.find(entityID);
-		if(entity == m_EntityPool.end()) 
+		if (entity == m_EntityPool.end())
 		{
 			GR_CORE_TRACE("{0} entity doesn't exist!", entityID);
 			return nullptr;
@@ -360,25 +366,25 @@ namespace Gear {
 		{
 			switch (id)
 			{
-			case ComponentID::ID::Animator:   
+			case ComponentID::ID::Animator:
 				if (!m_Animators[entityID]) m_Animators[entityID].reset(new Animator2D(entityID));
 				break;
-			case ComponentID::ID::Controller:	
+			case ComponentID::ID::Controller:
 				if (!m_Controllers[entityID]) m_Controllers[entityID].reset(new Controller(entityID));
 				break;
-			case ComponentID::ID::Drawer:		
+			case ComponentID::ID::Drawer:
 				if (!m_Drawer[entityID]) m_Drawer[entityID].reset(new Drawer2D(entityID));
 				break;
-			case ComponentID::ID::FSM:			
+			case ComponentID::ID::FSM:
 				if (!m_FSMs[entityID]) m_FSMs[entityID].reset(new FSM(entityID));
 				break;
-			case ComponentID::ID::Physics:		
+			case ComponentID::ID::Physics:
 				if (!m_Phisics[entityID]) m_Phisics[entityID].reset(new Physics2D(entityID));
 				break;
-			case ComponentID::ID::SoundPlayer:	
+			case ComponentID::ID::SoundPlayer:
 				if (!m_SoundPlayers[entityID]) m_SoundPlayers[entityID].reset(new SoundPlayer(entityID));
 				break;
-			case ComponentID::ID::Transform:	
+			case ComponentID::ID::Transform:
 				if (!m_Transforms[entityID]) m_Transforms[entityID].reset(new Transform2D(entityID));
 				break;
 			case ComponentID::ID::Timer:

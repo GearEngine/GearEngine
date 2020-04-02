@@ -45,10 +45,42 @@ namespace InGame {
 		{
 			jumpAniOrder.push_back({ 0, 6 - i });
 		}
+		std::vector<std::pair<int, int>> landAniOrder;
+		for(int i = 0; i < 6; ++i)
+		{
+			landAniOrder.push_back({ 0, 5 - i });
+		}
 		std::vector<std::pair<int, int>> flipAniOrder;
 		for (int i = 0; i < 22; ++i)
 		{
 			flipAniOrder.push_back({ 0, 21 - i });
+		}
+		std::vector<std::pair<int, int>> stuckAniOrder;
+		for (int i = 0; i < 49; ++i)
+		{
+			stuckAniOrder.push_back({ 0, 48 - i });
+		}
+		std::vector<std::pair<int, int>> afterSlidingAniOrder;
+		for (int i = 0; i < 22; ++i)
+		{
+			afterSlidingAniOrder.push_back({ 0, 21 - i });
+		}
+		std::vector<std::pair<int, int>> afterDamagedSlidingAniOrder;
+		for (int i = 0; i < 36; ++i)
+		{
+			afterDamagedSlidingAniOrder.push_back({ 0, 35 - i });
+		}
+		std::vector<std::pair<int, int>> slidingAniOder;
+		for(int i = 0 ; i < 5; ++i)
+		{
+			if (i < 3)
+			{
+				slidingAniOder.push_back({ 0, i });
+			}
+			else
+			{
+				slidingAniOder.push_back({ 0, 4 - i });
+			}
 		}
 
 		Gear::Ref<Gear::Animation2D> empty;
@@ -84,12 +116,40 @@ namespace InGame {
 			{ WormState::OnLeftUpJumpReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpReadyJump"), 0.03f, false)},
 			{ WormState::OnLeftDownJumpReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownReadyJump"), 0.03f, false)},
 
-			{ WormState::OnRightFlatLand, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatLand"), 0.02f, false)},
-			{ WormState::OnRightUpLand, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpLand"), 0.02f, false)},
-			{ WormState::OnRightDownLand, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownLand"), 0.02f, false)},
-			{ WormState::OnLeftFlatLand, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatLand"), 0.02f, false)},
-			{ WormState::OnLeftUpLand, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpLand"), 0.02f, false)},
-			{ WormState::OnLeftDownLand, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownLand"), 0.02f, false)},
+			{ WormState::OnRightFlatLand, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatLand"), 0.03f,landAniOrder, false)},
+			{ WormState::OnRightUpLand, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpLand"), 0.03f,landAniOrder, false)},
+			{ WormState::OnRightDownLand, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownLand"), 0.03f,landAniOrder, false)},
+			{ WormState::OnLeftFlatLand, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatLand"), 0.03f,landAniOrder, false)},
+			{ WormState::OnLeftUpLand, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpLand"), 0.03f,landAniOrder, false)},
+			{ WormState::OnLeftDownLand, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownLand"), 0.03f,landAniOrder, false)},
+
+			{ WormState::OnLeftFlatSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatSliding"), 0.02f, slidingAniOder, true)},
+			{ WormState::OnLeftUpSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpSliding"), 0.02f, slidingAniOder, true)},
+			{ WormState::OnLeftDownSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownSliding"), 0.02f, slidingAniOder, true)},
+			{ WormState::OnRightFlatSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatSliding"), 0.02f, slidingAniOder, true)},
+			{ WormState::OnRightUpSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpSliding"), 0.02f, slidingAniOder, true)},
+			{ WormState::OnRightDownSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownSliding"), 0.02f, slidingAniOder,true)},
+
+			{ WormState::OnLeftFlatAfterSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatAfterSliding"), 0.02f, afterSlidingAniOrder, false)},
+			{ WormState::OnLeftUpAfterSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpAfterSliding"), 0.02f, afterSlidingAniOrder, false)},
+			{ WormState::OnLeftDownAfterSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownAfterSliding"), 0.02f, afterSlidingAniOrder, false)},
+			{ WormState::OnRightFlatAfterSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatAfterSliding"), 0.02f, afterSlidingAniOrder, false)},
+			{ WormState::OnRightUpAfterSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpAfterSliding"), 0.02f, afterSlidingAniOrder, false)},
+			{ WormState::OnRightDownAfterSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownAfterSliding"), 0.02f, afterSlidingAniOrder, false)},
+
+			{ WormState::OnLeftFlatAfterDamagedSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatAfterDamagedSliding"), 0.02f, afterDamagedSlidingAniOrder, false)},
+			{ WormState::OnLeftUpAfterDamagedSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpAfterDamagedSliding"), 0.02f, afterDamagedSlidingAniOrder, false)},
+			{ WormState::OnLeftDownAfterDamagedSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownAfterDamagedSliding"), 0.02f, afterDamagedSlidingAniOrder,false)},
+			{ WormState::OnRightFlatAfterDamagedSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatAfterDamagedSliding"), 0.02f,afterDamagedSlidingAniOrder, false)},
+			{ WormState::OnRightUpAfterDamagedSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpAfterDamagedSliding"), 0.02f, afterDamagedSlidingAniOrder, false)},
+			{ WormState::OnRightDownAfterDamagedSliding,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownAfterDamagedSliding"), 0.02f, afterDamagedSlidingAniOrder, false)},
+
+			{ WormState::OnLeftFlatStuck,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatStuck"), 0.02f, stuckAniOrder, false)},
+			{ WormState::OnLeftUpStuck,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpStuck"), 0.02f, stuckAniOrder, false)},
+			{ WormState::OnLeftDownStuck,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownStuck"), 0.02f,stuckAniOrder, false)},
+			{ WormState::OnRightFlatStuck,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatStuck"), 0.02f, stuckAniOrder, false)},
+			{ WormState::OnRightUpStuck,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpStuck"), 0.02f, stuckAniOrder, false)},
+			{ WormState::OnRightDownStuck,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownStuck"), 0.02f, stuckAniOrder, false)},
 
 			{ WormState::OnUseItem,	Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.02f, true)},
 		});
@@ -102,7 +162,10 @@ namespace InGame {
 			{ WormState::OnWaiting, new WormOnWaitingHandler }, { WormState::OnNotMyTurn, new WormOnNotMyTurnHandler },
 			{ WormState::OnMove, new WormOnMoveHandler}, {WormState::OnBreath, new WormOnBreathHandler},			
 			{ WormState::OnAir, new WormOnAirHandler }, { WormState::OnTurnOver, new WormOnTurnOverHandler },
-			{ WormState::OnReadyJump, new WormOnReadyJumpHandler }, {WormState::OnReadyBackJump, new WormOnReadyBackJumpHandler}
+			{ WormState::OnReadyJump, new WormOnReadyJumpHandler }, {WormState::OnReadyBackJump, new WormOnReadyBackJumpHandler},
+			{ WormState::OnReadyLand, new WormOnReadyLandHandler }, { WormState::OnReadyFallen, new WormOnReadyFallenHandler},
+			{ WormState::OnLand, new WormOnLandHandler },			{ WormState::OnSliding, new WormOnSlidingHandler },
+			{ WormState::OnStuck, new WormOnStuckHandler },			{ WormState::OnStandUp, new WormOnStandUpHandler }
 		});
 
 		//Set Controller
@@ -118,7 +181,7 @@ namespace InGame {
 		Gear::EntitySystem::InActivateComponent(m_ID, { Gear::ComponentID::Controller });
 
 		//Set physics
-		Gear::EntitySystem::SetPhysics(m_ID, true, 0.7f, 10.0f, 0.3f, 0.3f);
+		Gear::EntitySystem::SetPhysics(m_ID, true, 0.7f, 0.8f, 0.3f, 0.3f);
 		auto physics = Gear::EntitySystem::GetPhysics2D(m_ID);
 		
 		auto mask = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName + "Mask");
@@ -130,6 +193,7 @@ namespace InGame {
 		Gear::EntitySystem::SetPixelCollision( m_ID, { 255, 255, 255 }, mask, maskTranslate, {
 			{ "OnAir", Gear::CreateRef<WormOnAirPCHandler>() },
 			{ "Move", Gear::CreateRef<WormMovePCHandler>() },
+			{ "Sliding", Gear::CreateRef<WormSlidingPCHandler>() },
 		});
 		
 		physics->SetPixelCollisionHandler("OnAir");

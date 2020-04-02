@@ -62,7 +62,14 @@ namespace Gear {
 		inline void InActivateFollowTarget() { m_ActivatedFollowTarget = false; m_FollowTarget = nullptr; }
 		inline void PauseFollowingTarget() { m_ActivatedFollowTarget = false; }
 		inline void SetPixelCollisionHandler(const std::string& name) { m_PixelCollisionHandlerName = name; }
-		
+		inline const std::string& GetPixelCollisionHandlerName() const { return m_PixelCollisionHandlerName; }
+		inline void SetExternalVectorX(float xVector) { m_ExternalVector.x = xVector; }
+		inline void SetExternalVectorY(float yVector) { m_ExternalVector.x = yVector; }
+		inline float& GetExternalVectorX() { return m_ExternalVector.x; }
+		inline float& GetExternalVectorY() { return m_ExternalVector.y; }
+		inline glm::vec2& GetExternalVector() { return m_ExternalVector; }
+		inline void ResetGravityAccelation() { m_GravityAccelation = 0.0f; }
+
 		void ActivateMoveLimit(const Util::FRect& moveLimit);
 		void SetFollowTarget(glm::vec3* followTargetPos);
 

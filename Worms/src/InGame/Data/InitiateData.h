@@ -80,7 +80,7 @@ namespace InGame {
 		float WindowHeight = Gear::WINDOW_HEIGHT;
 		float WindowAspectRatio = Gear::WINDOW_WIDTH / (float)Gear::WINDOW_HEIGHT;
 		
-		float LimitTurnTime = 45.0f;
+		float LimitTurnTime = 10.0f;
 		int LimitSuddenDeathTurn = 10;
 		
 		int WormMaxHP = 100;

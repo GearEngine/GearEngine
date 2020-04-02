@@ -39,13 +39,14 @@ namespace InGame {
 
 	class ObjLayerTransceiver : public Gear::EventHandler
 	{
-		inline virtual void Handle(std::any data, int entityID) override
+		inline virtual void Handle(std::any data, int entityID, bool& handled) override
 		{
 			auto worldData = std::any_cast<WorldData>(data);
 			if (worldData.DataType == WorldDataType::NewStart)
 			{
 				ObjectLayer::ChangeWorm();
 			}
+			handled = true;
 		}
 	};
 

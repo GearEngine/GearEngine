@@ -101,6 +101,8 @@ namespace Gear {
 		if (m_HasFrameOrder)
 		{
 			m_FrameOrderIndex = 0;
+			m_CurrentFrameX = m_FrameOrder[0].first;
+			m_CurrentFrameY = m_FrameOrder[0].second;
 		}
 		else
 		{

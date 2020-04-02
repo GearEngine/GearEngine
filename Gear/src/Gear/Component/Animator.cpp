@@ -31,7 +31,7 @@ namespace Gear {
 			GR_CORE_WARN("There is no %s animation", name);
 			return;
 		}
-		
+
 		m_CurrentAnimation = find->second;
 		m_CurrentAnimation->Start();
 	}

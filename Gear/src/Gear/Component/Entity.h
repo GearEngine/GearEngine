@@ -10,6 +10,7 @@ namespace Gear {
 		{}
 		EntityEventType Type;
 		std::any Data;
+		bool handled = false;
 	};
 
 	class Entity
@@ -25,7 +26,7 @@ namespace Gear {
 		int m_EntityID;
 		bool m_OnActivate;
 
-		std::queue<struct EntityEvent> m_EventQueue;
+		std::vector<struct EntityEvent> m_EventQueue;
 		std::unordered_map<EnumType, Ref<class EventHandler>> m_EventHandler;
 
 		friend class EntitySystem;

@@ -15,10 +15,16 @@ namespace InGame {
 			OnReadyItemUse,
 			OnUseItem,
 			OnAir,
+			OnJump,
 			OnReadyJump,
 			OnReadyBackJump,
-			OnJump,
+			OnReadyLand,
 			OnLand,
+			OnFallen,
+			OnReadyFallen,
+			OnSliding,
+			OnStuck,
+			OnStandUp,
 			OnAirItemUse,
 			OnDamaged,
 			OnDye,
@@ -43,6 +49,22 @@ namespace InGame {
 			OnLeftFlatLand, OnRightFlatLand,
 			OnLeftUpLand, OnRightUpLand,
 			OnLeftDownLand, OnRightDownLand,
+
+			OnLeftFlatSliding, OnRightFlatSliding,
+			OnLeftUpSliding, OnRightUpSliding,
+			OnLeftDownSliding, OnRightDownSliding,
+
+			OnLeftFlatAfterSliding, OnRightFlatAfterSliding,
+			OnLeftUpAfterSliding, OnRightUpAfterSliding,
+			OnLeftDownAfterSliding, OnRightDownAfterSliding,
+
+			OnLeftFlatAfterDamagedSliding, OnRightFlatAfterDamagedSliding,
+			OnLeftUpAfterDamagedSliding, OnRightUpAfterDamagedSliding,
+			OnLeftDownAfterDamagedSliding, OnRightDownAfterDamagedSliding,
+
+			OnLeftFlatStuck, OnRightFlatStuck,
+			OnLeftUpStuck, OnRightUpStuck,
+			OnLeftDownStuck, OnRightDownStuck
 		};
 	}
 
@@ -75,7 +97,7 @@ namespace InGame {
 			DisplayPosChange,
 			Damaged,
 			FireAngle,
-			FirePower
+			FirePower,
 		};
 	}
 
