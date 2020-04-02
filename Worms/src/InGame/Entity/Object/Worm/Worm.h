@@ -14,6 +14,8 @@ namespace InGame {
 		int GetID() { return m_ID; }
 
 	private:
+		void InitWormPosition(WormSpecific& wormData, int wormNumber, int teamNumber, Gear::Ref<Gear::Texture2D> mask, const glm::mat4& maskTranslate);
+		
 		int m_ID;
 
 		static Gear::Ref<WormExplosionEventHandler> s_ExplosionEventHandler;

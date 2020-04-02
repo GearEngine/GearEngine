@@ -23,9 +23,11 @@ namespace InGame {
 
 		//Set Component specific
 		Gear::EntitySystem::SetFSM(m_ID, {
-			{ WorldState::OnStart, new WorldOnStartHandler },			{ WorldState::OnPrepareRun, new WorldOnPrepareRunHandler },
-			{ WorldState::OnQuitWindow, new WorldOnQuitWindowHandler},	{ WorldState::OnRunning, new WorldOnRunningHandler},
+			{ WorldState::InGameStart, new InGemeStartHandler }, { WorldState::OnStart, new WorldOnStartHandler },
+			{ WorldState::OnPrepareRun, new WorldOnPrepareRunHandler }, { WorldState::OnRunning, new WorldOnRunningHandler},
+			{ WorldState::OnQuitWindow, new WorldOnQuitWindowHandler},	
 		});
+		Gear::EntitySystem::GetFSM(m_ID)->SetCurrentState(WorldState::InGameStart);
 
 		Gear::EntitySystem::SetStatus(m_ID, {
 			{ WorldInfo::CurrentWorm, std::string("") }, { WorldInfo::DyeInfo, std::stack<int>()},

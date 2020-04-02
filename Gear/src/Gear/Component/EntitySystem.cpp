@@ -23,6 +23,8 @@ namespace Gear {
 
 	void EntitySystem::Init()
 	{
+		srand(time(NULL));
+
 		m_Animators.resize(10000);
 		m_Controllers.resize(10000);
 		m_Drawer.resize(10000);
@@ -57,7 +59,6 @@ namespace Gear {
 	void EntitySystem::Update(Timestep ts)
 	{
 		GR_PROFILE_FUNCTION();
-
 		for (auto& entity : m_ActivateEntitys)
 		{
 			int id = entity.first;
@@ -106,6 +107,13 @@ namespace Gear {
 				continue;
 			}
 
+			/*if (entity->m_EntityID == 11)
+			{
+				if (type == 0)
+				{
+					GR_CORE_TRACE("Worm11 get event {0}", event->Type);
+				}
+			}*/
 			entity->m_EventHandler[type]->Handle(event->Data, entity->m_EntityID, event->handled);
 			if (event->handled)
 			{

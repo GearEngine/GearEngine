@@ -10,6 +10,8 @@ namespace InGame {
 		std::string Water;
 		std::string Grad;
 		glm::vec4 WaterRGB;
+		float TerrainMaxX;
+		float TerrainMinX;
 	};
 
 	namespace WormInfo {
@@ -113,6 +115,8 @@ namespace InGame {
 			ret.Water = "BlueWater";
 			ret.Grad = "Grad0";
 			ret.WaterRGB = { 50 / 255.0f, 59 / 255.0f, 126 / 255.0f, 1.0f };
+			ret.TerrainMaxX = 25.3f;
+			ret.TerrainMinX = -25.3f;
 			find = true;
 		}
 

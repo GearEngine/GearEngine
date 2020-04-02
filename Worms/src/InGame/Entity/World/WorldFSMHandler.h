@@ -4,6 +4,27 @@
 
 namespace InGame {
 
+	class InGemeStartHandler : public Gear::FSM::InputHandler
+	{
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			static bool inFirst = true;
+			auto timer = Gear::EntitySystem::GetTimer(entityID);
+			if (inFirst)
+			{
+				inFirst = false;
+				timer->SetTimer(1.2f);
+				timer->Start();
+			}
+			if (timer->isExpired())
+			{
+				inFirst = true;
+				return WorldState::OnStart;
+			}
+		
+			return WorldState::InGameStart;
+		}
+	};
 
 	class WorldOnStartHandler : public Gear::FSM::InputHandler
 	{

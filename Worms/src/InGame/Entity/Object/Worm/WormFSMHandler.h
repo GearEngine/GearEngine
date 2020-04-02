@@ -164,7 +164,7 @@ namespace InGame {
 		{
 			static bool onFirst = true;
 			static bool backJump = false;
-			static glm::vec2 externalVector(0.0f, 0.0f);
+			static glm::vec2 externalVector(3.4f, 4.0f);
 
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			auto timer = Gear::EntitySystem::GetTimer(entityID);
@@ -217,7 +217,7 @@ namespace InGame {
 					}
 					
 				}
-				externalVector = { 0.0f, 0.0f };
+				externalVector = { 3.4f, 4.0f };
 				onFirst = true;
 				backJump = false;
 				return WormState::OnJump;
@@ -226,8 +226,6 @@ namespace InGame {
 			if (onFirst)
 			{
 				onFirst = false;
-				externalVector.x = 3.4f;
-				externalVector.y = 4.0f;
 
 				switch (dir)
 				{
@@ -446,12 +444,47 @@ namespace InGame {
 			auto& externalX = physics->GetExternalVectorX();
 			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
 
+			
 			if (physics->GetPixelCollisionHandlerName() == "Sliding")
 			{
-				externalX *= 0.95f;
+				if (dir == WormInfo::DirectionType::RightDown || dir == WormInfo::DirectionType::LeftDown)
+				{
+					externalX *= 0.98f;
+				}
+				else if (dir == WormInfo::DirectionType::RightUp || dir == WormInfo::DirectionType::LeftUp)
+				{
+					externalX *= 0.92f;
+				}
+				else
+				{
+					externalX *= 0.95f;
+				}
+
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->SetCurrentAnimation(WormState::OnLeftFlatSliding);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->SetCurrentAnimation(WormState::OnRightFlatSliding);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->SetCurrentAnimation(WormState::OnLeftUpSliding);
+					break;
+				case InGame::WormInfo::RightUp:
+					animator->SetCurrentAnimation(WormState::OnRightUpSliding);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->SetCurrentAnimation(WormState::OnLeftDownSliding);
+					break;
+				case InGame::WormInfo::RightDown:
+					animator->SetCurrentAnimation(WormState::OnRightDownSliding);
+					break;
+				}
+				animator->ResumeAnimation();
 			}
 
-			if (std::abs(externalX) < 0.1f)
+			if (std::abs(externalX) < 0.2f)
 			{
 				switch (dir)
 				{
@@ -512,7 +545,7 @@ namespace InGame {
 			externalVector.y = 0.0f;
 			physics->ResetGravityAccelation();
 
-			if (std::abs(verticalRatio) < 4.0f)
+			if (std::abs(verticalRatio) < 8.0f)
 			{
 				externalVector.x = 0.0f;
 				switch (dir)
@@ -539,28 +572,7 @@ namespace InGame {
 				return WormState::OnStuck;
 			}
 			else
-			{
-				switch (dir)
-				{
-				case InGame::WormInfo::LeftFlat:
-					animator->PlayAnimation(WormState::OnLeftFlatSliding);
-					break;
-				case InGame::WormInfo::RightFlat:
-					animator->PlayAnimation(WormState::OnRightFlatSliding);
-					break;
-				case InGame::WormInfo::LeftUp:
-					animator->PlayAnimation(WormState::OnLeftUpSliding);
-					break;
-				case InGame::WormInfo::RightUp:
-					animator->PlayAnimation(WormState::OnRightUpSliding);
-					break;
-				case InGame::WormInfo::LeftDown:
-					animator->PlayAnimation(WormState::OnLeftDownSliding);
-					break;
-				case InGame::WormInfo::RightDown:
-					animator->PlayAnimation(WormState::OnRightDownSliding);
-					break;
-				}
+			{				
 				physics->SetPixelCollisionHandler("Sliding");
 				return WormState::OnSliding;
 			}
@@ -640,6 +652,7 @@ namespace InGame {
 				break;
 			}
 			animator->ResumeAnimation();
+			Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
 
 			firstIn = true;
 			return WormState::OnNotMyTurn;

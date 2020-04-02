@@ -155,6 +155,14 @@ namespace InGame {
 		});
 		
 		//Set Transform
+		auto mask = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName + "Mask");
+		int width = mask->GetWidth();
+		int height = mask->GetHeight();
+
+		auto maskTranslate = glm::translate(glm::mat4(1.0f), initData.MapPosition)
+			* glm::scale(glm::mat4(1.0f), { width / initData.MapReductionRatio  , height / initData.MapReductionRatio , 1.0f });
+
+		InitWormPosition(wormData, wormNumber, teamNumber, mask, maskTranslate);
 		Gear::EntitySystem::SetTransform(m_ID, wormData.StartPosition, 0.0f, initData.WormScale);
 
 		//Set FSM
@@ -181,22 +189,16 @@ namespace InGame {
 		Gear::EntitySystem::InActivateComponent(m_ID, { Gear::ComponentID::Controller });
 
 		//Set physics
-		Gear::EntitySystem::SetPhysics(m_ID, true, 0.7f, 0.8f, 0.3f, 0.3f);
+		Gear::EntitySystem::SetPhysics(m_ID, false, 0.7f, 0.8f, 0.3f, 0.3f);
 		auto physics = Gear::EntitySystem::GetPhysics2D(m_ID);
 		
-		auto mask = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName + "Mask");
-		int width = mask->GetWidth();
-		int height = mask->GetHeight();
-
-		auto maskTranslate = glm::translate(glm::mat4(1.0f), initData.MapPosition)
-			* glm::scale(glm::mat4(1.0f), { width / initData.MapReductionRatio  , height/ initData.MapReductionRatio , 1.0f });
 		Gear::EntitySystem::SetPixelCollision( m_ID, { 255, 255, 255 }, mask, maskTranslate, {
 			{ "OnAir", Gear::CreateRef<WormOnAirPCHandler>() },
 			{ "Move", Gear::CreateRef<WormMovePCHandler>() },
 			{ "Sliding", Gear::CreateRef<WormSlidingPCHandler>() },
 		});
 		
-		physics->SetPixelCollisionHandler("OnAir");
+		physics->SetPixelCollisionHandler("Move");
 
 		//Set status
 		Gear::EntitySystem::SetStatus(m_ID, {
@@ -264,5 +266,40 @@ namespace InGame {
 
 	}
 
+	void Worm::InitWormPosition(WormSpecific& wormData, int wormNumber, int teamNumber, Gear::Ref<Gear::Texture2D> mask ,const glm::mat4& maskTranslate)
+	{
+		auto coordManager = Gear::Coord2DManger::Get();
+		float width = (float)mask->GetWidth();
+		float height = (float)mask->GetHeight();
+
+		glm::vec3 targetPxiel(255, 255, 255);
+		auto textureLocalPosition = coordManager->GetTextureLocalPosition_From_WorlPosition(glm::vec2(wormData.StartPosition.x, wormData.StartPosition.y), maskTranslate);
+		float wormOnTexturePositionX = textureLocalPosition.x * width;
+		float wormOnTexturePositionY = textureLocalPosition.y * height;
+
+		int basicYOffset = 8;
+		while (1)
+		{
+			int fixedBottomPos = (int)wormOnTexturePositionY - basicYOffset;
+			auto pixel = coordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(mask, { (int)wormOnTexturePositionX, fixedBottomPos });
+
+			if (pixel == targetPxiel)
+			{
+				for (int i = 1; i < 40; ++i)
+				{
+					fixedBottomPos = (int)wormOnTexturePositionY - (basicYOffset - i);
+					pixel = coordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(mask, { (int)wormOnTexturePositionX, fixedBottomPos });
+					
+					if (pixel != targetPxiel)
+					{
+						float localY = (fixedBottomPos - 1) / height - 0.5f;
+						wormData.StartPosition.y = maskTranslate[1][1] * localY + maskTranslate[3][1];
+						return;
+					}
+				}
+			}
+			basicYOffset += 10;
+		}
+	}
 }
 

@@ -13,7 +13,8 @@ namespace InGame {
 			OnWindowSelect,
 			OnItemWindow,
 			OnQuitWindow,
-			OnPrepareNextPhase
+			OnPrepareNextPhase,
+			InGameStart
 		};
 
 	}

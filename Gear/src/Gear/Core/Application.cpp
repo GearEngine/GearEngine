@@ -7,7 +7,7 @@
 #include "Gear/Manager/Sound.h"
 #include "Gear/Manager/CoordManager.h"
 #include "Gear/Component/EntitySystem.h"
-
+#include "Gear/Renderer/Renderer2D.h"
 #include <GLFW/glfw3.h>
 
 namespace Gear {
@@ -84,7 +84,13 @@ namespace Gear {
 					EntitySystem::Update(timestep);
 					EntitySystem::Render();
 				}
-
+				static float alpha = 1.0f;
+				if (alpha > 0.0f)
+				{
+					alpha -= 0.005f;
+					Renderer2D::DrawQuad({ 0.0f, 0.0f, 1.0f }, { 100.0f, 100.0f }, { 0.0f, 0.0f, 0.001f, alpha });
+				}
+				
 				/*m_ImGuilayer->Begin();
 				{
 					GR_PROFILE_SCOPE("LayerStack OnImGuiRender");

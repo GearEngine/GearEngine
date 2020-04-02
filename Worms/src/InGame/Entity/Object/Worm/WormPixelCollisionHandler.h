@@ -184,7 +184,7 @@ namespace InGame {
 				}
 				else
 				{
-					if (*m_GravityAccelation <= 0.65f)
+					if (*m_GravityAccelation <= 0.7f)
 					{
 						FSM->SetCurrentState(WormState::OnReadyLand);
 					}
@@ -193,7 +193,6 @@ namespace InGame {
 						FSM->SetCurrentState(WormState::OnReadyFallen);
 					}
 				}
-				
 
 				for (int i = 1; i < 40; ++i)
 				{
@@ -560,7 +559,7 @@ namespace InGame {
 			if (m_ExternalVector->x > 0.0f)
 			{
 				bool isCollion = false;
-				auto rightPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX + xOffset, (int)wormOnTexturePositionY + 4 });
+				auto rightPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX + xOffset, (int)wormOnTexturePositionY + 6 });
 				isCollion = rightPixel == m_TargetPixelColor ? true : false;
 				if (isCollion)
 				{
@@ -568,7 +567,7 @@ namespace InGame {
 					for (int i = 1; i <= 10; ++i)
 					{
 						fixedXpos = (int)wormOnTexturePositionX + (xOffset - i);
-						rightPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { fixedXpos, (int)wormOnTexturePositionY + 4 });
+						rightPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { fixedXpos, (int)wormOnTexturePositionY + 6 });
 						if (rightPixel != m_TargetPixelColor)
 						{
 							float localX = (fixedXpos) / m_TargetTextureWidth - 0.5f;
@@ -633,7 +632,7 @@ namespace InGame {
 						break;
 					}
 					//On Air
-					if (bottomDist == 10)
+					if (bottomDist == 20)
 					{
 						physics->ActivateGravity();
 						physics->SetPixelCollisionHandler("OnAir");

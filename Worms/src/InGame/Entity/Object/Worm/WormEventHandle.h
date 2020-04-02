@@ -79,7 +79,7 @@ namespace InGame {
 
 				FSM->SetCurrentState(WormState::OnTurnOver);
 				auto timer = Gear::EntitySystem::GetTimer(entityID);
-				timer->SetTimer(2.0f);
+				timer->SetTimer(1.5f);
 				timer->Start();
 
 				auto status = Gear::EntitySystem::GetStatus(entityID);
@@ -88,6 +88,11 @@ namespace InGame {
 				if(prevState != WormState::OnWaiting)
 					status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(-0.2f));
 			}
+			if (worldData.DataType == WorldDataType::NewStart)
+			{
+				handled = true;
+			}
+
 		}
 	};
 

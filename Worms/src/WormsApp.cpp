@@ -161,7 +161,7 @@ public:
 				int flatIndex = i * initData.Teams[i].nWorm + j;
 				worm.Name = names[i * initData.Teams[i].nWorm + j];
 				worm.AdditionalZRenderOffset = flatIndex * 0.02f;
-				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(-25.0f, 25.0f), 10.0f, ZOrder::z_Worm);
+				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(initData.Mapinfo.TerrainMinX, initData.Mapinfo.TerrainMaxX), 5.0f, ZOrder::z_Worm);
 				worm.Hp = initData.WormMaxHP;
 				worm.Direction = (InGame::WormInfo::DirectionType)Gear::Util::GetRndInt(2);
 

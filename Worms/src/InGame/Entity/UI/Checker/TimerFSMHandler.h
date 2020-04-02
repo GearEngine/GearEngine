@@ -104,8 +104,8 @@ namespace InGame {
 			if (timer->isExpired())
 			{
 				Gear::EntitySystem::GetStatus(entityID)->PushNeedHandleData(TimerStatusHandleType::MoveDown, Gear::Status::StatHandleData(0));
-				timer->SetTimer(1.5f);
-				timer->Start();
+				/*timer->SetTimer(1.5f);
+				timer->Start();*/
 				onRed = false;
 				onPressing = false;
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::PrepareNextPhase)));
@@ -122,12 +122,12 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			auto timer = Gear::EntitySystem::GetTimer(entityID);
+			/*auto timer = Gear::EntitySystem::GetTimer(entityID);
 			if (timer->isExpired())
 			{
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
 				return WorldState::OnPrepareNextPhase;
-			}
+			}*/
 
 			return WorldState::OnPrepareNextPhase;
 		}
