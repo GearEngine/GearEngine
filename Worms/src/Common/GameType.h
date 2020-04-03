@@ -6,8 +6,8 @@ namespace ZOrder {
 	const float z_FlatCheckerImg = -0.91f;
 	const float z_FlatChecker = -0.9f;
 	const float z_Grad = -0.8f;
-	const float z_WatterBackGround = -0.7f;
 	const float z_FloatingMatter = -0.6f;
+	const float z_WatterBackGround = -0.7f;
 	const float z_TerrainBack = -0.55f;
 	const float z_WaterWaveB = -0.5f;
 	const float z_CloudLarge = -0.38f;
@@ -21,8 +21,8 @@ namespace ZOrder {
 	const float z_Checker = 0.3f;
 	const float z_CheckerImg = 0.31f;
 	const float z_Font = 0.32f;
-	const float z_WaterWaveF = 0.34f;
 	const float z_Worm = 0.7f;
+	const float z_WaterWaveF = 0.8f;
 	const float z_FollowArrow = 0.75f;
 	const float z_Cursor = 0.99f;
 

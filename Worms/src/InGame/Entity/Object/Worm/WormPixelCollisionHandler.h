@@ -69,6 +69,18 @@ namespace InGame {
 			auto status = Gear::EntitySystem::GetStatus(entityID);
 			auto FSM = Gear::EntitySystem::GetFSM(entityID);
 
+			if (m_TargetPos->y < -13.0f)
+			{
+				FSM->SetCurrentState(WormState::OnUnderWater);
+
+				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnUnderWater);
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::TurnOver)));
+				physics->ActivateGravity();
+				physics->SetPixelCollisionHandler("UnderWater");
+				*m_ExternalVector = { 0.0f, 0.0f };
+				return;
+			}
+
 			auto textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(*m_TargetPos, *m_PixelCollisionTargetTextureTranslate);
 
 			float wormOnTexturePositionX = textureLocalPosition.x * m_TargetTextureWidth;
@@ -344,6 +356,17 @@ namespace InGame {
 			auto FSM = Gear::EntitySystem::GetFSM(entityID);
 			auto textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(*m_TargetPos, *m_PixelCollisionTargetTextureTranslate);
 
+			if (m_TargetPos->y < -13.0f)
+			{
+				FSM->SetCurrentState(WormState::OnUnderWater);
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::TurnOver)));
+				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnUnderWater);
+				physics->ActivateGravity();
+				physics->SetPixelCollisionHandler("UnderWater");
+				*m_ExternalVector = { 0.0f, 0.0f };
+				return;
+			}
+
 			float wormOnTexturePositionX = textureLocalPosition.x * m_TargetTextureWidth;
 			float wormOnTexturePositionY = textureLocalPosition.y * m_TargetTextureHeight;
 
@@ -554,6 +577,17 @@ namespace InGame {
 			float wormOnTexturePositionX = textureLocalPosition.x * m_TargetTextureWidth;
 			float wormOnTexturePositionY = textureLocalPosition.y * m_TargetTextureHeight;
 
+			if (m_TargetPos->y < -13.0f)
+			{
+				FSM->SetCurrentState(WormState::OnUnderWater);
+				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnUnderWater);
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::TurnOver)));
+				physics->ActivateGravity();
+				physics->SetPixelCollisionHandler("UnderWater");
+				*m_ExternalVector = { 0.0f, 0.0f };
+				return;
+			}
+
 			//right
 			int xOffset = 5;
 			if (m_ExternalVector->x > 0.0f)
@@ -662,6 +696,14 @@ namespace InGame {
 					}
 				}
 			}
+		}
+	};
+
+	class WormOnUnderWater : public Gear::Physics2D::PixelCollisionHander
+	{
+		inline virtual void Handle(int entityID) override
+		{
+			m_ExternalVector->y = -0.2f;
 		}
 	};
 }

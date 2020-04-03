@@ -84,12 +84,12 @@ namespace Gear {
 					EntitySystem::Update(timestep);
 					EntitySystem::Render();
 				}
-				static float alpha = 1.0f;
+				/*static float alpha = 1.0f;
 				if (alpha > 0.0f)
 				{
 					alpha -= 0.005f;
 					Renderer2D::DrawQuad({ 0.0f, 0.0f, 1.0f }, { 100.0f, 100.0f }, { 0.0f, 0.0f, 0.001f, alpha });
-				}
+				}*/
 				
 				/*m_ImGuilayer->Begin();
 				{

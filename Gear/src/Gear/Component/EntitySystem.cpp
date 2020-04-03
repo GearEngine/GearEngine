@@ -6,6 +6,7 @@ namespace Gear {
 	int EntitySystem::s_EntityID = 0;
 
 	std::queue<int> EntitySystem::m_SpareIDqueue = std::queue<int>();
+	std::queue<int> EntitySystem::m_InActivateQueue = std::queue<int>();
 
 	std::unordered_map<int, Ref<Entity>> EntitySystem::m_EntityPool = std::unordered_map<int, Ref<Entity>>();
 	std::unordered_map<int, Ref<Entity>> EntitySystem::m_ActivateEntitys = std::unordered_map<int, Ref<Entity>>();
@@ -20,6 +21,7 @@ namespace Gear {
 	std::vector<Ref<Timer>>			EntitySystem::m_Timers = std::vector<Ref<Timer>>();
 	std::vector<Ref<Texturer2D>>	EntitySystem::m_Texturer = std::vector<Ref<Texturer2D>>();
 	std::vector<Ref<Status>>		EntitySystem::m_Status = std::vector<Ref<Status>>();
+	std::vector<Ref<LateDrawer>>	EntitySystem::m_LateDrawers = std::vector<Ref<LateDrawer>>();
 
 	void EntitySystem::Init()
 	{
@@ -35,6 +37,7 @@ namespace Gear {
 		m_Timers.resize(10000);
 		m_Texturer.resize(10000);
 		m_Status.resize(10000);
+		m_LateDrawers.resize(10000);
 	}
 
 	void EntitySystem::Shutdown()
@@ -52,6 +55,7 @@ namespace Gear {
 		m_Timers.clear();
 		m_Texturer.clear();
 		m_Status.clear();
+		m_LateDrawers.clear();
 
 		EventSystem::Shutdown();
 	}
@@ -59,6 +63,9 @@ namespace Gear {
 	void EntitySystem::Update(Timestep ts)
 	{
 		GR_PROFILE_FUNCTION();
+
+		InActivateEntity();
+
 		for (auto& entity : m_ActivateEntitys)
 		{
 			int id = entity.first;
@@ -87,8 +94,14 @@ namespace Gear {
 
 			if (!m_Drawer[id] || !m_Drawer[id]->m_OnActivate)
 				continue;
-			m_Drawer[id]->Render();
+			m_Drawer[id]->Render();	
 		}
+		for(auto& entity : m_ActivateEntitys)
+		{
+			int id = entity.first;
+			UpdateLateDrawer(id);
+		}
+
 	}
 
 	void EntitySystem::EventHandle(Ref<Entity>& entity)
@@ -107,13 +120,6 @@ namespace Gear {
 				continue;
 			}
 
-			/*if (entity->m_EntityID == 11)
-			{
-				if (type == 0)
-				{
-					GR_CORE_TRACE("Worm11 get event {0}", event->Type);
-				}
-			}*/
 			entity->m_EventHandler[type]->Handle(event->Data, entity->m_EntityID, event->handled);
 			if (event->handled)
 			{
@@ -253,6 +259,15 @@ namespace Gear {
 		m_Status[entityID]->Update(ts);
 	}
 
+	void EntitySystem::UpdateLateDrawer(int entityID)
+	{
+		if (!m_LateDrawers[entityID] || !m_LateDrawers[entityID]->m_OnActivate)
+		{
+			return;
+		}
+		m_LateDrawers[entityID]->Render();
+	}
+
 	int EntitySystem::CreateEntity(bool activate)
 	{
 		int entityID;
@@ -323,19 +338,25 @@ namespace Gear {
 		}
 	}
 
-	void EntitySystem::InActivateEntity(int entityID)
+	void EntitySystem::InActivateEntity()
 	{
-		auto entityInActivate = m_ActivateEntitys.find(entityID);
-		if (entityInActivate != m_ActivateEntitys.end())
+		while (!m_InActivateQueue.empty())
 		{
-			entityInActivate->second->m_OnActivate = false;
-			m_ActivateEntitys.erase(entityInActivate);
-			GR_CORE_TRACE("{0} entity inactivated!", entityID);
+			int entityID = m_InActivateQueue.front();
+			auto entityInActivate = m_ActivateEntitys.find(entityID);
+			if (entityInActivate != m_ActivateEntitys.end())
+			{
+				entityInActivate->second->m_OnActivate = false;
+				m_ActivateEntitys.erase(entityInActivate);
+				GR_CORE_TRACE("{0} entity inactivated!", entityID);
+			}
+			else
+			{
+				GR_CORE_WARN("{0} entity aleady inactivated!", entityID);
+			}
+			m_InActivateQueue.pop();
 		}
-		else
-		{
-			GR_CORE_WARN("{0} entity aleady inactivated!", entityID);
-		}
+		
 	}
 
 	void EntitySystem::DeleteEntity(int entityID)
@@ -361,6 +382,7 @@ namespace Gear {
 			m_Transforms[entityID].reset();
 			m_Texturer[entityID].reset();
 			m_Status[entityID].reset();
+			m_LateDrawers[entityID].reset();
 		}
 		else
 		{
@@ -404,6 +426,9 @@ namespace Gear {
 			case ComponentID::ID::Status:
 				if (!m_Status[entityID]) m_Status[entityID].reset(new Status(entityID));
 				break;
+			case ComponentID::ID::LateDrawer:
+				if (!m_LateDrawers[entityID]) m_LateDrawers[entityID].reset(new LateDrawer(entityID));
+				break;
 			}
 		}
 	}
@@ -443,6 +468,9 @@ namespace Gear {
 				break;
 			case ComponentID::ID::Status:
 				m_Status[entityID].reset();
+				break;
+			case ComponentID::ID::LateDrawer:
+				m_LateDrawers[entityID].reset();
 				break;
 			}
 		}
@@ -484,6 +512,9 @@ namespace Gear {
 			case ComponentID::ID::Status:
 				if (m_Status[entityID]) m_Status[entityID]->m_OnActivate = true;
 				break;
+			case ComponentID::ID::LateDrawer:
+				if (m_LateDrawers[entityID]) m_LateDrawers[entityID]->m_OnActivate = true;
+				break;
 			}
 		}
 	}
@@ -523,6 +554,9 @@ namespace Gear {
 				break;
 			case ComponentID::ID::Status:
 				if (!m_Status[entityID]) m_Status[entityID]->m_OnActivate = false;
+				break;
+			case ComponentID::ID::LateDrawer:
+				if (!m_LateDrawers[entityID]) m_LateDrawers[entityID]->m_OnActivate = false;
 				break;
 			}
 		}
@@ -680,6 +714,11 @@ namespace Gear {
 		m_Phisics[entityID]->ActiveSliding(slidingRatio);
 	}
 
+	void EntitySystem::RegisterInActivateEntity(int entityID)
+	{
+		m_InActivateQueue.push(entityID);
+	}
+
 	bool EntitySystem::IsComponenetActivate(int entityID, ComponentID::ID componentID)
 	{
 		switch (componentID)
@@ -713,6 +752,9 @@ namespace Gear {
 			break;
 		case Gear::ComponentID::Status:
 			if (m_Status[entityID]) return m_Status[entityID]->IsActivate();
+			break;
+		case Gear::ComponentID::LateDrawer:
+			if (m_LateDrawers[entityID]) return m_LateDrawers[entityID]->IsActivate();
 			break;
 		}
 		GR_CORE_WARN("{0} entity has no {1} component!", entityID, componentID);
@@ -856,6 +898,16 @@ namespace Gear {
 			return nullptr;
 		}
 		return m_Status[entityID];
+	}
+
+	Ref<LateDrawer> EntitySystem::GetLateDrawer(int entityID)
+	{
+		if (!m_LateDrawers[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have LateDrawer component!", entityID);
+			return nullptr;
+		}
+		return m_LateDrawers[entityID];
 	}
 
 }

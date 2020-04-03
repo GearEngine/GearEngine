@@ -34,6 +34,8 @@ namespace Gear {
 		virtual void Pause() override;
 		virtual void Resume() override;
 		inline bool isCompleteOneLoop() { return m_CompleteOneLoop; }
+		inline glm::vec4& GetTintColor() { return m_TintColor; }
+		inline void SetTintColor(const glm::vec4& tintColor) { m_TintColor = tintColor; }
 
 		void SetFrameX(uint32_t frameX);
 		void SetFrameY(uint32_t frameY);
@@ -58,6 +60,7 @@ namespace Gear {
 		uint32_t m_CurrentFrameX = 0;
 		uint32_t m_CurrentFrameY = 0;
 
+		glm::vec4 m_TintColor = glm::vec4(1.0f);
 		bool m_HasFrameOrder = false;
 		std::vector<std::pair<int, int>> m_FrameOrder;
 		int m_FrameOrderIndex;

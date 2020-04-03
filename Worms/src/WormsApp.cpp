@@ -45,6 +45,7 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("BlueFollowArrow", Gear::FrameTexture2D::Create("assets/textures/UI/BlueFollowingArrow.png", 1, 16));
 
 		//Worm
+		Gear::TextureStorage::AddFrameTexture2D("Drawn", Gear::FrameTexture2D::Create("assets/textures/Worm/Drawn.png", 1, 4));
 		//walk
 		Gear::TextureStorage::AddFrameTexture2D("LeftFlatWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/Walk/LeftFlatWalk.png", 1, 15));
 		Gear::TextureStorage::AddFrameTexture2D("LeftUpWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/Walk/LeftUpWalk.png", 1, 15));
@@ -138,7 +139,7 @@ public:
 		//Temporary initData
 		InGame::InitiateData initData;
 		initData.Mapinfo = InGame::GetMapInfo("City");
-		std::string names[] = { "Sunwoo", "Younghwan", "TaeHwan", "Meongchorriya", "Chanho..TT", "Junsoo"};
+		std::string names[] = { "Sunwoo", "Younghwan", "TaeHwan", "Meongcheriya", "Chanho..TT", "Junsoo"};
 		
 		InGame::TeamInfo team1;
 		InGame::TeamInfo team2;

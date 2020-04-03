@@ -61,4 +61,186 @@ namespace Gear {
 			break;
 		}
 	}
+
+	LateDrawer::~LateDrawer()
+	{
+		Reset();
+	}
+
+	void LateDrawer::Update(Timestep ts)
+	{
+		//Render();
+	}
+
+	void LateDrawer::Render()
+	{
+		for (auto& stuff : m_TextureStuffList)
+		{
+			if (stuff.second.Activate)
+			{
+				Renderer2D::DrawQuad(stuff.second.Translate, stuff.second.Texture, stuff.second.TintColor);
+			}
+
+		}
+		for (auto& stuff : m_QuadStuffList)
+		{
+			if (stuff.second.Activate)
+			{
+				Renderer2D::DrawQuad(stuff.second.Translate, stuff.second.Color);
+			}
+		}
+	}
+
+	void LateDrawer::UpLoadDrawStuff(const std::string name, const QuardStuff & stuff)
+	{
+		auto find = m_QuadStuffList.find(name);
+		if (find == m_QuadStuffList.end())
+		{
+			m_QuadStuffList.insert({ name, stuff });
+		}
+		else
+		{
+			GR_CORE_WARN("LateDrawer : {} is aleady exist!", name);
+		}
+	}
+	void LateDrawer::UpLoadDrawStuff(const std::string name, const TextureStuff & stuff)
+	{
+		auto find = m_TextureStuffList.find(name);
+		if (find == m_TextureStuffList.end())
+		{
+			m_TextureStuffList.insert({ name, stuff });
+		}
+		else
+		{
+			GR_CORE_WARN("LateDrawer : {} is aleady exist!", name);
+		}
+	}
+	void LateDrawer::Reset()
+	{
+		m_QuadStuffList.clear();
+		m_TextureStuffList.clear();
+	}
+
+	void LateDrawer::SetStuff(const std::string & name, const glm::mat4 & translate, const glm::vec4 & color)
+	{
+		auto find = m_QuadStuffList.find(name);
+		if (find != m_QuadStuffList.end())
+		{
+			find->second.Translate = translate;
+			find->second.Color = color;
+		}
+		else
+		{
+			GR_CORE_WARN("LateDrawer : {} doesn't exist!", name);
+		}
+
+	}
+
+	void LateDrawer::SetStuff(const std::string & name, Ref<Texture2D> texture, const glm::mat4 & translate, const glm::vec4 & tintColor)
+	{
+		auto find = m_TextureStuffList.find(name);
+		if(find != m_TextureStuffList.end())
+		{ 
+			find->second.Translate = translate;
+			find->second.Texture = texture;
+			find->second.TintColor = tintColor;
+		}
+		else
+		{
+			GR_CORE_WARN("LateDrawer : {} doesn't exist!", name);
+		}
+	}
+
+	void LateDrawer::EraseStuff(const std::string & name, EnumType type)
+	{
+		switch (type)
+		{
+		case Stuff::Texture:
+		{
+			auto find = m_TextureStuffList.find(name);
+			if (find != m_TextureStuffList.end())
+			{
+				m_TextureStuffList.erase(find);
+			}
+			else
+			{
+				GR_CORE_WARN("LateDrawer : {} doesn't exist!", name);
+			}
+		}
+		case Stuff::Quard:
+		{
+			auto find = m_QuadStuffList.find(name);
+			if (find != m_QuadStuffList.end())
+			{
+				m_QuadStuffList.erase(find);
+			}
+			else
+			{
+				GR_CORE_WARN("LateDrawer : {} doesn't exist!", name);
+			}
+		}
+		}
+	}
+
+	void LateDrawer::ActivateStuff(const std::string & name, EnumType type)
+	{
+		switch (type)
+		{
+		case Stuff::Texture:
+		{
+			auto find = m_TextureStuffList.find(name);
+			if (find != m_TextureStuffList.end())
+			{
+				find->second.Activate = true;
+			}
+			else
+			{
+				GR_CORE_WARN("LateDrawer : {} doesn't exist!", name);
+			}
+		}
+		case Stuff::Quard:
+		{
+			auto find = m_QuadStuffList.find(name);
+			if (find != m_QuadStuffList.end())
+			{
+				find->second.Activate = true;
+			}
+			else
+			{
+				GR_CORE_WARN("LateDrawer : {} doesn't exist!", name);
+			}
+		}
+		}
+	}
+
+	void LateDrawer::InActivateStuff(const std::string & name, EnumType type)
+	{
+		switch (type)
+		{
+		case Stuff::Texture:
+		{
+			auto find = m_TextureStuffList.find(name);
+			if (find != m_TextureStuffList.end())
+			{
+				find->second.Activate = false;
+			}
+			else
+			{
+				GR_CORE_WARN("LateDrawer : {} doesn't exist!", name);
+			}
+		}
+		case Stuff::Quard:
+		{
+			auto find = m_QuadStuffList.find(name);
+			if (find != m_QuadStuffList.end())
+			{
+				find->second.Activate = false;
+			}
+			else
+			{
+				GR_CORE_WARN("LateDrawer : {} doesn't exist!", name);
+			}
+		}
+		}
+	}
 }

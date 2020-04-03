@@ -88,6 +88,8 @@ namespace InGame {
 
 	void ObjectLayer::ChangeWorm()
 	{
+		static std::unordered_map<std::string, TeamInfo>::iterator prevTeamIter = s_TeamInfo.begin();
+
 		if (s_CurrentActivatedWormID != -1)
 		{
 			Gear::EntitySystem::GetFSM(s_CurrentActivatedWormID)->SetCurrentState(WormState::OnNotMyTurn);
@@ -99,6 +101,11 @@ namespace InGame {
 			{
 				s_TeamIter = s_TeamInfo.begin();
 			}
+			/*if (prevTeamIter == s_TeamIter)
+			{
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::GameEnd)));
+				return;
+			}*/
 			if (s_TeamIter->second.TotalWormHp != 0)
 			{
 				break;
@@ -114,7 +121,7 @@ namespace InGame {
 			}
 			s_CurrentActivatedWormID = s_Worms[s_TeamIter->first][s_curWorm]->GetID();
 			int hp = std::any_cast<int>(Gear::EntitySystem::GetStatus(s_CurrentActivatedWormID)->GetStat(WormInfo::Hp));
-			if (hp != 0)
+			if (hp != 0 && Gear::EntitySystem::IsEntityActivated(s_CurrentActivatedWormID))
 			{
 				break;
 			}

@@ -37,6 +37,12 @@ namespace InGame {
 				timer->Start();
 				handled = true;
 			}
+			if (worldData.DataType == WorldDataType::TurnOver)
+			{
+				timerFSM->SetCurrentState(WorldState::OnPrepareNextPhase);
+				Gear::EntitySystem::GetStatus(entityID)->PushNeedHandleData(TimerStatusHandleType::MoveDown, Gear::Status::StatHandleData(0));
+				handled = true;
+			}
 		}
 	};
 

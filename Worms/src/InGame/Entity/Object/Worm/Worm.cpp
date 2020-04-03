@@ -84,9 +84,12 @@ namespace InGame {
 		}
 
 		Gear::Ref<Gear::Animation2D> empty;
+		auto drawn = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Drawn"), 0.03f, true);
+		drawn->SetTintColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.3f));
 		Gear::EntitySystem::SetAnimator(m_ID, {
 			{ WormState::OnNotMyTurn,		empty },
 			{ WormState::OnTurnOver,		empty },
+			{ WormState::OnUnderWater,		drawn },
 
 			{ WormState::OnRightFlatBreath, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatBreath"), 0.02f, birthAniOrder, true) },
 			{ WormState::OnRightUpBreath, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpBreath"), 0.02f, birthAniOrder, true) },
@@ -173,7 +176,8 @@ namespace InGame {
 			{ WormState::OnReadyJump, new WormOnReadyJumpHandler }, {WormState::OnReadyBackJump, new WormOnReadyBackJumpHandler},
 			{ WormState::OnReadyLand, new WormOnReadyLandHandler }, { WormState::OnReadyFallen, new WormOnReadyFallenHandler},
 			{ WormState::OnLand, new WormOnLandHandler },			{ WormState::OnSliding, new WormOnSlidingHandler },
-			{ WormState::OnStuck, new WormOnStuckHandler },			{ WormState::OnStandUp, new WormOnStandUpHandler }
+			{ WormState::OnStuck, new WormOnStuckHandler },			{ WormState::OnStandUp, new WormOnStandUpHandler },
+			{ WormState::OnUnderWater, new WormOnUnderWaterHandler },
 		});
 
 		//Set Controller
@@ -196,6 +200,7 @@ namespace InGame {
 			{ "OnAir", Gear::CreateRef<WormOnAirPCHandler>() },
 			{ "Move", Gear::CreateRef<WormMovePCHandler>() },
 			{ "Sliding", Gear::CreateRef<WormSlidingPCHandler>() },
+			{ "UnderWater", Gear::CreateRef<WormOnUnderWater>() }
 		});
 		
 		physics->SetPixelCollisionHandler("Move");

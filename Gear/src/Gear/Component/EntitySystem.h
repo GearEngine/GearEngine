@@ -29,6 +29,7 @@ namespace Gear {
 			Timer,
 			Texturer,
 			Status,
+			LateDrawer,
 			ComponentMax
 		};
 	}
@@ -51,6 +52,9 @@ namespace Gear {
 		static void UpdateTimer(int entityID, Timestep ts);
 		static void UpdateTexturer2D(int entityID, Timestep ts);
 		static void UpdateStatus(int entityID, Timestep ts);
+		static void UpdateLateDrawer(int entityID);
+
+		static void InActivateEntity();
 
 		//user interface
 	public:
@@ -61,13 +65,12 @@ namespace Gear {
 		static void Render();
 
 		static void ActivateEntity(int entityID);
-		static void InActivateEntity(int entityID);
+		static void InActivateComponent(int entityID, const std::vector<ComponentID::ID>& components);
 		static void DeleteEntity(int entityID);
 
 		static void AttachComponent(int entityID, const std::vector<ComponentID::ID>& components);
 		static void DetachComponent(int entityID, const std::vector<ComponentID::ID>& components);
 		static void ActivateComponent(int entityID, const std::vector<ComponentID::ID>& components);
-		static void InActivateComponent(int entityID, const std::vector<ComponentID::ID>& components);
 
 		static void SetFSM(int entityID, const std::initializer_list<std::pair<const EnumType, FSM::InputHandler*>>& handlers);
 		static void SetController(int entityID, const std::initializer_list<Command>& commands);
@@ -83,6 +86,8 @@ namespace Gear {
 		static void SetMoveLimit(int entityID, const Util::FRect& rect);
 		static void SetSliding(int entityID, float slidingRatio);
 
+		static void RegisterInActivateEntity(int entityID);
+		static bool IsEntityActivated(int entityID) { return m_EntityPool[entityID]->m_OnActivate; }
 		static bool IsComponenetActivate(int entityID, ComponentID::ID componentID);
 
 		static Ref<Transform2D>		GetTransform2D(int entityID);
@@ -94,11 +99,13 @@ namespace Gear {
 		static Ref<Timer>			GetTimer(int entityID);
 		static Ref<Texturer2D>		GetTexturer(int entityID);
 		static Ref<Status>			GetStatus(int entityID);
+		static Ref<LateDrawer>		GetLateDrawer(int entityID);
 
 	private:
 		static int s_EntityID;
 
 		static std::queue<int> m_SpareIDqueue;
+		static std::queue<int> m_InActivateQueue;
 
 		//first : Entity ID, second Entity Pointer
 		static std::unordered_map<int, Ref<Entity>> m_EntityPool;
@@ -115,6 +122,7 @@ namespace Gear {
 		static std::vector<Ref<Timer>>			m_Timers;
 		static std::vector<Ref<Texturer2D>>		m_Texturer;
 		static std::vector<Ref<Status>>			m_Status;
+		static std::vector<Ref<LateDrawer>>		m_LateDrawers;
 
 		friend class Application;
 		friend class EventSystem;

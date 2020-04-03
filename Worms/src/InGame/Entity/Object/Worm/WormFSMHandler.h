@@ -658,7 +658,6 @@ namespace InGame {
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			physics->SetExternalVector({ 0.0f, 0.0f });
 			physics->SetPixelCollisionHandler("Move");
-			//status->PopNeedHandleData(WormStatusHandleType::WaitingDisplay);
 			status->SetStat(WormInfo::MyTurn, false);
 
 			WormInfo::DirectionType dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Stat::Direction));
@@ -688,6 +687,22 @@ namespace InGame {
 
 			firstIn = true;
 			return WormState::OnNotMyTurn;
+		}
+	};
+
+	class WormOnUnderWaterHandler : public Gear::FSM::InputHandler
+	{
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			auto transform = Gear::EntitySystem::GetTransform2D(entityID);
+			auto timer = Gear::EntitySystem::GetTimer(entityID);
+			if (transform->GetPosition().y < -18.f)
+			{
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
+				Gear::EntitySystem::RegisterInActivateEntity(entityID);
+				return WormState::OnTurnOver;
+			}
+			return WormState::OnUnderWater;
 		}
 	};
 

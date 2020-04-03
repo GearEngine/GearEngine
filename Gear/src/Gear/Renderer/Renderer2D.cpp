@@ -371,9 +371,11 @@ namespace Gear {
 		RenderCommand::DrawIndexed(s_Data.QuardVertexArray);
 	}
 
-	void Renderer2D::DrawAnimation(const glm::mat4 & translate, const Ref<Animation2D> animation, const glm::vec4 & tintColor)
+	void Renderer2D::DrawAnimation(const glm::mat4 & translate, const Ref<Animation2D> animation)
 	{
 		GR_PROFILE_FUNCTION();
+
+		auto tintColor = animation->GetTintColor();
 
 		s_Data.TextureShader->Bind();
 		s_Data.TextureShader->SetInt("u_WithMask", 0);

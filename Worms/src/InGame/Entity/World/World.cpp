@@ -18,7 +18,8 @@ namespace InGame {
 
 		//Attach Component
 		Gear::EntitySystem::AttachComponent(m_ID, {
-			Gear::ComponentID::FSM,	Gear::ComponentID::Status, Gear::ComponentID::Timer
+			Gear::ComponentID::FSM,	Gear::ComponentID::Status, Gear::ComponentID::Timer,
+			Gear::ComponentID::LateDrawer
 		});
 
 		//Set Component specific
@@ -44,6 +45,11 @@ namespace InGame {
 		status->PushNeedHandleData(WorldStatusHandleType::DisplayTeamInfo,
 			Gear::Status::StatHandleData(WorldTeamInfoDenoteData(Gear::TextureStorage::GetTexture2D("WormNameBorder"))));
 
+		auto lateDrawer = Gear::EntitySystem::GetLateDrawer(m_ID);
+	
+		glm::mat4 fogTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1000.0f, 1000.0f, 1.0f));
+		lateDrawer->UpLoadDrawStuff("Fog", Gear::LateDrawer::QuardStuff(fogTranslate, glm::vec4(0.0f, 0.0f, 0.001f, 1.0f)));
+		
 		//Subscpribe EventChannel
 		//Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::MouseClick);
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::World);

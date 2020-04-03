@@ -21,7 +21,9 @@ namespace InGame {
 		ReFollow,
 		NewFollow,
 		PrepareNextPhase,
-		RunningStart
+		TurnOver,
+		RunningStart,
+		GameEnd
 	};
 
 	struct ExplosionData

@@ -29,6 +29,7 @@ namespace InGame {
 			OnDamaged,
 			OnDye,
 			OnTurnOver,
+			OnUnderWater,
 
 			OnLeftFlatMove, OnRightFlatMove,
 			OnLeftUpMove, OnRightUpMove,
