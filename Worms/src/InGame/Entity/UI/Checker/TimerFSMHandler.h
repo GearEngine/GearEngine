@@ -64,13 +64,14 @@ namespace InGame {
 		}
 	};
 
+	static bool onRed = false;
 	class TimerOnRunningHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			static const float blinkTerm = 0.3f;
 			static float blinkElapsed = 0.0f;
-			static bool onRed = false;
+			
 			static bool onPressing = false;
 
 			auto timer = Gear::EntitySystem::GetTimer(entityID);
@@ -104,8 +105,6 @@ namespace InGame {
 			if (timer->isExpired())
 			{
 				Gear::EntitySystem::GetStatus(entityID)->PushNeedHandleData(TimerStatusHandleType::MoveDown, Gear::Status::StatHandleData(0));
-				/*timer->SetTimer(1.5f);
-				timer->Start();*/
 				onRed = false;
 				onPressing = false;
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::PrepareNextPhase)));
@@ -122,6 +121,10 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
+			if (onRed)
+			{
+				onRed = false;
+			}
 			/*auto timer = Gear::EntitySystem::GetTimer(entityID);
 			if (timer->isExpired())
 			{

@@ -180,9 +180,21 @@ namespace InGame {
 			{
 				Gear::EntitySystem::GetStatus(entityID)->SetNeedHandleData(WormStatusHandleType::WaitingDisplay, true);
 			}
+			pastMove += moveDist;
+			if (std::abs(pastMove) > moveLimit)
+			{
+				if (moveDist > 0.0f)
+				{
+					moveDist = pastMove - moveLimit;
+				}
+				else
+				{
+					moveDist = pastMove + moveLimit;
+				}
+			}
+
 			hpOffset += moveDist;
 			nameOffset += moveDist;
-			pastMove += moveDist;
 
 			statlist[WormInfo::HpBorderOffset] = hpOffset;
 			statlist[WormInfo::NameBorderOffset] = nameOffset;

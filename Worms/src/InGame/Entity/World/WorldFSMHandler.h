@@ -24,7 +24,7 @@ namespace InGame {
 				LateDrawer->InActivateStuff("Fog", Gear::Stuff::Quard);
 				return WorldState::OnStart;
 			}
-			LateDrawer->GetQuardStuff("Fog").Color.a -= 0.005f;
+			LateDrawer->GetQuardStuff("Fog").Color.a -= 0.007f;
 			return WorldState::InGameStart;
 		}
 	};
