@@ -91,6 +91,38 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
+			static int yIndex = 0;
+			static float pastTime = 0.0f;
+
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			auto tick = Gear::EntitySystem::GetTimer(entityID)->GetTick();
+			
+			pastTime += tick;
+			if (pastTime > 0.05f)
+			{
+				pastTime = 0.0f;
+				if (yIndex)
+				{
+					yIndex = 0;
+				}
+				else
+				{
+					yIndex = 1;
+				}
+			}
+			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
+
+			if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftUp || dir == WormInfo::DirectionType::LeftFlat)
+			{
+				animator->SetCurrentAnimation(WormState::OnLeftJump);
+			}
+			else
+			{
+				animator->SetCurrentAnimation(WormState::OnRightJump);
+			}
+			animator->SetFrameIdx({ 0, yIndex });
+
 			return WormState::OnAir;
 		}
 	};
@@ -626,7 +658,7 @@ namespace InGame {
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			physics->SetExternalVector({ 0.0f, 0.0f });
 			physics->SetPixelCollisionHandler("Move");
-			status->PopNeedHandleData(WormStatusHandleType::WaitingDisplay);
+			//status->PopNeedHandleData(WormStatusHandleType::WaitingDisplay);
 			status->SetStat(WormInfo::MyTurn, false);
 
 			WormInfo::DirectionType dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Stat::Direction));

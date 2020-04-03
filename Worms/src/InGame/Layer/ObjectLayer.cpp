@@ -109,6 +109,7 @@ namespace InGame {
 			s_curWorm = ++s_WormTurnIndex[s_TeamIter->first];
 			if (s_curWorm >= s_Worms[s_TeamIter->first].size())
 			{
+				s_WormTurnIndex[s_TeamIter->first] = 0;
 				s_curWorm = 0;
 			}
 			s_CurrentActivatedWormID = s_Worms[s_TeamIter->first][s_curWorm]->GetID();

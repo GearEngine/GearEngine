@@ -176,6 +176,10 @@ namespace InGame {
 			float nameOffset = std::any_cast<float>(statlist[WormInfo::NameBorderOffset]);
 
 			float moveDist = std::any_cast<float>(data.Data);
+			if (moveDist < 0.0f)
+			{
+				Gear::EntitySystem::GetStatus(entityID)->SetNeedHandleData(WormStatusHandleType::WaitingDisplay, true);
+			}
 			hpOffset += moveDist;
 			nameOffset += moveDist;
 			pastMove += moveDist;
@@ -187,7 +191,15 @@ namespace InGame {
 			{
 				data.Handled = true;
 				pastMove = 0.0f;
-				Gear::EntitySystem::GetStatus(entityID)->SetNeedHandleData(WormStatusHandleType::WaitingDisplay, true);
+				if (moveDist > 0.0f)
+				{
+					Gear::EntitySystem::GetStatus(entityID)->SetNeedHandleData(WormStatusHandleType::WaitingDisplay, true);
+					Gear::EntitySystem::GetStatus(entityID)->SetNeedHandleData(WormStatusHandleType::Display, true);
+				}
+				else
+				{
+					Gear::EntitySystem::GetStatus(entityID)->SetNeedHandleData(WormStatusHandleType::Display, false);
+				}
 			}
 		}
 	};

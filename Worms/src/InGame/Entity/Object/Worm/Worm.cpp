@@ -207,7 +207,7 @@ namespace InGame {
 			{ WormInfo::Stat::FirePower, 0.0f}, { WormInfo::Stat::SelectedItem, ItemName::Bazooka }, 
 			{ WormInfo::Stat::NameBorderOffset, 1.26f }, { WormInfo::Stat::HpBorderOffset, 0.7f }, { WormInfo::Stat::ZRenderOffset, wormData.AdditionalZRenderOffset },
 			{ WormInfo::Stat::Direction, wormData.Direction}, { WormInfo::Stat::MoveSpeed, initData.WormMoveSpeed } ,
-			{ WormInfo::Stat::MyTurn, false }
+			{ WormInfo::Stat::MyTurn, false }, { WormInfo::Stat::Damage, 0 }, {WormInfo::Stat::SelfDamage , 0}
 		});
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {
