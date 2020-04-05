@@ -14,7 +14,7 @@ namespace Gear {
 		bool FullScreen;
 
 		WindowProps(const std::string& title = "Worms Amageddon",
-			unsigned int width = WINDOW_WIDTH, unsigned int height = WINDOW_HEIGHT, bool fullScreen = true)
+			unsigned int width = WINDOW_WIDTH, unsigned int height = WINDOW_HEIGHT, bool fullScreen = false)
 			: Title(title), Width(width), Height(height), FullScreen(fullScreen)
 		{}
 	};

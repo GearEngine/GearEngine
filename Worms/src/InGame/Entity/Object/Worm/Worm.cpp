@@ -177,7 +177,7 @@ namespace InGame {
 			{ WormState::OnReadyLand, new WormOnReadyLandHandler }, { WormState::OnReadyFallen, new WormOnReadyFallenHandler},
 			{ WormState::OnLand, new WormOnLandHandler },			{ WormState::OnSliding, new WormOnSlidingHandler },
 			{ WormState::OnStuck, new WormOnStuckHandler },			{ WormState::OnStandUp, new WormOnStandUpHandler },
-			{ WormState::OnUnderWater, new WormOnUnderWaterHandler },
+			{ WormState::OnUnderWater, new WormOnUnderWaterHandler },	{WormState::OnDamaged, new WormOnDamagedHandler }
 		});
 
 		//Set Controller

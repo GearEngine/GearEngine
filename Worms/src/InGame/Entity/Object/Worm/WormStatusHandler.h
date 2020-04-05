@@ -216,4 +216,12 @@ namespace InGame {
 		}
 	};
 
+	class WormGetDamageHanlder : public Gear::Status::StatusHandler
+	{
+		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
+		{
+
+		}
+	};
+
 }

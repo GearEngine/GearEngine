@@ -185,11 +185,29 @@ namespace InGame {
 			//Position adjust
 			int fixedBottomPos;
 			auto midPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)wormOnTexturePositionX, (int)wormOnTexturePositionY - basicYOffset });
+			bool myTurn = std::any_cast<bool>(status->GetStat(WormInfo::MyTurn));
 
 			if (midPixel == m_TargetPixelColor)
 			{
 				if (FSM->GetCurrentState() == WormState::OnSliding)
 				{
+					if (*m_GravityAccelation <= 0.7f)
+					{
+						int fallenDamage = (int)((*m_GravityAccelation - 7.0f) * 10);
+						if (myTurn)
+						{
+							int selfDamage = std::any_cast<int>(status->GetStat(WormInfo::SelfDamage));
+							selfDamage += fallenDamage;
+							status->SetStat(WormInfo::SelfDamage, selfDamage);
+						}
+						else
+						{
+							int damage = std::any_cast<int>(status->GetStat(WormInfo::Damage));
+							damage += fallenDamage;
+							status->SetStat(WormInfo::Damage, damage);
+						}
+					}
+
 					*m_GravityAccelation = 0.0f;
 					m_ExternalVector->y = 0.0f;
 					physics->SetPixelCollisionHandler("Sliding");
@@ -202,6 +220,19 @@ namespace InGame {
 					}
 					else
 					{
+						int fallenDamage = (int)((*m_GravityAccelation - 0.7f) * 100.0f);
+						if (myTurn)
+						{
+							int selfDamage = std::any_cast<int>(status->GetStat(WormInfo::SelfDamage));
+							selfDamage += fallenDamage;
+							status->SetStat(WormInfo::SelfDamage, selfDamage);
+						}
+						else
+						{
+							int damage = std::any_cast<int>(status->GetStat(WormInfo::Damage));
+							damage += fallenDamage;
+							status->SetStat(WormInfo::Damage, damage);
+						}
 						FSM->SetCurrentState(WormState::OnReadyFallen);
 					}
 				}

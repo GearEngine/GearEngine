@@ -460,6 +460,13 @@ namespace InGame {
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			if (animator->loopCompleted())
 			{
+				auto status = Gear::EntitySystem::GetStatus(entityID);
+				int selfDamage = std::any_cast<int>(status->GetStat(WormInfo::SelfDamage));
+				int damage = std::any_cast<int>(status->GetStat(WormInfo::SelfDamage));
+				if (selfDamage + damage > 0)
+				{
+					return WormState::OnDamaged;
+				}
 				return WormState::OnBreath;
 			}
 			return WormState::OnStandUp;
@@ -475,7 +482,6 @@ namespace InGame {
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			auto& externalX = physics->GetExternalVectorX();
 			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
-
 			
 			if (physics->GetPixelCollisionHandlerName() == "Sliding")
 			{
@@ -556,7 +562,7 @@ namespace InGame {
 			if (animator->loopCompleted())
 			{
 				Gear::EntitySystem::GetPhysics2D(entityID)->SetPixelCollisionHandler("Move");
-				return WormState::OnBreath;
+				return WormState::OnDamaged;
 			}
 			return WormState::OnStuck;
 		}
@@ -573,7 +579,7 @@ namespace InGame {
 			auto& externalVector = physics->GetExternalVector();
 			float verticalRatio = externalVector.x / externalVector.y * 100.0f;
 			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
-
+			
 			externalVector.y = 0.0f;
 			physics->ResetGravityAccelation();
 
@@ -610,6 +616,50 @@ namespace InGame {
 			}
 
 			return WormState::OnFallen;
+		}
+	};
+
+	class WormOnDamagedHandler : public Gear::FSM::InputHandler
+	{
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+
+			WormInfo::DirectionType dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Stat::Direction));
+			switch (dir)
+			{
+			case WormInfo::DirectionType::LeftFlat:
+				animator->SetCurrentAnimation(WormState::OnLeftFlatBreath);
+				break;
+			case WormInfo::DirectionType::LeftUp:
+				animator->SetCurrentAnimation(WormState::OnLeftUpBreath);
+				break;
+			case WormInfo::DirectionType::LeftDown:
+				animator->SetCurrentAnimation(WormState::OnLeftDownBreath);
+				break;
+			case WormInfo::DirectionType::RightFlat:
+				animator->SetCurrentAnimation(WormState::OnRightFlatBreath);
+				break;
+			case WormInfo::DirectionType::RightUp:
+				animator->SetCurrentAnimation(WormState::OnRightUpBreath);
+				break;
+			case WormInfo::DirectionType::RightDown:
+				animator->SetCurrentAnimation(WormState::OnRightDownBreath);
+				break;
+			}
+			animator->ResumeAnimation();
+
+			if (std::any_cast<bool>(status->GetStat(WormInfo::MyTurn)))
+			{
+				return WormState::OnTurnOver;
+			}
+			else
+			{
+				return WormState::OnNotMyTurn;
+			}
+
+			return WormState::OnDamaged;
 		}
 	};
 
@@ -703,14 +753,6 @@ namespace InGame {
 				return WormState::OnTurnOver;
 			}
 			return WormState::OnUnderWater;
-		}
-	};
-
-	class WormOnDamagedHandler : public Gear::FSM::InputHandler
-	{
-		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
-		{
-			return WormState::OnDamaged;
 		}
 	};
 
