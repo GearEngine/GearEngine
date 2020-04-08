@@ -13,6 +13,7 @@ namespace InGame {
 			OnMove,
 			OnBreath,
 			OnReadyItemUse,
+			OnItemWithdraw,
 			OnUseItem,
 			OnAir,
 			OnJump,
@@ -65,6 +66,18 @@ namespace InGame {
 			OnLeftUpAfterDamagedSliding, OnRightUpAfterDamagedSliding,
 			OnLeftDownAfterDamagedSliding, OnRightDownAfterDamagedSliding,
 
+			OnLeftFlatBazukaReady, OnRightFlatBazukaReady,
+			OnLeftUpBazukaReady, OnRightUpBazukaReady,
+			OnLeftDownBazukaReady, OnRightDownBazukaReady,
+
+			OnLeftFlatBazukaWithdraw, OnRightFlatBazukaWithdraw,
+			OnLeftUpBazukaWithdraw, OnRightUpBazukaWithdraw,
+			OnLeftDownBazukaWithdraw, OnRightDownBazukaWithdraw,
+
+			OnLeftFlatBazukaOn, OnRightFlatBazukaOn,
+			OnLeftUpBazukaOn, OnRightUpBazukaOn,
+			OnLeftDownBazukaOn, OnRightDownBazukaOn,
+
 			OnLeftFlatStuck, OnRightFlatStuck,
 			OnLeftUpStuck, OnRightUpStuck,
 			OnLeftDownStuck, OnRightDownStuck
@@ -100,8 +113,7 @@ namespace InGame {
 			DisplayPosChange,
 			Damaged,
 			DisplayDamage,
-			FireAngle,
-			FirePower,
+			DisplayAim,
 		};
 	}
 

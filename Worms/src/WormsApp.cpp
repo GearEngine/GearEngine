@@ -43,6 +43,11 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("WindRight", Gear::FrameTexture2D::Create("assets/textures/UI/WindRight.png", 1, 8));
 		Gear::TextureStorage::AddFrameTexture2D("RedFollowArrow", Gear::FrameTexture2D::Create("assets/textures/UI/RedFollowingArrow.png", 1, 16));
 		Gear::TextureStorage::AddFrameTexture2D("BlueFollowArrow", Gear::FrameTexture2D::Create("assets/textures/UI/BlueFollowingArrow.png", 1, 16));
+		Gear::TextureStorage::AddFrameTexture2D("BlueAim", Gear::FrameTexture2D::Create("assets/textures/UI/BlueAim.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("RedAim", Gear::FrameTexture2D::Create("assets/textures/UI/RedAim.png", 1, 32));
+
+		//Weapon
+		Gear::TextureStorage::AddFrameTexture2D("BazukaBullet", Gear::FrameTexture2D::Create("assets/textures/Weapon/BazukaBullet.png", 1, 32));
 
 		//Worm
 		Gear::TextureStorage::AddFrameTexture2D("Drawn", Gear::FrameTexture2D::Create("assets/textures/Worm/Drawn.png", 1, 4));
@@ -105,7 +110,22 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RightFlatAfterDamagedSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightFlatAfterDamagedSliding.png", 1, 36));
 		Gear::TextureStorage::AddFrameTexture2D("RightUpAfterDamagedSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightUpAfterDamagedSliding.png", 1, 36));
 		Gear::TextureStorage::AddFrameTexture2D("RightDownAfterDamagedSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightDownAfterDamagedSliding.png", 1, 36));
+	
+		//Weapon
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownBazukaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/LeftDownBazukaReady.png", 1, 7));
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatBazukaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/LeftFlatBazukaReady.png", 1, 7));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpBazukaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/LeftUpBazukaReady.png", 1, 7));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownBazukaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightDownBazukaReady.png", 1, 7));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatBazukaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightFlatBazukaReady.png", 1, 7));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpBazukaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightUpBazukaReady.png", 1, 7));
 
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/LeftDownBazukaOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/LeftFlatBazukaOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/LeftUpBazukaOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightDownBazukaOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightFlatBazukaOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightUpBazukaOn.png", 1, 32));
+		
 		//animation
 		std::vector<std::pair<int, int>> orderVector;
 		for (int i = 0; i < 32; ++i)

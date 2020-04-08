@@ -2,9 +2,9 @@
 
 namespace InGame {
 
-	namespace ItemName {
+	namespace Item {
 
-		enum : unsigned int
+		enum Name : unsigned int
 		{
 			Bazooka,
 			ShotGun,

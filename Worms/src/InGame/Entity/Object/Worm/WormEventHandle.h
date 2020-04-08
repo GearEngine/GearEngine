@@ -1,5 +1,6 @@
 #pragma once
 #include "WormEnum.h"
+#include "InGame/Entity/Object/Item/ItemEnum.h"
 
 namespace InGame {
 
@@ -55,6 +56,39 @@ namespace InGame {
 			}
 		}
 
+		inline void ItemWithdraw(int entityID)
+		{
+			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			auto item = std::any_cast<Item::Name>(status->GetStat(WormInfo::SelectedItem));
+			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
+
+			if (item == Item::Bazooka)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->PlayAnimation(WormState::OnLeftFlatBazukaWithdraw);
+					return;
+				case InGame::WormInfo::RightFlat:
+					animator->PlayAnimation(WormState::OnRightFlatBazukaWithdraw);
+					return;
+				case InGame::WormInfo::LeftUp:
+					animator->PlayAnimation(WormState::OnLeftUpBazukaWithdraw);
+					return;
+				case InGame::WormInfo::RightUp:
+					animator->PlayAnimation(WormState::OnRightUpBazukaWithdraw);
+					return;
+				case InGame::WormInfo::LeftDown:
+					animator->PlayAnimation(WormState::OnLeftDownBazukaWithdraw);
+					return;
+				case InGame::WormInfo::RightDown:
+					animator->PlayAnimation(WormState::OnRightDownBazukaWithdraw);
+					return;
+				}
+			}
+		}
+
 		inline virtual void Handle(std::any data, int entityID, bool& handled) override
 		{
 			auto worldData = std::any_cast<WorldData>(data);
@@ -69,6 +103,15 @@ namespace InGame {
 				}
 				auto FSM = Gear::EntitySystem::GetFSM(entityID);
 				auto prevState = FSM->GetCurrentState();
+				if (prevState == WormState::OnReadyItemUse)
+				{
+					ItemWithdraw(entityID);
+					FSM->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
+					prevState = WormState::OnItemWithdraw;
+					FSM->SetCurrentState(WormState::OnItemWithdraw);
+					
+				}
+
 				if (prevState != WormState::OnBreath && prevState != WormState::OnWaiting)
 				{
 					handled = false;

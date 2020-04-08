@@ -1,7 +1,6 @@
 #include "wmpch.h"
 #include "Worm.h"
 
-#include "InGame/Entity/Object/Item/ItemEnum.h"
 #include "WormPixelCollisionHandler.h"
 
 namespace InGame {
@@ -82,6 +81,13 @@ namespace InGame {
 				slidingAniOder.push_back({ 0, 4 - i });
 			}
 		}
+		std::vector<std::pair<int, int>> bazukaReadyAniOrder;
+		for(int i = 0 ; i < 7; ++i)
+		{
+			bazukaReadyAniOrder.push_back({ 0, 6 - i });
+		}
+
+
 
 		Gear::Ref<Gear::Animation2D> empty;
 		auto drawn = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Drawn"), 0.03f, true);
@@ -154,6 +160,27 @@ namespace InGame {
 			{ WormState::OnRightUpStuck,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpStuck"), 0.02f, stuckAniOrder, false)},
 			{ WormState::OnRightDownStuck,  Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownStuck"), 0.02f, stuckAniOrder, false)},
 
+			{ WormState::OnLeftFlatBazukaReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatBazukaReady"), 0.02f, bazukaReadyAniOrder, false)},
+			{ WormState::OnLeftUpBazukaReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpBazukaReady"), 0.02f, bazukaReadyAniOrder, false)},
+			{ WormState::OnLeftDownBazukaReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownBazukaReady"), 0.02f, bazukaReadyAniOrder, false)},
+			{ WormState::OnRightFlatBazukaReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatBazukaReady"), 0.02f, bazukaReadyAniOrder, false)},
+			{ WormState::OnRightUpBazukaReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpBazukaReady"), 0.02f, bazukaReadyAniOrder, false)},
+			{ WormState::OnRightDownBazukaReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownBazukaReady"), 0.02f, bazukaReadyAniOrder, false)},
+
+			{ WormState::OnLeftFlatBazukaOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatBazukaOn"), 0.02f, false)},
+			{ WormState::OnLeftUpBazukaOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpBazukaOn"), 0.02f, false)},
+			{ WormState::OnLeftDownBazukaOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownBazukaOn"), 0.02f, false)},
+			{ WormState::OnRightFlatBazukaOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatBazukaOn"), 0.02f, false)},
+			{ WormState::OnRightUpBazukaOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpBazukaOn"), 0.02f, false)},
+			{ WormState::OnRightDownBazukaOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownBazukaOn"), 0.02f, false)},
+
+			{ WormState::OnLeftFlatBazukaWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatBazukaReady"), 0.02f, false)},
+			{ WormState::OnLeftUpBazukaWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpBazukaReady"), 0.02f, false)},
+			{ WormState::OnLeftDownBazukaWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownBazukaReady"), 0.02f, false)},
+			{ WormState::OnRightFlatBazukaWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatBazukaReady"), 0.02f, false)},
+			{ WormState::OnRightUpBazukaWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpBazukaReady"), 0.02f, false)},
+			{ WormState::OnRightDownBazukaWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownBazukaReady"), 0.02f, false)},
+
 			{ WormState::OnUseItem,	Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.02f, true)},
 		});
 		
@@ -177,14 +204,15 @@ namespace InGame {
 			{ WormState::OnReadyLand, new WormOnReadyLandHandler }, { WormState::OnReadyFallen, new WormOnReadyFallenHandler},
 			{ WormState::OnLand, new WormOnLandHandler },			{ WormState::OnSliding, new WormOnSlidingHandler },
 			{ WormState::OnStuck, new WormOnStuckHandler },			{ WormState::OnStandUp, new WormOnStandUpHandler },
-			{ WormState::OnUnderWater, new WormOnUnderWaterHandler },	{WormState::OnDamaged, new WormOnDamagedHandler },
-			{ WormState::OnAfterDamaged, new WormOnAfterDamaged }
+			{ WormState::OnUnderWater, new WormOnUnderWaterHandler },	{ WormState::OnDamaged, new WormOnDamagedHandler },
+			{ WormState::OnAfterDamaged, new WormOnAfterDamaged }, { WormState::OnReadyItemUse, new WormOnReadyItemUseHandler },
+			{ WormState::OnItemWithdraw, new WormOnItemWithdraw}
 		});
 
 		//Set Controller
 		Gear::EntitySystem::SetController(m_ID, {
 			{ WormCommand::BackJump, GR_KEY_BACKSPACE },{ WormCommand::ChangeWorm, GR_KEY_TAB},
-			{WormCommand::Jump, GR_KEY_ENTER },
+			{ WormCommand::Jump, GR_KEY_ENTER },
 			{ WormCommand::Up, GR_KEY_UP },				{ WormCommand::Down, GR_KEY_DOWN },
 			{ WormCommand::Left, GR_KEY_LEFT },			{ WormCommand::Right, GR_KEY_RIGHT},
 			{ WormCommand::UseItem, GR_KEY_SPACE },		{ WormCommand::SetTimer1, GR_KEY_1},
@@ -209,8 +237,8 @@ namespace InGame {
 		//Set status
 		Gear::EntitySystem::SetStatus(m_ID, {
 			{ WormInfo::Stat::Name, wormData.Name}, { WormInfo::Stat::TeamColor, teamData.TeamColor }, { WormInfo::Stat::TeamName, teamData.TeamName }, 
-			{ WormInfo::Stat::Hp, wormData.Hp }, { WormInfo::Stat::FireAngleVector , glm::vec2(0.70710678f, 0.70710678f) }, 
-			{ WormInfo::Stat::FirePower, 0.0f}, { WormInfo::Stat::SelectedItem, ItemName::Bazooka }, 
+			{ WormInfo::Stat::Hp, wormData.Hp }, { WormInfo::Stat::FireAngle, 15.0f },
+			{ WormInfo::Stat::FirePower, 0.0f}, { WormInfo::Stat::SelectedItem, Item::Bazooka }, 
 			{ WormInfo::Stat::NameBorderOffset, 1.26f }, { WormInfo::Stat::HpBorderOffset, 0.7f }, { WormInfo::Stat::ZRenderOffset, wormData.AdditionalZRenderOffset },
 			{ WormInfo::Stat::Direction, wormData.Direction}, { WormInfo::Stat::MoveSpeed, initData.WormMoveSpeed } ,
 			{ WormInfo::Stat::MyTurn, false }, { WormInfo::Stat::Damage, 0 }, {WormInfo::Stat::SelfDamage , 0}
@@ -221,7 +249,8 @@ namespace InGame {
 			{ WormStatusHandleType::WaitingDisplay, Gear::CreateRef<WormWaitingDisplayHanlder>() },
 			{ WormStatusHandleType::DisplayPosChange, Gear::CreateRef<WormChangeDisplayPosHanlder>() },
 			{ WormStatusHandleType::Damaged, Gear::CreateRef<WormGetDamageHanlder>() },
-			{ WormStatusHandleType::DisplayDamage, Gear::CreateRef<WormDisplayDamageHanlder>() }
+			{ WormStatusHandleType::DisplayDamage, Gear::CreateRef<WormDisplayDamageHanlder>() },
+			{ WormStatusHandleType::DisplayAim, Gear::CreateRef<WormDisplayAimHandler>() }
 		});
 
 		auto NameBorder = Gear::TextureStorage::GetTexture2D("WormNameBorder");

@@ -13,6 +13,7 @@ namespace Gear {
 		{
 		public:
 			virtual EnumType Handle(int entityID, const Command& cmd) = 0;
+			virtual void OnOut(int entityID) {}
 		};
 
 	public:
@@ -28,6 +29,8 @@ namespace Gear {
 		void Handle(int entityID, const Command& cmd);
 		inline EnumType GetCurrentState() const { return m_CurrentState; }
 		inline void SetCurrentState(EnumType state) { m_CurrentState = state; }
+
+		inline InputHandler* GetHandler(EnumType state) { return m_Handlers[state]; }
 
 	private:
 		std::vector<EnumType> m_States;

@@ -16,7 +16,7 @@ namespace InGame {
 				return WormState::OnBreath;
 			}
 
-			if (cmd.KeyType == NONE_COMMAND)
+			if (cmd.KeyType == NONE_COMMAND || cmd.KeyType == WormCommand::Down || cmd.KeyType == WormCommand::Up)
 			{
 				physics->SetExternalVector(glm::vec2(0.0f, 0.0f));
 				return WormState::OnBreath;
@@ -129,12 +129,53 @@ namespace InGame {
 
 	class WormOnBreathHandler : public Gear::FSM::InputHandler
 	{
+		inline void SetReadyItemUseAnimation(int entityID, WormInfo::DirectionType dir)
+		{
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			Item::Name curSettedItem = std::any_cast<Item::Name>(status->GetStat(WormInfo::SelectedItem));
+
+			if (curSettedItem == Item::Bazooka)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->PlayAnimation(WormState::OnLeftFlatBazukaReady);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->PlayAnimation(WormState::OnRightFlatBazukaReady);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->PlayAnimation(WormState::OnLeftUpBazukaReady);
+					break;									 
+				case InGame::WormInfo::RightUp:				 
+					animator->PlayAnimation(WormState::OnRightUpBazukaReady);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->PlayAnimation(WormState::OnLeftDownBazukaReady);
+					break;									 
+				case InGame::WormInfo::RightDown:			 
+					animator->PlayAnimation(WormState::OnRightDownBazukaReady);
+					break;
+				}
+			}
+
+		}
+
+		bool firstIn = true;
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			auto status = Gear::EntitySystem::GetStatus(entityID);
 			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			auto timer = Gear::EntitySystem::GetTimer(entityID);
+
+			if (firstIn)
+			{
+				firstIn = false;
+				timer->SetTimer(0.5f);
+				timer->Start();
+			}
 
 			WormInfo::DirectionType dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Stat::Direction));
 			switch (dir)
@@ -160,29 +201,40 @@ namespace InGame {
 			}
 			animator->ResumeAnimation();
 
+			if (timer->isExpired())
+			{
+				SetReadyItemUseAnimation(entityID, dir);
+				firstIn = true;
+				return WormState::OnReadyItemUse;
+			}
+
 			float moveSpeed = std::any_cast<float>(status->GetStat(WormInfo::MoveSpeed));
 			if (cmd.KeyType == WormCommand::Left)
 			{
 				physics->SetExternalVector(glm::vec2(-moveSpeed, 0.0f));
 				status->SetStat(WormInfo::Direction, WormInfo::DirectionType::LeftFlat);
+				firstIn = true;
 				return WormState::OnMove;
 			}
 			if (cmd.KeyType == WormCommand::Right)
 			{
 				physics->SetExternalVector(glm::vec2(moveSpeed, 0.0f));
 				status->SetStat(WormInfo::Direction, WormInfo::DirectionType::RightFlat);
+				firstIn = true;
 				return WormState::OnMove;
 			}
 			if (cmd.KeyType == WormCommand::Jump)
 			{
 				timer->SetTimer(0.2f);
 				timer->Start();
+				firstIn = true;
 				return WormState::OnReadyJump;
 			}
 			if (cmd.KeyType == WormCommand::BackJump)
 			{
 				timer->SetTimer(0.2f);
 				timer->Start();
+				firstIn = true;
 				return WormState::OnReadyBackJump;
 			}
 
@@ -681,9 +733,188 @@ namespace InGame {
 
 	class WormOnReadyItemUseHandler : public Gear::FSM::InputHandler
 	{
+		bool inFirst = true;
+		bool SettedAngle = false;
+		bool afterReadyAni = false;
+		float actualFireAngle;
+		float firstFireAngle;
+		const float FixedFireAngle = 15.0f;
+
+		inline void OnOut(int entityID) override
+		{
+			inFirst = true;
+			SettedAngle = false;
+			afterReadyAni = false;
+		}
+
+		inline void SetWeaponOnAnimator(int entityID)
+		{
+			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			auto item = std::any_cast<Item::Name>(status->GetStat(WormInfo::SelectedItem));
+			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
+
+			if (item == Item::Bazooka)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->SetCurrentAnimation(WormState::OnLeftFlatBazukaOn);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->SetCurrentAnimation(WormState::OnRightFlatBazukaOn);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->SetCurrentAnimation(WormState::OnLeftUpBazukaOn);
+					break;										   
+				case InGame::WormInfo::RightUp:					   
+					animator->SetCurrentAnimation(WormState::OnRightUpBazukaOn);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->SetCurrentAnimation(WormState::OnLeftDownBazukaOn);
+					break;										   
+				case InGame::WormInfo::RightDown:				   
+					animator->SetCurrentAnimation(WormState::OnRightDownBazukaOn);
+					break;
+				}
+				animator->SetFrameY(int(31 - firstFireAngle));
+			}
+		}
+
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			return WormState::OnLeftFlatBreath;
+			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			if (inFirst)
+			{
+				inFirst = false;
+				actualFireAngle = (int)std::any_cast<float>(status->GetStat(WormInfo::FireAngle));
+				firstFireAngle = FixedFireAngle;
+			}
+			float moveSpeed = std::any_cast<float>(status->GetStat(WormInfo::Stat::MoveSpeed));
+
+			if (animator->loopCompleted())
+			{
+				SetWeaponOnAnimator(entityID);
+				afterReadyAni = true;
+			}
+
+			if (!SettedAngle && afterReadyAni)
+			{
+				if ((int)firstFireAngle != (int)actualFireAngle)
+				{
+					if (firstFireAngle > actualFireAngle)
+					{
+						firstFireAngle -= 1;
+					}
+					else
+					{
+						firstFireAngle += 1;
+					}
+				}
+				else
+				{
+					SettedAngle = true;
+				}
+				animator->SetFrameY((int)31 - firstFireAngle);
+			}
+
+			if (cmd.KeyType == WormCommand::BackJump)
+			{
+				auto timer = Gear::EntitySystem::GetTimer(entityID);
+				timer->SetTimer(0.2f);
+				timer->Start();
+				OnOut(entityID);
+				return WormState::OnReadyBackJump;
+			}
+			if (cmd.KeyType == WormCommand::Jump)
+			{
+				auto timer = Gear::EntitySystem::GetTimer(entityID);
+				timer->SetTimer(0.2f);
+				timer->Start();
+				OnOut(entityID);
+				return WormState::OnReadyJump;
+			}
+			if (cmd.KeyType == WormCommand::Left)
+			{
+				physics->SetPixelCollisionHandler("Move");
+				physics->SetExternalVector(glm::vec2(-moveSpeed, 0.0f));
+				OnOut(entityID);
+				return WormState::OnMove;
+			}
+			if (cmd.KeyType == WormCommand::Right)
+			{
+				physics->SetPixelCollisionHandler("Move");
+				physics->SetExternalVector(glm::vec2(moveSpeed, 0.0f));
+				OnOut(entityID);
+				return WormState::OnMove;
+			}
+			if (afterReadyAni) 
+			{
+				if (cmd.KeyType == WormCommand::Up)
+				{
+					firstFireAngle += 0.2f;
+
+					if (firstFireAngle > 31.0f)
+					{
+						firstFireAngle = 31.0f;
+					}
+
+					animator->SetFrameY((int)31 - firstFireAngle);
+					status->SetStat(WormInfo::FireAngle, firstFireAngle);
+					return WormState::OnReadyItemUse;
+				}
+				if (cmd.KeyType == WormCommand::Down)
+				{
+					firstFireAngle -= 0.2f;
+
+					if (firstFireAngle < 0.0f)
+					{
+						firstFireAngle = 0.0f;
+					}
+
+					animator->SetFrameY((int)31 - firstFireAngle);
+					status->SetStat(WormInfo::FireAngle, firstFireAngle);
+					return WormState::OnReadyItemUse;
+				}
+			}
+
+			if (cmd.KeyType == WormCommand::SetTimer1)
+			{
+
+			}
+			if (cmd.KeyType == WormCommand::SetTimer2)
+			{
+
+			}
+			if (cmd.KeyType == WormCommand::SetTimer3)
+			{
+
+			}
+			if (cmd.KeyType == WormCommand::SetTimer4)
+			{
+
+			}
+			if (cmd.KeyType == WormCommand::SetTimer5)
+			{
+
+			}
+
+			return WormState::OnReadyItemUse;
+		}
+	};
+
+	class WormOnItemWithdraw : public Gear::FSM::InputHandler
+	{
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			if (animator->loopCompleted())
+			{
+				return WormState::OnBreath;
+			}
+			return WormState::OnItemWithdraw;
 		}
 	};
 

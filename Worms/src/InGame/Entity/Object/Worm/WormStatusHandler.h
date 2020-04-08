@@ -255,6 +255,38 @@ namespace InGame {
 		}
 	};
 
+	class WormDisplayAimHandler : public Gear::Status::StatusHandler
+	{
+		float m_Radius = 3.0f;
+
+		inline void init(int entityID)
+		{
+
+		}
+
+		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
+		{
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			auto WormPosition = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition();
+			Gear::Ref<Gear::Texture2D> m_Aim;
+
+			float nativeFireAngle = std::any_cast<float>(status->GetStat(WormInfo::FireAngle));
+			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
+			float theata;
+
+			if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat, dir == WormInfo::DirectionType::LeftUp)
+			{
+				theata = (nativeFireAngle - 15.5f) / 15.5f * 90.0f;
+			}
+			else
+			{
+				theata = (nativeFireAngle - 15.5f) / 15.5f * 90.0f;
+			}
+
+
+		}
+	};
+
 	class WormDisplayDamageHanlder : public Gear::Status::StatusHandler
 	{
 		bool firstIn = true;
