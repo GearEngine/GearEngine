@@ -45,6 +45,7 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("BlueFollowArrow", Gear::FrameTexture2D::Create("assets/textures/UI/BlueFollowingArrow.png", 1, 16));
 		Gear::TextureStorage::AddFrameTexture2D("BlueAim", Gear::FrameTexture2D::Create("assets/textures/UI/BlueAim.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("RedAim", Gear::FrameTexture2D::Create("assets/textures/UI/RedAim.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("Blob", Gear::FrameTexture2D::Create("assets/textures/Effect/Blob.png", 1, 16));
 
 		//Weapon
 		Gear::TextureStorage::AddFrameTexture2D("BazukaBullet", Gear::FrameTexture2D::Create("assets/textures/Weapon/BazukaBullet.png", 1, 32));

@@ -206,7 +206,7 @@ namespace InGame {
 			{ WormState::OnStuck, new WormOnStuckHandler },			{ WormState::OnStandUp, new WormOnStandUpHandler },
 			{ WormState::OnUnderWater, new WormOnUnderWaterHandler },	{ WormState::OnDamaged, new WormOnDamagedHandler },
 			{ WormState::OnAfterDamaged, new WormOnAfterDamaged }, { WormState::OnReadyItemUse, new WormOnReadyItemUseHandler },
-			{ WormState::OnItemWithdraw, new WormOnItemWithdraw}
+			{ WormState::OnItemWithdraw, new WormOnItemWithdraw}, {WormState::OnUseItem, new WormOnUseItemHandler }
 		});
 
 		//Set Controller
@@ -271,6 +271,7 @@ namespace InGame {
 		status->PushNeedHandleData(WormStatusHandleType::Display, Gear::Status::StatHandleData(denoteData));
 		status->PushNeedHandleData(WormStatusHandleType::WaitingDisplay, Gear::Status::StatHandleData(denoteData, true));
 		status->PushNeedHandleData(WormStatusHandleType::Damaged, Gear::Status::StatHandleData(denoteData, true));
+		status->PushNeedHandleData(WormStatusHandleType::DisplayAim, Gear::Status::StatHandleData(0, true));
 
 		//Subscpribe EventChannel
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Explosion);

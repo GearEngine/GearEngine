@@ -1,4 +1,5 @@
 #include "WormEventHandle.h"
+#include "InGame/Entity/Object/Effects/Effects.h"
 
 namespace InGame {
 
@@ -745,6 +746,7 @@ namespace InGame {
 			inFirst = true;
 			SettedAngle = false;
 			afterReadyAni = false;
+			Gear::EntitySystem::GetStatus(entityID)->SetNeedHandleData(WormStatusHandleType::DisplayAim, true);
 		}
 
 		inline void SetWeaponOnAnimator(int entityID)
@@ -790,6 +792,7 @@ namespace InGame {
 			{
 				inFirst = false;
 				actualFireAngle = (int)std::any_cast<float>(status->GetStat(WormInfo::FireAngle));
+				status->SetNeedHandleData(WormStatusHandleType::DisplayAim, false);
 				firstFireAngle = FixedFireAngle;
 			}
 			float moveSpeed = std::any_cast<float>(status->GetStat(WormInfo::Stat::MoveSpeed));
@@ -806,11 +809,26 @@ namespace InGame {
 				{
 					if (firstFireAngle > actualFireAngle)
 					{
-						firstFireAngle -= 1;
+						if (std::abs(firstFireAngle - actualFireAngle) >= 2.0f)
+						{
+							firstFireAngle -= 2;
+						}
+						else
+						{
+							firstFireAngle -= 1;
+
+						}
 					}
 					else
 					{
-						firstFireAngle += 1;
+						if (std::abs(actualFireAngle - firstFireAngle) >= 2.0f)
+						{
+							firstFireAngle += 2;
+						}
+						else
+						{
+							firstFireAngle += 1;
+						}
 					}
 				}
 				else
@@ -850,7 +868,11 @@ namespace InGame {
 				OnOut(entityID);
 				return WormState::OnMove;
 			}
-			if (afterReadyAni) 
+			if (cmd.KeyType == WormCommand::UseItem)
+			{
+				return WormState::OnUseItem;
+			}
+			if (SettedAngle)
 			{
 				if (cmd.KeyType == WormCommand::Up)
 				{
@@ -920,9 +942,77 @@ namespace InGame {
 
 	class WormOnUseItemHandler : public Gear::FSM::InputHandler
 	{
+		std::vector<Gear::Ref<Blob>> blobs;
+		int blobCount = 0;
+		float blobAddDelay = 0.1f;
+		float pastTime = 0.3f;
+
+		inline float GetAngle(int entityID)
+		{
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			float angle;
+
+			float nativeFireAngle = std::any_cast<float>(status->GetStat(WormInfo::FireAngle));
+			auto WormPosition = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition();
+			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
+
+			if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat || dir == WormInfo::DirectionType::LeftUp)
+			{
+				angle = 270.0f - nativeFireAngle / 31.0f * 180.0f;
+			}
+			else
+			{
+				angle = (nativeFireAngle - 15.5f) / 15.5f * 90.0f;
+			}
+			return angle;
+		}
+
+		inline void OnOut(int entityID) override
+		{
+			blobs.clear();
+			blobCount = 0;
+			blobAddDelay = 0.1f;
+			pastTime = 0.3f;
+		}
+
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			return WormState::OnLeftFlatBreath;
+			auto tick = Gear::EntitySystem::GetTimer(entityID)->GetTick();
+			float angle = GetAngle(entityID);
+
+			if (cmd.KeyType == WormCommand::UseItem)
+			{
+				pastTime += tick;
+				if (pastTime > blobAddDelay)
+				{
+					pastTime = 0.0f;
+					auto position = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition();
+					auto blob = EffectPool::GetBlob();
+					blob->reset(position, blobCount++);
+					blobs.push_back(blob);
+				}
+
+				for (auto blob = blobs.begin(); blob != blobs.end(); )
+				{
+					(*blob)->SetAngle(angle);
+					(*blob)->UpDate(tick);
+					if (!(*blob)->m_OnUsing)
+					{
+						blob = blobs.erase(blob);
+					}
+					else
+					{
+						++blob;
+					}
+				}
+				for (auto& blob : blobs)
+				{
+					blob->Render();
+				}
+				return WormState::OnUseItem;
+			}
+			OnOut(entityID);
+			return WormState::OnBreath;
 		}
 	};
 

@@ -257,33 +257,62 @@ namespace InGame {
 
 	class WormDisplayAimHandler : public Gear::Status::StatusHandler
 	{
-		float m_Radius = 3.0f;
+		float Radius = 2.9f;
+		Gear::Ref<Gear::FrameTexture2D> AimTexture;
+		bool inFirst = true;
 
 		inline void init(int entityID)
 		{
+			inFirst = false;
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			auto teamColor = std::any_cast<TeamColor::Color>(status->GetStat(WormInfo::TeamColor));
+
+			switch (teamColor)
+			{
+			case InGame::TeamColor::Red:
+				AimTexture = Gear::TextureStorage::GetFrameTexture2D("RedAim");
+				break;
+			case InGame::TeamColor::Blue:
+				AimTexture = Gear::TextureStorage::GetFrameTexture2D("BlueAim");
+				break;
+			}
 
 		}
 
 		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
 		{
 			auto status = Gear::EntitySystem::GetStatus(entityID);
-			auto WormPosition = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition();
 			Gear::Ref<Gear::Texture2D> m_Aim;
 
-			float nativeFireAngle = std::any_cast<float>(status->GetStat(WormInfo::FireAngle));
-			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
-			float theata;
-
-			if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat, dir == WormInfo::DirectionType::LeftUp)
+			if (inFirst)
 			{
-				theata = (nativeFireAngle - 15.5f) / 15.5f * 90.0f;
+				init(entityID);
+			}
+			float nativeFireAngle = std::any_cast<float>(status->GetStat(WormInfo::FireAngle));
+			auto WormPosition = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition();
+			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
+
+			float theta;
+
+			if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat || dir == WormInfo::DirectionType::LeftUp)
+			{
+				theta = 270.0f - nativeFireAngle / 31.0f * 180.0f;
 			}
 			else
 			{
-				theata = (nativeFireAngle - 15.5f) / 15.5f * 90.0f;
+				theta = (nativeFireAngle - 15.5f) / 15.5f * 90.0f;
 			}
+			glm::vec3 aimPos(WormPosition.x + Radius * glm::cos(glm::radians(theta)), WormPosition.y + Radius * glm::sin(glm::radians(theta)), ZOrder::z_Aim);
+			glm::mat4 aimTrans = glm::translate(glm::mat4(1.0f), aimPos) * glm::scale(glm::mat4(1.0f), glm::vec3(1.8f, 1.8f, 1.0f));
 
-
+			if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat || dir == WormInfo::DirectionType::LeftUp)
+			{
+				Gear::Renderer2D::DrawFrameQuad(aimTrans, AimTexture, 0, 31 - int(nativeFireAngle));
+			}
+			else
+			{
+				Gear::Renderer2D::DrawFrameQuad(aimTrans, AimTexture, 0, int(nativeFireAngle));
+			}
 		}
 	};
 
