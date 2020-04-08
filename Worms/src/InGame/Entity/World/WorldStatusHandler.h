@@ -55,24 +55,57 @@ namespace InGame {
 
 	class WorldDisplayTeamInfoHandler : public Gear::Status::StatusHandler
 	{
+		const float blinkDelay = 0.5f;
+		float elasedTime = 0.0f;
+		bool onWhite = false;
+		bool inFirst = true;
+		WorldTeamInfoDenoteData teamDenoteData;
+		std::string currentTeamName;
+		bool blink;
+		Gear::Ref<Gear::Texture2D> nameBorder;
+
+		glm::mat4 teamInfoTranslate;
+		glm::vec3 teamInfoNamePos;
+		glm::mat4 IconTranslate;
+		glm::vec3 hpPosition;
+
+		glm::mat4 originTeamInfoTranslate;
+		glm::vec3 originTeamInfoNamePos;
+		glm::mat4 originIconTranslate;
+		glm::vec3 originHpPosition;
+
+		std::vector<TeamInfo> teamInfoData;
+
+	private:
+		inline void init(Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist)
+		{
+			teamDenoteData = std::any_cast<WorldTeamInfoDenoteData>(data.Data);
+			nameBorder = teamDenoteData.NameBorder;
+
+			originTeamInfoTranslate = teamDenoteData.TeamInfoBorderTranslate;
+			originTeamInfoNamePos = teamDenoteData.TeamNameFontPosition;
+			originIconTranslate = teamDenoteData.IconTranslate;
+			originHpPosition = teamDenoteData.HpBasisBarPosition;
+		}
+
 		inline void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
 		{
-			static const float blinkDelay = 0.5f;
-			static float elasedTime = 0.0f;
-			static bool onWhite = false;
+			if (inFirst)
+			{
+				inFirst = false;
+				init(data, statlist);
+			}
+			blink = std::any_cast<bool>(statlist[WorldInfo::TeamInfoBlink]);
+			currentTeamName = std::any_cast<std::string>(statlist[WorldInfo::CurrnetTeam]);
+			teamInfoData = std::any_cast<std::vector<TeamInfo>>(statlist[WorldInfo::TeamInfo]);
 
-			auto& teamDenoteData = std::any_cast<WorldTeamInfoDenoteData>(data.Data);
-			auto& teamInfoData = std::any_cast<std::vector<TeamInfo>>(statlist[WorldInfo::TeamInfo]);
-			auto& currentTeamName = std::any_cast<std::string>(statlist[WorldInfo::CurrnetTeam]);
-			auto blink = std::any_cast<bool>(statlist[WorldInfo::TeamInfoBlink]);
-			auto nameBorder = teamDenoteData.NameBorder;
-
-			glm::mat4 teamInfoTranslate = teamDenoteData.TeamInfoBorderTranslate;
-			glm::vec3 teamInfoNamePos = teamDenoteData.TeamNameFontPosition;
-			glm::mat4 IconTranslate = teamDenoteData.IconTranslate;
-			glm::vec3 hpPosition = teamDenoteData.HpBasisBarPosition;
 			int offsetCount = 0;
 
+			teamInfoTranslate = originTeamInfoTranslate;
+			teamInfoNamePos = originTeamInfoNamePos;
+			IconTranslate = originIconTranslate;
+			hpPosition = originHpPosition;
+		
 			for (int i = 0; i < teamInfoData.size(); ++i)
 			{
 				int curTotalHp = teamInfoData[i].CurrentTotalWormHp;
@@ -151,5 +184,4 @@ namespace InGame {
 			}
 		}
 	};
-
 }

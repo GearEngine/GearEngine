@@ -457,17 +457,26 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
+			GR_TRACE("FSM on StrandUp Worm : {0}", entityID);
+
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			if (animator->loopCompleted())
 			{
 				auto status = Gear::EntitySystem::GetStatus(entityID);
 				int selfDamage = std::any_cast<int>(status->GetStat(WormInfo::SelfDamage));
-				int damage = std::any_cast<int>(status->GetStat(WormInfo::SelfDamage));
+				int damage = std::any_cast<int>(status->GetStat(WormInfo::Damage));
 				if (selfDamage + damage > 0)
 				{
 					return WormState::OnDamaged;
 				}
-				return WormState::OnBreath;
+				if (std::any_cast<bool>(status->GetStat(WormInfo::MyTurn)))
+				{
+					return WormState::OnBreath;
+				}
+				else
+				{
+					return WormState::OnNotMyTurn;
+				}
 			}
 			return WormState::OnStandUp;
 		}
@@ -477,6 +486,8 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
+			GR_TRACE("FSM on Sliding Worm : {0}", entityID);
+
 			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 			auto status = Gear::EntitySystem::GetStatus(entityID);
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
@@ -558,6 +569,7 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
+			GR_TRACE("FSM on Stuck Worm : {0}", entityID);
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			if (animator->loopCompleted())
 			{
@@ -572,6 +584,7 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
+			GR_TRACE("FSM on ReadyFallen Worm : {0}", entityID);
 			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			auto status = Gear::EntitySystem::GetStatus(entityID);
@@ -623,6 +636,8 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
+			GR_TRACE("FSM on Damaged Worm : {0}", entityID);
+
 			auto status = Gear::EntitySystem::GetStatus(entityID);
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 
@@ -650,16 +665,17 @@ namespace InGame {
 			}
 			animator->ResumeAnimation();
 
-			if (std::any_cast<bool>(status->GetStat(WormInfo::MyTurn)))
-			{
-				return WormState::OnTurnOver;
-			}
-			else
-			{
-				return WormState::OnNotMyTurn;
-			}
+			Gear::EventSystem::DispatchEventOnce(EventType::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::DamageWorm)));
+			
+			return WormState::OnNothing;
+		}
+	};
 
-			return WormState::OnDamaged;
+	class WormOnNothingHandler : public Gear::FSM::InputHandler
+	{
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			return WormState::OnNothing;
 		}
 	};
 
@@ -676,6 +692,35 @@ namespace InGame {
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			return WormState::OnLeftFlatBreath;
+		}
+	};
+
+	class WormOnAfterDamaged : public Gear::FSM::InputHandler
+	{
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			GR_TRACE("FSM on After Damaged Worm : {0}", entityID);
+
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			
+			int hp = std::any_cast<int>(status->GetStat(WormInfo::Hp));
+						
+			if (hp == 0)
+			{
+				return WormState::OnDye;
+			}
+			bool myTurn = std::any_cast<bool>(status->GetStat(WormInfo::MyTurn));
+			if (myTurn)
+			{
+				auto timer = Gear::EntitySystem::GetTimer(entityID);
+				timer->SetTimer(1.0f);
+				timer->Start();
+				return WormState::OnTurnOver;
+			}
+			else
+			{
+				return WormState::OnNotMyTurn;
+			}
 		}
 	};
 
@@ -777,6 +822,7 @@ namespace InGame {
 			if (cmd.KeyType != NONE_COMMAND)
 			{
 				status->SetStat(WormInfo::MyTurn, true);
+				GR_TRACE("Push DisplayPosChage +0.5f at Worm FSM OnWaiting Handler");
 				status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(0.5f));
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::RunningStart, 0, entityID)));
 			}

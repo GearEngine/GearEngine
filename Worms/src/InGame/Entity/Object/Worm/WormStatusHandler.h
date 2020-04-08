@@ -201,15 +201,24 @@ namespace InGame {
 
 			if (std::abs(pastMove) > moveLimit)
 			{
+				GR_TRACE("DisplayPosChage complete");
 				data.Handled = true;
+
 				pastMove = 0.0f;
+				auto status = Gear::EntitySystem::GetStatus(entityID);
 				if (moveDist > 0.0f)
 				{
-					Gear::EntitySystem::GetStatus(entityID)->SetNeedHandleData(WormStatusHandleType::WaitingDisplay, true);
-					Gear::EntitySystem::GetStatus(entityID)->SetNeedHandleData(WormStatusHandleType::Display, true);
+					status->SetNeedHandleData(WormStatusHandleType::WaitingDisplay, true);
+					status->SetNeedHandleData(WormStatusHandleType::Display, true);
 				}
 				else
 				{
+					auto timer = Gear::EntitySystem::GetTimer(entityID);
+					timer->SetTimer(2.0f);
+					if (std::any_cast<int>(status->GetStat(WormInfo::Damage)) + std::any_cast<int>(status->GetStat(WormInfo::SelfDamage)))
+					{
+						status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
+					}
 					Gear::EntitySystem::GetStatus(entityID)->SetNeedHandleData(WormStatusHandleType::Display, false);
 				}
 			}
@@ -218,9 +227,131 @@ namespace InGame {
 
 	class WormGetDamageHanlder : public Gear::Status::StatusHandler
 	{
+		bool inFirst = true;
 		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
 		{
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			if (inFirst && std::any_cast<bool>(status->GetStat(WormInfo::MyTurn)))
+			{
+				inFirst = false;
+				status->SetNeedHandleData(WormStatusHandleType::Display, false);
+				GR_TRACE("Push DisplayPosChage -0.2f at Worm GetDamage Handler");
+				status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(-0.2f));
+			}
 
+			if (Gear::EntitySystem::GetTimer(entityID)->isExpired())
+			{
+				auto FSM = Gear::EntitySystem::GetFSM(entityID);
+				FSM->SetCurrentState(WormState::OnNothing);
+				inFirst = true;
+				data.Handled = true;
+
+				int totalDamage = std::any_cast<int>(status->GetStat(WormInfo::Damage)) + std::any_cast<int>(status->GetStat(WormInfo::SelfDamage));
+				if (totalDamage)
+				{
+					status->PushNeedHandleData(WormStatusHandleType::DisplayDamage, Gear::Status::StatHandleData(0));
+				}
+			}
+		}
+	};
+
+	class WormDisplayDamageHanlder : public Gear::Status::StatusHandler
+	{
+		bool firstIn = true;
+		int totalDamage = 0;
+		std::string totalDamageStr;
+		int totalDamageLength;
+
+		bool damageDisplayEnd = false;
+
+		float damageBorderOffset = 2.5f;
+		glm::vec3 damageBorderPosition;
+		Gear::Ref<Gear::Texture2D> damageBorder;
+		float damageBorderWidthUnit;
+		float damageBorderHeightUnit;
+
+		//float partitialDamage;
+		FontType::Type fontType;
+
+		glm::mat4 damageBorderTrans;
+
+		void init(int entityID)
+		{
+			firstIn = false;
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+
+			totalDamage = std::any_cast<int>(status->GetStat(WormInfo::Damage)) + std::any_cast<int>(status->GetStat(WormInfo::SelfDamage));
+			totalDamageStr = std::to_string(totalDamage);
+			totalDamageLength = totalDamageStr.length();
+
+			damageBorderPosition = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition();
+			damageBorderPosition.z = ZOrder::z_Font;
+			damageBorderPosition.y += damageBorderOffset;
+
+			damageBorder = Gear::TextureStorage::GetTexture2D("WormHpBorder");
+			float hpBorderWidth = damageBorder->GetWidth();
+			float hpBorderHeight = damageBorder->GetHeight();
+			damageBorderWidthUnit = hpBorderWidth / (37.0f * 3) * totalDamageLength / 3;
+			damageBorderHeightUnit = hpBorderHeight / (37.0f * 3);
+
+			damageBorderTrans = glm::translate(glm::mat4(1.0f), damageBorderPosition) * glm::scale(glm::mat4(1.0f), glm::vec3(damageBorderWidthUnit, damageBorderHeightUnit, 1.0f));
+			damageBorderPosition.x += 0.15f;
+			damageBorderTrans[3].z = ZOrder::z_CheckerImg;
+		
+			//partitialDamage = totalDamage / 51.0f;
+
+			auto teamColor = std::any_cast<TeamColor::Color>(status->GetStat(WormInfo::TeamColor));
+			switch (teamColor)
+			{
+			case TeamColor::Red:
+				fontType = FontType::RedSmall;
+				break;
+			case TeamColor::Blue:
+				fontType = FontType::BlueSmall;
+				break;
+			}
+		}
+
+		int count = 0;
+		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
+		{
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			if (firstIn)
+			{
+				init(entityID);
+			}
+			damageBorderOffset += 0.02f;
+
+			damageBorderPosition.y += 0.02f;
+			damageBorderTrans[3].y += 0.02f;
+
+			//int hp = std::any_cast<int>(status->GetStat(WormInfo::Hp));
+			//status->SetStat(WormInfo::Hp, hp - totalDamage);
+
+
+			Gear::Renderer2D::DrawQuad(damageBorderTrans, damageBorder);
+			Font::PrintFont(damageBorderPosition, glm::vec3(0.5f, 0.5f, 1.0f), totalDamageStr, fontType, 0.3f, false);
+
+			if (damageBorderOffset > 3.5f)
+			{
+				damageDisplayEnd = true;
+			}
+			
+			if (damageDisplayEnd)
+			{
+				int hp = std::any_cast<int>(status->GetStat(WormInfo::Hp));
+				status->SetStat(WormInfo::Damage, 0);
+				status->SetStat(WormInfo::Hp, hp - totalDamage);
+				status->SetStat(WormInfo::SelfDamage, 0);
+				
+
+				firstIn = true;
+				totalDamage = 0;
+
+				auto FSM = Gear::EntitySystem::GetFSM(entityID);
+				FSM->SetCurrentState(WormState::OnAfterDamaged);
+				data.Handled = true;
+			}
 		}
 	};
 

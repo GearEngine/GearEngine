@@ -177,7 +177,8 @@ namespace InGame {
 			{ WormState::OnReadyLand, new WormOnReadyLandHandler }, { WormState::OnReadyFallen, new WormOnReadyFallenHandler},
 			{ WormState::OnLand, new WormOnLandHandler },			{ WormState::OnSliding, new WormOnSlidingHandler },
 			{ WormState::OnStuck, new WormOnStuckHandler },			{ WormState::OnStandUp, new WormOnStandUpHandler },
-			{ WormState::OnUnderWater, new WormOnUnderWaterHandler },	{WormState::OnDamaged, new WormOnDamagedHandler }
+			{ WormState::OnUnderWater, new WormOnUnderWaterHandler },	{WormState::OnDamaged, new WormOnDamagedHandler },
+			{ WormState::OnAfterDamaged, new WormOnAfterDamaged }
 		});
 
 		//Set Controller
@@ -196,11 +197,11 @@ namespace InGame {
 		Gear::EntitySystem::SetPhysics(m_ID, false, 0.7f, 0.8f, 0.3f, 0.3f);
 		auto physics = Gear::EntitySystem::GetPhysics2D(m_ID);
 		
-		Gear::EntitySystem::SetPixelCollision( m_ID, { 255, 255, 255 }, mask, maskTranslate, {
+		Gear::EntitySystem::SetPixelCollision(m_ID, { 255, 255, 255 }, mask, maskTranslate, {
 			{ "OnAir", Gear::CreateRef<WormOnAirPCHandler>() },
 			{ "Move", Gear::CreateRef<WormMovePCHandler>() },
 			{ "Sliding", Gear::CreateRef<WormSlidingPCHandler>() },
-			{ "UnderWater", Gear::CreateRef<WormOnUnderWater>() }
+			{ "UnderWater", Gear::CreateRef<WormOnUnderWater>() },
 		});
 		
 		physics->SetPixelCollisionHandler("Move");
@@ -216,9 +217,11 @@ namespace InGame {
 		});
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {
-			{ WormStatusHandleType::Display, Gear::CreateRef<WormDisplayHanlder>() }, 
-			{ WormStatusHandleType::WaitingDisplay, Gear::CreateRef<WormWaitingDisplayHanlder>()},
-			{ WormStatusHandleType::DisplayPosChange, Gear::CreateRef<WormChangeDisplayPosHanlder>()}
+			{ WormStatusHandleType::Display, Gear::CreateRef<WormDisplayHanlder>() },
+			{ WormStatusHandleType::WaitingDisplay, Gear::CreateRef<WormWaitingDisplayHanlder>() },
+			{ WormStatusHandleType::DisplayPosChange, Gear::CreateRef<WormChangeDisplayPosHanlder>() },
+			{ WormStatusHandleType::Damaged, Gear::CreateRef<WormGetDamageHanlder>() },
+			{ WormStatusHandleType::DisplayDamage, Gear::CreateRef<WormDisplayDamageHanlder>() }
 		});
 
 		auto NameBorder = Gear::TextureStorage::GetTexture2D("WormNameBorder");
@@ -238,6 +241,7 @@ namespace InGame {
 
 		status->PushNeedHandleData(WormStatusHandleType::Display, Gear::Status::StatHandleData(denoteData));
 		status->PushNeedHandleData(WormStatusHandleType::WaitingDisplay, Gear::Status::StatHandleData(denoteData, true));
+		status->PushNeedHandleData(WormStatusHandleType::Damaged, Gear::Status::StatHandleData(denoteData, true));
 
 		//Subscpribe EventChannel
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Explosion);
@@ -258,6 +262,7 @@ namespace InGame {
 			break;
 		}
 		
+		Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::CreatedWorm, 0, m_ID)));
 	}
 
 	Worm::~Worm()

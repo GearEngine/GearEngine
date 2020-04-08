@@ -16,6 +16,7 @@ namespace InGame {
 
 	enum WorldDataType : unsigned int
 	{
+		CreatedWorm,
 		NewStart,
 		OnExitMenu,
 		ReFollow,
@@ -23,6 +24,8 @@ namespace InGame {
 		PrepareNextPhase,
 		TurnOver,
 		RunningStart,
+		DamageWorm,
+		GetDamageWorm,
 		GameEnd
 	};
 
@@ -54,6 +57,16 @@ namespace InGame {
 		WorldDataType DataType;
 		std::any Data;
 		int EntityID;
+	};
+
+	struct DamageData
+	{
+		DamageData(int damage, const std::string& teamName)
+			:Damage(damage), WormTeamName(teamName)
+		{}
+
+		int Damage;
+		std::string WormTeamName;
 	};
 
 }

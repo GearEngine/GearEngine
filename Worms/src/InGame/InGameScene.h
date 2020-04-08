@@ -13,8 +13,10 @@ namespace InGame {
 		glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
 		tempCamera->GetCamera().SetPosition({ 0.0f, 0.0f, 1.0f });
+		std::cout << "Loading thread start!" << std::endl;
 		while (++i)
 		{
+			std::cout << "In Loading Thread! i : " << i << std::endl;
 			Gear::RenderCommand::SetClearColor({ 1.0f, 0.0f, 1.0f, 1.0f });
 			Gear::RenderCommand::Clear();
 
@@ -24,11 +26,12 @@ namespace InGame {
 
 			Gear::Renderer2D::EndScene();
 
-			Gear::Application::Get().GetWindow2().OnUpdate();
+			Gear::Application::Get().GetWindow().OnUpdate();
 
 			if (i == 300)
 				return;
 		}
+		std::cout << "Loading thread end!" << std::endl;
 	}*/
 
 	class InGameScene : public Gear::Scene
@@ -38,7 +41,6 @@ namespace InGame {
 			: Gear::Scene(name)
 		{
 			//std::thread LoadingThread = std::thread(workFunk, initData);
-			//LoadingThread.join();
 
 			std::thread InitThread = std::thread([&]() {
 				PushLayer(new UILayer(initData));
@@ -46,6 +48,7 @@ namespace InGame {
 				PushLayer(new ObjectLayer(initData));
 			});
 
+			//LoadingThread.join();
 			InitThread.join();
 		}
 

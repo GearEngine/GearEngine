@@ -61,6 +61,7 @@ namespace InGame {
 
 			if (worldData.DataType == WorldDataType::PrepareNextPhase)
 			{
+				auto status = Gear::EntitySystem::GetStatus(entityID);
 				if (!Gear::EntitySystem::IsComponenetActivate(entityID, Gear::ComponentID::Controller))
 				{
 					handled = true;
@@ -68,10 +69,14 @@ namespace InGame {
 				}
 				auto FSM = Gear::EntitySystem::GetFSM(entityID);
 				auto prevState = FSM->GetCurrentState();
-				if (prevState != WormState::OnBreath)
+				if (prevState != WormState::OnBreath && prevState != WormState::OnWaiting)
 				{
 					handled = false;
 					return;
+				}
+				if (prevState == WormState::OnWaiting)
+				{
+					status->SetNeedHandleData(WormStatusHandleType::WaitingDisplay, true);
 				}
 
 				handled = true;
@@ -82,11 +87,13 @@ namespace InGame {
 				timer->SetTimer(1.5f);
 				timer->Start();
 
-				auto status = Gear::EntitySystem::GetStatus(entityID);
 				status->SetNeedHandleData(WormStatusHandleType::Display, false);
 
-				if(prevState != WormState::OnWaiting)
+				if (prevState != WormState::OnWaiting)
+				{
+					GR_TRACE("Push DisplayPosChage -0.2f at Worm Event Handler Event(PrepareNextPhase)");
 					status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(-0.2f));
+				}
 			}
 			if (worldData.DataType == WorldDataType::NewStart)
 			{

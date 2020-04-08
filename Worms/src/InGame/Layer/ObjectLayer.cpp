@@ -80,6 +80,7 @@ namespace InGame {
 		status->SetNeedHandleData(WormStatusHandleType::WaitingDisplay, false);
 		FSM->SetCurrentState(WormState::OnWaiting);
 
+
 		std::string curWormName = s_TeamInfo[s_TeamIter->first].worms[s_curWorm].Name;
 		std::pair<std::string, std::string> ChangedWormData = { s_TeamIter->first, curWormName };
 

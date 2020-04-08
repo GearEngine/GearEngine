@@ -18,7 +18,7 @@ namespace Gear {
 			: Title(title), Width(width), Height(height), FullScreen(fullScreen)
 		{}
 	};
-
+	
 	//Interface representing a desktop system based Window
 	class GEAR_API Window {
 	public:

@@ -1,9 +1,16 @@
 #pragma once
 
 #include "WorldState.h"
+#include "InGame/Entity/Object/Worm/WormEnum.h"
 #include "Common/EventChannel.h"
 
 namespace InGame {
+
+	class WorldWormData
+	{
+	public: 
+		static std::vector<int> s_LivingWorms;
+	};
 
 	struct WorldDenoteData
 	{
@@ -28,6 +35,7 @@ namespace InGame {
 
 	struct WorldTeamInfoDenoteData
 	{
+		WorldTeamInfoDenoteData() = default;
 		WorldTeamInfoDenoteData(const Gear::Ref<Gear::Texture2D>& nameBorder)
 			: NameBorder(nameBorder)
 		{
@@ -76,6 +84,7 @@ namespace InGame {
 
 	class WorldEventHandler : public Gear::EventHandler
 	{
+		
 		inline virtual void Handle(std::any data, int entityID, bool& handled) override
 		{
 			auto worldData = std::any_cast<WorldData>(data);
@@ -93,19 +102,75 @@ namespace InGame {
 				timer->SetTimer(5.0f);
 				timer->Start();
 				handled = true;
+				return;
 			}
 			if (worldData.DataType == WorldDataType::RunningStart)
 			{
 				status->SetNeedHandleData(WorldStatusHandleType::DisplayWaitingCount, false, true);
 				handled = true;
+				return;
 			}
 			if (worldData.DataType == WorldDataType::PrepareNextPhase)
 			{
+				GR_TRACE("World Reseive PrepareNext");
+
 				status->SetStat(WorldInfo::TeamInfoBlink, false);
 				handled = true;
+				return;
 			}
+			if (worldData.DataType == WorldDataType::DamageWorm)
+			{
+				GR_TRACE("World Reseive DamageWorm");
+
+				std::vector<int> damagedWorm;
+				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
+				{
+					status->SetStat(WorldInfo::TeamInfoBlink, false);
+					auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
+					if (curState != WormState::OnNothing && curState != WormState::OnNotMyTurn)
+					{
+						return;
+					}
+					if(curState == WormState::OnNothing)
+					{
+						damagedWorm.push_back(WorldWormData::s_LivingWorms[i]);
+					}
+				}
+				for (int i = 0; i < damagedWorm.size(); ++i)
+				{
+					auto status = Gear::EntitySystem::GetStatus(damagedWorm[i]);
+					auto timer = Gear::EntitySystem::GetTimer(damagedWorm[i]);
+					timer->SetTimer(1.0f);
+					timer->Start();
+					status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
+				}
+				handled = true;
+				return;
+			}
+			if (worldData.DataType == WorldDataType::CreatedWorm)
+			{
+				WorldWormData::s_LivingWorms.push_back(worldData.EntityID);
+				handled = true;
+				return;
+			}
+			if (worldData.DataType == WorldDataType::GetDamageWorm)
+			{
+				auto& teamInfoData = std::any_cast<std::vector<TeamInfo>>(WorldInfo::TeamInfo);
+				auto& damageData = std::any_cast<DamageData>(data);
+				for (auto team : teamInfoData)
+				{
+					if (team.TeamName == damageData.WormTeamName)
+					{
+						team.CurrentTotalWormHp -= damageData.Damage;
+					}
+				}
+				handled = true;
+				return;
+			}
+
+			handled = true;
 		}
 	};
-
+	
 
 }

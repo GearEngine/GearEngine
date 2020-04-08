@@ -30,6 +30,8 @@ namespace InGame {
 			OnDye,
 			OnTurnOver,
 			OnUnderWater,
+			OnAfterDamaged,
+			OnNothing,
 
 			OnLeftFlatMove, OnRightFlatMove,
 			OnLeftUpMove, OnRightUpMove,
@@ -97,6 +99,7 @@ namespace InGame {
 			WaitingDisplay,
 			DisplayPosChange,
 			Damaged,
+			DisplayDamage,
 			FireAngle,
 			FirePower,
 		};

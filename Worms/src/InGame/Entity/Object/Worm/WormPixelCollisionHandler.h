@@ -191,11 +191,12 @@ namespace InGame {
 			{
 				if (FSM->GetCurrentState() == WormState::OnSliding)
 				{
-					if (*m_GravityAccelation <= 0.7f)
+					if (m_ExternalVector->y <= -20.f)
 					{
-						int fallenDamage = (int)((*m_GravityAccelation - 7.0f) * 10);
+						int fallenDamage = (int)((-m_ExternalVector->y - 20.0f) * 0.1f);
 						if (myTurn)
 						{
+							Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::TurnOver)));
 							int selfDamage = std::any_cast<int>(status->GetStat(WormInfo::SelfDamage));
 							selfDamage += fallenDamage;
 							status->SetStat(WormInfo::SelfDamage, selfDamage);
@@ -214,15 +215,17 @@ namespace InGame {
 				}
 				else
 				{
-					if (*m_GravityAccelation <= 0.7f)
+					if (m_ExternalVector->y >= -20.f)
 					{
 						FSM->SetCurrentState(WormState::OnReadyLand);
 					}
 					else
 					{
-						int fallenDamage = (int)((*m_GravityAccelation - 0.7f) * 100.0f);
+						int fallenDamage = (int)((-m_ExternalVector->y + 20.f) * 0.1f);
+						GR_TRACE("Worm {0} First Damaged {1}", entityID, fallenDamage);
 						if (myTurn)
 						{
+							Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::TurnOver)));
 							int selfDamage = std::any_cast<int>(status->GetStat(WormInfo::SelfDamage));
 							selfDamage += fallenDamage;
 							status->SetStat(WormInfo::SelfDamage, selfDamage);

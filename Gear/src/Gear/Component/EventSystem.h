@@ -22,6 +22,7 @@ namespace Gear {
 		void UnSubscribe(int entityID);
 
 		void DispatchEvent(const EntityEvent& event);
+		void DispatchEventOnce(const EntityEvent& event);
 
 	private:
 		ChannelType m_Channel;
@@ -40,6 +41,7 @@ namespace Gear {
 		static void UnSubscribeChannel(int entityID, ChannelType channel);
 		static void DispatchEvent(ChannelType channel, const EntityEvent& event);
 		static void RegisterEventHandler(int entityID, ChannelType channel, Ref<EventHandler> handler);
+		static void DispatchEventOnce(ChannelType channel, const EntityEvent& event);
 
 	private:
 		static int s_channelID;
