@@ -242,39 +242,7 @@ namespace InGame {
 					glm::vec3(width[i] / initData.MapReductionRatio, height[i] / initData.MapReductionRatio, 1.0f), Gear::Util::GetRndFloatFromTo(-15.0f, 15.0f), initData.WorldRect);
 			}
 		}
-	}
-
-	/*void BackGroundLayer::DestroyMask(float x, float y, float radius)
-	{
-		int _width = Mask::s_Mask->GetWidth();
-		int _height = Mask::s_Mask->GetHeight();
-		unsigned int* _data = (unsigned int*)Mask::s_Mask->GetData();
-
-		float _x = x * _width;
-		float _y = y * _height;
-		float _radius = radius;
-
-		int mHeight = -(_radius + 1);
-		for (int yPos = _y - _radius; yPos <= _y + _radius; ++yPos)
-		{
-			++mHeight;
-			if (yPos < 0 || yPos >= _height)
-			{
-				continue;
-			}
-			float platwidth = std::sqrt(std::powf(_radius, 2) - std::powf(mHeight, 2));
-
-			for (int xPos = _x - platwidth; xPos < _x + platwidth; ++xPos)
-			{
-				if (xPos < 0 || xPos >= _width)
-				{
-					continue;
-				}
-				_data[_width * yPos + xPos] = 0;
-			}
-		}
-		Mask::s_Mask->SetData(_data, _width * _height * 4);
-	}*/
+	}	
 
 	void FloatingMatter::Update(Gear::Timestep ts)
 	{

@@ -2,7 +2,6 @@
 #include "ObjectLayer.h"
 
 #include "InGame/Entity/Object/Worm/WormEnum.h"
-#include "InGame/Entity/Object/Effects/Effects.h"
 #include "InGame/Entity/Object/Item/Item.h"
 
 namespace InGame {
@@ -11,6 +10,7 @@ namespace InGame {
 	std::unordered_map<std::string, TeamInfo> ObjectLayer:: s_TeamInfo = std::unordered_map<std::string, TeamInfo>();
 	std::unordered_map<std::string, TeamInfo>::iterator ObjectLayer:: s_TeamIter = std::unordered_map<std::string, TeamInfo>::iterator();
 	std::unordered_map<std::string, int> ObjectLayer::s_WormTurnIndex = std::unordered_map<std::string, int>();
+	std::vector<Gear::Ref<ExplosionEffect>> ObjectLayer::s_Explosion = std::vector<Gear::Ref<ExplosionEffect>>();
 
 	int ObjectLayer::s_curWorm = 0;
 	int ObjectLayer::s_CurrentActivatedWormID = -1;
@@ -61,6 +61,25 @@ namespace InGame {
 		if (s_turnChanged)
 		{
 			HandleTurnChange();
+		}
+		if (s_Explosion.size())
+		{
+			for (auto explosion = s_Explosion.begin(); explosion != s_Explosion.end(); )
+			{
+				(*explosion)->Update(ts);
+				if (!(*explosion)->m_OnUsing)
+				{
+					explosion = s_Explosion.erase(explosion);
+				}
+				else
+				{
+					++explosion;
+				}
+			}
+			for (auto& explosion : s_Explosion)
+			{
+				explosion->Render();
+			}
 		}
 	}
 

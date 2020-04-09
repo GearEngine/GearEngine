@@ -21,7 +21,7 @@ namespace InGame {
 
 		enum Info : unsigned int
 		{
-			Power, Angle, WindAdjustRatio,
+			Power, Angle, WindAdjustRatio, ExplosionRadius,
 			ExplosionType
 		};
 

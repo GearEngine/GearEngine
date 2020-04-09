@@ -39,6 +39,12 @@ namespace InGame {
 		return Item::State::OnGoing;
 	}
 
+	Gear::EnumType BazookaOnExplosion::Handle(int entityID, const Gear::Command & cmd)
+	{
+		Gear::EntitySystem::RegisterInActivateEntity(entityID);
+		return Item::State::OnExplosion;
+	}
+
 }
 
 

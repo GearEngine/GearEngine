@@ -39,6 +39,10 @@ namespace Gear {
 		virtual void Update(Timestep ts) override;
 		virtual void RegisterTexture(RenderType::Type renderType, Ref<Texture2D> texture, Ref<Texture2D> m_Mask = nullptr , Ref<Texture2D> m_BlendTexture = nullptr);
 
+	public:
+		inline Ref<Texture2D> GetTexture() { return m_Texture; }
+		inline Ref<Texture2D> GetMask() { return m_Mask; }
+
 	private:
 		Ref<Texture2D> m_Texture;
 		Ref<Texture2D> m_Mask;

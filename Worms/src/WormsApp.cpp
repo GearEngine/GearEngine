@@ -47,6 +47,22 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RedAim", Gear::FrameTexture2D::Create("assets/textures/UI/RedAim.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("Blob", Gear::FrameTexture2D::Create("assets/textures/Effect/Blob.png", 1, 16));
 
+		//Explosion
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionCircle25", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionCircle25.png", 1, 8));
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionCircle50", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionCircle50.png", 1, 8));
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionCircle75", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionCircle75.png", 1, 4));
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionCircle100", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionCircle100.png", 1, 4));
+		
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionEllipse25", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionEllipse25.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionEllipse50", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionEllipse50.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionEllipse75", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionEllipse75.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionEllipse100", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionEllipse100.png", 1, 10));
+
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionTextFoom", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionTextFoom.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionTextBiff", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionTextBiff.png", 1, 12));
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionTextPoot", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionTextPoot.png", 1, 18));
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionTextPow", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionTextPow.png", 1, 12));
+		
 		//Weapon
 		Gear::TextureStorage::AddFrameTexture2D("BazukaBullet", Gear::FrameTexture2D::Create("assets/textures/Weapon/BazukaBullet.png", 1, 32));
 

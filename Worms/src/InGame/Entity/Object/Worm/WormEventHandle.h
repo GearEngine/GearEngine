@@ -17,7 +17,24 @@ namespace InGame {
 
 			float distance = std::powf((explosion.Position.x - entityPosition.x), 2) + std::powf((explosion.Position.y - entityPosition.y), 2);
 
-			if (distance < powf(explosion.radius, 2))
+			float radius;
+			switch (explosion.Size)
+			{
+			case Explosion::Size::Size25:
+				radius = 25.0f;
+				break;
+			case Explosion::Size::Size50:
+				radius = 50.0f;
+				break;
+			case Explosion::Size::Size75:
+				radius = 75.0f;
+				break;
+			case Explosion::Size::Size100:
+				radius = 100.0f;
+				break;
+			}
+
+			if (distance < powf(radius, 2))
 			{
 				GR_TRACE("No.{0} Entity Damaged by explosion", entityID);
 			}

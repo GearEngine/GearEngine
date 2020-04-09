@@ -54,6 +54,7 @@ namespace InGame {
 		//Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::MouseClick);
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::World);
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::World, Gear::CreateRef<WorldEventHandler>());
+
 	}
 
 	World::~World()

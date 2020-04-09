@@ -24,6 +24,9 @@ namespace ZOrder {
 	const float z_Item = 0.5f;
 	const float z_Worm = 0.7f;
 	const float z_Blob = 0.71f;
+	const float z_ExplosionCircle = 0.711f;
+	const float z_ExplosionEllipse = 0.712f;
+	const float z_ExplosionText = 0.713f;
 	const float z_FollowArrow = 0.75f;
 	const float z_Aim = 0.76f;
 	const float z_WaterWaveF = 0.8f;

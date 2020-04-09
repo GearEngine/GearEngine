@@ -948,7 +948,7 @@ namespace InGame {
 		float blobAddDelay = 0.1f;
 		float pastTime = 0.3f;
 		float shoutPower = 0.0f;
-		const float powerRate = 4.5f;
+		const float powerRate = 3.0f;
 
 		inline float GetAngle(int entityID)
 		{

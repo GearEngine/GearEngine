@@ -27,10 +27,6 @@ namespace InGame {
 
 	class BazookaOnExplosion : public Gear::FSM::InputHandler
 	{
-		inline Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
-		{
-
-			return Item::State::OnExplosion;
-		}
+		Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override;
 	};
 }

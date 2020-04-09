@@ -1,6 +1,7 @@
 #pragma once
 
 #include "InGame/Entity/Object/Worm/Worm.h"
+#include "InGame/Entity/Object/Effects/Effects.h"
 
 namespace InGame {
 
@@ -23,6 +24,7 @@ namespace InGame {
 	public:
 		static void ChangeWorm();
 
+		static std::vector<Gear::Ref<ExplosionEffect>> s_Explosion;
 	private:
 		//for turn count
 		static std::unordered_map<std::string, std::vector<Gear::Ref<Worm>>> s_Worms;

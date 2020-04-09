@@ -1,4 +1,5 @@
 #pragma once
+#include "InGame/Entity/Object/Effects/Effects.h"
 
 namespace InGame {
 
@@ -31,12 +32,15 @@ namespace InGame {
 
 	struct ExplosionData
 	{
-		ExplosionData(const glm::vec2 position, float radius, float power)
-			: Position(position), radius(radius), Power(power)
+		ExplosionData(const glm::vec2 position, Explosion::Size size, Explosion::Text text, float power)
+			: Position(position), Size(size), Text(text), Power(power)
 		{
 		}
 		glm::vec2 Position;
-		float radius;
+
+		Explosion::Size Size;
+		Explosion::Text Text;
+
 		float Power;
 	};
 
