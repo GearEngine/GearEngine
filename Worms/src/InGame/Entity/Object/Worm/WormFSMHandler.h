@@ -1,5 +1,6 @@
 #include "WormEventHandle.h"
 #include "InGame/Entity/Object/Effects/Effects.h"
+#include "InGame/Entity/Object/Item/Item.h"
 
 namespace InGame {
 
@@ -946,6 +947,8 @@ namespace InGame {
 		int blobCount = 0;
 		float blobAddDelay = 0.1f;
 		float pastTime = 0.3f;
+		float shoutPower = 0.0f;
+		const float powerRate = 4.5f;
 
 		inline float GetAngle(int entityID)
 		{
@@ -973,12 +976,14 @@ namespace InGame {
 			blobCount = 0;
 			blobAddDelay = 0.1f;
 			pastTime = 0.3f;
+			shoutPower = 0.0f;
 		}
 
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			auto tick = Gear::EntitySystem::GetTimer(entityID)->GetTick();
 			float angle = GetAngle(entityID);
+			auto position = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition();
 
 			if (cmd.KeyType == WormCommand::UseItem)
 			{
@@ -986,7 +991,6 @@ namespace InGame {
 				if (pastTime > blobAddDelay)
 				{
 					pastTime = 0.0f;
-					auto position = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition();
 					auto blob = EffectPool::GetBlob();
 					blob->reset(position, blobCount++);
 					blobs.push_back(blob);
@@ -1009,8 +1013,21 @@ namespace InGame {
 				{
 					blob->Render();
 				}
+				shoutPower += 0.1f;
+				if (shoutPower >= 10.0f)
+				{
+					shoutPower = 10.0f;
+					auto item = ITEM_POOL->GetItem(std::any_cast<Item::Name>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem)));
+					item->init(position, angle, shoutPower * powerRate);
+					OnOut(entityID);
+					return WormState::OnBreath;
+				}
 				return WormState::OnUseItem;
 			}
+
+			auto item = ITEM_POOL->GetItem(std::any_cast<Item::Name>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem)));
+			item->init(position, angle, shoutPower * powerRate);
+
 			OnOut(entityID);
 			return WormState::OnBreath;
 		}

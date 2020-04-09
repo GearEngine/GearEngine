@@ -257,7 +257,7 @@ namespace InGame {
 
 	class WormDisplayAimHandler : public Gear::Status::StatusHandler
 	{
-		float Radius = 2.9f;
+		float Radius = 2.8f;
 		Gear::Ref<Gear::FrameTexture2D> AimTexture;
 		bool inFirst = true;
 
@@ -303,7 +303,7 @@ namespace InGame {
 				theta = (nativeFireAngle - 15.5f) / 15.5f * 90.0f;
 			}
 			glm::vec3 aimPos(WormPosition.x + Radius * glm::cos(glm::radians(theta)), WormPosition.y + Radius * glm::sin(glm::radians(theta)), ZOrder::z_Aim);
-			glm::mat4 aimTrans = glm::translate(glm::mat4(1.0f), aimPos) * glm::scale(glm::mat4(1.0f), glm::vec3(1.8f, 1.8f, 1.0f));
+			glm::mat4 aimTrans = glm::translate(glm::mat4(1.0f), aimPos) * glm::scale(glm::mat4(1.0f), glm::vec3(1.9f, 1.9f, 1.0f));
 
 			if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat || dir == WormInfo::DirectionType::LeftUp)
 			{

@@ -11,5 +11,20 @@ namespace InGame {
 			Grenade,
 			ItemMax
 		};
+
+		enum State : unsigned int
+		{
+			OnGoing,
+			OnExplosion,
+			OnUnderWater
+		};
+
+		enum Info : unsigned int
+		{
+			Power, Angle, WindAdjustRatio,
+			ExplosionType
+		};
+
+
 	}
 }

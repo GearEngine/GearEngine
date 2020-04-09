@@ -9,13 +9,12 @@ namespace InGame {
 		m_Offset = 0.5f;
 		m_TextureIndex = 15;
 		m_BasePosition = basePosition;
-		m_Position.z = ZOrder::z_Aim + count * 0.001f;
+		m_Position.z = ZOrder::z_Blob + count * 0.001f;
 		m_PastTime = 0.0f;
 	}
 
 	void Blob::UpDate(float tick)
 	{
-
 		m_Position.x = m_BasePosition.x + m_Offset * glm::cos(glm::radians(m_Angle));
 		m_Position.y = m_BasePosition.y + m_Offset * glm::sin(glm::radians(m_Angle));
 		m_Translate = glm::translate(glm::mat4(1.0f), m_Position) * glm::scale(glm::mat4(1.0f), m_Scale);

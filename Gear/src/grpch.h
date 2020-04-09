@@ -25,6 +25,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/glm.hpp>
 
 #ifdef GR_PLATFORM_WINDOWS
 	#include <Windows.h>

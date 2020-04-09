@@ -21,7 +21,9 @@ namespace ZOrder {
 	const float z_Checker = 0.3f;
 	const float z_CheckerImg = 0.31f;
 	const float z_Font = 0.32f;
+	const float z_Item = 0.5f;
 	const float z_Worm = 0.7f;
+	const float z_Blob = 0.71f;
 	const float z_FollowArrow = 0.75f;
 	const float z_Aim = 0.76f;
 	const float z_WaterWaveF = 0.8f;

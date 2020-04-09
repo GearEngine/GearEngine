@@ -50,5 +50,7 @@ namespace Gear {
 			int ret = toNum - fromNum;
 			return rand() % ret + fromNum;
 		}
+
+		float GetAngleFromXY(float x, float y);
 	}
 }

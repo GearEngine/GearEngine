@@ -14,15 +14,20 @@ namespace Gear {
 		if (m_ActivatedGravity)
 		{
 			//LimitGravityAccelation 0 is no limit
-			if (m_GravityAccelation < m_LimitGravityAccelation || m_LimitGravityAccelation == 0.0f)
+			if (m_GravityAccelation < 0.0f)
+			{
+				m_ExternalVector.y -= m_Gravity * ts;
+			}
+			else if (m_GravityAccelation < m_LimitGravityAccelation || m_LimitGravityAccelation == 0.0f)
 			{
 				m_GravityAccelation += m_Gravity * ts;
+				m_ExternalVector.y -= m_GravityAccelation;
 			}
-			if (m_GravityAccelation > m_LimitGravityAccelation)
+			else if (m_GravityAccelation > m_LimitGravityAccelation)
 			{
 				m_GravityAccelation = m_LimitGravityAccelation;
+				m_ExternalVector.y -= m_GravityAccelation;
 			}
-			m_ExternalVector.y -= m_GravityAccelation;
 		}
 
 		if (m_ActivatedFollowTarget)
@@ -30,8 +35,11 @@ namespace Gear {
 			UpdateFollow();
 		}
 
+		
+
 		m_TargetPos->x += m_ExternalVector.x * ts;
 		m_TargetPos->y += m_ExternalVector.y * ts;
+
 
 		if (m_ActivatedPixelCollision)
 		{

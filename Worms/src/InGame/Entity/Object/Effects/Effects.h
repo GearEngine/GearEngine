@@ -21,10 +21,10 @@ namespace InGame {
 		glm::mat4 m_Translate;
 		float m_Angle;
 		float m_Offset = 0.0f;
-		const float m_LimitOffset = 2.9f;
-		const float m_OffsetSpeed = 1.0f;
+		const float m_LimitOffset = 2.8f;
+		const float m_OffsetSpeed = 1.4f;
 		int m_TextureIndex = 15;
-		const float m_FrameDelay = 0.2f;
+		const float m_FrameDelay = 0.1f;
 		float m_PastTime = 0.0f;
 
 		friend class EffectPool;

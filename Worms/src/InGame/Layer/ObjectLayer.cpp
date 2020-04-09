@@ -3,6 +3,7 @@
 
 #include "InGame/Entity/Object/Worm/WormEnum.h"
 #include "InGame/Entity/Object/Effects/Effects.h"
+#include "InGame/Entity/Object/Item/Item.h"
 
 namespace InGame {
 
@@ -35,6 +36,7 @@ namespace InGame {
 		s_TeamIter = s_TeamInfo.begin();
 
 		EffectPool::Init();
+		ItemPool::init(initData);
 
 		m_Transceiver = Gear::EntitySystem::CreateEntity(true);
 

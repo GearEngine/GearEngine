@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Component.h"
-#include <glm/glm.hpp>
 #include "Gear/Renderer/Texture.h"
 
 namespace Gear {
