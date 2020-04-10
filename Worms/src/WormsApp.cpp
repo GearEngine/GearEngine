@@ -63,6 +63,11 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("ExplosionTextPoot", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionTextPoot.png", 1, 18));
 		Gear::TextureStorage::AddFrameTexture2D("ExplosionTextPow", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionTextPow.png", 1, 12));
 		
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionSmoke25", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionSmoke25.png", 1, 22));
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionSmoke50", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionSmoke50.png", 1, 28));
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionSmoke75", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionSmoke75.png", 1, 28));
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionSmoke100", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionSmoke100.png", 1, 28));
+
 		//Weapon
 		Gear::TextureStorage::AddFrameTexture2D("BazukaBullet", Gear::FrameTexture2D::Create("assets/textures/Weapon/BazukaBullet.png", 1, 32));
 
@@ -127,7 +132,7 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RightFlatAfterDamagedSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightFlatAfterDamagedSliding.png", 1, 36));
 		Gear::TextureStorage::AddFrameTexture2D("RightUpAfterDamagedSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightUpAfterDamagedSliding.png", 1, 36));
 		Gear::TextureStorage::AddFrameTexture2D("RightDownAfterDamagedSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightDownAfterDamagedSliding.png", 1, 36));
-	
+		
 		//Weapon
 		Gear::TextureStorage::AddFrameTexture2D("LeftDownBazukaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/LeftDownBazukaReady.png", 1, 7));
 		Gear::TextureStorage::AddFrameTexture2D("LeftFlatBazukaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/LeftFlatBazukaReady.png", 1, 7));

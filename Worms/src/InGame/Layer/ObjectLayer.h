@@ -25,6 +25,7 @@ namespace InGame {
 		static void ChangeWorm();
 
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Explosion;
+		static std::vector<Gear::Ref<ExplosionSmokeBunddle>> s_ExplosionSmoke;
 	private:
 		//for turn count
 		static std::unordered_map<std::string, std::vector<Gear::Ref<Worm>>> s_Worms;

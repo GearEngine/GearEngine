@@ -32,16 +32,14 @@ namespace InGame {
 
 	struct ExplosionData
 	{
-		ExplosionData(const glm::vec2 position, Explosion::Size size, Explosion::Text text, float power)
-			: Position(position), Size(size), Text(text), Power(power)
+		ExplosionData(const glm::vec2 position, Explosion::Size size, Explosion::Text text)
+			: Position(position), Size(size), Text(text)
 		{
 		}
 		glm::vec2 Position;
 
 		Explosion::Size Size;
 		Explosion::Text Text;
-
-		float Power;
 	};
 
 	struct MouseMoveData

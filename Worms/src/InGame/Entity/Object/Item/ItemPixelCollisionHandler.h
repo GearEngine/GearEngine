@@ -24,18 +24,25 @@ namespace InGame {
 			if (pixel == m_TargetPixelColor)
 			{
 				auto status = Gear::EntitySystem::GetStatus(entityID);
-				auto explosionRadius = std::any_cast<float>(status->GetStat(Item::Info::ExplosionRadius));
 				auto power = std::any_cast<float>(status->GetStat(Item::Info::Power));
+				auto size = std::any_cast<Explosion::Size>(status->GetStat(Item::Info::ExplosionSize));
+				auto text = std::any_cast<Explosion::Text>(status->GetStat(Item::Info::ExplosionText));
 
-				//TODO : edit hardcord (Explosion::Size50, Explosion::Text::Foom)
-				Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(checkPosition, Explosion::Size50, Explosion::Text::Foom, power)));
-				auto explosion = EffectPool::GetExplosion(Explosion::Size50, Explosion::Text::Foom);
+				Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(checkPosition, size, text)));
+				auto explosion = EffectPool::GetExplosion(size, text);
 				explosion->init(checkPosition);
 				ObjectLayer::s_Explosion.push_back(explosion);
 
+				auto smoke = EffectPool::GetExplosionSmoke(size);
+				smoke->init(checkPosition);
+				ObjectLayer::s_ExplosionSmoke.push_back(smoke);
+
+				auto flame = EffectPool::GetFlame(size);
+				flame->init(checkPosition);
+				ObjectLayer::s_ExplosionFlame.push_back(flame);
+
 				FSM->SetCurrentState(Item::State::OnExplosion);
 			}
-
 		}
 	};
 

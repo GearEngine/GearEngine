@@ -35,8 +35,6 @@ namespace Gear {
 			UpdateFollow();
 		}
 
-		
-
 		m_TargetPos->x += m_ExternalVector.x * ts;
 		m_TargetPos->y += m_ExternalVector.y * ts;
 

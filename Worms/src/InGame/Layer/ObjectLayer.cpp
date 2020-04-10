@@ -10,7 +10,9 @@ namespace InGame {
 	std::unordered_map<std::string, TeamInfo> ObjectLayer:: s_TeamInfo = std::unordered_map<std::string, TeamInfo>();
 	std::unordered_map<std::string, TeamInfo>::iterator ObjectLayer:: s_TeamIter = std::unordered_map<std::string, TeamInfo>::iterator();
 	std::unordered_map<std::string, int> ObjectLayer::s_WormTurnIndex = std::unordered_map<std::string, int>();
+
 	std::vector<Gear::Ref<ExplosionEffect>> ObjectLayer::s_Explosion = std::vector<Gear::Ref<ExplosionEffect>>();
+	std::vector<Gear::Ref<ExplosionSmokeBunddle>> ObjectLayer::s_ExplosionSmoke = std::vector<Gear::Ref<ExplosionSmokeBunddle>>();
 
 	int ObjectLayer::s_curWorm = 0;
 	int ObjectLayer::s_CurrentActivatedWormID = -1;
@@ -81,6 +83,27 @@ namespace InGame {
 				explosion->Render();
 			}
 		}
+
+		if (s_ExplosionSmoke.size())
+		{
+			for (auto smoke = s_ExplosionSmoke.begin(); smoke != s_ExplosionSmoke.end(); )
+			{
+				(*smoke)->Update(ts);
+				if (!(*smoke)->m_OnUsing)
+				{
+					smoke = s_ExplosionSmoke.erase(smoke);
+				}
+				else
+				{
+					++smoke;
+				}
+			}
+			for (auto& smoke : s_ExplosionSmoke)
+			{
+				smoke->Render();
+			}
+		}
+
 	}
 
 	void ObjectLayer::OnImGuiRender()

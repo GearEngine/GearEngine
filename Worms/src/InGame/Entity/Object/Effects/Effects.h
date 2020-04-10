@@ -49,22 +49,111 @@ namespace InGame {
 		};
 	}
 
-	
 	class Smoke
 	{
 
+
+
 	};
 
-	class Flame
+
+
+	class FlameBundle
 	{
+	public:
+		class Flame
+		{
+		public:
+			void init(const glm::vec2 & externalVector);
+			void init(const glm::vec2& wolrdPosition);
 
+			void Update(float ts);
+			void Render();
 
+			bool m_OnUsing = false;
+
+		private:
+			glm::vec3 m_Position;
+			glm::vec3 m_Scale;
+			glm::vec2 m_OriginExternalVector;
+			glm::vec2 m_ExternalVector;
+
+			float m_Gravity = 10.0f;
+			int m_StartIndex;
+
+			const float m_FrameDelay = 0.02f;
+			float m_PastTime = 0.0f;
+
+			Gear::Ref<Gear::FrameTexture2D> m_Texture;
+			glm::mat4 m_OriginTranslate;
+			glm::mat4 m_Translate;
+
+			int m_TextureIndex;
+		};
+
+		bool m_OnUsing = false;
+
+	private:
+		void init(Explosion::Size size);
+	public:
+		void init(const glm::vec2& worldPosition);
+		void Update(float ts);
+		void Render();
+
+	private:
+		std::vector<Flame> m_Flames;
+
+		friend class EffectPool;
 	};
 
-	class ExplosionSmoke
+	
+
+	class ExplosionSmokeBunddle
 	{
+	private:
+		class ExplosionSmoke
+		{
+		public:
+			void init(Explosion::Size size, const glm::vec2& offsetVector, const glm::vec2 & externalVector);
+			void init(const glm::vec2& wolrdPosition);
 
+			void Update(float ts);
+			void Render();
+
+			bool m_OnUsing = false;
+		private:
+			glm::vec3 m_Position;
+			glm::vec3 m_Scale;
+			glm::vec2 m_OriginExternalVector;
+			glm::vec2 m_ExternalVector;
+			int m_StartIndex;
+
+			const float m_FrameDelay = 0.02f;
+			float m_PastTime = 0.0f;
+
+			Gear::Ref<Gear::FrameTexture2D> m_Texture;
+			glm::mat4 m_OriginTranslate;
+			glm::mat4 m_Translate;
+
+			int m_TextureIndex;
+		};
+
+	private:
+		void init(Explosion::Size size);
+
+	public:
+		void init(const glm::vec2& basePosition);
+
+		void Update(float ts);
+		void Render();
+
+		bool m_OnUsing = false;
+	private:
+		std::vector<ExplosionSmoke> m_Smokes;
+
+		friend class EffectPool;
 	};
+
 
 	class ExplosionEffect
 	{
@@ -79,12 +168,13 @@ namespace InGame {
 
 		bool m_OnUsing = false;
 	private:
-		int size;
-
 		bool m_InFisrt = true;
 
-		const float m_FrameDelay = 0.02f;
+		float m_FrameDelay;
 		float m_pastTime = 0.0f;
+
+		float m_TextFrameDelay = 0.02f;
+		float m_TextPastTime = 0.0f;
 
 		Gear::Ref<Gear::FrameTexture2D> m_Circle;
 		Gear::Ref<Gear::FrameTexture2D> m_Ellipse;
@@ -117,6 +207,7 @@ namespace InGame {
 		static void Init();
 		static Gear::Ref<Blob> GetBlob();
 		static Gear::Ref<ExplosionEffect> GetExplosion(Explosion::Size size, Explosion::Text text);
+		static Gear::Ref<ExplosionSmokeBunddle> GetExplosionSmoke(Explosion::Size size);
 
 	public:
 		static std::vector<Gear::Ref<Blob>> s_BlobPool;
@@ -161,7 +252,20 @@ namespace InGame {
 		static int s_Ex50PowPtr;
 		static int s_Ex75PowPtr;
 		static int s_Ex100PowPtr;
+
+		static std::vector<Gear::Ref<ExplosionSmokeBunddle>> s_Sm25;
+		static std::vector<Gear::Ref<ExplosionSmokeBunddle>> s_Sm50;
+		static std::vector<Gear::Ref<ExplosionSmokeBunddle>> s_Sm75;
+		static std::vector<Gear::Ref<ExplosionSmokeBunddle>> s_Sm100;
+
+		static int s_Sm25Ptr;
+		static int s_Sm50Ptr;
+		static int s_Sm75Ptr;
+		static int s_Sm100Ptr;
+
+		static std::vector<Gear::Ref<FlameBundle>> s_Fm25;
+		static std::vector<Gear::Ref<FlameBundle>> s_Fm50;
+		static std::vector<Gear::Ref<FlameBundle>> s_Fm75;
+		static std::vector<Gear::Ref<FlameBundle>> s_Fm100;
 	};
-
-
 }

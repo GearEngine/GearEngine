@@ -38,7 +38,7 @@ namespace InGame {
 		});
 
 		Gear::EntitySystem::SetStatus(m_ID, {
-			{ Item::Info::Angle, 0.0f}, { Item::Info::Power, 50.0f }, {Item::Info::ExplosionType, "Normal"}, {Item::Info::ExplosionRadius, 50.0f},
+			{ Item::Info::Angle, 0.0f}, { Item::Info::Power, 50.0f }, {Item::Info::ExplosionText, Explosion::Text::Foom}, {Item::Info::ExplosionSize, Explosion::Size::Size50},
 		});
 	}
 
