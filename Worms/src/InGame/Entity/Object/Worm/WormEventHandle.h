@@ -8,29 +8,27 @@ namespace InGame {
 	{
 		inline virtual void Handle(std::any data, int entityID, bool& handled) override
 		{
-			GR_TRACE("No.{0} Entity get explosion event", entityID);
-
 			auto explosion = std::any_cast<ExplosionData>(data);
 
-			auto transformComponent = Gear::EntitySystem::GetTransform2D(entityID);
-			auto entityPosition = transformComponent->GetPosition();
+			auto transform = Gear::EntitySystem::GetTransform2D(entityID);
+			auto wormPosition = transform->GetPosition();
 
-			float distance = std::powf((explosion.Position.x - entityPosition.x), 2) + std::powf((explosion.Position.y - entityPosition.y), 2);
+			float distance = std::powf((explosion.Position.x - wormPosition.x), 2) + std::powf((explosion.Position.y - wormPosition.y), 2);
 
 			float radius;
 			switch (explosion.Size)
 			{
 			case Explosion::Size::Size25:
-				radius = 25.0f;
+				radius = 25.0f * 1.2f;
 				break;
 			case Explosion::Size::Size50:
-				radius = 50.0f;
+				radius = 50.0f * 1.2f;
 				break;
 			case Explosion::Size::Size75:
-				radius = 75.0f;
+				radius = 75.0f * 1.2f;
 				break;
 			case Explosion::Size::Size100:
-				radius = 100.0f;
+				radius = 100.0f * 1.2f;
 				break;
 			}
 
