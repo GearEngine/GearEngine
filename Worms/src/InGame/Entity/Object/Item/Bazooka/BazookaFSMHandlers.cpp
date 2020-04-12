@@ -2,6 +2,7 @@
 #include "BazookaFSMHandlers.h"
 
 #include "InGame/Layer/BackGroundLayer.h"
+#include "InGame/Layer/ObjectLayer.h"
 
 namespace InGame {
 	
@@ -35,6 +36,17 @@ namespace InGame {
 		float currentWind = BackGroundLayer::GetCurrentWind();
 		externalVector.x += currentWind * tick * WindAdjustRatio;
 		physics->SetExternalVectorX(externalVector.x);
+
+		//Gen Exhaust
+		m_pastTime += tick;
+		if (m_pastTime > m_GenExhaustDelay)
+		{
+			m_pastTime = 0.0f;
+			auto exhaust = EffectPool::GetExhuast(ExhaustType::_1);
+
+			exhaust->init(Gear::EntitySystem::GetTransform2D(entityID)->GetPosition());
+			ObjectLayer::s_Exhausts.push_back(exhaust);
+		}
 
 		return Item::State::OnGoing;
 	}

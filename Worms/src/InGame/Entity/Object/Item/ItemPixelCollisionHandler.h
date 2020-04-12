@@ -39,7 +39,7 @@ namespace InGame {
 
 				auto flame = EffectPool::GetFlame(size);
 				flame->init(checkPosition);
-				ObjectLayer::s_ExplosionFlame.push_back(flame);
+				ObjectLayer::s_Flames.push_back(flame);
 
 				FSM->SetCurrentState(Item::State::OnExplosion);
 			}

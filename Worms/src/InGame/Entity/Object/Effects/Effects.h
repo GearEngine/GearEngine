@@ -47,16 +47,75 @@ namespace InGame {
 			Poot,
 			Pow
 		};
+
+		enum SmokeSize : unsigned int
+		{
+			Size20,
+			Size30,
+			Size40
+		};
+	}
+
+	namespace ExhaustType
+	{
+		enum Type : unsigned int
+		{
+			_1,
+		};
 	}
 
 	class Smoke
 	{
+	private:
+		void init(Explosion::SmokeSize size);
+	public:
+		void init(const glm::vec2& worldPosition, const glm::vec2& externalVector = glm::vec2(0.0f, 0.0f));
+		void Update(float ts);
+		void Render();
 
+		bool m_OnUsing = false;
 
+	private:
+		glm::vec3 m_Scale;
+		glm::mat4 m_OriginTranslate;
+		glm::mat4 m_Translate;
+		glm::vec2 m_ExternalVector;
 
+		Gear::Ref<Gear::FrameTexture2D> m_Texture;
+		int m_StartIndex;
+		int m_TextureIndex;
+
+		const float m_FrameDelay = 0.01f;
+		float m_PastTime = 0.0f;
+
+		friend class EffectPool;
 	};
 
+	class Exhaust
+	{
+	public:
+		void init(ExhaustType::Type type);
+		void init(const glm::vec3& wolrdPosition);
 
+		void Update(float ts);
+		void Render();
+
+		bool m_OnUsing = false;
+
+	private:
+		Gear::Ref<Gear::FrameTexture2D> m_Texture;
+		glm::vec3 m_Scale;
+		glm::mat4 m_Translate;
+		glm::mat4 m_OriginTranslate;
+
+		int m_StartIndex;
+		int m_TextureIndex;
+
+		const float m_FrameDelay = 0.01f;
+		float m_PastTime = 0.0f;
+
+		friend class EffectPool;
+	};
 
 	class FlameBundle
 	{
@@ -64,7 +123,7 @@ namespace InGame {
 		class Flame
 		{
 		public:
-			void init(const glm::vec2 & externalVector);
+			void init(const glm::vec2& externalVector, Explosion::Size size);
 			void init(const glm::vec2& wolrdPosition);
 
 			void Update(float ts);
@@ -73,16 +132,20 @@ namespace InGame {
 			bool m_OnUsing = false;
 
 		private:
+			Explosion::Size m_Size;
+
 			glm::vec3 m_Position;
 			glm::vec3 m_Scale;
 			glm::vec2 m_OriginExternalVector;
 			glm::vec2 m_ExternalVector;
 
-			float m_Gravity = 10.0f;
+			float m_Gravity = 0.5f;
 			int m_StartIndex;
 
-			const float m_FrameDelay = 0.02f;
+			float m_GenSmokeDelay;
+			const float m_FrameDelay = 0.08f;
 			float m_PastTime = 0.0f;
+			float m_GenPastTime = 0.0f;
 
 			Gear::Ref<Gear::FrameTexture2D> m_Texture;
 			glm::mat4 m_OriginTranslate;
@@ -102,6 +165,7 @@ namespace InGame {
 
 	private:
 		std::vector<Flame> m_Flames;
+		Explosion::Size m_Size;
 
 		friend class EffectPool;
 	};
@@ -208,6 +272,9 @@ namespace InGame {
 		static Gear::Ref<Blob> GetBlob();
 		static Gear::Ref<ExplosionEffect> GetExplosion(Explosion::Size size, Explosion::Text text);
 		static Gear::Ref<ExplosionSmokeBunddle> GetExplosionSmoke(Explosion::Size size);
+		static Gear::Ref<FlameBundle> GetFlame(Explosion::Size size);
+		static Gear::Ref<Smoke> GetSmoke(Explosion::SmokeSize size);
+		static Gear::Ref<Exhaust> GetExhuast(ExhaustType::Type type);
 
 	public:
 		static std::vector<Gear::Ref<Blob>> s_BlobPool;
@@ -267,5 +334,23 @@ namespace InGame {
 		static std::vector<Gear::Ref<FlameBundle>> s_Fm50;
 		static std::vector<Gear::Ref<FlameBundle>> s_Fm75;
 		static std::vector<Gear::Ref<FlameBundle>> s_Fm100;
+
+		static int s_Fm25Ptr;
+		static int s_Fm50Ptr;
+		static int s_Fm75Ptr;
+		static int s_Fm100Ptr;
+
+		static std::vector<Gear::Ref<Smoke>> s_Sm20;
+		static std::vector<Gear::Ref<Smoke>> s_Sm30;
+		static std::vector<Gear::Ref<Smoke>> s_Sm40;
+
+		static int s_Sm20Ptr;
+		static int s_Sm30Ptr;
+		static int s_Sm40Ptr;
+
+		static std::vector<Gear::Ref<Exhaust>> s_Exhaust1;
+
+		static int s_Exhaust1Ptr;
+
 	};
 }

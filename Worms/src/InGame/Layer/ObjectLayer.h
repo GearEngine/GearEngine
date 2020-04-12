@@ -26,6 +26,10 @@ namespace InGame {
 
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Explosion;
 		static std::vector<Gear::Ref<ExplosionSmokeBunddle>> s_ExplosionSmoke;
+		static std::vector<Gear::Ref<FlameBundle>> s_Flames;
+		static std::list<Gear::Ref<Smoke>> s_Smokes;
+		static std::list<Gear::Ref<Exhaust>> s_Exhausts;
+
 	private:
 		//for turn count
 		static std::unordered_map<std::string, std::vector<Gear::Ref<Worm>>> s_Worms;

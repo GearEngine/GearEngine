@@ -6,6 +6,9 @@ namespace InGame {
 
 	class BazookaOnGoingHandler : public Gear::FSM::InputHandler
 	{
+		const float m_GenExhaustDelay = 0.03f;
+		float m_pastTime = 0.0f;
+
 	public:
 		BazookaOnGoingHandler()
 		{

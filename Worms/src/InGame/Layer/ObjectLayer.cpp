@@ -13,6 +13,10 @@ namespace InGame {
 
 	std::vector<Gear::Ref<ExplosionEffect>> ObjectLayer::s_Explosion = std::vector<Gear::Ref<ExplosionEffect>>();
 	std::vector<Gear::Ref<ExplosionSmokeBunddle>> ObjectLayer::s_ExplosionSmoke = std::vector<Gear::Ref<ExplosionSmokeBunddle>>();
+	std::vector<Gear::Ref<FlameBundle>> ObjectLayer::s_Flames = std::vector<Gear::Ref<FlameBundle>>();
+	std::list<Gear::Ref<Smoke>> ObjectLayer::s_Smokes = std::list<Gear::Ref<Smoke>>();
+	std::list<Gear::Ref<Exhaust>> ObjectLayer::s_Exhausts = std::list<Gear::Ref<Exhaust>>();
+
 
 	int ObjectLayer::s_curWorm = 0;
 	int ObjectLayer::s_CurrentActivatedWormID = -1;
@@ -83,7 +87,6 @@ namespace InGame {
 				explosion->Render();
 			}
 		}
-
 		if (s_ExplosionSmoke.size())
 		{
 			for (auto smoke = s_ExplosionSmoke.begin(); smoke != s_ExplosionSmoke.end(); )
@@ -101,6 +104,63 @@ namespace InGame {
 			for (auto& smoke : s_ExplosionSmoke)
 			{
 				smoke->Render();
+			}
+		}
+		if (s_Flames.size())
+		{
+			for (auto flame = s_Flames.begin(); flame != s_Flames.end(); )
+			{
+				(*flame)->Update(ts);
+				if (!(*flame)->m_OnUsing)
+				{
+					flame = s_Flames.erase(flame);
+				}
+				else
+				{
+					++flame;
+				}
+			}
+			for (auto& flame : s_Flames)
+			{
+				flame->Render();
+			}
+		}
+		if (s_Smokes.size())
+		{
+			for (auto smoke = s_Smokes.begin(); smoke != s_Smokes.end(); )
+			{
+				(*smoke)->Update(ts);
+				if (!(*smoke)->m_OnUsing)
+				{
+					smoke = s_Smokes.erase(smoke);
+				}
+				else
+				{
+					++smoke;
+				}
+			}
+			for (auto& smoke : s_Smokes)
+			{
+				smoke->Render();
+			}
+		}
+		if (s_Exhausts.size())
+		{
+			for (auto exhaust = s_Exhausts.begin(); exhaust != s_Exhausts.end(); )
+			{
+				(*exhaust)->Update(ts);
+				if (!(*exhaust)->m_OnUsing)
+				{
+					exhaust = s_Exhausts.erase(exhaust);
+				}
+				else
+				{
+					++exhaust;
+				}
+			}
+			for (auto& exhaust : s_Exhausts)
+			{
+				exhaust->Render();
 			}
 		}
 

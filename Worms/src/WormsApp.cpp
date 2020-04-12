@@ -67,9 +67,17 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("ExplosionSmoke50", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionSmoke50.png", 1, 28));
 		Gear::TextureStorage::AddFrameTexture2D("ExplosionSmoke75", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionSmoke75.png", 1, 28));
 		Gear::TextureStorage::AddFrameTexture2D("ExplosionSmoke100", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionSmoke100.png", 1, 28));
+		
+		Gear::TextureStorage::AddFrameTexture2D("Smoke20", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/Smoke20.png", 1, 28));
+		Gear::TextureStorage::AddFrameTexture2D("Smoke30", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/Smoke30.png", 1, 28));
+		Gear::TextureStorage::AddFrameTexture2D("Smoke40", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/Smoke40.png", 1, 28));
 
+		Gear::TextureStorage::AddFrameTexture2D("Flame", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/Flame1.png", 1, 32));
 		//Weapon
 		Gear::TextureStorage::AddFrameTexture2D("BazukaBullet", Gear::FrameTexture2D::Create("assets/textures/Weapon/BazukaBullet.png", 1, 32));
+
+		Gear::TextureStorage::AddFrameTexture2D("Exhaust1", Gear::FrameTexture2D::Create("assets/textures/Effect/Exhaust/Exhaust1.png", 1, 28));
+
 
 		//Worm
 		Gear::TextureStorage::AddFrameTexture2D("Drawn", Gear::FrameTexture2D::Create("assets/textures/Worm/Drawn.png", 1, 4));
