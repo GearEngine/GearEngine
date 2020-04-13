@@ -13,7 +13,12 @@ namespace Gear {
 		{
 		public:
 			virtual EnumType Handle(int entityID, const Command& cmd) = 0;
+			virtual void Awake(int entityID) {}
 			virtual void OnOut(int entityID) {}
+
+		protected:
+			bool OnAwake = true;
+
 		};
 
 	public:

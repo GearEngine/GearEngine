@@ -90,18 +90,34 @@ namespace InGame {
 		{
 			auto worldData = std::any_cast<WorldData>(data);
 			auto status = Gear::EntitySystem::GetStatus(entityID);
+			auto FSM = Gear::EntitySystem::GetFSM(entityID);
+			auto worldTimer = Gear::EntitySystem::GetTimer(entityID);
 			if (worldData.DataType == WorldDataType::NewFollow)
 			{
-				auto FSM = Gear::EntitySystem::GetFSM(entityID);
-				auto timer = Gear::EntitySystem::GetTimer(entityID);
+				bool isWorm = false;
+				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
+				{
+					if (worldData.EntityID == WorldWormData::s_LivingWorms[i])
+					{
+						isWorm = true;
+						break;
+					}
+				}
+
+				if (!isWorm)
+				{
+					handled = true;
+					return;
+				}
+
 				auto changedWormData = std::any_cast<std::pair<std::string, std::string>>(worldData.Data);
 
 				status->SetStat(WorldInfo::CurrnetTeam, changedWormData.first);
 				status->SetStat(WorldInfo::CurrentWorm, changedWormData.second);
 				status->SetStat(WorldInfo::TeamInfoBlink, true);
 				status->PushNeedHandleData(WorldStatusHandleType::DisplayWaitingCount, Gear::Status::StatHandleData(WorldDenoteData(Gear::TextureStorage::GetTexture2D("WaitingTimeBorder"))));
-				timer->SetTimer(5.0f);
-				timer->Start();
+				worldTimer->SetTimer(5.0f);
+				worldTimer->Start();
 				handled = true;
 				return;
 			}
@@ -133,7 +149,6 @@ namespace InGame {
 					auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
 					if (!(curState == WormState::OnNothing || curState == WormState::OnNotMyTurn))
 					{
-						//GR_TRACE("WormState {0} {1} {2}", Gear::EntitySystem::GetEntity(WorldWormData::s_LivingWorms[i])->GetName(), curState, WorldWormData::s_LivingWorms[i]);
 						return;
 					}
 					if(curState == WormState::OnNothing)
@@ -150,8 +165,17 @@ namespace InGame {
 					InFirst = true;
 					GR_TRACE("dispatch damage {0}", Gear::EntitySystem::GetEntity(damagedWorm[i])->GetName());
 					status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
+					Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
+					worldTimer->SetTimer(3.0f);
+					worldTimer->Start();
 				}
 				
+				handled = true;
+				return;
+			}
+			if (worldData.DataType == WorldDataType::NewStart)
+			{
+				FSM->SetCurrentState(WorldState::OnPrepareRun);
 				handled = true;
 				return;
 			}
@@ -174,6 +198,18 @@ namespace InGame {
 				}
 				handled = true;
 				return;
+			}
+			if (worldData.DataType == WorldDataType::WormDie)
+			{
+				for (auto worm = WorldWormData::s_LivingWorms.begin(); worm < WorldWormData::s_LivingWorms.end(); ++worm)
+				{
+					if (*worm == worldData.EntityID)
+					{
+						WorldWormData::s_LivingWorms.erase(worm);
+						handled = true;
+						return;
+					}
+				}
 			}
 
 			handled = true;

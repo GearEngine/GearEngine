@@ -10,8 +10,6 @@ namespace InGame {
 		Bazooka(const InitiateData& initData);
 		virtual void init(const glm::vec3& position, float initAngle, float initPower, int From) override;
 
-	private:
-		int m_ID;
 	};
 
 

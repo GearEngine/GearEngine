@@ -181,6 +181,9 @@ namespace InGame {
 			{ WormState::OnRightUpBazukaWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpBazukaReady"), 0.02f, false)},
 			{ WormState::OnRightDownBazukaWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownBazukaReady"), 0.02f, false)},
 
+			{ WormState::OnLeftFly,	Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftWormFly"), 0.02f, false)},
+			{ WormState::OnRightFly, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightWormFly"), 0.02f, false)},
+
 			{ WormState::OnUseItem,	Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.02f, true)},
 		});
 		

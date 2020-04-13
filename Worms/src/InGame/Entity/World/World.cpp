@@ -26,7 +26,7 @@ namespace InGame {
 		Gear::EntitySystem::SetFSM(m_ID, {
 			{ WorldState::InGameStart, new InGemeStartHandler }, { WorldState::OnStart, new WorldOnStartHandler },
 			{ WorldState::OnPrepareRun, new WorldOnPrepareRunHandler }, { WorldState::OnRunning, new WorldOnRunningHandler},
-			{ WorldState::OnQuitWindow, new WorldOnQuitWindowHandler},	
+			{ WorldState::OnQuitWindow, new WorldOnQuitWindowHandler},	{WorldState::OnWaiting, new WorldOnWaitingHandler }
 		});
 		Gear::EntitySystem::GetFSM(m_ID)->SetCurrentState(WorldState::InGameStart);
 

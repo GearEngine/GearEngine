@@ -186,5 +186,4 @@ namespace InGame {
 
 		}
 	};
-
 }

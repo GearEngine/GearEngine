@@ -27,6 +27,7 @@ namespace InGame {
 		RunningStart,
 		DamageWorm,
 		GetDamageWorm,
+		WormDie,
 		GameEnd
 	};
 

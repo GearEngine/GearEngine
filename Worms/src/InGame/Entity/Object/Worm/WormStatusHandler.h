@@ -351,7 +351,6 @@ namespace InGame {
 
 				int totalDamage = std::any_cast<int>(status->GetStat(WormInfo::Damage)) + std::any_cast<int>(status->GetStat(WormInfo::SelfDamage));
 				status->RegisterPushNeedHandleData(WormStatusHandleType::DisplayDamage, Gear::Status::StatHandleData(0));
-				//status->RegisterPushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 0.0f)));
 			}
 		}
 	};

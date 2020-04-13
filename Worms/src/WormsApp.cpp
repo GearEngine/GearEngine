@@ -156,6 +156,11 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RightFlatBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightFlatBazukaOn.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("RightUpBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightUpBazukaOn.png", 1, 32));
 		
+		//Fly
+		Gear::TextureStorage::AddFrameTexture2D("LeftWormFly", Gear::FrameTexture2D::Create("assets/textures/Worm/Fly/LeftWormFly.png", 3, 32));
+		Gear::TextureStorage::AddFrameTexture2D("RightWormFly", Gear::FrameTexture2D::Create("assets/textures/Worm/Fly/RightWormFly.png", 3, 32));
+
+
 		//animation
 		std::vector<std::pair<int, int>> orderVector;
 		for (int i = 0; i < 32; ++i)
