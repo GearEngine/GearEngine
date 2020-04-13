@@ -189,7 +189,8 @@ namespace InGame {
 
 			if (midPixel == m_TargetPixelColor)
 			{
-				if (FSM->GetCurrentState() == WormState::OnSliding)
+				auto curState = FSM->GetCurrentState();
+				if (curState == WormState::OnSliding || curState == WormState::OnAttacked)
 				{
 					if (m_ExternalVector->y <= -20.f)
 					{
@@ -211,6 +212,7 @@ namespace InGame {
 
 					*m_GravityAccelation = 0.0f;
 					m_ExternalVector->y = 0.0f;
+					FSM->SetCurrentState(WormState::OnSliding);
 					physics->SetPixelCollisionHandler("Sliding");
 				}
 				else

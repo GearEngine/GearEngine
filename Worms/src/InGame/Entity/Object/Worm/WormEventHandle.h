@@ -13,29 +13,58 @@ namespace InGame {
 			auto transform = Gear::EntitySystem::GetTransform2D(entityID);
 			auto wormPosition = transform->GetPosition();
 
-			float distance = std::powf((explosion.Position.x - wormPosition.x), 2) + std::powf((explosion.Position.y - wormPosition.y), 2);
+			float dx = wormPosition.x - explosion.Position.x;
+			float dy = wormPosition.y - explosion.Position.y;
+			float distance = std::powf((dx), 2) + std::powf((dy), 2);
+			distance = sqrt(distance);
 
-			float radius;
+			float radius, power, externalRatio;
 			switch (explosion.Size)
 			{
 			case Explosion::Size::Size25:
-				radius = 25.0f * 1.2f;
+				radius = 25.0f * 1.3f / 37.0f;
+				power = 25.0f;
+				externalRatio = 5.0f;
 				break;
 			case Explosion::Size::Size50:
-				radius = 50.0f * 1.2f;
+				radius = 50.0f * 1.3f / 37.0f;
+				power = 50.0f;
+				externalRatio = 10.0f;
 				break;
 			case Explosion::Size::Size75:
-				radius = 75.0f * 1.2f;
+				radius = 75.0f * 1.3f / 37.0f;
+				power = 75.0f;
+				externalRatio = 15.0f;
 				break;
 			case Explosion::Size::Size100:
-				radius = 100.0f * 1.2f;
+				radius = 100.0f * 1.3f / 37.0f;
+				power = 100.0f;
+				externalRatio = 20.0f;
 				break;
 			}
 
-			if (distance < powf(radius, 2))
+			Gear::EventSystem::DispatchEventOnce(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::DamageWorm)));
+
+			if (distance < radius)
 			{
-				GR_TRACE("No.{0} Entity Damaged by explosion", entityID);
+				float damageRatio = 1.0f - distance / radius;
+
+				glm::vec2 externalVector = glm::normalize(glm::vec2(dx, dy));
+
+				auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
+				auto FSM = Gear::EntitySystem::GetFSM(entityID);
+				auto status = Gear::EntitySystem::GetStatus(entityID);
+
+				status->SetStat(WormInfo::Damage, int(damageRatio * power));
+
+				FSM->SetCurrentState(WormState::OnAttacked);
+				GR_TRACE("{0} OnAttacked", Gear::EntitySystem::GetEntity(entityID)->GetName());
+
+				physics->ActivateGravity();
+				physics->SetPixelCollisionHandler("OnAir");
+				physics->SetExternalVector(glm::vec2(externalVector.x * externalRatio * damageRatio, externalVector.y * externalRatio * damageRatio));
 			}
+			
 			handled = true;
 		}
 	};
@@ -145,12 +174,9 @@ namespace InGame {
 				timer->SetTimer(1.5f);
 				timer->Start();
 
-				status->SetNeedHandleData(WormStatusHandleType::Display, false);
-
 				if (prevState != WormState::OnWaiting)
 				{
-					GR_TRACE("Push DisplayPosChage -0.2f at Worm Event Handler Event(PrepareNextPhase)");
-					status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(-0.2f));
+					status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair( -0.2f, 0.0f )));
 				}
 			}
 			if (worldData.DataType == WorldDataType::NewStart)

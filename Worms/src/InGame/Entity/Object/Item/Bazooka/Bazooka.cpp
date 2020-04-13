@@ -39,10 +39,11 @@ namespace InGame {
 
 		Gear::EntitySystem::SetStatus(m_ID, {
 			{ Item::Info::Angle, 0.0f}, { Item::Info::Power, 50.0f }, {Item::Info::ExplosionText, Explosion::Text::Foom}, {Item::Info::ExplosionSize, Explosion::Size::Size50},
+			{ Item::Info::From, -1},
 		});
 	}
 
-	void Bazooka::init(const glm::vec3 & position, float initAngle, float initPower)
+	void Bazooka::init(const glm::vec3 & position, float initAngle, float initPower, int FromEntityID)
 	{
 		Gear::EntitySystem::ActivateEntity(m_ID);
 		Gear::EntitySystem::GetFSM(m_ID)->SetCurrentState(Item::State::OnGoing);
@@ -55,6 +56,8 @@ namespace InGame {
 		glm::vec2 ExternalVector(initPower * glm::cos(glm::radians(initAngle)), initPower * glm::sin(glm::radians(initAngle)));
 		physics->SetExternalVector(ExternalVector);
 		physics->SetPixelCollisionHandler("MissilePC");
+
+		Gear::EntitySystem::GetStatus(m_ID)->SetStat(Item::Info::From, FromEntityID);
 	}
 
 }

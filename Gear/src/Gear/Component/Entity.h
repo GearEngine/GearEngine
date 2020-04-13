@@ -18,13 +18,17 @@ namespace Gear {
 	public:
 		Entity() {}
 	private:
-		Entity(int entityID)
-			: m_EntityID(entityID)
+		Entity(int entityID, const std::string& name = "")
+			: m_EntityID(entityID), m_Name(name)
 		{}
+
+	public:
+		const std::string& GetName() const { return m_Name; }
 
 	protected:
 		int m_EntityID;
 		bool m_OnActivate;
+		std::string m_Name;
 
 		std::vector<struct EntityEvent> m_EventQueue;
 		std::unordered_map<EnumType, Ref<class EventHandler>> m_EventHandler;

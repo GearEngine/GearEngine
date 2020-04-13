@@ -16,6 +16,7 @@ namespace InGame {
 			OnItemWithdraw,
 			OnUseItem,
 			OnAir,
+			OnAttacked,
 			OnJump,
 			OnReadyJump,
 			OnReadyBackJump,

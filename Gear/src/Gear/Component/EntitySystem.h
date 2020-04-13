@@ -58,7 +58,7 @@ namespace Gear {
 
 		//user interface
 	public:
-		static int CreateEntity(bool activate = false);
+		static int CreateEntity(bool activate = false, const std::string& name = "");
 		static Ref<Entity> GetEntity(int entityID);
 
 		static void Update(Timestep ts);

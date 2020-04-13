@@ -45,11 +45,17 @@ namespace Gear {
 		{
 			m_NeedHandleList.push_back({ type, data });
 		}
+		inline void RegisterPushNeedHandleData(EnumType type, const StatHandleData& data)
+		{
+			m_RegistedPushedList.push_back({ type, data });
+		}
 
 	private:
 		std::unordered_map<EnumType, std::any> m_StatList;
 		std::vector<std::pair<EnumType, StatHandleData>> m_NeedHandleList;
 		std::unordered_map<EnumType, Ref<StatusHandler>> m_StatusHandlers;
+
+		std::vector<std::pair<EnumType, StatHandleData>> m_RegistedPushedList;
 	};
 
 }

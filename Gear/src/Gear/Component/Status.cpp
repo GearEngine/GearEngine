@@ -5,6 +5,16 @@ namespace Gear {
 
 	void Status::Update(Timestep ts)
 	{
+		if (m_RegistedPushedList.size())
+		{
+			for (auto& needHandle : m_RegistedPushedList)
+			{
+				m_NeedHandleList.push_back(needHandle);
+			}
+			m_RegistedPushedList.clear();
+		}
+
+
 		if (m_NeedHandleList.size())
 		{
 			for (auto needHandle = m_NeedHandleList.begin(); needHandle != m_NeedHandleList.end(); )
@@ -23,7 +33,6 @@ namespace Gear {
 				else
 				{
 					m_StatusHandlers[needHandle->first]->Handle(m_ID, needHandle->second, m_StatList);
-					
 					needHandle++;
 				}
 			}

@@ -79,12 +79,8 @@ namespace Gear {
 					m_CurScene->Update(timestep);
 				}
 
-				if (m_CurScene->PassFirstDelay())
-				{
-					EntitySystem::Update(timestep);
-					EntitySystem::Render();
-				}
-				
+				EntitySystem::Update(timestep);
+				EntitySystem::Render();
 				
 				/*m_ImGuilayer->Begin();
 				{

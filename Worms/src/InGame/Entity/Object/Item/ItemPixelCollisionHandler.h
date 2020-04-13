@@ -42,6 +42,14 @@ namespace InGame {
 				ObjectLayer::s_Flames.push_back(flame);
 
 				FSM->SetCurrentState(Item::State::OnExplosion);
+
+				//ShooterHandle
+
+				int shooterID = std::any_cast<int>(status->GetStat(Item::Info::From));
+				auto shooterStatus = Gear::EntitySystem::GetStatus(shooterID);
+				//GR_TRACE("Shooter DisplayPos change {0}", Gear::EntitySystem::GetEntity(shooterID)->GetName());
+				
+				shooterStatus->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair( -0.2f, 1.0f )));
 			}
 		}
 	};

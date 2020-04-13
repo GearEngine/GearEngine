@@ -268,7 +268,7 @@ namespace Gear {
 		m_LateDrawers[entityID]->Render();
 	}
 
-	int EntitySystem::CreateEntity(bool activate)
+	int EntitySystem::CreateEntity(bool activate, const std::string& name)
 	{
 		int entityID;
 		Ref<Entity> newEntity;
@@ -277,7 +277,7 @@ namespace Gear {
 		{
 			entityID = s_EntityID++;
 
-			newEntity.reset(new Entity(entityID));
+			newEntity.reset(new Entity(entityID, name));
 
 			m_EntityPool.insert({ entityID, newEntity });
 			if (activate)
@@ -291,7 +291,7 @@ namespace Gear {
 			entityID = m_SpareIDqueue.front();
 			m_SpareIDqueue.pop();
 
-			newEntity.reset(new Entity(entityID));
+			newEntity.reset(new Entity(entityID, name));
 
 			m_EntityPool.insert({ entityID, newEntity });
 			if (activate)

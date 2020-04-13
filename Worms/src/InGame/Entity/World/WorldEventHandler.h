@@ -84,7 +84,8 @@ namespace InGame {
 
 	class WorldEventHandler : public Gear::EventHandler
 	{
-		
+		bool InFirst = true;
+
 		inline virtual void Handle(std::any data, int entityID, bool& handled) override
 		{
 			auto worldData = std::any_cast<WorldData>(data);
@@ -120,15 +121,19 @@ namespace InGame {
 			}
 			if (worldData.DataType == WorldDataType::DamageWorm)
 			{
-				GR_TRACE("World Reseive DamageWorm");
-
+				if (InFirst)
+				{
+					InFirst = false;
+					return;
+				}
 				std::vector<int> damagedWorm;
 				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
 				{
 					status->SetStat(WorldInfo::TeamInfoBlink, false);
 					auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
-					if (curState != WormState::OnNothing && curState != WormState::OnNotMyTurn)
+					if (!(curState == WormState::OnNothing || curState == WormState::OnNotMyTurn))
 					{
+						//GR_TRACE("WormState {0} {1} {2}", Gear::EntitySystem::GetEntity(WorldWormData::s_LivingWorms[i])->GetName(), curState, WorldWormData::s_LivingWorms[i]);
 						return;
 					}
 					if(curState == WormState::OnNothing)
@@ -142,8 +147,11 @@ namespace InGame {
 					auto timer = Gear::EntitySystem::GetTimer(damagedWorm[i]);
 					timer->SetTimer(1.0f);
 					timer->Start();
+					InFirst = true;
+					GR_TRACE("dispatch damage {0}", Gear::EntitySystem::GetEntity(damagedWorm[i])->GetName());
 					status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
 				}
+				
 				handled = true;
 				return;
 			}

@@ -167,93 +167,100 @@ namespace InGame {
 
 	class WormChangeDisplayPosHanlder : public Gear::Status::StatusHandler
 	{
+	public:
+
+		void init(int entityID, Gear::Status::StatHandleData& data)
+		{
+			auto moveData = std::any_cast<std::pair<float, float>>(data.Data);
+			moveDist = moveData.first;
+			FirstDelay = moveData.second;
+
+			timer = Gear::EntitySystem::GetTimer(entityID);
+		}
+
+	private:
+
+		bool inFirst = true;
+		const float moveLimit = 10.0f;
+
+		const float BottomNameOffset = 1.36f;
+		const float TopNameOffset = 11.26f;
+		const float offsetDist = 0.56f;	//within NameBorder and HpBorder
+
+		float pastMove = 0.0f;
+		float moveDist;
+		float FirstDelay;
+		float pastTime = 0.0f;
+
+
+		Gear::Ref<Gear::Timer> timer;
+
+	private:
 		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
 		{
-			static const float moveLimit = 10.0f;
-			static float pastMove = 0.0f;
-
 			float hpOffset = std::any_cast<float>(statlist[WormInfo::HpBorderOffset]);
 			float nameOffset = std::any_cast<float>(statlist[WormInfo::NameBorderOffset]);
 
-			float moveDist = std::any_cast<float>(data.Data);
+			if (inFirst)
+			{
+				init(entityID, data);
+			}
+			
+			if (pastTime < FirstDelay)
+			{
+				auto tick = timer->GetTick();
+				pastTime += tick;
+				return;
+			}
+
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			status->SetNeedHandleData(WormStatusHandleType::Display, false);
+
 			if (moveDist < 0.0f)
 			{
 				Gear::EntitySystem::GetStatus(entityID)->SetNeedHandleData(WormStatusHandleType::WaitingDisplay, true);
-			}
-			pastMove += moveDist;
-			if (std::abs(pastMove) > moveLimit)
-			{
-				if (moveDist > 0.0f)
+				if (hpOffset > BottomNameOffset)
 				{
-					moveDist = pastMove - moveLimit;
+					hpOffset += moveDist;
+					nameOffset += moveDist;
 				}
 				else
 				{
-					moveDist = pastMove + moveLimit;
+					GR_TRACE("DisplayPosChage complete");
+
+					hpOffset = BottomNameOffset - offsetDist;
+					nameOffset = BottomNameOffset;
+					data.Handled = true;
+
+					auto status = Gear::EntitySystem::GetStatus(entityID);
+					
 				}
 			}
+			else
+			{
+				if (hpOffset < TopNameOffset)
+				{
+					hpOffset += moveDist;
+					nameOffset += moveDist;
+				}
+				else
+				{
+					GR_TRACE("DisplayPosChage complete");
 
-			hpOffset += moveDist;
-			nameOffset += moveDist;
+					hpOffset = TopNameOffset - offsetDist;
+					nameOffset = TopNameOffset;
+					data.Handled = true;
+
+					status->SetNeedHandleData(WormStatusHandleType::WaitingDisplay, true);
+					status->SetNeedHandleData(WormStatusHandleType::Display, true);
+				}
+			}
 
 			statlist[WormInfo::HpBorderOffset] = hpOffset;
 			statlist[WormInfo::NameBorderOffset] = nameOffset;
 
-			if (std::abs(pastMove) > moveLimit)
-			{
-				GR_TRACE("DisplayPosChage complete");
-				data.Handled = true;
-
-				pastMove = 0.0f;
-				auto status = Gear::EntitySystem::GetStatus(entityID);
-				if (moveDist > 0.0f)
-				{
-					status->SetNeedHandleData(WormStatusHandleType::WaitingDisplay, true);
-					status->SetNeedHandleData(WormStatusHandleType::Display, true);
-				}
-				else
-				{
-					auto timer = Gear::EntitySystem::GetTimer(entityID);
-					timer->SetTimer(2.0f);
-					if (std::any_cast<int>(status->GetStat(WormInfo::Damage)) + std::any_cast<int>(status->GetStat(WormInfo::SelfDamage)))
-					{
-						status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
-					}
-					Gear::EntitySystem::GetStatus(entityID)->SetNeedHandleData(WormStatusHandleType::Display, false);
-				}
-			}
 		}
-	};
-
-	class WormGetDamageHanlder : public Gear::Status::StatusHandler
-	{
-		bool inFirst = true;
-		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
-		{
-			auto status = Gear::EntitySystem::GetStatus(entityID);
-			if (inFirst && std::any_cast<bool>(status->GetStat(WormInfo::MyTurn)))
-			{
-				inFirst = false;
-				status->SetNeedHandleData(WormStatusHandleType::Display, false);
-				GR_TRACE("Push DisplayPosChage -0.2f at Worm GetDamage Handler");
-				status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(-0.2f));
-			}
-
-			if (Gear::EntitySystem::GetTimer(entityID)->isExpired())
-			{
-				auto FSM = Gear::EntitySystem::GetFSM(entityID);
-				FSM->SetCurrentState(WormState::OnNothing);
-				inFirst = true;
-				data.Handled = true;
-
-				int totalDamage = std::any_cast<int>(status->GetStat(WormInfo::Damage)) + std::any_cast<int>(status->GetStat(WormInfo::SelfDamage));
-				if (totalDamage)
-				{
-					status->PushNeedHandleData(WormStatusHandleType::DisplayDamage, Gear::Status::StatHandleData(0));
-				}
-			}
-		}
-	};
+	};	
 
 	class WormDisplayAimHandler : public Gear::Status::StatusHandler
 	{
@@ -312,6 +319,39 @@ namespace InGame {
 			else
 			{
 				Gear::Renderer2D::DrawFrameQuad(aimTrans, AimTexture, 0, int(nativeFireAngle));
+			}
+		}
+	};
+
+	class WormGetDamageHanlder : public Gear::Status::StatusHandler
+	{
+		bool inFirst = true;
+
+		float damageDisplayDelay = 1.5f;
+		float pastTime = 0.0f;
+
+		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
+		{
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			if (inFirst)
+			{
+				GR_TRACE("Worm Enter WormGetDamageHanlder {0}", Gear::EntitySystem::GetEntity(entityID)->GetName());
+				inFirst = false;
+				pastTime = 0.0f;
+			}
+			auto timer = Gear::EntitySystem::GetTimer(entityID);
+			pastTime += timer->GetTick();
+
+			if (damageDisplayDelay < pastTime)
+			{
+				auto FSM = Gear::EntitySystem::GetFSM(entityID);
+				FSM->SetCurrentState(WormState::OnNothing);
+				inFirst = true;
+				data.Paused = true;
+
+				int totalDamage = std::any_cast<int>(status->GetStat(WormInfo::Damage)) + std::any_cast<int>(status->GetStat(WormInfo::SelfDamage));
+				status->RegisterPushNeedHandleData(WormStatusHandleType::DisplayDamage, Gear::Status::StatHandleData(0));
+				//status->RegisterPushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 0.0f)));
 			}
 		}
 	};
@@ -389,10 +429,12 @@ namespace InGame {
 			//int hp = std::any_cast<int>(status->GetStat(WormInfo::Hp));
 			//status->SetStat(WormInfo::Hp, hp - totalDamage);
 
-
-			Gear::Renderer2D::DrawQuad(damageBorderTrans, damageBorder);
-			Font::PrintFont(damageBorderPosition, glm::vec3(0.5f, 0.5f, 1.0f), totalDamageStr, fontType, 0.3f, false);
-
+			if (totalDamage != 0)
+			{
+				Gear::Renderer2D::DrawQuad(damageBorderTrans, damageBorder);
+				Font::PrintFont(damageBorderPosition, glm::vec3(0.5f, 0.5f, 1.0f), totalDamageStr, fontType, 0.3f, false);
+			}
+			
 			if (damageBorderOffset > 3.5f)
 			{
 				damageDisplayEnd = true;
@@ -405,9 +447,10 @@ namespace InGame {
 				status->SetStat(WormInfo::Hp, hp - totalDamage);
 				status->SetStat(WormInfo::SelfDamage, 0);
 				
-
+				damageDisplayEnd = false;
 				firstIn = true;
 				totalDamage = 0;
+				damageBorderOffset = 2.5f;
 
 				auto FSM = Gear::EntitySystem::GetFSM(entityID);
 				FSM->SetCurrentState(WormState::OnAfterDamaged);

@@ -834,7 +834,6 @@ namespace InGame {
 			m_StartCircleIndex = 7;
 			m_StartEllipseIndex = 19;
 			m_FrameDelay = 0.02f;
-
 			break;
 		case InGame::Explosion::Size75:
 			m_Circle = Gear::TextureStorage::GetFrameTexture2D("ExplosionCircle75");

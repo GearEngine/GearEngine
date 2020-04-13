@@ -14,7 +14,7 @@ namespace InGame {
 		auto wormData = initData.Teams[teamNumber].worms[wormNumber];
 
 		//Create Entity
-		m_ID = Gear::EntitySystem::CreateEntity(true);
+		m_ID = Gear::EntitySystem::CreateEntity(true, wormData.Name);
 
 		//Attach Component
 		Gear::EntitySystem::AttachComponent(m_ID, {
@@ -206,7 +206,8 @@ namespace InGame {
 			{ WormState::OnStuck, new WormOnStuckHandler },			{ WormState::OnStandUp, new WormOnStandUpHandler },
 			{ WormState::OnUnderWater, new WormOnUnderWaterHandler },	{ WormState::OnDamaged, new WormOnDamagedHandler },
 			{ WormState::OnAfterDamaged, new WormOnAfterDamaged }, { WormState::OnReadyItemUse, new WormOnReadyItemUseHandler },
-			{ WormState::OnItemWithdraw, new WormOnItemWithdraw}, {WormState::OnUseItem, new WormOnUseItemHandler }
+			{ WormState::OnItemWithdraw, new WormOnItemWithdraw }, {WormState::OnUseItem, new WormOnUseItemHandler },
+			{ WormState::OnAttacked, new WormOnAttackedHandler },
 		});
 
 		//Set Controller
@@ -239,7 +240,7 @@ namespace InGame {
 			{ WormInfo::Stat::Name, wormData.Name}, { WormInfo::Stat::TeamColor, teamData.TeamColor }, { WormInfo::Stat::TeamName, teamData.TeamName }, 
 			{ WormInfo::Stat::Hp, wormData.Hp }, { WormInfo::Stat::FireAngle, 15.0f },
 			{ WormInfo::Stat::FirePower, 0.0f}, { WormInfo::Stat::SelectedItem, Item::Bazooka }, 
-			{ WormInfo::Stat::NameBorderOffset, 1.26f }, { WormInfo::Stat::HpBorderOffset, 0.7f }, { WormInfo::Stat::ZRenderOffset, wormData.AdditionalZRenderOffset },
+			{ WormInfo::Stat::NameBorderOffset, 1.36f }, { WormInfo::Stat::HpBorderOffset, 0.8f }, { WormInfo::Stat::ZRenderOffset, wormData.AdditionalZRenderOffset },
 			{ WormInfo::Stat::Direction, wormData.Direction}, { WormInfo::Stat::MoveSpeed, initData.WormMoveSpeed } ,
 			{ WormInfo::Stat::MyTurn, false }, { WormInfo::Stat::Damage, 0 }, {WormInfo::Stat::SelfDamage , 0}
 		});
