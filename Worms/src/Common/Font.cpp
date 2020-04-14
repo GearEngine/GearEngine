@@ -53,7 +53,7 @@ void Font::ShoutDown()
 	m_Indexer.clear();
 }
 
-void Font::PrintFont(const glm::vec3 & midPosition, const glm::vec3& scale, const std::string & str, FontType::Type font, float offset, bool fixed)
+void Font::PrintFont(const glm::vec3 & midPosition, const glm::vec3& scale, const std::string & str, FontType::Type font, float offset, bool fixed, const glm::vec4& tintColor)
 {
 	int len = str.length();
 	float spaceOfLetter = -(len * 0.5) * offset;
@@ -73,7 +73,7 @@ void Font::PrintFont(const glm::vec3 & midPosition, const glm::vec3& scale, cons
 			}
 			else
 			{
-				Gear::Renderer2D::DrawFrameQuad(trans, m_Fonts[font], 0, 9 - (str[i] - '0'));
+				Gear::Renderer2D::DrawFrameQuad(trans, m_Fonts[font], 0, 9 - (str[i] - '0'), tintColor);
 			}
 		}
 	}

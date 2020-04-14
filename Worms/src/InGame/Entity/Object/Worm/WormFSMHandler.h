@@ -85,6 +85,7 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
+			GR_TRACE("Worm on Die FSM");
 			return WormState::OnDye;
 		}
 	};
@@ -1199,7 +1200,7 @@ namespace InGame {
 					FSM->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
 					status->SetNeedHandleData(WormStatusHandleType::DisplayAim, true);
 					Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, 0, item->GetID())));
-					Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::ShootBullet)));
+					Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::TeamInfoBlinkOff)));
 					timerStatus->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
 
 					AfterShoot(entityID);
@@ -1214,8 +1215,8 @@ namespace InGame {
 			FSM->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
 			status->SetNeedHandleData(WormStatusHandleType::DisplayAim, true);
 			timerStatus->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
-			Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::ShootBullet)));
-			if (shootPower >= 7.0f)
+			Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::TeamInfoBlinkOff)));
+			if (shootPower >= 4.0f)
 			{
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, 0, item->GetID())));
 			}
@@ -1321,6 +1322,8 @@ namespace InGame {
 		Gear::Ref<Gear::Transform2D> transform;
 		Gear::Ref<Gear::Timer> timer;
 		Gear::Ref<Gear::Status> status;
+
+		bool damageDisplay = false;
 
 		void Awake(int entityID) override
 		{

@@ -28,7 +28,7 @@ namespace InGame {
 		DamageWorm,
 		GetDamageWorm,
 		WormDie,
-		ShootBullet,
+		TeamInfoBlinkOff,
 		GameEnd
 	};
 

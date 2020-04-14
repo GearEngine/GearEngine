@@ -327,7 +327,7 @@ namespace InGame {
 	{
 		bool inFirst = true;
 
-		float damageDisplayDelay = 1.5f;
+		float damageDisplayDelay = 1.0f;
 		float pastTime = 0.0f;
 
 		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
@@ -335,7 +335,7 @@ namespace InGame {
 			auto status = Gear::EntitySystem::GetStatus(entityID);
 			if (inFirst)
 			{
-				GR_TRACE("Worm Enter WormGetDamageHanlder {0}", Gear::EntitySystem::GetEntity(entityID)->GetName());
+				//GR_TRACE("Worm Enter WormGetDamageHanlder {0}", Gear::EntitySystem::GetEntity(entityID)->GetName());
 				inFirst = false;
 				pastTime = 0.0f;
 			}
@@ -359,17 +359,22 @@ namespace InGame {
 	{
 		bool firstIn = true;
 		int totalDamage = 0;
+		int wormGetDamage = 0;
 		std::string totalDamageStr;
 		int totalDamageLength;
 
 		bool damageDisplayEnd = false;
 
-		float damageBorderOffset = 2.5f;
+		float damageBorderOffset = 2.0f;
 		glm::vec3 damageBorderPosition;
 		Gear::Ref<Gear::Texture2D> damageBorder;
 		float damageBorderWidthUnit;
 		float damageBorderHeightUnit;
 
+		float accumulateDamage = 0.0f;
+		float originHP;
+
+		int mode;
 		//float partitialDamage;
 		FontType::Type fontType;
 
@@ -379,10 +384,19 @@ namespace InGame {
 		{
 			firstIn = false;
 			auto status = Gear::EntitySystem::GetStatus(entityID);
+			originHP = (float)std::any_cast<int>(status->GetStat(WormInfo::Hp));
 
 			totalDamage = std::any_cast<int>(status->GetStat(WormInfo::Damage)) + std::any_cast<int>(status->GetStat(WormInfo::SelfDamage));
 			totalDamageStr = std::to_string(totalDamage);
 			totalDamageLength = totalDamageStr.length();
+
+			wormGetDamage = totalDamage;
+			if (wormGetDamage > originHP)
+			{
+				wormGetDamage = originHP;
+			}
+
+			accumulateDamage = 0.0f;
 
 			damageBorderPosition = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition();
 			damageBorderPosition.z = ZOrder::z_Font;
@@ -415,24 +429,38 @@ namespace InGame {
 		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
 		{
 			auto status = Gear::EntitySystem::GetStatus(entityID);
+			
 			if (firstIn)
 			{
+				mode = std::any_cast<int>(data.Data);
 				init(entityID);
 			}
-			damageBorderOffset += 0.02f;
+			damageBorderOffset += 0.03f;
 
-			damageBorderPosition.y += 0.02f;
-			damageBorderTrans[3].y += 0.02f;
-
-			//int hp = std::any_cast<int>(status->GetStat(WormInfo::Hp));
-			//status->SetStat(WormInfo::Hp, hp - totalDamage);
+			damageBorderPosition.y += 0.03f;
+			damageBorderTrans[3].y += 0.03f;
 
 			if (totalDamage != 0)
 			{
-				Gear::Renderer2D::DrawQuad(damageBorderTrans, damageBorder);
-				Font::PrintFont(damageBorderPosition, glm::vec3(0.5f, 0.5f, 1.0f), totalDamageStr, fontType, 0.3f, false);
+				if (mode)
+				{
+					Gear::Renderer2D::DrawQuad(damageBorderTrans, damageBorder, glm::vec4(1.0f, 1.0f, 1.0f, 0.3f));
+					Font::PrintFont(damageBorderPosition, glm::vec3(0.5f, 0.5f, 1.0f), totalDamageStr, fontType, 0.3f, false, glm::vec4(1.0f, 1.0f, 1.0f, 0.3f));
+				}
+				else
+				{
+					Gear::Renderer2D::DrawQuad(damageBorderTrans, damageBorder);
+					Font::PrintFont(damageBorderPosition, glm::vec3(0.5f, 0.5f, 1.0f), totalDamageStr, fontType, 0.3f, false);
+				}
 			}
-			
+
+			accumulateDamage += wormGetDamage / 50.0f;
+			if (accumulateDamage > wormGetDamage)
+			{
+				accumulateDamage = wormGetDamage;
+			}
+			status->SetStat(WormInfo::Hp, int(originHP - accumulateDamage));
+
 			if (damageBorderOffset > 3.5f)
 			{
 				damageDisplayEnd = true;
@@ -440,18 +468,20 @@ namespace InGame {
 			
 			if (damageDisplayEnd)
 			{
-				int hp = std::any_cast<int>(status->GetStat(WormInfo::Hp));
 				status->SetStat(WormInfo::Damage, 0);
-				status->SetStat(WormInfo::Hp, hp - totalDamage);
 				status->SetStat(WormInfo::SelfDamage, 0);
 				
 				damageDisplayEnd = false;
 				firstIn = true;
 				totalDamage = 0;
-				damageBorderOffset = 2.5f;
+				damageBorderOffset = 2.0f;
 
 				auto FSM = Gear::EntitySystem::GetFSM(entityID);
-				FSM->SetCurrentState(WormState::OnAfterDamaged);
+
+				if (!mode)
+				{
+					FSM->SetCurrentState(WormState::OnAfterDamaged);
+				}
 				data.Handled = true;
 			}
 		}

@@ -87,8 +87,6 @@ namespace InGame {
 			bazukaReadyAniOrder.push_back({ 0, 6 - i });
 		}
 
-
-
 		Gear::Ref<Gear::Animation2D> empty;
 		auto drawn = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Drawn"), 0.03f, true);
 		drawn->SetTintColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.3f));

@@ -224,7 +224,6 @@ namespace InGame {
 					else
 					{
 						int fallenDamage = (int)((-m_ExternalVector->y + 20.f) * 0.1f);
-						GR_TRACE("Worm {0} First Damaged {1}", entityID, fallenDamage);
 						if (myTurn)
 						{
 							Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::TurnOver)));

@@ -23,7 +23,7 @@ class Font
 public:
 	static void Init();
 	static void ShoutDown();
-	static void PrintFont(const glm::vec3& midPosition, const glm::vec3& scale, const std::string& str, FontType::Type font, float offset, bool fixed = true);
+	static void PrintFont(const glm::vec3& midPosition, const glm::vec3& scale, const std::string& str, FontType::Type font, float offset, bool fixed = true, const glm::vec4& tintColor = glm::vec4(1.0f));
 
 private:
 	static std::vector<Gear::Ref<Gear::FrameTexture2D>> m_Fonts;

@@ -129,13 +129,11 @@ namespace InGame {
 			}
 			if (worldData.DataType == WorldDataType::PrepareNextPhase)
 			{
-				GR_TRACE("World Reseive PrepareNext");
-
 				status->SetStat(WorldInfo::TeamInfoBlink, false);
 				handled = true;
 				return;
 			}
-			if (worldData.DataType == WorldDataType::ShootBullet)
+			if (worldData.DataType == WorldDataType::TeamInfoBlinkOff)
 			{
 				status->SetStat(WorldInfo::TeamInfoBlink, false);
 				handled = true;

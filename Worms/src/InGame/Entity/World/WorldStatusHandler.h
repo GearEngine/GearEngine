@@ -105,6 +105,21 @@ namespace InGame {
 			teamInfoNamePos = originTeamInfoNamePos;
 			IconTranslate = originIconTranslate;
 			hpPosition = originHpPosition;
+
+			for (int i = 0; i < teamInfoData.size(); ++i)
+			{
+				teamInfoData[i].CurrentTotalWormHp = 0;
+				for (int j = 0; j < WorldWormData::s_LivingWorms.size(); ++j)
+				{
+					
+					auto status = Gear::EntitySystem::GetStatus(WorldWormData::s_LivingWorms[j]);
+					if (teamInfoData[i].TeamName == std::any_cast<std::string>(status->GetStat(WormInfo::TeamName)))
+					{
+						teamInfoData[i].CurrentTotalWormHp += std::any_cast<int>(status->GetStat(WormInfo::Hp));
+					}
+				}
+			}
+			
 		
 			for (int i = 0; i < teamInfoData.size(); ++i)
 			{
