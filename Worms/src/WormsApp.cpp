@@ -47,6 +47,14 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RedAim", Gear::FrameTexture2D::Create("assets/textures/UI/RedAim.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("Blob", Gear::FrameTexture2D::Create("assets/textures/Effect/Blob.png", 1, 16));
 
+		//Grave
+		Gear::TextureStorage::AddFrameTexture2D("Grave1", Gear::FrameTexture2D::Create("assets/textures/Grave/grave1.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("Grave2", Gear::FrameTexture2D::Create("assets/textures/Grave/grave2.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("Grave3", Gear::FrameTexture2D::Create("assets/textures/Grave/grave3.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("Grave4", Gear::FrameTexture2D::Create("assets/textures/Grave/grave4.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("Grave5", Gear::FrameTexture2D::Create("assets/textures/Grave/grave5.png", 1, 20));
+		Gear::TextureStorage::AddFrameTexture2D("Grave6", Gear::FrameTexture2D::Create("assets/textures/Grave/grave6.png", 1, 20));
+
 		//Explosion
 		Gear::TextureStorage::AddFrameTexture2D("ExplosionCircle25", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionCircle25.png", 1, 8));
 		Gear::TextureStorage::AddFrameTexture2D("ExplosionCircle50", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionCircle50.png", 1, 8));
@@ -63,7 +71,7 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("ExplosionTextPoot", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionTextPoot.png", 1, 18));
 		Gear::TextureStorage::AddFrameTexture2D("ExplosionTextPow", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionTextPow.png", 1, 12));
 		
-		Gear::TextureStorage::AddFrameTexture2D("ExplosionSmoke25", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionSmoke25.png", 1, 22));
+		Gear::TextureStorage::AddFrameTexture2D("ExplosionSmoke25", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionSmoke25.png", 1, 28));
 		Gear::TextureStorage::AddFrameTexture2D("ExplosionSmoke50", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionSmoke50.png", 1, 28));
 		Gear::TextureStorage::AddFrameTexture2D("ExplosionSmoke75", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionSmoke75.png", 1, 28));
 		Gear::TextureStorage::AddFrameTexture2D("ExplosionSmoke100", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/ExplosionSmoke100.png", 1, 28));
@@ -73,14 +81,16 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("Smoke40", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/Smoke40.png", 1, 28));
 
 		Gear::TextureStorage::AddFrameTexture2D("Flame", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/Flame1.png", 1, 32));
+		
 		//Weapon
 		Gear::TextureStorage::AddFrameTexture2D("BazukaBullet", Gear::FrameTexture2D::Create("assets/textures/Weapon/BazukaBullet.png", 1, 32));
-
 		Gear::TextureStorage::AddFrameTexture2D("Exhaust1", Gear::FrameTexture2D::Create("assets/textures/Effect/Exhaust/Exhaust1.png", 1, 28));
-
 
 		//Worm
 		Gear::TextureStorage::AddFrameTexture2D("Drawn", Gear::FrameTexture2D::Create("assets/textures/Worm/Drawn.png", 1, 4));
+		Gear::TextureStorage::AddFrameTexture2D("LeftWormDying", Gear::FrameTexture2D::Create("assets/textures/Worm/Dying/LeftWormDying.png", 1, 60));
+		Gear::TextureStorage::AddFrameTexture2D("RightWormDying", Gear::FrameTexture2D::Create("assets/textures/Worm/Dying/RightWormDying.png", 1, 60));
+		
 		//walk
 		Gear::TextureStorage::AddFrameTexture2D("LeftFlatWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/Walk/LeftFlatWalk.png", 1, 15));
 		Gear::TextureStorage::AddFrameTexture2D("LeftUpWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/Walk/LeftUpWalk.png", 1, 15));

@@ -38,7 +38,7 @@ namespace InGame {
 
 	void Blob::Render()
 	{
-  		Gear::Renderer2D::DrawFrameQuad(m_Translate, m_BlobTexture, 0, m_TextureIndex);
+		Gear::Renderer2D::DrawFrameQuad(m_Translate, m_BlobTexture, 0, m_TextureIndex);
 	}
 
 	void Blob::SetAngle(float angle)
@@ -47,32 +47,29 @@ namespace InGame {
 	}
 
 	std::vector<Gear::Ref<Blob>> EffectPool::s_BlobPool = std::vector<Gear::Ref<Blob>>(EFFECT_POOL_MAX);
-	
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex25Foom	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex50Foom	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex75Foom	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex100Foom	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex25Biff	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex50Biff	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex75Biff	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex100Biff	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex25Poot	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex50Poot	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex75Poot	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex100Poot	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex25Pow	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex50Pow	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex75Pow	= std::vector<Gear::Ref<ExplosionEffect>>();
-	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex100Pow	= std::vector<Gear::Ref<ExplosionEffect>>();
+
+	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex25 = std::vector<Gear::Ref<ExplosionEffect>>();
+	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex50Foom = std::vector<Gear::Ref<ExplosionEffect>>();
+	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex75Foom = std::vector<Gear::Ref<ExplosionEffect>>();
+	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex100Foom = std::vector<Gear::Ref<ExplosionEffect>>();
+	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex50Biff = std::vector<Gear::Ref<ExplosionEffect>>();
+	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex75Biff = std::vector<Gear::Ref<ExplosionEffect>>();
+	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex100Biff = std::vector<Gear::Ref<ExplosionEffect>>();
+	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex50Poot = std::vector<Gear::Ref<ExplosionEffect>>();
+	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex75Poot = std::vector<Gear::Ref<ExplosionEffect>>();
+	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex100Poot = std::vector<Gear::Ref<ExplosionEffect>>();
+	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex50Pow = std::vector<Gear::Ref<ExplosionEffect>>();
+	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex75Pow = std::vector<Gear::Ref<ExplosionEffect>>();
+	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex100Pow = std::vector<Gear::Ref<ExplosionEffect>>();
 
 	std::vector<Gear::Ref<ExplosionSmokeBunddle>> EffectPool::s_Sm25 = std::vector<Gear::Ref<ExplosionSmokeBunddle>>();
 	std::vector<Gear::Ref<ExplosionSmokeBunddle>> EffectPool::s_Sm50 = std::vector<Gear::Ref<ExplosionSmokeBunddle>>();
 	std::vector<Gear::Ref<ExplosionSmokeBunddle>> EffectPool::s_Sm75 = std::vector<Gear::Ref<ExplosionSmokeBunddle>>();
 	std::vector<Gear::Ref<ExplosionSmokeBunddle>> EffectPool::s_Sm100 = std::vector<Gear::Ref<ExplosionSmokeBunddle>>();
 
-	std::vector<Gear::Ref<FlameBundle>> EffectPool::s_Fm25	= std::vector<Gear::Ref<FlameBundle>>();
-	std::vector<Gear::Ref<FlameBundle>> EffectPool::s_Fm50  = std::vector<Gear::Ref<FlameBundle>>();
-	std::vector<Gear::Ref<FlameBundle>> EffectPool::s_Fm75  = std::vector<Gear::Ref<FlameBundle>>();
+	std::vector<Gear::Ref<FlameBundle>> EffectPool::s_Fm25 = std::vector<Gear::Ref<FlameBundle>>();
+	std::vector<Gear::Ref<FlameBundle>> EffectPool::s_Fm50 = std::vector<Gear::Ref<FlameBundle>>();
+	std::vector<Gear::Ref<FlameBundle>> EffectPool::s_Fm75 = std::vector<Gear::Ref<FlameBundle>>();
 	std::vector<Gear::Ref<FlameBundle>> EffectPool::s_Fm100 = std::vector<Gear::Ref<FlameBundle>>();
 
 	std::vector<Gear::Ref<Smoke>> EffectPool::s_Sm20 = std::vector<Gear::Ref<Smoke>>();
@@ -81,22 +78,19 @@ namespace InGame {
 
 	std::vector<Gear::Ref<Exhaust>> EffectPool::s_Exhaust1 = std::vector<Gear::Ref<Exhaust>>();
 
-	int EffectPool::s_Ex25FoomPtr	= 0;
-	int EffectPool::s_Ex50FoomPtr	= 0;
-	int EffectPool::s_Ex75FoomPtr	= 0;
-	int EffectPool::s_Ex100FoomPtr	= 0;
-	int EffectPool::s_Ex25BiffPtr	= 0;
-	int EffectPool::s_Ex50BiffPtr	= 0;
-	int EffectPool::s_Ex75BiffPtr	= 0;
-	int EffectPool::s_Ex100BiffPtr	= 0;
-	int EffectPool::s_Ex25PootPtr	= 0;
-	int EffectPool::s_Ex50PootPtr	= 0;
-	int EffectPool::s_Ex75PootPtr	= 0;
-	int EffectPool::s_Ex100PootPtr	= 0;
-	int EffectPool::s_Ex25PowPtr	= 0;
-	int EffectPool::s_Ex50PowPtr	= 0;
-	int EffectPool::s_Ex75PowPtr	= 0;
-	int EffectPool::s_Ex100PowPtr	= 0;
+	int EffectPool::s_Ex25Ptr = 0;
+	int EffectPool::s_Ex50FoomPtr = 0;
+	int EffectPool::s_Ex75FoomPtr = 0;
+	int EffectPool::s_Ex100FoomPtr = 0;
+	int EffectPool::s_Ex50BiffPtr = 0;
+	int EffectPool::s_Ex75BiffPtr = 0;
+	int EffectPool::s_Ex100BiffPtr = 0;
+	int EffectPool::s_Ex50PootPtr = 0;
+	int EffectPool::s_Ex75PootPtr = 0;
+	int EffectPool::s_Ex100PootPtr = 0;
+	int EffectPool::s_Ex50PowPtr = 0;
+	int EffectPool::s_Ex75PowPtr = 0;
+	int EffectPool::s_Ex100PowPtr = 0;
 
 	int EffectPool::s_Sm25Ptr = 0;
 	int EffectPool::s_Sm50Ptr = 0;
@@ -125,11 +119,11 @@ namespace InGame {
 		}
 
 		//Explosion
-		s_Ex25Biff.resize(10);
+		s_Ex25.resize(10);
 		for (int i = 0; i < 10; ++i)
 		{
-			s_Ex25Biff[i].reset(new ExplosionEffect);
-			s_Ex25Biff[i]->init(Explosion::Size25, Explosion::Biff);
+			s_Ex25[i].reset(new ExplosionEffect);
+			s_Ex25[i]->init(Explosion::Size25, Explosion::Null);
 		}
 		s_Ex50Biff.resize(10);
 		for (int i = 0; i < 10; ++i)
@@ -150,12 +144,7 @@ namespace InGame {
 			s_Ex100Biff[i]->init(Explosion::Size100, Explosion::Biff);
 		}
 
-		s_Ex25Foom.resize(10);
-		for (int i = 0; i < 10; ++i)
-		{
-			s_Ex25Foom[i].reset(new ExplosionEffect);
-			s_Ex25Foom[i]->init(Explosion::Size25, Explosion::Foom);
-		}
+
 		s_Ex50Foom.resize(10);
 		for (int i = 0; i < 10; ++i)
 		{
@@ -175,12 +164,7 @@ namespace InGame {
 			s_Ex100Foom[i]->init(Explosion::Size100, Explosion::Foom);
 		}
 
-		s_Ex25Poot.resize(10);
-		for (int i = 0; i < 10; ++i)
-		{
-			s_Ex25Poot[i].reset(new ExplosionEffect);
-			s_Ex25Poot[i]->init(Explosion::Size25, Explosion::Poot);
-		}
+
 		s_Ex50Poot.resize(10);
 		for (int i = 0; i < 10; ++i)
 		{
@@ -200,12 +184,6 @@ namespace InGame {
 			s_Ex100Poot[i]->init(Explosion::Size100, Explosion::Poot);
 		}
 
-		s_Ex25Pow.resize(10);
-		for (int i = 0; i < 10; ++i)
-		{
-			s_Ex25Pow[i].reset(new ExplosionEffect);
-			s_Ex25Pow[i]->init(Explosion::Size25, Explosion::Pow);
-		}
 		s_Ex50Pow.resize(10);
 		for (int i = 0; i < 10; ++i)
 		{
@@ -327,71 +305,19 @@ namespace InGame {
 		switch (size)
 		{
 		case InGame::Explosion::Size25:
-			switch (text)
+			while (1)
 			{
-			case InGame::Explosion::Foom:
-				while (1)
+				if (s_Ex25[s_Ex25Ptr]->m_OnUsing)
 				{
-					if (s_Ex25Foom[s_Ex25FoomPtr]->m_OnUsing)
+					++s_Ex25Ptr;
+					if (s_Ex25Ptr >= 10)
 					{
-						++s_Ex25FoomPtr;
-						if (s_Ex25FoomPtr >= 10)
-						{
-							s_Ex25FoomPtr = 0;
-						}
-					}
-					else
-					{
-						return s_Ex25Foom[s_Ex25FoomPtr];
+						s_Ex25Ptr = 0;
 					}
 				}
-			case InGame::Explosion::Biff:
-				while (1)
+				else
 				{
-					if (s_Ex25Biff[s_Ex25BiffPtr]->m_OnUsing)
-					{
-						++s_Ex25BiffPtr;
-						if (s_Ex25BiffPtr >= 10)
-						{
-							s_Ex25BiffPtr = 0;
-						}
-					}
-					else
-					{
-						return s_Ex25Biff[s_Ex25BiffPtr];
-					}
-				}
-			case InGame::Explosion::Poot:
-				while (1)
-				{
-					if (s_Ex25Poot[s_Ex25PootPtr]->m_OnUsing)
-					{
-						++s_Ex25PootPtr;
-						if (s_Ex25PootPtr >= 10)
-						{
-							s_Ex25PootPtr = 0;
-						}
-					}
-					else
-					{
-						return s_Ex25Poot[s_Ex25PootPtr];
-					}
-				}
-			case InGame::Explosion::Pow:
-				while (1)
-				{
-					if (s_Ex25Pow[s_Ex25PowPtr]->m_OnUsing)
-					{
-						++s_Ex25PowPtr;
-						if (s_Ex25PowPtr >= 10)
-						{
-							s_Ex25PowPtr = 0;
-						}
-					}
-					else
-					{
-						return s_Ex25Pow[s_Ex25PowPtr];
-					}
+					return s_Ex25[s_Ex25Ptr];
 				}
 			}
 		case InGame::Explosion::Size50:
@@ -598,763 +524,786 @@ namespace InGame {
 					}
 				}
 			}
-		}
-	}
-
-	Gear::Ref<ExplosionSmokeBunddle> EffectPool::GetExplosionSmoke(Explosion::Size size)
-	{
-		switch (size)
-		{
-		case InGame::Explosion::Size25:
-			while (1)
-			{
-				++s_Sm25Ptr;
-				if (s_Sm25Ptr >= 10)
-				{
-					s_Sm25Ptr = 0;
-				}
-				if (!s_Sm25[s_Sm25Ptr]->m_OnUsing)
-				{
-					return s_Sm25[s_Sm25Ptr];
-				}
-			}
-		case InGame::Explosion::Size50:
-			while (1)
-			{
-				++s_Sm50Ptr;
-				if (s_Sm50Ptr >= 10)
-				{
-					s_Sm50Ptr = 0;
-				}
-				if (!s_Sm50[s_Sm50Ptr]->m_OnUsing)
-				{
-					return s_Sm50[s_Sm50Ptr];
-				}
-			}
-		case InGame::Explosion::Size75:
-			while (1)
-			{
-				++s_Sm75Ptr;
-				if (s_Sm75Ptr >= 10)
-				{
-					s_Sm75Ptr = 0;
-				}
-				if (!s_Sm75[s_Sm75Ptr]->m_OnUsing)
-				{
-					return s_Sm75[s_Sm75Ptr];
-				}
-			}
-		case InGame::Explosion::Size100:
-			while (1)
-			{
-				++s_Sm100Ptr;
-				if (s_Sm100Ptr >= 10)
-				{
-					s_Sm100Ptr = 0;
-				}
-				if (!s_Sm100[s_Sm100Ptr]->m_OnUsing)
-				{
-					return s_Sm100[s_Sm100Ptr];
-				}
 			}
 		}
-		return nullptr;
-	}
 
-	Gear::Ref<FlameBundle> EffectPool::GetFlame(Explosion::Size size)
-	{
-		switch (size)
+		Gear::Ref<ExplosionSmokeBunddle> EffectPool::GetExplosionSmoke(Explosion::Size size)
 		{
-		case InGame::Explosion::Size25:
-			while (1)
+			switch (size)
 			{
-				++s_Fm25Ptr;
-				if (s_Fm25Ptr >= 10)
+			case InGame::Explosion::Size25:
+				while (1)
 				{
-					s_Fm25Ptr = 0;
+					++s_Sm25Ptr;
+					if (s_Sm25Ptr >= 10)
+					{
+						s_Sm25Ptr = 0;
+					}
+					if (!s_Sm25[s_Sm25Ptr]->m_OnUsing)
+					{
+						return s_Sm25[s_Sm25Ptr];
+					}
 				}
-				if (!s_Fm25[s_Fm25Ptr]->m_OnUsing)
+			case InGame::Explosion::Size50:
+				while (1)
 				{
-					return s_Fm25[s_Fm25Ptr];
+					++s_Sm50Ptr;
+					if (s_Sm50Ptr >= 10)
+					{
+						s_Sm50Ptr = 0;
+					}
+					if (!s_Sm50[s_Sm50Ptr]->m_OnUsing)
+					{
+						return s_Sm50[s_Sm50Ptr];
+					}
+				}
+			case InGame::Explosion::Size75:
+				while (1)
+				{
+					++s_Sm75Ptr;
+					if (s_Sm75Ptr >= 10)
+					{
+						s_Sm75Ptr = 0;
+					}
+					if (!s_Sm75[s_Sm75Ptr]->m_OnUsing)
+					{
+						return s_Sm75[s_Sm75Ptr];
+					}
+				}
+			case InGame::Explosion::Size100:
+				while (1)
+				{
+					++s_Sm100Ptr;
+					if (s_Sm100Ptr >= 10)
+					{
+						s_Sm100Ptr = 0;
+					}
+					if (!s_Sm100[s_Sm100Ptr]->m_OnUsing)
+					{
+						return s_Sm100[s_Sm100Ptr];
+					}
 				}
 			}
-			break;
-		case InGame::Explosion::Size50:
-			while (1)
-			{
-				++s_Fm50Ptr;
-				if (s_Fm50Ptr >= 10)
-				{
-					s_Fm50Ptr = 0;
-				}
-				if (!s_Fm50[s_Fm50Ptr]->m_OnUsing)
-				{
-					return s_Fm50[s_Fm50Ptr];
-				}
-			}
-			break;
-		case InGame::Explosion::Size75:
-			while (1)
-			{
-				++s_Fm75Ptr;
-				if (s_Fm75Ptr >= 10)
-				{
-					s_Fm75Ptr = 0;
-				}
-				if (!s_Fm75[s_Fm75Ptr]->m_OnUsing)
-				{
-					return s_Fm75[s_Fm75Ptr];
-				}
-			}
-			break;
-		case InGame::Explosion::Size100:
-			while (1)
-			{
-				++s_Fm100Ptr;
-				if (s_Fm100Ptr >= 10)
-				{
-					s_Fm100Ptr = 0;
-				}
-				if (!s_Fm100[s_Fm100Ptr]->m_OnUsing)
-				{
-					return s_Fm100[s_Fm100Ptr];
-				}
-			}
-			break;
-		}
-		return nullptr;
-	}
-
-	Gear::Ref<Smoke> EffectPool::GetSmoke(Explosion::SmokeSize size)
-	{
-		switch (size)
-		{
-		case InGame::Explosion::Size20:
-			while (1)
-			{
-				++s_Sm20Ptr;
-				if (s_Sm20Ptr >= 150)
-				{
-					s_Sm20Ptr = 0;
-				}
-				if (!s_Sm20[s_Sm20Ptr]->m_OnUsing)
-				{
-					return s_Sm20[s_Sm20Ptr];
-				}
-			}
-			break;
-		case InGame::Explosion::Size30:
-			while (1)
-			{
-				++s_Sm30Ptr;
-				if (s_Sm30Ptr >= 150)
-				{
-					s_Sm30Ptr = 0;
-				}
-				if (!s_Sm30[s_Sm30Ptr]->m_OnUsing)
-				{
-					return s_Sm30[s_Sm30Ptr];
-				}
-			}
-			break;
-		case InGame::Explosion::Size40:
-			while (1)
-			{
-				++s_Sm40Ptr;
-				if (s_Sm40Ptr >= 150)
-				{
-					s_Sm40Ptr = 0;
-				}
-				if (!s_Sm40[s_Sm40Ptr]->m_OnUsing)
-				{
-					return s_Sm40[s_Sm40Ptr];
-				}
-			}
-			break;
-		}
-		return nullptr;
-	}
-
-	Gear::Ref<Exhaust> EffectPool::GetExhuast(ExhaustType::Type type)
-	{
-		switch (type)
-		{
-		case InGame::ExhaustType::_1:
-			while (1)
-			{
-				++s_Exhaust1Ptr;
-				if (s_Exhaust1Ptr >= 50)
-				{
-					s_Exhaust1Ptr = 0;
-				}
-				if (!s_Exhaust1[s_Exhaust1Ptr]->m_OnUsing)
-				{
-					return s_Exhaust1[s_Exhaust1Ptr];
-				}
-			}
-		}
-		return nullptr;
-	}
-	
-
-	void ExplosionEffect::init(Explosion::Size size, Explosion::Text explosionText)
-	{
-		switch (explosionText)
-		{
-		case InGame::Explosion::Foom:
-			m_Text = Gear::TextureStorage::GetFrameTexture2D("ExplosionTextFoom");
-			m_StartTextIndex = 19;
-			break;
-		case InGame::Explosion::Biff:
-			m_Text = Gear::TextureStorage::GetFrameTexture2D("ExplosionTextBiff");
-			m_StartTextIndex = 11;
-			break;
-		case InGame::Explosion::Poot:
-			m_Text = Gear::TextureStorage::GetFrameTexture2D("ExplosionTextPoot");
-			m_StartTextIndex = 17;
-			break;
-		case InGame::Explosion::Pow:
-			m_Text = Gear::TextureStorage::GetFrameTexture2D("ExplosionTextPow");
-			m_StartTextIndex = 11;
-			break;
+			return nullptr;
 		}
 
-		switch (size)
+		Gear::Ref<FlameBundle> EffectPool::GetFlame(Explosion::Size size)
 		{
-		case InGame::Explosion::Size25:
-			m_Circle = Gear::TextureStorage::GetFrameTexture2D("ExplosionCircle25");
-			m_Ellipse = Gear::TextureStorage::GetFrameTexture2D("ExplosionEllipse25");
-			m_StartCircleIndex = 7;
-			m_StartEllipseIndex = 19;
-			m_FrameDelay = 0.02f;
-			break;
-		case InGame::Explosion::Size50:
-			m_Circle = Gear::TextureStorage::GetFrameTexture2D("ExplosionCircle50");
-			m_Ellipse = Gear::TextureStorage::GetFrameTexture2D("ExplosionEllipse50");
-			m_StartCircleIndex = 7;
-			m_StartEllipseIndex = 19;
-			m_FrameDelay = 0.02f;
-			break;
-		case InGame::Explosion::Size75:
-			m_Circle = Gear::TextureStorage::GetFrameTexture2D("ExplosionCircle75");
-			m_Ellipse = Gear::TextureStorage::GetFrameTexture2D("ExplosionEllipse75");
-			m_StartCircleIndex = 3;
-			m_StartEllipseIndex = 9;
-			m_FrameDelay = 0.04f;
-			break;
-		case InGame::Explosion::Size100:
-			m_Circle = Gear::TextureStorage::GetFrameTexture2D("ExplosionCircle100");
-			m_Ellipse = Gear::TextureStorage::GetFrameTexture2D("ExplosionEllipse100");
-			m_StartCircleIndex = 3;
-			m_StartEllipseIndex = 9;
-			m_FrameDelay = 0.04f;
-			break;
+			switch (size)
+			{
+			case InGame::Explosion::Size25:
+				while (1)
+				{
+					++s_Fm25Ptr;
+					if (s_Fm25Ptr >= 10)
+					{
+						s_Fm25Ptr = 0;
+					}
+					if (!s_Fm25[s_Fm25Ptr]->m_OnUsing)
+					{
+						return s_Fm25[s_Fm25Ptr];
+					}
+				}
+				break;
+			case InGame::Explosion::Size50:
+				while (1)
+				{
+					++s_Fm50Ptr;
+					if (s_Fm50Ptr >= 10)
+					{
+						s_Fm50Ptr = 0;
+					}
+					if (!s_Fm50[s_Fm50Ptr]->m_OnUsing)
+					{
+						return s_Fm50[s_Fm50Ptr];
+					}
+				}
+				break;
+			case InGame::Explosion::Size75:
+				while (1)
+				{
+					++s_Fm75Ptr;
+					if (s_Fm75Ptr >= 10)
+					{
+						s_Fm75Ptr = 0;
+					}
+					if (!s_Fm75[s_Fm75Ptr]->m_OnUsing)
+					{
+						return s_Fm75[s_Fm75Ptr];
+					}
+				}
+				break;
+			case InGame::Explosion::Size100:
+				while (1)
+				{
+					++s_Fm100Ptr;
+					if (s_Fm100Ptr >= 10)
+					{
+						s_Fm100Ptr = 0;
+					}
+					if (!s_Fm100[s_Fm100Ptr]->m_OnUsing)
+					{
+						return s_Fm100[s_Fm100Ptr];
+					}
+				}
+				break;
+			}
+			return nullptr;
 		}
 
-		float circleWidth = m_Circle->GetWidth();
-		float circleHeight = m_Circle->GetHeight();
-		m_CircleScale = glm::vec3(circleWidth / 60.0f * 1.8f, circleHeight / 60.0f * 1.8f, 1.0f);
-
-		float ellipseWidth = m_Ellipse->GetWidth();
-		float ellipseHeight = m_Ellipse->GetHeight();
-		m_EllipseScale = glm::vec3(ellipseWidth / 60.0f * 1.8f, ellipseHeight / 60.0f * 1.8f, 1.0f);
-
-		float textWidth = m_Text->GetWidth();
-		float textHeight = m_Text->GetHeight();
-		m_TextScale = glm::vec3(textWidth / 60.0f * 1.8f, textHeight / 60.0f * 1.8f, 1.0f);
-
-	}
-
-	void ExplosionEffect::init(const glm::vec2 & basePosition)
-	{
-		m_InFisrt = true;
-		m_OnUsing = true;
-
-		m_CircleIndex = m_StartCircleIndex;
-		m_TextIndex = m_StartTextIndex;
-		m_EllipseIndex = m_StartEllipseIndex;
-
-		m_pastTime = 0.0f;
-		m_TextPastTime = 0.0f;
-
-		m_CircleTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(basePosition, ZOrder::z_ExplosionCircle))* glm::scale(glm::mat4(1.0f), m_CircleScale);
-		m_EllipseTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(basePosition, ZOrder::z_ExplosionEllipse))* glm::scale(glm::mat4(1.0f), m_EllipseScale);
-		m_TextTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(basePosition, ZOrder::z_ExplosionText))* glm::scale(glm::mat4(1.0f), m_TextScale);
-	}
-
-	void ExplosionEffect::Update(float ts)
-	{
-		if (m_InFisrt)
+		Gear::Ref<Smoke> EffectPool::GetSmoke(Explosion::SmokeSize size)
 		{
-			m_InFisrt = false;
-			return;
+			switch (size)
+			{
+			case InGame::Explosion::Size20:
+				while (1)
+				{
+					++s_Sm20Ptr;
+					if (s_Sm20Ptr >= 150)
+					{
+						s_Sm20Ptr = 0;
+					}
+					if (!s_Sm20[s_Sm20Ptr]->m_OnUsing)
+					{
+						return s_Sm20[s_Sm20Ptr];
+					}
+				}
+				break;
+			case InGame::Explosion::Size30:
+				while (1)
+				{
+					++s_Sm30Ptr;
+					if (s_Sm30Ptr >= 150)
+					{
+						s_Sm30Ptr = 0;
+					}
+					if (!s_Sm30[s_Sm30Ptr]->m_OnUsing)
+					{
+						return s_Sm30[s_Sm30Ptr];
+					}
+				}
+				break;
+			case InGame::Explosion::Size40:
+				while (1)
+				{
+					++s_Sm40Ptr;
+					if (s_Sm40Ptr >= 150)
+					{
+						s_Sm40Ptr = 0;
+					}
+					if (!s_Sm40[s_Sm40Ptr]->m_OnUsing)
+					{
+						return s_Sm40[s_Sm40Ptr];
+					}
+				}
+				break;
+			}
+			return nullptr;
 		}
-		if (m_CircleIndex < 0 && m_EllipseIndex < 0 && m_TextIndex < 0)
+
+		Gear::Ref<Exhaust> EffectPool::GetExhuast(ExhaustType::Type type)
 		{
-			m_OnUsing = false;
+			switch (type)
+			{
+			case InGame::ExhaustType::_1:
+				while (1)
+				{
+					++s_Exhaust1Ptr;
+					if (s_Exhaust1Ptr >= 50)
+					{
+						s_Exhaust1Ptr = 0;
+					}
+					if (!s_Exhaust1[s_Exhaust1Ptr]->m_OnUsing)
+					{
+						return s_Exhaust1[s_Exhaust1Ptr];
+					}
+				}
+			}
+			return nullptr;
+		}
+
+		void EffectPool::pushExplosion(Gear::Ref<ExplosionEffect> explosion)
+		{
+			ObjectLayer::s_Explosion.push_back(explosion);
+		}
+
+		void EffectPool::pushExplosionSmoke(Gear::Ref<ExplosionSmokeBunddle> explosionSmoke)
+		{
+			ObjectLayer::s_ExplosionSmoke.push_back(explosionSmoke);
+		}
+
+		void EffectPool::pushFlame(Gear::Ref<FlameBundle> flame)
+		{
+			ObjectLayer::s_Flames.push_back(flame);
+		}
+
+
+		void ExplosionEffect::init(Explosion::Size size, Explosion::Text explosionText)
+		{
+			switch (explosionText)
+			{
+			case InGame::Explosion::Foom:
+				m_Text = Gear::TextureStorage::GetFrameTexture2D("ExplosionTextFoom");
+				m_StartTextIndex = 19;
+				break;
+			case InGame::Explosion::Biff:
+				m_Text = Gear::TextureStorage::GetFrameTexture2D("ExplosionTextBiff");
+				m_StartTextIndex = 11;
+				break;
+			case InGame::Explosion::Poot:
+				m_Text = Gear::TextureStorage::GetFrameTexture2D("ExplosionTextPoot");
+				m_StartTextIndex = 17;
+				break;
+			case InGame::Explosion::Pow:
+				m_Text = Gear::TextureStorage::GetFrameTexture2D("ExplosionTextPow");
+				m_StartTextIndex = 11;
+				break;
+			}
+
+			switch (size)
+			{
+			case InGame::Explosion::Size25:
+				m_Circle = Gear::TextureStorage::GetFrameTexture2D("ExplosionCircle25");
+				m_Ellipse = Gear::TextureStorage::GetFrameTexture2D("ExplosionEllipse25");
+				m_StartCircleIndex = 7;
+				m_StartEllipseIndex = 19;
+				m_FrameDelay = 0.02f;
+				break;
+			case InGame::Explosion::Size50:
+				m_Circle = Gear::TextureStorage::GetFrameTexture2D("ExplosionCircle50");
+				m_Ellipse = Gear::TextureStorage::GetFrameTexture2D("ExplosionEllipse50");
+				m_StartCircleIndex = 7;
+				m_StartEllipseIndex = 19;
+				m_FrameDelay = 0.02f;
+				break;
+			case InGame::Explosion::Size75:
+				m_Circle = Gear::TextureStorage::GetFrameTexture2D("ExplosionCircle75");
+				m_Ellipse = Gear::TextureStorage::GetFrameTexture2D("ExplosionEllipse75");
+				m_StartCircleIndex = 3;
+				m_StartEllipseIndex = 9;
+				m_FrameDelay = 0.04f;
+				break;
+			case InGame::Explosion::Size100:
+				m_Circle = Gear::TextureStorage::GetFrameTexture2D("ExplosionCircle100");
+				m_Ellipse = Gear::TextureStorage::GetFrameTexture2D("ExplosionEllipse100");
+				m_StartCircleIndex = 3;
+				m_StartEllipseIndex = 9;
+				m_FrameDelay = 0.04f;
+				break;
+			}
+
+			float circleWidth = m_Circle->GetWidth();
+			float circleHeight = m_Circle->GetHeight();
+			m_CircleScale = glm::vec3(circleWidth / 60.0f * 1.8f, circleHeight / 60.0f * 1.8f, 1.0f);
+
+			float ellipseWidth = m_Ellipse->GetWidth();
+			float ellipseHeight = m_Ellipse->GetHeight();
+			m_EllipseScale = glm::vec3(ellipseWidth / 60.0f * 1.8f, ellipseHeight / 60.0f * 1.8f, 1.0f);
+
+			if (m_Text)
+			{
+				float textWidth = m_Text->GetWidth();
+				float textHeight = m_Text->GetHeight();
+				m_TextScale = glm::vec3(textWidth / 60.0f * 1.8f, textHeight / 60.0f * 1.8f, 1.0f);
+			}
+		}
+
+		void ExplosionEffect::init(const glm::vec2 & basePosition)
+		{
 			m_InFisrt = true;
-			return;
-		}
+			m_OnUsing = true;
 
-		m_pastTime += ts;
-		if (m_FrameDelay < m_pastTime)
-		{
+			m_CircleIndex = m_StartCircleIndex;
+			m_TextIndex = m_StartTextIndex;
+			m_EllipseIndex = m_StartEllipseIndex;
+
 			m_pastTime = 0.0f;
-			--m_CircleIndex;
-			--m_EllipseIndex;
-		}
-
-		m_TextPastTime += ts;
-		if(m_TextFrameDelay < m_TextPastTime)
-		{
 			m_TextPastTime = 0.0f;
-			--m_TextIndex;
-		}
 
-	}
-
-	void ExplosionEffect::Render()
-	{
-		if (m_CircleIndex >= 0)
-		{
-			Gear::Renderer2D::DrawFrameQuad(m_CircleTranslate, m_Circle, 0, m_CircleIndex);
-		}
-		if (m_EllipseIndex >= 0)
-		{
-			Gear::Renderer2D::DrawFrameQuad(m_EllipseTranslate, m_Ellipse, 0, m_EllipseIndex);
-		}
-		if (m_TextIndex >= 0)
-		{
-			Gear::Renderer2D::DrawFrameQuad(m_TextTranslate, m_Text, 0, m_TextIndex);
-		}
-	}
-
-	void ExplosionSmokeBunddle::ExplosionSmoke::init(Explosion::Size size, const glm::vec2& offsetVector, const glm::vec2 & externalVector)
-	{
-		switch (size)
-		{
-		case InGame::Explosion::Size25:
-			m_Texture = Gear::TextureStorage::GetFrameTexture2D("ExplosionSmoke25");
-			m_StartIndex = 21;
-			break;
-		case InGame::Explosion::Size50:
-			m_Texture = Gear::TextureStorage::GetFrameTexture2D("ExplosionSmoke50");
-			m_StartIndex = 27;
-			break;
-		case InGame::Explosion::Size75:
-			m_Texture = Gear::TextureStorage::GetFrameTexture2D("ExplosionSmoke75");
-			m_StartIndex = 27;
-			break;
-		case InGame::Explosion::Size100:
-			m_Texture = Gear::TextureStorage::GetFrameTexture2D("ExplosionSmoke100");
-			m_StartIndex = 27;
-			break;
-		}
-		int width = m_Texture->GetWidth();
-		int height = m_Texture->GetHeight();
-		m_Scale = glm::vec3(width / 60.0f * 1.8f, height / 60.0f * 1.8f, 1.0f);
-
-		m_OriginTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(offsetVector, ZOrder::z_ExplosionSmoke)) * glm::scale(glm::mat4(1.0f), m_Scale);
-		m_OriginExternalVector = externalVector;
-	}
-
-	void ExplosionSmokeBunddle::ExplosionSmoke::init(const glm::vec2& worldPosition)
-	{
-		m_ExternalVector.x = m_OriginExternalVector.x;
-		m_ExternalVector.y = m_OriginExternalVector.y;
-		m_Translate = m_OriginTranslate;
-		m_Translate[3][0] += worldPosition.x;
-		m_Translate[3][1] += worldPosition.y;
-
-		m_TextureIndex = m_StartIndex;
-
-		m_OnUsing = true;
-		m_PastTime = 0.0f;
-	}
-
-	void ExplosionSmokeBunddle::ExplosionSmoke::Update(float ts)
-	{
-		if (!m_OnUsing)
-			return;
-
-		m_PastTime += ts;
+			m_CircleTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(basePosition, ZOrder::z_ExplosionCircle))* glm::scale(glm::mat4(1.0f), m_CircleScale);
+			m_EllipseTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(basePosition, ZOrder::z_ExplosionEllipse))* glm::scale(glm::mat4(1.0f), m_EllipseScale);
 			
-		
-		m_Translate[3][0] += m_ExternalVector.x * ts;
-		m_Translate[3][1] += m_ExternalVector.y * ts;		
+			if (m_Text)
+			{
+				m_TextTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(basePosition, ZOrder::z_ExplosionText))* glm::scale(glm::mat4(1.0f), m_TextScale);
+			}
+		}
 
-		if (m_PastTime > m_FrameDelay)
+		void ExplosionEffect::Update(float ts)
 		{
-			m_PastTime = 0.0f;
-			--m_TextureIndex;
-			if (m_TextureIndex < 0)
+			if (m_InFisrt)
+			{
+				m_InFisrt = false;
+				return;
+			}
+			if (m_CircleIndex < 0 && m_EllipseIndex < 0 && m_TextIndex < 0)
 			{
 				m_OnUsing = false;
+				m_InFisrt = true;
+				return;
 			}
-		}
-	}
 
-	void ExplosionSmokeBunddle::ExplosionSmoke::Render()
-	{
-		if (m_OnUsing)
-		{
-			Gear::Renderer2D::DrawFrameQuad(m_Translate, m_Texture, 0, m_TextureIndex);
-		}
-	}
-
-	void ExplosionSmokeBunddle::init(Explosion::Size size)
-	{
-		glm::vec2 offsetVector(0.0f);
-		switch (size)
-		{
-		case InGame::Explosion::Size25:
-			m_Smokes.resize(9);
-			for (int i = -1; i <= 1; ++i)
+			m_pastTime += ts;
+			if (m_FrameDelay < m_pastTime)
 			{
-				for (int j = -1; j <= 1; ++j)
+				m_pastTime = 0.0f;
+				--m_CircleIndex;
+				--m_EllipseIndex;
+			}
+
+			if (m_Text)
+			{
+				m_TextPastTime += ts;
+				if (m_TextFrameDelay < m_TextPastTime)
 				{
-					offsetVector.x = 0.1f * j;
-					offsetVector.y = 0.1f * i;
-					m_Smokes[(i + 1) * 3 + (j + 1)].init(size, offsetVector, glm::vec2(Gear::Util::GetRndFloatFromTo(-2.2f, 2.2f), Gear::Util::GetRndFloatFromTo(-0.5f, 5.0f)));
+					m_TextPastTime = 0.0f;
+					--m_TextIndex;
 				}
 			}
-			break;
-		case InGame::Explosion::Size50:
-			m_Smokes.resize(12);
-			for (int i = -1; i <= 1; ++i)
+		}
+
+		void ExplosionEffect::Render()
+		{
+			if (m_CircleIndex >= 0)
 			{
-				for (float j = -1.5f; j <= 1.5f; j += 1.0f)
-				{
-					offsetVector.x = 0.15f * j;
-					offsetVector.y = 0.15f * i;
-					m_Smokes[(i + 1) * 4 + (int)(j + 1.5f)].init(size, offsetVector, glm::vec2(Gear::Util::GetRndFloatFromTo(-2.5f, 2.5f), Gear::Util::GetRndFloatFromTo(-0.5f, 6.0f)));
-				}
+				Gear::Renderer2D::DrawFrameQuad(m_CircleTranslate, m_Circle, 0, m_CircleIndex);
 			}
-			break;
-		case InGame::Explosion::Size75:
-			m_Smokes.resize(16);
-			for (float i = -1.5; i <= 1.5; i += 1.0f)
+			if (m_EllipseIndex >= 0)
 			{
-				for (float j = -1.5; j <= 1.5f; j += 1.0f)
-				{
-					offsetVector.x = 0.2f * j;
-					offsetVector.y = 0.2f * i;
-					m_Smokes[int(i + 1.5f) * 4 + int(j + 1.5f)].init(size, offsetVector, glm::vec2(Gear::Util::GetRndFloatFromTo(-2.8f, 2.8f), Gear::Util::GetRndFloatFromTo(-0.5f, 6.5f)));
-				}
+				Gear::Renderer2D::DrawFrameQuad(m_EllipseTranslate, m_Ellipse, 0, m_EllipseIndex);
 			}
-			break;
-		case InGame::Explosion::Size100:
-			m_Smokes.resize(20);
-			for (int i = -2; i <= 2; ++i)
+			if (m_TextIndex >= 0 && m_Text)
 			{
-				for (float j = -1.5; j <= 1.5f; j += 1.0f)
-				{
-					offsetVector.x = 0.25f * j;
-					offsetVector.y = 0.25f * i;
-					m_Smokes[(i + 2) * 4 + int(j + 1.5f)].init(size, offsetVector, glm::vec2(Gear::Util::GetRndFloatFromTo(-3.0f, 3.0f), Gear::Util::GetRndFloatFromTo(-0.5f, 7.0f)));
-				}
-			}
-			break;
-		}
-	}
-
-	void ExplosionSmokeBunddle::init(const glm::vec2 & worldPosition)
-	{
-		m_OnUsing = true;
-		for (int i = 0; i < m_Smokes.size(); ++i)
-		{
-			m_Smokes[i].init(worldPosition);
-		}
-	}
-
-	void ExplosionSmokeBunddle::Update(float ts)
-	{
-		int usingCount = 0;
-		for(auto& smoke : m_Smokes)
-		{
-			usingCount += smoke.m_OnUsing;
-			smoke.Update(ts);
-		}
-		if (usingCount == 0)
-		{
-			m_OnUsing = false;
-		}
-	}
-
-	void ExplosionSmokeBunddle::Render()
-	{
-		for (auto& smoke : m_Smokes)
-		{
-			smoke.Render();
-		}
-	}
-
-	void FlameBundle::Flame::init(const glm::vec2 & externalVector, Explosion::Size size)
-	{
-		m_OriginExternalVector = externalVector;
-
-		m_Texture = Gear::TextureStorage::GetFrameTexture2D("Flame");
-		int width = m_Texture->GetWidth();
-		int height = m_Texture->GetHeight();
-
-		m_Scale = glm::vec3(width / 60.0f * 1.8f, height / 60.0f * 1.8f, 1.0f);
-		m_OriginTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, ZOrder::z_Flame)) * glm::scale(glm::mat4(1.0f), m_Scale);
-
-		m_OriginExternalVector = externalVector;
-		m_StartIndex = 22;
-	}
-
-	void FlameBundle::Flame::init(const glm::vec2 & wolrdPosition)
-	{
-		m_Translate = m_OriginTranslate;
-		m_Translate[3][0] += wolrdPosition.x;
-		m_Translate[3][1] += wolrdPosition.y;
-
-		m_TextureIndex = Gear::Util::GetRndIntFromTo(m_StartIndex / 3, m_StartIndex);
-		m_ExternalVector = m_OriginExternalVector;
-
-		m_PastTime = 0.0f;
-		m_GenPastTime = 0.0f;
-		m_GenSmokeDelay = Gear::Util::GetRndFloat(0.5f);
-		m_OnUsing = true;
-	}
-
-
-	void FlameBundle::Flame::Update(float ts)
-	{
-		if (!m_OnUsing)
-			return;
-
-		m_PastTime += ts;
-
-		m_ExternalVector.y -= m_Gravity * ts;
-
-		if (m_ExternalVector.y < 0.0f)
-		{
-			m_GenPastTime += ts;
-
-			if (m_GenPastTime > m_GenSmokeDelay)
-			{
-				m_GenPastTime = 0.0f;
-
-				m_GenSmokeDelay = Gear::Util::GetRndFloat(0.5f);
-
-				Gear::Ref<Smoke> smoke = EffectPool::GetSmoke(Explosion::SmokeSize::Size20);
-				
-				smoke->init(glm::vec2(m_Translate[3][0], m_Translate[3][1]), glm::vec2(0.0f, 0.05f));
-				InGame::ObjectLayer::s_Smokes.push_back(smoke);
-			}
-
-			if (m_ExternalVector.y <= -0.1f)
-			{
-				m_ExternalVector.y = -0.1f;
+				Gear::Renderer2D::DrawFrameQuad(m_TextTranslate, m_Text, 0, m_TextIndex);
 			}
 		}
 
-		m_Translate[3][0] += m_ExternalVector.x;
-		m_Translate[3][1] += m_ExternalVector.y;
-
-		if (m_PastTime > m_FrameDelay)
+		void ExplosionSmokeBunddle::ExplosionSmoke::init(Explosion::Size size, const glm::vec2& offsetVector, const glm::vec2 & externalVector)
 		{
+			switch (size)
+			{
+			case InGame::Explosion::Size25:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("ExplosionSmoke25");
+				m_StartIndex = 21;
+				break;
+			case InGame::Explosion::Size50:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("ExplosionSmoke50");
+				m_StartIndex = 27;
+				break;
+			case InGame::Explosion::Size75:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("ExplosionSmoke75");
+				m_StartIndex = 27;
+				break;
+			case InGame::Explosion::Size100:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("ExplosionSmoke100");
+				m_StartIndex = 27;
+				break;
+			}
+			int width = m_Texture->GetWidth();
+			int height = m_Texture->GetHeight();
+			m_Scale = glm::vec3(width / 60.0f * 1.8f, height / 60.0f * 1.8f, 1.0f);
+
+			m_OriginTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(offsetVector, ZOrder::z_ExplosionSmoke)) * glm::scale(glm::mat4(1.0f), m_Scale);
+			m_OriginExternalVector = externalVector;
+		}
+
+		void ExplosionSmokeBunddle::ExplosionSmoke::init(const glm::vec2& worldPosition)
+		{
+			m_ExternalVector.x = m_OriginExternalVector.x;
+			m_ExternalVector.y = m_OriginExternalVector.y;
+			m_Translate = m_OriginTranslate;
+			m_Translate[3][0] += worldPosition.x;
+			m_Translate[3][1] += worldPosition.y;
+
+			m_TextureIndex = m_StartIndex;
+
+			m_OnUsing = true;
 			m_PastTime = 0.0f;
-			--m_TextureIndex;
+		}
 
-			if (m_TextureIndex < 0)
+		void ExplosionSmokeBunddle::ExplosionSmoke::Update(float ts)
+		{
+			if (!m_OnUsing)
+				return;
+
+			m_PastTime += ts;
+
+
+			m_Translate[3][0] += m_ExternalVector.x * ts;
+			m_Translate[3][1] += m_ExternalVector.y * ts;
+
+			if (m_PastTime > m_FrameDelay)
 			{
-				m_OnUsing = false;
+				m_PastTime = 0.0f;
+				--m_TextureIndex;
+				if (m_TextureIndex < 0)
+				{
+					m_OnUsing = false;
+				}
 			}
 		}
-	}
 
-	void FlameBundle::Flame::Render()
-	{
-		if (m_OnUsing)
+		void ExplosionSmokeBunddle::ExplosionSmoke::Render()
 		{
-			Gear::Renderer2D::DrawFrameQuad(m_Translate, m_Texture, 0, m_TextureIndex);
-		}
-	}
-
-	void FlameBundle::init(Explosion::Size size)
-	{
-		switch (size)
-		{
-		case InGame::Explosion::Size25:
-			m_Flames.resize(4);
-			break;
-		case InGame::Explosion::Size50:
-			m_Flames.resize(7);
-			break;
-		case InGame::Explosion::Size75:
-			m_Flames.resize(9);
-			break;
-		case InGame::Explosion::Size100:
-			m_Flames.resize(11);
-			break;
-		}
-		for (int i = 0; i < m_Flames.size(); ++i)
-		{
-			m_Flames[i].init(glm::vec2(Gear::Util::GetRndFloatFromTo(-0.07f, 0.07f), Gear::Util::GetRndFloatFromTo(0.05f, 0.3f)), size);
-		}
-	}
-
-	void FlameBundle::init(const glm::vec2 & worldPosition)
-	{
-		m_OnUsing = true;
-		for (int i = 0; i < m_Flames.size(); ++i)
-		{
-			m_Flames[i].init(worldPosition);
-		}
-	}
-
-	void FlameBundle::Update(float ts)
-	{
-		int count = 0;
-		for (int i = 0; i < m_Flames.size(); ++i)
-		{
-			m_Flames[i].Update(ts);
-			if (m_Flames[i].m_OnUsing)
+			if (m_OnUsing)
 			{
-				++count;
+				Gear::Renderer2D::DrawFrameQuad(m_Translate, m_Texture, 0, m_TextureIndex);
 			}
 		}
-		if (count == 0)
+
+		void ExplosionSmokeBunddle::init(Explosion::Size size)
 		{
-			m_OnUsing = false;
+			glm::vec2 offsetVector(0.0f);
+			switch (size)
+			{
+			case InGame::Explosion::Size25:
+				m_Smokes.resize(9);
+				for (int i = -1; i <= 1; ++i)
+				{
+					for (int j = -1; j <= 1; ++j)
+					{
+						offsetVector.x = 0.1f * j;
+						offsetVector.y = 0.1f * i;
+						m_Smokes[(i + 1) * 3 + (j + 1)].init(size, offsetVector, glm::vec2(Gear::Util::GetRndFloatFromTo(-2.2f, 2.2f), Gear::Util::GetRndFloatFromTo(-0.5f, 5.0f)));
+					}
+				}
+				break;
+			case InGame::Explosion::Size50:
+				m_Smokes.resize(12);
+				for (int i = -1; i <= 1; ++i)
+				{
+					for (float j = -1.5f; j <= 1.5f; j += 1.0f)
+					{
+						offsetVector.x = 0.15f * j;
+						offsetVector.y = 0.15f * i;
+						m_Smokes[(i + 1) * 4 + (int)(j + 1.5f)].init(size, offsetVector, glm::vec2(Gear::Util::GetRndFloatFromTo(-2.5f, 2.5f), Gear::Util::GetRndFloatFromTo(-0.5f, 6.0f)));
+					}
+				}
+				break;
+			case InGame::Explosion::Size75:
+				m_Smokes.resize(16);
+				for (float i = -1.5; i <= 1.5; i += 1.0f)
+				{
+					for (float j = -1.5; j <= 1.5f; j += 1.0f)
+					{
+						offsetVector.x = 0.2f * j;
+						offsetVector.y = 0.2f * i;
+						m_Smokes[int(i + 1.5f) * 4 + int(j + 1.5f)].init(size, offsetVector, glm::vec2(Gear::Util::GetRndFloatFromTo(-2.8f, 2.8f), Gear::Util::GetRndFloatFromTo(-0.5f, 6.5f)));
+					}
+				}
+				break;
+			case InGame::Explosion::Size100:
+				m_Smokes.resize(20);
+				for (int i = -2; i <= 2; ++i)
+				{
+					for (float j = -1.5; j <= 1.5f; j += 1.0f)
+					{
+						offsetVector.x = 0.25f * j;
+						offsetVector.y = 0.25f * i;
+						m_Smokes[(i + 2) * 4 + int(j + 1.5f)].init(size, offsetVector, glm::vec2(Gear::Util::GetRndFloatFromTo(-3.0f, 3.0f), Gear::Util::GetRndFloatFromTo(-0.5f, 7.0f)));
+					}
+				}
+				break;
+			}
 		}
-	}
 
-
-	void FlameBundle::Render()
-	{
-		for (int i = 0; i < m_Flames.size(); ++i)
+		void ExplosionSmokeBunddle::init(const glm::vec2 & worldPosition)
 		{
-			m_Flames[i].Render();
+			m_OnUsing = true;
+			for (int i = 0; i < m_Smokes.size(); ++i)
+			{
+				m_Smokes[i].init(worldPosition);
+			}
 		}
-	}
 
-	void Smoke::init(Explosion::SmokeSize size)
-	{
-		switch (size)
+		void ExplosionSmokeBunddle::Update(float ts)
 		{
-		case InGame::Explosion::Size20:
-			m_Texture = Gear::TextureStorage::GetFrameTexture2D("Smoke20");
-			break;
-		case InGame::Explosion::Size30:
-			m_Texture = Gear::TextureStorage::GetFrameTexture2D("Smoke30");
-			break;
-		case InGame::Explosion::Size40:
-			m_Texture = Gear::TextureStorage::GetFrameTexture2D("Smoke40");
-			break;
-		}
-		
-		int width = m_Texture->GetWidth();
-		int height = m_Texture->GetHeight();
-
-		m_Scale = glm::vec3(width / 120.0f * 1.8f, height / 120.0f * 1.8f, 1.0f);
-		m_OriginTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, ZOrder::z_Smoke)) * glm::scale(glm::mat4(1.0f), m_Scale);
-
-		m_StartIndex = 27;
-	}
-
-	void Smoke::init(const glm::vec2& worldPosition, const glm::vec2& externalVector)
-	{
-		m_ExternalVector = externalVector;
-
-		m_Translate = m_OriginTranslate;
-
-		m_Translate[3][0] += worldPosition.x;
-		m_Translate[3][1] += worldPosition.y;
-
-		m_PastTime = 0.0f;
-		m_TextureIndex = m_StartIndex;
-
-		m_OnUsing = true;
-
-	}
-
-	void Smoke::Update(float ts)
-	{
-		if (!m_OnUsing)
-			return;
-		
-		m_Translate[3][0] += m_ExternalVector.x;
-		m_Translate[3][1] += m_ExternalVector.y;
-
-		m_PastTime += ts;
-
-		if (m_PastTime > m_FrameDelay)
-		{
-			m_PastTime = 0.0f;
-			--m_TextureIndex;
-			if (m_TextureIndex < 0)
+			int usingCount = 0;
+			for (auto& smoke : m_Smokes)
+			{
+				usingCount += smoke.m_OnUsing;
+				smoke.Update(ts);
+			}
+			if (usingCount == 0)
 			{
 				m_OnUsing = false;
 			}
 		}
 
-	}
-
-	void Smoke::Render()
-	{
-		if (m_OnUsing)
+		void ExplosionSmokeBunddle::Render()
 		{
-			Gear::Renderer2D::DrawFrameQuad(m_Translate, m_Texture, 0, m_TextureIndex);
-		}
-	}
-
-	void Exhaust::init(ExhaustType::Type type)
-	{
-		switch (type)
-		{
-		case InGame::ExhaustType::_1:
-			m_Texture = Gear::TextureStorage::GetFrameTexture2D("Exhaust1");
-			break;
+			for (auto& smoke : m_Smokes)
+			{
+				smoke.Render();
+			}
 		}
 
-		int width = m_Texture->GetWidth();
-		int height = m_Texture->GetHeight();
-
-		m_Scale = glm::vec3(1.8f, 1.8f, 1.0f);
-		m_OriginTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, ZOrder::z_Exhaust)) * glm::scale(glm::mat4(1.0f), m_Scale);
-
-		m_StartIndex = 27;
-	}
-
-	void Exhaust::init(const glm::vec3 & wolrdPosition)
-	{
-		m_TextureIndex = m_StartIndex;
-
-		m_Translate = m_OriginTranslate;
-		m_Translate[3][0] += wolrdPosition.x;
-		m_Translate[3][1] += wolrdPosition.y;
-
-		m_PastTime = 0.0f;
-		m_OnUsing = true;
-	}
-
-	void Exhaust::Update(float ts)
-	{
-		if (!m_OnUsing)
-			return;
-
-		m_PastTime += ts;
-		if (m_PastTime > m_FrameDelay)
+		void FlameBundle::Flame::init(const glm::vec2 & externalVector, Explosion::Size size)
 		{
+			m_OriginExternalVector = externalVector;
+
+			m_Texture = Gear::TextureStorage::GetFrameTexture2D("Flame");
+			int width = m_Texture->GetWidth();
+			int height = m_Texture->GetHeight();
+
+			m_Scale = glm::vec3(width / 60.0f * 1.8f, height / 60.0f * 1.8f, 1.0f);
+			m_OriginTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, ZOrder::z_Flame)) * glm::scale(glm::mat4(1.0f), m_Scale);
+
+			m_OriginExternalVector = externalVector;
+			m_StartIndex = 22;
+		}
+
+		void FlameBundle::Flame::init(const glm::vec2 & wolrdPosition)
+		{
+			m_Translate = m_OriginTranslate;
+			m_Translate[3][0] += wolrdPosition.x;
+			m_Translate[3][1] += wolrdPosition.y;
+
+			m_TextureIndex = Gear::Util::GetRndIntFromTo(m_StartIndex / 3, m_StartIndex);
+			m_ExternalVector = m_OriginExternalVector;
+
 			m_PastTime = 0.0f;
-			--m_TextureIndex;
-			if (m_TextureIndex < 0)
+			m_GenPastTime = 0.0f;
+			m_GenSmokeDelay = Gear::Util::GetRndFloat(0.5f);
+			m_OnUsing = true;
+		}
+
+
+		void FlameBundle::Flame::Update(float ts)
+		{
+			if (!m_OnUsing)
+				return;
+
+			m_PastTime += ts;
+
+			m_ExternalVector.y -= m_Gravity * ts;
+
+			if (m_ExternalVector.y < 0.0f)
+			{
+				m_GenPastTime += ts;
+
+				if (m_GenPastTime > m_GenSmokeDelay)
+				{
+					m_GenPastTime = 0.0f;
+
+					m_GenSmokeDelay = Gear::Util::GetRndFloat(0.5f);
+
+					Gear::Ref<Smoke> smoke = EffectPool::GetSmoke(Explosion::SmokeSize::Size20);
+
+					smoke->init(glm::vec2(m_Translate[3][0], m_Translate[3][1]), glm::vec2(0.0f, 0.05f));
+					InGame::ObjectLayer::s_Smokes.push_back(smoke);
+				}
+
+				if (m_ExternalVector.y <= -0.1f)
+				{
+					m_ExternalVector.y = -0.1f;
+				}
+			}
+
+			m_Translate[3][0] += m_ExternalVector.x;
+			m_Translate[3][1] += m_ExternalVector.y;
+
+			if (m_PastTime > m_FrameDelay)
+			{
+				m_PastTime = 0.0f;
+				--m_TextureIndex;
+
+				if (m_TextureIndex < 0)
+				{
+					m_OnUsing = false;
+				}
+			}
+		}
+
+		void FlameBundle::Flame::Render()
+		{
+			if (m_OnUsing)
+			{
+				Gear::Renderer2D::DrawFrameQuad(m_Translate, m_Texture, 0, m_TextureIndex);
+			}
+		}
+
+		void FlameBundle::init(Explosion::Size size)
+		{
+			switch (size)
+			{
+			case InGame::Explosion::Size25:
+				m_Flames.resize(4);
+				break;
+			case InGame::Explosion::Size50:
+				m_Flames.resize(7);
+				break;
+			case InGame::Explosion::Size75:
+				m_Flames.resize(9);
+				break;
+			case InGame::Explosion::Size100:
+				m_Flames.resize(11);
+				break;
+			}
+			for (int i = 0; i < m_Flames.size(); ++i)
+			{
+				m_Flames[i].init(glm::vec2(Gear::Util::GetRndFloatFromTo(-0.07f, 0.07f), Gear::Util::GetRndFloatFromTo(0.05f, 0.3f)), size);
+			}
+		}
+
+		void FlameBundle::init(const glm::vec2 & worldPosition)
+		{
+			m_OnUsing = true;
+			for (int i = 0; i < m_Flames.size(); ++i)
+			{
+				m_Flames[i].init(worldPosition);
+			}
+		}
+
+		void FlameBundle::Update(float ts)
+		{
+			int count = 0;
+			for (int i = 0; i < m_Flames.size(); ++i)
+			{
+				m_Flames[i].Update(ts);
+				if (m_Flames[i].m_OnUsing)
+				{
+					++count;
+				}
+			}
+			if (count == 0)
 			{
 				m_OnUsing = false;
 			}
 		}
-	}
 
-	void Exhaust::Render()
-	{
-		if (m_OnUsing)
+
+		void FlameBundle::Render()
 		{
-			Gear::Renderer2D::DrawFrameQuad(m_Translate, m_Texture, 0, m_TextureIndex);
+			for (int i = 0; i < m_Flames.size(); ++i)
+			{
+				m_Flames[i].Render();
+			}
 		}
-	}
 
-}
+		void Smoke::init(Explosion::SmokeSize size)
+		{
+			switch (size)
+			{
+			case InGame::Explosion::Size20:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("Smoke20");
+				break;
+			case InGame::Explosion::Size30:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("Smoke30");
+				break;
+			case InGame::Explosion::Size40:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("Smoke40");
+				break;
+			}
+
+			int width = m_Texture->GetWidth();
+			int height = m_Texture->GetHeight();
+
+			m_Scale = glm::vec3(width / 120.0f * 1.8f, height / 120.0f * 1.8f, 1.0f);
+			m_OriginTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, ZOrder::z_Smoke)) * glm::scale(glm::mat4(1.0f), m_Scale);
+
+			m_StartIndex = 27;
+		}
+
+		void Smoke::init(const glm::vec2& worldPosition, const glm::vec2& externalVector)
+		{
+			m_ExternalVector = externalVector;
+
+			m_Translate = m_OriginTranslate;
+
+			m_Translate[3][0] += worldPosition.x;
+			m_Translate[3][1] += worldPosition.y;
+
+			m_PastTime = 0.0f;
+			m_TextureIndex = m_StartIndex;
+
+			m_OnUsing = true;
+
+		}
+
+		void Smoke::Update(float ts)
+		{
+			if (!m_OnUsing)
+				return;
+
+			m_Translate[3][0] += m_ExternalVector.x;
+			m_Translate[3][1] += m_ExternalVector.y;
+
+			m_PastTime += ts;
+
+			if (m_PastTime > m_FrameDelay)
+			{
+				m_PastTime = 0.0f;
+				--m_TextureIndex;
+				if (m_TextureIndex < 0)
+				{
+					m_OnUsing = false;
+				}
+			}
+
+		}
+
+		void Smoke::Render()
+		{
+			if (m_OnUsing)
+			{
+				Gear::Renderer2D::DrawFrameQuad(m_Translate, m_Texture, 0, m_TextureIndex);
+			}
+		}
+
+		void Exhaust::init(ExhaustType::Type type)
+		{
+			switch (type)
+			{
+			case InGame::ExhaustType::_1:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("Exhaust1");
+				break;
+			}
+
+			int width = m_Texture->GetWidth();
+			int height = m_Texture->GetHeight();
+
+			m_Scale = glm::vec3(1.8f, 1.8f, 1.0f);
+			m_OriginTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, ZOrder::z_Exhaust)) * glm::scale(glm::mat4(1.0f), m_Scale);
+
+			m_StartIndex = 27;
+		}
+
+		void Exhaust::init(const glm::vec3 & wolrdPosition)
+		{
+			m_TextureIndex = m_StartIndex;
+
+			m_Translate = m_OriginTranslate;
+			m_Translate[3][0] += wolrdPosition.x;
+			m_Translate[3][1] += wolrdPosition.y;
+
+			m_PastTime = 0.0f;
+			m_OnUsing = true;
+		}
+
+		void Exhaust::Update(float ts)
+		{
+			if (!m_OnUsing)
+				return;
+
+			m_PastTime += ts;
+			if (m_PastTime > m_FrameDelay)
+			{
+				m_PastTime = 0.0f;
+				--m_TextureIndex;
+				if (m_TextureIndex < 0)
+				{
+					m_OnUsing = false;
+				}
+			}
+		}
+
+		void Exhaust::Render()
+		{
+			if (m_OnUsing)
+			{
+				Gear::Renderer2D::DrawFrameQuad(m_Translate, m_Texture, 0, m_TextureIndex);
+			}
+		}
+
+	}

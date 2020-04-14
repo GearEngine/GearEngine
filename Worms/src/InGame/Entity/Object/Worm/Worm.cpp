@@ -87,6 +87,12 @@ namespace InGame {
 			bazukaReadyAniOrder.push_back({ 0, 6 - i });
 		}
 
+		std::vector<std::pair<int, int>> dyingAniOrder;
+		for (int i = 0; i < 60; ++i)
+		{
+			dyingAniOrder.push_back({ 0, 59 - i });
+		}
+
 		Gear::Ref<Gear::Animation2D> empty;
 		auto drawn = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Drawn"), 0.03f, true);
 		drawn->SetTintColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.3f));
@@ -181,6 +187,9 @@ namespace InGame {
 
 			{ WormState::OnLeftFly,	Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftWormFly"), 0.02f, false)},
 			{ WormState::OnRightFly, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightWormFly"), 0.02f, false)},
+			
+			{ WormState::OnRightDying, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightWormDying"), 0.02f, dyingAniOrder, false)},
+			{ WormState::OnLeftDying, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftWormDying"), 0.02f, dyingAniOrder, false)},
 
 			{ WormState::OnUseItem,	Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.02f, true)},
 		});
@@ -207,8 +216,8 @@ namespace InGame {
 			{ WormState::OnStuck, new WormOnStuckHandler },			{ WormState::OnStandUp, new WormOnStandUpHandler },
 			{ WormState::OnUnderWater, new WormOnUnderWaterHandler },	{ WormState::OnDamaged, new WormOnDamagedHandler },
 			{ WormState::OnAfterDamaged, new WormOnAfterDamaged }, { WormState::OnReadyItemUse, new WormOnReadyItemUseHandler },
-			{ WormState::OnItemWithdraw, new WormOnItemWithdraw }, {WormState::OnUseItem, new WormOnUseItemHandler },
-			{ WormState::OnAttacked, new WormOnAttackedHandler },
+			{ WormState::OnItemWithdraw, new WormOnItemWithdraw }, { WormState::OnUseItem, new WormOnUseItemHandler },
+			{ WormState::OnAttacked, new WormOnAttackedHandler }, { WormState::OnDye, new WormOnDyeHandler }
 		});
 
 		//Set Controller

@@ -10,6 +10,7 @@ namespace InGame {
 	{
 	public: 
 		static std::vector<int> s_LivingWorms;
+		static std::queue<int> s_WaitingDyeQue;
 	};
 
 	struct WorldDenoteData
@@ -85,13 +86,26 @@ namespace InGame {
 	class WorldEventHandler : public Gear::EventHandler
 	{
 		bool InFirst = true;
+		Gear::Ref<Gear::Status> status;
+		Gear::Ref<Gear::FSM> FSM;
+		Gear::Ref<Gear::Timer> worldTimer;
+
+		void init(int entityID)
+		{
+			status = Gear::EntitySystem::GetStatus(entityID);
+			FSM = Gear::EntitySystem::GetFSM(entityID);
+			worldTimer = Gear::EntitySystem::GetTimer(entityID);
+
+			InFirst = false;
+		}
 
 		inline virtual void Handle(std::any data, int entityID, bool& handled) override
 		{
+			if (InFirst)
+			{
+				init(entityID);
+			}
 			auto worldData = std::any_cast<WorldData>(data);
-			auto status = Gear::EntitySystem::GetStatus(entityID);
-			auto FSM = Gear::EntitySystem::GetFSM(entityID);
-			auto worldTimer = Gear::EntitySystem::GetTimer(entityID);
 			if (worldData.DataType == WorldDataType::NewFollow)
 			{
 				bool isWorm = false;
@@ -142,12 +156,16 @@ namespace InGame {
 
 			if (worldData.DataType == WorldDataType::DamageWorm)
 			{
-				if (InFirst)
-				{
-					InFirst = false;
-					return;
-				}
 				std::vector<int> damagedWorm;
+
+				GR_TRACE("World Receive DamageWorm");
+
+				if (FSM->GetCurrentState() == WorldState::OnWaiting)
+				{
+					GR_TRACE("Set World state OnRunning");
+					FSM->SetCurrentState(WorldState::OnRunning);
+				}
+
 				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
 				{
 					auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
@@ -160,21 +178,29 @@ namespace InGame {
 						damagedWorm.push_back(WorldWormData::s_LivingWorms[i]);
 					}
 				}
-				for (int i = 0; i < damagedWorm.size(); ++i)
+				if (damagedWorm.size())
 				{
-					auto status = Gear::EntitySystem::GetStatus(damagedWorm[i]);
-					auto timer = Gear::EntitySystem::GetTimer(damagedWorm[i]);
-					timer->SetTimer(1.0f);
-					timer->Start();
-					InFirst = true;
-					GR_TRACE("dispatch damage {0}", Gear::EntitySystem::GetEntity(damagedWorm[i])->GetName());
-					status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
-					Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
-					worldTimer->SetTimer(3.0f);
-					worldTimer->Start();
+					for (int i = 0; i < damagedWorm.size(); ++i)
+					{
+						auto status = Gear::EntitySystem::GetStatus(damagedWorm[i]);
+						auto timer = Gear::EntitySystem::GetTimer(damagedWorm[i]);
+						timer->SetTimer(1.0f);
+						timer->Start();
+						GR_TRACE("dispatch damage {0}", Gear::EntitySystem::GetEntity(damagedWorm[i])->GetName());
+						status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
+						Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
+						worldTimer->SetTimer(3.0f);
+						worldTimer->Start();
+						handled = true;
+					}
 				}
-				
-				handled = true;
+				else
+				{
+					Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
+					worldTimer->SetTimer(1.0f);
+					worldTimer->Start();
+					handled = true;
+				}
 				return;
 			}
 			if (worldData.DataType == WorldDataType::NewStart)
@@ -209,6 +235,7 @@ namespace InGame {
 				{
 					if (*worm == worldData.EntityID)
 					{
+						WorldWormData::s_WaitingDyeQue.push(*worm);
 						WorldWormData::s_LivingWorms.erase(worm);
 						handled = true;
 						return;

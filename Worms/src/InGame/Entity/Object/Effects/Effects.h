@@ -45,7 +45,8 @@ namespace InGame {
 			Foom,
 			Biff,
 			Poot,
-			Pow
+			Pow,
+			Null
 		};
 
 		enum SmokeSize : unsigned int
@@ -276,46 +277,46 @@ namespace InGame {
 		static Gear::Ref<Smoke> GetSmoke(Explosion::SmokeSize size);
 		static Gear::Ref<Exhaust> GetExhuast(ExhaustType::Type type);
 
+		static void pushExplosion(Gear::Ref<ExplosionEffect> explosion);
+		static void pushExplosionSmoke(Gear::Ref<ExplosionSmokeBunddle> explosionSmoke);
+		static void pushFlame(Gear::Ref<FlameBundle> flame);
+
 	public:
 		static std::vector<Gear::Ref<Blob>> s_BlobPool;
 		static int s_BlobPtr;
 		
-		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex25Foom;
+		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex25;
+
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex50Foom;
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex75Foom;
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex100Foom;
 
-		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex25Biff;
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex50Biff;
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex75Biff;
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex100Biff;
 
-		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex25Poot;
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex50Poot;
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex75Poot;
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex100Poot;
 		
-		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex25Pow;
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex50Pow;
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex75Pow;
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex100Pow;
 
-		static int s_Ex25FoomPtr;
+		static int s_Ex25Ptr;
+
 		static int s_Ex50FoomPtr;
 		static int s_Ex75FoomPtr;
 		static int s_Ex100FoomPtr;
 
-		static int s_Ex25BiffPtr;
 		static int s_Ex50BiffPtr;
 		static int s_Ex75BiffPtr;
 		static int s_Ex100BiffPtr;
 
-		static int s_Ex25PootPtr;
 		static int s_Ex50PootPtr;
 		static int s_Ex75PootPtr;
 		static int s_Ex100PootPtr;
 
-		static int s_Ex25PowPtr;
 		static int s_Ex50PowPtr;
 		static int s_Ex75PowPtr;
 		static int s_Ex100PowPtr;

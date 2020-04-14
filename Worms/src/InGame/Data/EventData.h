@@ -34,14 +34,13 @@ namespace InGame {
 
 	struct ExplosionData
 	{
-		ExplosionData(const glm::vec2 position, Explosion::Size size, Explosion::Text text)
-			: Position(position), Size(size), Text(text)
+		ExplosionData(const glm::vec2 position, Explosion::Size size)
+			: Position(position), Size(size)
 		{
 		}
 		glm::vec2 Position;
 
 		Explosion::Size Size;
-		Explosion::Text Text;
 	};
 
 	struct MouseMoveData

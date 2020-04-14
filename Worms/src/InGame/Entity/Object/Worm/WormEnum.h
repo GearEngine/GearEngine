@@ -83,7 +83,8 @@ namespace InGame {
 			OnLeftUpStuck, OnRightUpStuck,
 			OnLeftDownStuck, OnRightDownStuck,
 
-			OnLeftFly, OnRightFly
+			OnLeftFly, OnRightFly,
+			OnLeftDying, OnRightDying
 		};
 	}
 

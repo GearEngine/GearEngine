@@ -56,6 +56,25 @@ namespace InGame {
 		};
 	}
 
+	namespace GraveInfo {
+
+		enum Type : unsigned int
+		{
+			_1,
+			_2,
+			_3,
+			_4,
+			_5,
+			_6
+		};
+
+		enum State : unsigned int
+		{
+			OnNothing,
+			OnUnderWater
+		};
+	}
+
 	struct WormSpecific
 	{
 		std::string Name;
@@ -87,7 +106,7 @@ namespace InGame {
 		float LimitTurnTime = 45.0f;
 		int LimitSuddenDeathTurn = 10;
 		
-		int WormMaxHP = 100;
+		int WormMaxHP = 20;
 
 		MapInfo Mapinfo;
 		float WormMoveSpeed = 1.0f;

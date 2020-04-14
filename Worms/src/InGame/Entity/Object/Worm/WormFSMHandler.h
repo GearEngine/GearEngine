@@ -83,11 +83,31 @@ namespace InGame {
 
 	class WormOnDyeHandler : public Gear::FSM::InputHandler
 	{
-		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		Gear::Ref<Gear::Animator2D> animator;
+		Gear::Ref<Gear::Status> status;
+
+		void Awake(int entityID) override
 		{
-			GR_TRACE("Worm on Die FSM");
-			return WormState::OnDye;
+			animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			status = Gear::EntitySystem::GetStatus(entityID);
+
+			Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, 0, entityID)));
+			
+			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
+
+			if (dir == WormInfo::LeftDown || dir == WormInfo::LeftFlat || dir == WormInfo::LeftUp)
+			{
+				animator->PlayAnimation(WormState::OnLeftDying);
+			}
+			else
+			{
+				animator->PlayAnimation(WormState::OnRightDying);
+			}
+			
+			OnAwake = false;
 		}
+
+		virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override;
 	};
 
 	class WormOnAirHandler : public Gear::FSM::InputHandler
@@ -758,6 +778,7 @@ namespace InGame {
 
 			timerCheckerID = Gear::EntitySystem::GetEntityIDFromName("Timer");
 			timerStatus = Gear::EntitySystem::GetStatus(timerCheckerID);
+			OnAwake = false;
 		}
 
 		inline void OnOut(int entityID) override
@@ -1148,6 +1169,7 @@ namespace InGame {
 
 			TimerCheckerID = Gear::EntitySystem::GetEntityIDFromName("Timer");
 			timerStatus = Gear::EntitySystem::GetStatus(TimerCheckerID);
+			OnAwake = false;
 		}
 
 
@@ -1229,17 +1251,29 @@ namespace InGame {
 
 	class WormOnAfterDamaged : public Gear::FSM::InputHandler
 	{
+		Gear::Ref<Gear::Status> status;
+		Gear::Ref<Gear::Animator2D> animator;
+
+		void Awake(int entityID) override
+		{
+			status = Gear::EntitySystem::GetStatus(entityID);
+			animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			OnAwake = false;
+		}
+
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			GR_TRACE("FSM on After Damaged Worm : {0}", entityID);
-
-			auto status = Gear::EntitySystem::GetStatus(entityID);
+			if (OnAwake)
+			{
+				Awake(entityID);
+			}
 
 			int hp = std::any_cast<int>(status->GetStat(WormInfo::Hp));
 
 			if (hp == 0)
 			{
-				return WormState::OnDye;
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::WormDie, 0, entityID)));
+				return WormState::OnNothing;
 			}
 
 			bool myTurn = std::any_cast<bool>(status->GetStat(WormInfo::MyTurn));
@@ -1330,6 +1364,7 @@ namespace InGame {
 			transform = Gear::EntitySystem::GetTransform2D(entityID);
 			timer = Gear::EntitySystem::GetTimer(entityID);
 			status = Gear::EntitySystem::GetStatus(entityID);
+			OnAwake = false;
 		}
 
 		virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override;

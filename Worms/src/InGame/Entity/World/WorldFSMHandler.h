@@ -55,6 +55,7 @@ namespace InGame {
 			if (timer->isExpired())
 			{
 				int damagedWormCount = 0;
+				GR_TRACE("World On Waiting");
 				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
 				{
 					auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
@@ -65,8 +66,36 @@ namespace InGame {
 				}
 				if (!damagedWormCount)
 				{
-					GR_TRACE("World OnWaiting FSM : Dispatch New start");
-					Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
+					if (WorldWormData::s_WaitingDyeQue.size())
+					{
+						int WormID = WorldWormData::s_WaitingDyeQue.front();
+						auto FSM = Gear::EntitySystem::GetFSM(WormID);
+						auto curWormState = FSM->GetCurrentState();
+
+						if (Gear::EntitySystem::IsEntityActivated(WormID))
+						{
+							if (curWormState == WormState::OnNothing)
+							{
+								FSM->SetCurrentState(WormState::OnDye);
+							}
+						}
+						else
+						{
+							WorldWormData::s_WaitingDyeQue.pop();
+							if (!WorldWormData::s_WaitingDyeQue.size())
+							{
+								timer->SetTimer(1.0f);
+								timer->Start();
+							}
+						}
+
+						return WorldState::OnWaiting;
+					}
+					else
+					{
+						GR_TRACE("World OnWaiting FSM : Dispatch New start");
+						Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
+					}
 				}
 			}
 			return WorldState::OnWaiting;

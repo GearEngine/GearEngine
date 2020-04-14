@@ -42,7 +42,7 @@ namespace InGame {
 				auto size = std::any_cast<Explosion::Size>(status->GetStat(Item::Info::ExplosionSize));
 				auto text = std::any_cast<Explosion::Text>(status->GetStat(Item::Info::ExplosionText));
 
-				Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(checkPosition, size, text)));
+				Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(checkPosition, size)));
 				auto explosion = EffectPool::GetExplosion(size, text);
 				explosion->init(checkPosition);
 				ObjectLayer::s_Explosion.push_back(explosion);
