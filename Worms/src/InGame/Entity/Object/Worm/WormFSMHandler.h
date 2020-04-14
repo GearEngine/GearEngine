@@ -25,7 +25,7 @@ namespace InGame {
 			}
 
 			WormInfo::DirectionType dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Stat::Direction));
-			
+
 			auto curFrame = animator->GetFrameIdx();
 			switch (dir)
 			{
@@ -99,7 +99,7 @@ namespace InGame {
 			auto status = Gear::EntitySystem::GetStatus(entityID);
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			auto tick = Gear::EntitySystem::GetTimer(entityID)->GetTick();
-			
+
 			pastTime += tick;
 			if (pastTime > 0.05f)
 			{
@@ -149,14 +149,14 @@ namespace InGame {
 					break;
 				case InGame::WormInfo::LeftUp:
 					animator->PlayAnimation(WormState::OnLeftUpBazukaReady);
-					break;									 
-				case InGame::WormInfo::RightUp:				 
+					break;
+				case InGame::WormInfo::RightUp:
 					animator->PlayAnimation(WormState::OnRightUpBazukaReady);
 					break;
 				case InGame::WormInfo::LeftDown:
 					animator->PlayAnimation(WormState::OnLeftDownBazukaReady);
-					break;									 
-				case InGame::WormInfo::RightDown:			 
+					break;
+				case InGame::WormInfo::RightDown:
 					animator->PlayAnimation(WormState::OnRightDownBazukaReady);
 					break;
 				}
@@ -263,7 +263,7 @@ namespace InGame {
 				if (cmd.KeyType == WormCommand::Jump)
 				{
 					backJump = true;
-					if(dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat || dir == WormInfo::DirectionType::LeftUp)
+					if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat || dir == WormInfo::DirectionType::LeftUp)
 					{
 						externalVector.x = 1.3f;
 					}
@@ -297,11 +297,11 @@ namespace InGame {
 					{
 						animator->PlayAnimation(WormState::OnRightBackJump);
 					}
-					else 
+					else
 					{
 						animator->PlayAnimation(WormState::OnRightJump);
 					}
-					
+
 				}
 				externalVector = { 3.4f, 4.0f };
 				onFirst = true;
@@ -332,8 +332,8 @@ namespace InGame {
 					break;
 				case WormInfo::DirectionType::RightUp:
 					animator->PlayAnimation(WormState::OnRightUpJumpReady);
-					break;								 
-				case WormInfo::DirectionType::RightDown: 
+					break;
+				case WormInfo::DirectionType::RightDown:
 					animator->PlayAnimation(WormState::OnRightDownJumpReady);
 					break;
 				}
@@ -544,7 +544,7 @@ namespace InGame {
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			auto& externalX = physics->GetExternalVectorX();
 			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
-			
+
 			if (physics->GetPixelCollisionHandlerName() == "Sliding")
 			{
 				if (dir == WormInfo::DirectionType::RightDown || dir == WormInfo::DirectionType::LeftDown)
@@ -643,7 +643,7 @@ namespace InGame {
 			auto& externalVector = physics->GetExternalVector();
 			float verticalRatio = externalVector.x / externalVector.y * 100.0f;
 			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
-			
+
 			externalVector.y = 0.0f;
 			physics->ResetGravityAccelation();
 
@@ -675,7 +675,7 @@ namespace InGame {
 				return WormState::OnStuck;
 			}
 			else
-			{				
+			{
 				physics->SetPixelCollisionHandler("Sliding");
 				status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 1.0f)));
 				return WormState::OnSliding;
@@ -718,7 +718,7 @@ namespace InGame {
 			animator->ResumeAnimation();
 
 			Gear::EventSystem::DispatchEventOnce(EventType::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::DamageWorm)));
-			
+
 			return WormState::OnNothing;
 		}
 	};
@@ -740,18 +740,36 @@ namespace InGame {
 		float firstFireAngle;
 		const float FixedFireAngle = 15.0f;
 
+		Gear::Ref<Gear::Animator2D> animator;
+		Gear::Ref<Gear::Status> status;
+		Gear::Ref<Gear::Physics2D> physics;
+		Gear::Ref<Gear::Timer> timer;
+
+		int timerCheckerID;
+		Gear::Ref<Gear::Status> timerStatus;
+
+		inline void Awake(int entityID) override
+		{
+			animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			status = Gear::EntitySystem::GetStatus(entityID);
+			physics = Gear::EntitySystem::GetPhysics2D(entityID);
+			timer = Gear::EntitySystem::GetTimer(entityID);
+
+			timerCheckerID = Gear::EntitySystem::GetEntityIDFromName("Timer");
+			timerStatus = Gear::EntitySystem::GetStatus(timerCheckerID);
+		}
+
 		inline void OnOut(int entityID) override
 		{
 			inFirst = true;
 			SettedAngle = false;
 			afterReadyAni = false;
-			Gear::EntitySystem::GetStatus(entityID)->SetNeedHandleData(WormStatusHandleType::DisplayAim, true);
+			status->SetNeedHandleData(WormStatusHandleType::DisplayAim, true);
 		}
 
 		inline void SetWeaponOnAnimator(int entityID)
 		{
-			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
-			auto status = Gear::EntitySystem::GetStatus(entityID);
+			
 			auto item = std::any_cast<Item::Name>(status->GetStat(WormInfo::SelectedItem));
 			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
 
@@ -767,14 +785,14 @@ namespace InGame {
 					break;
 				case InGame::WormInfo::LeftUp:
 					animator->SetCurrentAnimation(WormState::OnLeftUpBazukaOn);
-					break;										   
-				case InGame::WormInfo::RightUp:					   
+					break;
+				case InGame::WormInfo::RightUp:
 					animator->SetCurrentAnimation(WormState::OnRightUpBazukaOn);
 					break;
 				case InGame::WormInfo::LeftDown:
 					animator->SetCurrentAnimation(WormState::OnLeftDownBazukaOn);
-					break;										   
-				case InGame::WormInfo::RightDown:				   
+					break;
+				case InGame::WormInfo::RightDown:
 					animator->SetCurrentAnimation(WormState::OnRightDownBazukaOn);
 					break;
 				}
@@ -784,9 +802,11 @@ namespace InGame {
 
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
-			auto status = Gear::EntitySystem::GetStatus(entityID);
-			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			if (OnAwake)
+			{
+				Awake(entityID);
+			}
+
 			if (inFirst)
 			{
 				inFirst = false;
@@ -839,7 +859,6 @@ namespace InGame {
 
 			if (cmd.KeyType == WormCommand::BackJump)
 			{
-				auto timer = Gear::EntitySystem::GetTimer(entityID);
 				timer->SetTimer(0.2f);
 				timer->Start();
 				OnOut(entityID);
@@ -847,7 +866,6 @@ namespace InGame {
 			}
 			if (cmd.KeyType == WormCommand::Jump)
 			{
-				auto timer = Gear::EntitySystem::GetTimer(entityID);
 				timer->SetTimer(0.2f);
 				timer->Start();
 				OnOut(entityID);
@@ -869,6 +887,7 @@ namespace InGame {
 			}
 			if (cmd.KeyType == WormCommand::UseItem)
 			{
+				timerStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(0));
 				return WormState::OnUseItem;
 			}
 			if (SettedAngle)
@@ -1030,7 +1049,7 @@ namespace InGame {
 					textureIndexX = 0;
 				}
 			}
-			
+
 			animator->SetFrameIdx({ textureIndexX, textureIndexY });
 
 			return WormState::OnAttacked;
@@ -1045,6 +1064,15 @@ namespace InGame {
 		float pastTime = 0.3f;
 		float shootPower = 0.0f;
 		const float powerRate = 3.0f;
+
+		Gear::Ref<Gear::Timer> timer;
+		Gear::Ref<Gear::Transform2D> transform;
+		Gear::Ref<Gear::Status>	status;
+		Gear::Ref<Gear::Animator> animator;
+		Gear::Ref<Gear::FSM> FSM;
+
+		int TimerCheckerID;
+		Gear::Ref<Gear::Status> timerStatus;
 
 		inline float GetAngle(int entityID)
 		{
@@ -1079,7 +1107,7 @@ namespace InGame {
 		{
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			auto status = Gear::EntitySystem::GetStatus(entityID);
-			
+
 			auto weapon = std::any_cast<Item::Name>(status->GetStat(WormInfo::SelectedItem));
 			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
 
@@ -1109,15 +1137,29 @@ namespace InGame {
 			}
 		}
 
+		inline void Awake(int entityID) override
+		{
+			timer = Gear::EntitySystem::GetTimer(entityID);
+			transform = Gear::EntitySystem::GetTransform2D(entityID);
+			status = Gear::EntitySystem::GetStatus(entityID);
+			animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			FSM = Gear::EntitySystem::GetFSM(entityID);
+
+			TimerCheckerID = Gear::EntitySystem::GetEntityIDFromName("Timer");
+			timerStatus = Gear::EntitySystem::GetStatus(TimerCheckerID);
+		}
+
 
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			auto tick = Gear::EntitySystem::GetTimer(entityID)->GetTick();
+			if (OnAwake)
+			{
+				Awake(entityID);
+			}
+
+			float tick = timer->GetTick();
 			float angle = GetAngle(entityID);
-			auto position = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition();
-			auto status = Gear::EntitySystem::GetStatus(entityID);
-			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
-			auto FSM = Gear::EntitySystem::GetFSM(entityID);
+			glm::vec3 position = transform->GetPosition();
 
 			if (cmd.KeyType == WormCommand::UseItem)
 			{
@@ -1153,10 +1195,12 @@ namespace InGame {
 					shootPower = 10.0f;
 					auto item = ITEM_POOL->GetItem(std::any_cast<Item::Name>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem)));
 					item->init(position, angle, shootPower * powerRate, entityID);
-					
+
 					FSM->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
 					status->SetNeedHandleData(WormStatusHandleType::DisplayAim, true);
 					Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, 0, item->GetID())));
+					Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::ShootBullet)));
+					timerStatus->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
 
 					AfterShoot(entityID);
 					OnOut(entityID);
@@ -1169,6 +1213,8 @@ namespace InGame {
 			item->init(position, angle, shootPower * powerRate, entityID);
 			FSM->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
 			status->SetNeedHandleData(WormStatusHandleType::DisplayAim, true);
+			timerStatus->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
+			Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::ShootBullet)));
 			if (shootPower >= 7.0f)
 			{
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, 0, item->GetID())));
@@ -1187,9 +1233,9 @@ namespace InGame {
 			GR_TRACE("FSM on After Damaged Worm : {0}", entityID);
 
 			auto status = Gear::EntitySystem::GetStatus(entityID);
-			
+
 			int hp = std::any_cast<int>(status->GetStat(WormInfo::Hp));
-						
+
 			if (hp == 0)
 			{
 				return WormState::OnDye;
@@ -1264,7 +1310,7 @@ namespace InGame {
 				break;
 			}
 			animator->ResumeAnimation();
-			
+
 			firstIn = true;
 			return WormState::OnNotMyTurn;
 		}

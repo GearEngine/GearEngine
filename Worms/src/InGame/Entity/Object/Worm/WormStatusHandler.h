@@ -398,7 +398,6 @@ namespace InGame {
 			damageBorderPosition.x += 0.15f;
 			damageBorderTrans[3].z = ZOrder::z_CheckerImg;
 		
-			//partitialDamage = totalDamage / 51.0f;
 
 			auto teamColor = std::any_cast<TeamColor::Color>(status->GetStat(WormInfo::TeamColor));
 			switch (teamColor)

@@ -28,6 +28,7 @@ namespace InGame {
 		DamageWorm,
 		GetDamageWorm,
 		WormDie,
+		ShootBullet,
 		GameEnd
 	};
 

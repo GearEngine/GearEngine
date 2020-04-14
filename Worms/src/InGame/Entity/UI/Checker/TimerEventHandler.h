@@ -9,7 +9,9 @@ namespace InGame {
 		enum : unsigned int
 		{
 			MoveUp,
-			MoveDown
+			MoveDown,
+			Pause,
+			Resume
 		};
 	}
 
@@ -31,10 +33,9 @@ namespace InGame {
 			}			
 			if (worldData.DataType == WorldDataType::RunningStart)
 			{
-				auto timer = Gear::EntitySystem::GetTimer(entityID);
 				Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnRunning);
-				timer->SetTimer(World::s_LimitTurnTime);
-				timer->Start();
+				timersTimer->SetTimer(World::s_LimitTurnTime);
+				timersTimer->Start();
 				handled = true;
 			}
 			if (worldData.DataType == WorldDataType::TurnOver)

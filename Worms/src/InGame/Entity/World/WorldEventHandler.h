@@ -135,6 +135,13 @@ namespace InGame {
 				handled = true;
 				return;
 			}
+			if (worldData.DataType == WorldDataType::ShootBullet)
+			{
+				status->SetStat(WorldInfo::TeamInfoBlink, false);
+				handled = true;
+				return;
+			}
+
 			if (worldData.DataType == WorldDataType::DamageWorm)
 			{
 				if (InFirst)
@@ -145,7 +152,6 @@ namespace InGame {
 				std::vector<int> damagedWorm;
 				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
 				{
-					status->SetStat(WorldInfo::TeamInfoBlink, false);
 					auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
 					if (!(curState == WormState::OnNothing || curState == WormState::OnNotMyTurn))
 					{

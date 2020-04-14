@@ -7,7 +7,7 @@ namespace InGame {
 
 	Timer::Timer(const InitiateData& initData)
 	{
-		m_ID = Gear::EntitySystem::CreateEntity(true);
+		m_ID = Gear::EntitySystem::CreateEntity(true, "Timer");
 
 		Gear::EntitySystem::AttachComponent(m_ID, {
 			Gear::ComponentID::Transform, Gear::ComponentID::Drawer,
@@ -42,7 +42,9 @@ namespace InGame {
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {
 			{ TimerStatusHandleType::MoveUp, Gear::CreateRef<TimerUpHandler>()},
-			{ TimerStatusHandleType::MoveDown, Gear::CreateRef<TimerDownHandler>()}
+			{ TimerStatusHandleType::MoveDown, Gear::CreateRef<TimerDownHandler>()},
+			{ TimerStatusHandleType::Pause, Gear::CreateRef<TimerPauseHandler>()},
+			{ TimerStatusHandleType::Resume, Gear::CreateRef<TimerResumeHandler>()}
 		});
 
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::World);

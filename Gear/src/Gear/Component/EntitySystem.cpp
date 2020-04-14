@@ -761,6 +761,19 @@ namespace Gear {
 		return false;
 	}
 
+	int EntitySystem::GetEntityIDFromName(const std::string & name)
+	{
+		for (auto& entity : m_EntityPool)
+		{
+			if (entity.second->m_Name == name)
+			{
+				return entity.first;
+			}
+		}
+
+		return -1;
+	}
+
 	void EntitySystem::SetTexturer(int entityID, RenderType::Type type, Ref<Texture2D> texture, Ref<Texture2D> mask, Ref<Texture2D> blending)
 	{
 		auto entity = m_EntityPool.find(entityID);

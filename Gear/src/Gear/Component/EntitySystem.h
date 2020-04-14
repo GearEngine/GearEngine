@@ -90,6 +90,8 @@ namespace Gear {
 		static bool IsEntityActivated(int entityID) { return m_EntityPool[entityID]->m_OnActivate; }
 		static bool IsComponenetActivate(int entityID, ComponentID::ID componentID);
 
+		static int GetEntityIDFromName(const std::string& name);
+
 		static Ref<Transform2D>		GetTransform2D(int entityID);
 		static Ref<FSM>				GetFSM(int entityID);
 		static Ref<Animator2D>		GetAnimator2D(int entityID);

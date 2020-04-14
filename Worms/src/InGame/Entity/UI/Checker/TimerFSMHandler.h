@@ -15,6 +15,9 @@ namespace InGame {
 	const glm::vec3 g_TimerUpPos(-0.91f, -0.89f, ZOrder::z_FlatChecker);
 	const glm::vec3 g_TimerDownPos(-0.91f, -1.3f, ZOrder::z_FlatChecker);
 
+	static bool onRed = false;
+	static bool onGray = false;
+
 	namespace TimerInfo {
 
 		enum : unsigned int
@@ -52,6 +55,10 @@ namespace InGame {
 			auto timer = Gear::EntitySystem::GetTimer(entityID);
 			auto timerY = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition().y;
 			Font::PrintFont(glm::vec3(-0.894f, timerY, ZOrder::z_FlatFont), glm::vec3(0.009f * 4, 0.02f * 4, 1.0f), std::to_string(int(World::s_LimitTurnTime)), FontType::GrayNumber, 0.037f);
+			
+			onGray = false;
+			onRed = false;
+
 			if (timer->isExpired())
 			{
 				Gear::EventSystem::DispatchEvent(EventType::World, Gear::EntityEvent(EventType::World, WorldData(RunningStart)));
@@ -64,7 +71,7 @@ namespace InGame {
 		}
 	};
 
-	static bool onRed = false;
+	
 	class TimerOnRunningHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
@@ -93,11 +100,15 @@ namespace InGame {
 				}
 			}
 
-			if (onRed)
+			if (onGray)
+			{
+				Font::PrintFont(glm::vec3(-0.894f, timerY, ZOrder::z_FlatFont), glm::vec3(0.009f * 4, 0.02f * 4, 1.0f), std::to_string(remainTime), FontType::GrayNumber, 0.037f);
+			}
+			else if (onRed)
 			{
 				Font::PrintFont(glm::vec3(-0.894f, timerY, ZOrder::z_FlatFont), glm::vec3(0.009f * 4, 0.02f * 4, 1.0f), std::to_string(remainTime), FontType::RedNumber, 0.037f);
 			}
-			else
+			else 
 			{
 				Font::PrintFont(glm::vec3(-0.894f, timerY, ZOrder::z_FlatFont), glm::vec3(0.009f * 4, 0.02f * 4, 1.0f), std::to_string(remainTime), FontType::WhiteNumber, 0.037f);
 			}
@@ -105,7 +116,6 @@ namespace InGame {
 			if (timer->isExpired())
 			{
 				Gear::EntitySystem::GetStatus(entityID)->PushNeedHandleData(TimerStatusHandleType::MoveDown, Gear::Status::StatHandleData(0));
-				onRed = false;
 				onPressing = false;
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::PrepareNextPhase)));
 				return WorldState::OnPrepareNextPhase;

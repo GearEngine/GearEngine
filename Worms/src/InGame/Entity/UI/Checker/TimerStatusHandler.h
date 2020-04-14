@@ -43,4 +43,24 @@ namespace InGame {
 			}
 		}
 	};
+
+	class TimerPauseHandler : public Gear::Status::StatusHandler
+	{
+		inline void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
+		{
+			onGray = true;
+			Gear::EntitySystem::GetTimer(entityID)->Pause();
+			data.Handled = true;
+		}
+	};
+
+	class TimerResumeHandler : public Gear::Status::StatusHandler
+	{
+		inline void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
+		{
+			onGray = false;
+			Gear::EntitySystem::GetTimer(entityID)->Resume();
+			data.Handled = true;
+		}
+	};
 }

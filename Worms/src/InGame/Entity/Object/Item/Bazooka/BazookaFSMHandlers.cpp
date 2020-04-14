@@ -56,7 +56,6 @@ namespace InGame {
 		Gear::EntitySystem::RegisterInActivateEntity(entityID);
 		return Item::State::OnExplosion;
 	}
-
 }
 
 

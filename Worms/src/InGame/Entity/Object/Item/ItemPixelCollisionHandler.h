@@ -9,6 +9,20 @@ namespace InGame {
 		float radius = 0.5f;
 		inline virtual void Handle(int entityID) override
 		{
+
+			if (m_TargetPos->y < -13.0f)
+			{
+				Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(Item::State::OnUnderWater);
+				Gear::EntitySystem::GetPhysics2D(entityID)->SetPixelCollisionHandler("MissileGeneralUnderWater");
+				int shooter = std::any_cast<int>(Gear::EntitySystem::GetStatus(entityID)->GetStat(Item::Info::From));
+				auto shooterStatus = Gear::EntitySystem::GetStatus(shooter);
+
+				shooterStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(std::make_pair( -0.2f, 0.0f )));
+
+				*m_ExternalVector = { 0.0f, 0.0f };
+				return;
+			}
+
 			auto FSM = Gear::EntitySystem::GetFSM(entityID);
 			float angle = Gear::Util::GetAngleFromXY(m_ExternalVector->x, m_ExternalVector->y);
 
@@ -54,4 +68,11 @@ namespace InGame {
 		}
 	};
 
+	class GaneralMissileOnUnderWater : public Gear::Physics2D::PixelCollisionHander
+	{
+		inline virtual void Handle(int entityID) override
+		{
+			m_ExternalVector->y = -1.3f;
+		}
+	};
 }

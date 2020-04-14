@@ -35,6 +35,7 @@ namespace InGame {
 		Gear::EntitySystem::SetPhysics(m_ID, true, 20.f, -0.1f);
 		Gear::EntitySystem::SetPixelCollision(m_ID, { 255, 255, 255 }, mask, maskTranslate, {
 			{ "MissilePC", Gear::CreateRef<MissileTypePCHandler>() },
+			{"MissileGeneralUnderWater", Gear::CreateRef<GaneralMissileOnUnderWater>() }
 		});
 
 		Gear::EntitySystem::SetStatus(m_ID, {

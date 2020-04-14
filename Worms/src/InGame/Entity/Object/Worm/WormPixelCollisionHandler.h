@@ -739,7 +739,7 @@ namespace InGame {
 	{
 		inline virtual void Handle(int entityID) override
 		{
-			m_ExternalVector->y = -1.5f;
+			m_ExternalVector->y = -1.3f;
 		}
 	};
 }
