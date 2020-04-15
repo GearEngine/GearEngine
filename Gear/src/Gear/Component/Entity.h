@@ -27,7 +27,7 @@ namespace Gear {
 
 	protected:
 		int m_EntityID;
-		bool m_OnActivate;
+		bool m_OnActivate = false;
 		std::string m_Name;
 
 		std::vector<struct EntityEvent> m_EventQueue;

@@ -158,11 +158,11 @@ namespace InGame {
 			{
 				std::vector<int> damagedWorm;
 
-				GR_TRACE("World Receive DamageWorm");
+				//GR_TRACE("World Receive DamageWorm");
 
 				if (FSM->GetCurrentState() == WorldState::OnWaiting)
 				{
-					GR_TRACE("Set World state OnRunning");
+					//GR_TRACE("Set World state OnRunning");
 					FSM->SetCurrentState(WorldState::OnRunning);
 				}
 

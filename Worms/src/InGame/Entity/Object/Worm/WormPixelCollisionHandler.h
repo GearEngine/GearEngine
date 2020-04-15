@@ -15,6 +15,7 @@ namespace InGame {
 	}
 
 	class WormOnAirPCHandler : public Gear::Physics2D::PixelCollisionHander
+		\
 	{
 		inline void StateHandle(int entityID, bool leftCollision, bool rightCollision)
 		{

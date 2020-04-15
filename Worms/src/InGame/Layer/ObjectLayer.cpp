@@ -3,6 +3,7 @@
 
 #include "InGame/Entity/Object/Worm/WormEnum.h"
 #include "InGame/Entity/Object/Item/Item.h"
+#include "InGame/Entity/Object/Grave/Grave.h"
 
 namespace InGame {
 
@@ -43,6 +44,7 @@ namespace InGame {
 
 		EffectPool::Init();
 		ItemPool::init(initData);
+		GRAVE_POOL->init(initData);
 
 		m_Transceiver = Gear::EntitySystem::CreateEntity(true);
 

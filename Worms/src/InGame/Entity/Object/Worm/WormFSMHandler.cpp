@@ -2,6 +2,7 @@
 #include "WormFSMHandler.h"
 
 #include "InGame/Entity/World/World.h"
+#include "InGame/Entity/Object/Grave/Grave.h"
 
 namespace InGame {
 
@@ -75,6 +76,8 @@ namespace InGame {
 			EffectPool::pushExplosion(explosion);
 			EffectPool::pushExplosionSmoke(smoke);
 			EffectPool::pushFlame(flame);
+
+			GRAVE_POOL->ActivateGrave(GraveInfo::_1, wormPosition);
 
 			Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(position, Explosion::Size::Size25)));
 
