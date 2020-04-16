@@ -25,6 +25,5 @@ namespace InGame {
 			ExplosionText, From
 		};
 
-
 	}
 }

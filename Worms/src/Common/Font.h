@@ -11,9 +11,11 @@ namespace FontType
 		White,
 		WhiteSmall,
 		GraySmall,
+		GrayTinySmall,
 		RedNumber,
 		GrayNumber,
 		WhiteNumber,
+		WhiteTinySmall,
 		FontEnd
 	};
 }

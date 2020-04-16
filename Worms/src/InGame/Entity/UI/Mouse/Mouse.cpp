@@ -11,11 +11,10 @@ namespace InGame {
 		m_MiddlePosition.first = initData.WindowWidth / 2;
 		m_MiddlePosition.second = initData.WindowHeight / 2;
 
-		m_CurrentPosition = m_MiddlePosition;
 		glfwSetCursorPos((GLFWwindow*)Gear::Application::Get().GetWindow().GetNativeWindow(), m_MiddlePosition.first, m_MiddlePosition.second);
 
 		//Create Entity
-		m_ID = Gear::EntitySystem::CreateEntity(true);
+		m_ID = Gear::EntitySystem::CreateEntity(true, "Mouse");
 
 		//Attach Component
 		Gear::EntitySystem::AttachComponent(m_ID, {
@@ -37,7 +36,7 @@ namespace InGame {
 			{ WorldState::OnItemWindow,		new MouseOnItemWindowHandler },
 			{ WorldState::OnQuitWindow,		new MouseOnQuitWindowHandler  },
 			{ WorldState::OnWindowSelect,	new MouseOnWindowSelectHandler },
-			{ WorldState::OnRunning,			new MouseOnGameRunningHandler },	
+			{ WorldState::OnRunning,		new MouseOnGameRunningHandler },	
 			{ WorldState::OnWormsDying,		new MouseOnGameRunningHandler },
 			{ WorldState::OnStart,			new MouseOnGameRunningHandler },		
 			{ WorldState::OnPrepareRun,		new MouseOnGameRunningHandler }

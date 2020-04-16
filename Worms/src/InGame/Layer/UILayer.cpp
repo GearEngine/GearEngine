@@ -12,6 +12,7 @@ namespace InGame {
 		m_Timer.reset(new Timer(initData));
 		m_WindChecker.reset(new WindChecker(initData));
 		m_TurnChecker.reset(new TurnChecker(initData));
+		m_ItemSelector.reset(new ItemSelector(initData));
 	}
 
 	void UILayer::OnAttach()

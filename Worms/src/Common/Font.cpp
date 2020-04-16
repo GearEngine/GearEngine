@@ -20,6 +20,8 @@ void Font::Init()
 	m_Fonts[FontType::RedNumber] = Gear::FrameTexture2D::Create("assets/textures/Font/RedNumber.png", 1, 10);
 	m_Fonts[FontType::WhiteNumber] = Gear::FrameTexture2D::Create("assets/textures/Font/WhiteNumber.png", 1, 10);
 	m_Fonts[FontType::GrayNumber] = Gear::FrameTexture2D::Create("assets/textures/Font/GrayNumber.png", 1, 10);
+	m_Fonts[FontType::GrayTinySmall] = Gear::FrameTexture2D::Create("assets/textures/Font/GrayTinySmall.png", 1, 160);
+	m_Fonts[FontType::WhiteTinySmall] = Gear::FrameTexture2D::Create("assets/textures/Font/WhiteTinySmall.png", 1, 160);
 
 	for (int i = 0; i < 26; ++i)
 	{

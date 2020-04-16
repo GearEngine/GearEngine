@@ -6,7 +6,6 @@ namespace InGame {
 	{
 		inline virtual void Handle(std::any data, int entityID, bool& handled) override
 		{
-			GR_TRACE("No.{0} Entity get explosion event!", entityID);
 			handled = true;
 		}
 	};

@@ -79,10 +79,37 @@ namespace InGame {
 	{
 		std::string Name;
 		glm::vec3 StartPosition;
+		GraveInfo::Type GraveType;
 		int Hp;
 		WormInfo::DirectionType Direction;
 		float AdditionalZRenderOffset;
 	};
+
+	namespace ItemInfo {
+
+		enum Type : unsigned int
+		{
+			Util, F1, F2, F3, F4, F5, F6,
+			F7, F8, F9, F10, F11, F12
+		};
+
+		enum Number : unsigned int
+		{
+			JetPack, LowGravity, FastMove, ShowAim, Invisible,
+			Bazooka, GuideMissile, ShotBazooka, Pigeon, ShotShip,
+			Grenade, ShotGrenade, Banana, Axe, Earthquake,
+			ShotGun, HandGun, Uzi, MachineGun, Bow,
+			Uppercut, Adogen, KamiKaze, Booming, Flick,
+			Dynamite, Mine, Ship, SuperShip, Mole,
+			Strike, FlameStirke, MailStrike, MineStrike, MoleStrike,
+			Welding, Dril, Ladder, Bat, MultiLadder,
+			Rope, Bunge, Parasuit, Teleport, Ballence,
+			SupperBanana, Hallelujah, Flamethrower, Tambourine, RiddleBomb,
+			MolotovCocktail, Skunk, Ceramics, FireShipStrike, CarpetStrike,
+			MadCow, OldWoman, Dunkey, Sanctuary, Ammageddon,
+			Turnover, Giveup, TurnChange, Freeze, MagicMissile
+		};
+	}
 
 	struct TeamInfo
 	{
@@ -92,8 +119,10 @@ namespace InGame {
 		std::string TeamName;
 		TeamColor::Color TeamColor;
 		std::vector<WormSpecific> worms;
+		std::vector<std::pair<ItemInfo::Number, int>> TeamItem;
 		Gear::Ref<Gear::Texture2D> TeamIcon;
 	};
+	
 
 	struct InitiateData
 	{

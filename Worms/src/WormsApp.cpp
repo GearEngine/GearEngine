@@ -31,6 +31,19 @@ public:
 		Gear::TextureStorage::AddTexture2D("RedHpBar", Gear::Texture2D::Create("assets/textures/UI/RedHp.png"));
 		Gear::TextureStorage::AddTexture2D("BlueHpBar", Gear::Texture2D::Create("assets/textures/UI/BlueHp.png"));
 		Gear::TextureStorage::AddTexture2D("WhiteHpBar", Gear::Texture2D::Create("assets/textures/UI/WhiteHp.png"));
+
+		Gear::TextureStorage::AddTexture2D("ItemSelector2", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/2.png"));
+		Gear::TextureStorage::AddTexture2D("ItemSelector3", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/3.png"));
+		Gear::TextureStorage::AddTexture2D("ItemSelector4", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/4.png"));
+		Gear::TextureStorage::AddTexture2D("ItemSelector5", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/5.png"));
+		Gear::TextureStorage::AddTexture2D("ItemSelector6", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/6.png"));
+		Gear::TextureStorage::AddTexture2D("ItemSelector7", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/7.png"));
+		Gear::TextureStorage::AddTexture2D("ItemSelector8", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/8.png"));
+		Gear::TextureStorage::AddTexture2D("ItemSelector9", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/9.png"));
+		Gear::TextureStorage::AddTexture2D("ItemSelector10", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/10.png"));
+		Gear::TextureStorage::AddTexture2D("ItemSelector11", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/11.png"));
+		Gear::TextureStorage::AddTexture2D("ItemSelector12", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/12.png"));
+		Gear::TextureStorage::AddTexture2D("ItemSelector13", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/13.png"));
 		
 		Gear::TextureStorage::AddFrameTexture2D("BlueWater", Gear::FrameTexture2D::Create("assets/textures/BackGround/BlueWaterWave.png", 1, 12));
 		Gear::TextureStorage::AddFrameTexture2D("Cursor", Gear::FrameTexture2D::Create("assets/textures/Cursor.png", 5, 1));
@@ -46,6 +59,9 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("BlueAim", Gear::FrameTexture2D::Create("assets/textures/UI/BlueAim.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("RedAim", Gear::FrameTexture2D::Create("assets/textures/UI/RedAim.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("Blob", Gear::FrameTexture2D::Create("assets/textures/Effect/Blob.png", 1, 16));
+
+		Gear::TextureStorage::AddFrameTexture2D("RedCursor", Gear::FrameTexture2D::Create("assets/textures/UI/Cursor/RedCursor.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("BlueCursor", Gear::FrameTexture2D::Create("assets/textures/UI/Cursor/BlueCursor.png", 1, 32));
 
 		//Grave
 		Gear::TextureStorage::AddFrameTexture2D("Grave1", Gear::FrameTexture2D::Create("assets/textures/Grave/grave1.png", 1, 20));
@@ -191,6 +207,12 @@ public:
 		Gear::TextureStorage::AddAnimation("RedFollowArrow", redArrow);
 		Gear::TextureStorage::AddAnimation("BlueFollowArrow", blueArrow);
 		
+		auto redCursor = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RedCursor"), 0.0f, true);
+		auto blueCursor = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("BlueCursor"), 0.0f, true);
+		Gear::TextureStorage::AddAnimation("RedCursor", redCursor);
+		Gear::TextureStorage::AddAnimation("BlueCursor", blueCursor);
+
+
 		//Load Sound
 		
 		//Create Event Channel
@@ -206,18 +228,41 @@ public:
 		initData.Mapinfo = InGame::GetMapInfo("City");
 		std::string names[] = { "Sunwoo", "Younghwan", "TaeHwan", "Meongcheriya", "Chanho..TT", "Junsoo"};
 		
+		std::vector<std::pair<InGame::ItemInfo::Number, int>> itemList;
+
+		//itemList.push_back({ InGame::ItemInfo::LowGravity, -1 });
+		itemList.push_back({ InGame::ItemInfo::Bazooka, -1 });
+		itemList.push_back({ InGame::ItemInfo::Grenade, -1 });
+		itemList.push_back({ InGame::ItemInfo::ShotGun, -1 });
+		itemList.push_back({ InGame::ItemInfo::Uppercut, -1 });
+		itemList.push_back({ InGame::ItemInfo::Dynamite, -1 });
+		itemList.push_back({ InGame::ItemInfo::Strike, -1 });
+		//itemList.push_back({ InGame::ItemInfo::Welding, -1 });
+		itemList.push_back({ InGame::ItemInfo::Rope, -1 });
+		itemList.push_back({ InGame::ItemInfo::SupperBanana, -1 });
+		itemList.push_back({ InGame::ItemInfo::MolotovCocktail, -1 });
+		itemList.push_back({ InGame::ItemInfo::MadCow, -1 });
+		itemList.push_back({ InGame::ItemInfo::Turnover, -1 });
+
 		InGame::TeamInfo team1;
 		InGame::TeamInfo team2;
 		team1.TeamName = "IL";
 		team1.TeamColor = InGame::TeamColor::Blue;
 		team1.nWorm = 3;
 		team1.TeamIcon = Gear::TextureStorage::GetTexture2D("Japan");
+		team1.TeamItem = itemList;
+
 		team2.TeamName = "KYUNG";
 		team2.TeamColor = InGame::TeamColor::Red;
 		team2.nWorm = 3;
 		team2.TeamIcon = Gear::TextureStorage::GetTexture2D("USA");
+		team2.TeamItem = itemList;
+		
+		
 		initData.Teams.push_back(team1);
 		initData.Teams.push_back(team2);
+
+
 
 		for (int i = 0; i < initData.Teams.size(); ++i)
 		{

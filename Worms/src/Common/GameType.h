@@ -2,6 +2,7 @@
 
 namespace ZOrder {
 
+	const float z_FlatMouse = -0.93f;
 	const float z_FlatFont = -0.92f;
 	const float z_FlatCheckerImg = -0.91f;
 	const float z_FlatChecker = -0.9f;
