@@ -96,18 +96,34 @@ namespace InGame {
 		enum Number : unsigned int
 		{
 			JetPack, LowGravity, FastMove, ShowAim, Invisible,
-			Bazooka, GuideMissile, ShotBazooka, Pigeon, ShotShip,
-			Grenade, ShotGrenade, Banana, Axe, Earthquake,
-			ShotGun, HandGun, Uzi, MachineGun, Bow,
-			Uppercut, Adogen, KamiKaze, Booming, Flick,
-			Dynamite, Mine, Ship, SuperShip, Mole,
-			Strike, FlameStirke, MailStrike, MineStrike, MoleStrike,
-			Welding, Dril, Ladder, Bat, MultiLadder,
-			Rope, Bunge, Parasuit, Teleport, Ballence,
-			SupperBanana, Hallelujah, Flamethrower, Tambourine, RiddleBomb,
-			MolotovCocktail, Skunk, Ceramics, FireShipStrike, CarpetStrike,
+			Bazooka, HomingMissile, Mortar, HomingPigeon, SheepLauncher,
+			Grenade, ClusterBomb, Banana, BattleAxe, Earthquake,
+			Shotgun, Handgun, Uzi, Minigun, Longbow,
+			FirePunch, DragonBall, KamiKaze, Suicide, Prod,
+			Dynamite, Mine, Sheep, SuperSheep, MoleBomb,
+			AirStrike, NapalmStirke, MailStrike, MineStrike, MoleStrike,
+			BlowTorch, PneumaticDril, Girder, BaseballBat, Girders,
+			NinjaRope, Bungee, Parachute, Teleport, Scales,
+			SupperBanana, HollyGrenade, FlameThrower, Tambourine, RiddleBomb,
+			PetrolBomb, Skunk, Ceramics, FireShipStrike, CarpetStrike,
 			MadCow, OldWoman, Dunkey, Sanctuary, Ammageddon,
-			Turnover, Giveup, TurnChange, Freeze, MagicMissile
+			SkipGo, Surrender, TurnChange, Freeze, MagicMissile
+		};
+
+		struct ItemDescprition
+		{
+			ItemDescprition(Number number, const std::string& name, int quantity, int limitTrun)
+				: ItemNumber(number), Name(name), Quantity(quantity), LimitTurn(limitTrun)
+			{
+				Texture = Gear::TextureStorage::GetTexture2D(Name);
+			}
+
+			Number ItemNumber;
+			Gear::Ref<Gear::Texture2D> Texture;
+			std::string Name;
+			glm::mat4 Translate;
+			int Quantity;
+			int LimitTurn;
 		};
 	}
 
@@ -119,7 +135,7 @@ namespace InGame {
 		std::string TeamName;
 		TeamColor::Color TeamColor;
 		std::vector<WormSpecific> worms;
-		std::vector<std::pair<ItemInfo::Number, int>> TeamItem;
+		std::vector<ItemInfo::ItemDescprition> TeamItem;
 		Gear::Ref<Gear::Texture2D> TeamIcon;
 	};
 	

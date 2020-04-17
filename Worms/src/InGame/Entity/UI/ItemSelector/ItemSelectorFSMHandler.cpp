@@ -10,9 +10,16 @@ float itemTypeStrBottomYpos = -0.76f;
 float itemTypeStrYOffset = 0.104f;
 float itemTypeStrXOffset = 0.145f;
 
+float item13BottomBase = -0.783f;
+float itemLeftBase = 1.218f;
+
+float itemXOffset = 0.0568f;
+float itemYOffset = 0.104f;
+
+
 namespace InGame {
 
-	ItemSelectorDrawData data;
+	ItemSelectorDrawData itemSelectData;
 
 	void ItemSelectorOnUpdate::Awake(int entityID)
 	{
@@ -35,101 +42,150 @@ namespace InGame {
 		}
 
 		auto curTeam = std::any_cast<std::string>(worldStatus->GetStat(WorldInfo::CurrnetTeam));
-		auto itemlist = std::any_cast<std::unordered_map<std::string, std::vector<std::pair<ItemInfo::Number, int>>>>(status->GetStat(ItemSelectorInfo::Stat::ItemList));
+		auto itemlist = std::any_cast<std::unordered_map<std::string, std::vector<ItemInfo::ItemDescprition>>>(status->GetStat(ItemSelectorInfo::Stat::ItemList));
 
-		data.CurrentTeamItemVector = itemlist[curTeam];
+		itemSelectData.CurrentTeamItemVector = itemlist[curTeam];
 
 		bool itemVariation[13]{0, };
-		int size = 0;
-		data.DrawItemTypeStr.clear();
-		for (int i = 0; i < data.CurrentTeamItemVector.size(); ++i)
+		bool itemInPos[13][5]{ 0, };
+
+		int itemSelectorHeight = 0;
+		itemSelectData.DrawItemTypeStr.clear();
+		for (int i = 0; i < itemSelectData.CurrentTeamItemVector.size(); ++i)
 		{
-			ItemInfo::Type type = (ItemInfo::Type)(data.CurrentTeamItemVector[i].first / 5);
+			ItemInfo::Type type = (ItemInfo::Type)(itemSelectData.CurrentTeamItemVector[i].ItemNumber / 5);
+			ItemInfo::Type xPos = (ItemInfo::Type)(itemSelectData.CurrentTeamItemVector[i].ItemNumber % 5);
+			itemInPos[type][xPos] = true;
 			if (!itemVariation[type])
 			{
 				itemVariation[type] = true;
 				switch (type)
 				{
 				case InGame::ItemInfo::Util:
-					data.DrawItemTypeStr.push_back("Util.");
+					itemSelectData.DrawItemTypeStr.push_back("Util.");
 					break;
 				case InGame::ItemInfo::F1:
-					data.DrawItemTypeStr.push_back("F1");
+					itemSelectData.DrawItemTypeStr.push_back("F1");
 					break;
 				case InGame::ItemInfo::F2:
-					data.DrawItemTypeStr.push_back("F2");
+					itemSelectData.DrawItemTypeStr.push_back("F2");
 					break;
 				case InGame::ItemInfo::F3:
-					data.DrawItemTypeStr.push_back("F3");
+					itemSelectData.DrawItemTypeStr.push_back("F3");
 					break;
 				case InGame::ItemInfo::F4:
-					data.DrawItemTypeStr.push_back("F4");
+					itemSelectData.DrawItemTypeStr.push_back("F4");
 					break;
 				case InGame::ItemInfo::F5:
-					data.DrawItemTypeStr.push_back("F5");
+					itemSelectData.DrawItemTypeStr.push_back("F5");
 					break;
 				case InGame::ItemInfo::F6:
-					data.DrawItemTypeStr.push_back("F6");
+					itemSelectData.DrawItemTypeStr.push_back("F6");
 					break;
 				case InGame::ItemInfo::F7:
-					data.DrawItemTypeStr.push_back("F7");
+					itemSelectData.DrawItemTypeStr.push_back("F7");
 					break;
 				case InGame::ItemInfo::F8:
-					data.DrawItemTypeStr.push_back("F8");
+					itemSelectData.DrawItemTypeStr.push_back("F8");
 					break;
 				case InGame::ItemInfo::F9:
-					data.DrawItemTypeStr.push_back("F9");
+					itemSelectData.DrawItemTypeStr.push_back("F9");
 					break;
 				case InGame::ItemInfo::F10:
-					data.DrawItemTypeStr.push_back("F10");
+					itemSelectData.DrawItemTypeStr.push_back("F10");
 					break;
 				case InGame::ItemInfo::F11:
-					data.DrawItemTypeStr.push_back("F11");
+					itemSelectData.DrawItemTypeStr.push_back("F11");
 					break;
 				case InGame::ItemInfo::F12:
-					data.DrawItemTypeStr.push_back("F12");
+					itemSelectData.DrawItemTypeStr.push_back("F12");
 					break;
 				}
-				size++;
+				itemSelectorHeight++;
 			}
 		}
 		std::string name = "ItemSelector";
-		name += std::to_string(size);
+		name += std::to_string(itemSelectorHeight);
 
-		data.ItemSelectorTexture = Gear::TextureStorage::GetTexture2D(name);
+		itemSelectData.ItemSelectorTexture = Gear::TextureStorage::GetTexture2D(name);
 
-		int width = data.ItemSelectorTexture->GetWidth();
-		int height = data.ItemSelectorTexture->GetHeight();
+		int width = itemSelectData.ItemSelectorTexture->GetWidth();
+		int height = itemSelectData.ItemSelectorTexture->GetHeight();
 
 		glm::vec3 scale(width / 920.0f * 1.8f, height / 500.0f * 1.8f, 1.0f);
 
-		data.Translate = glm::translate(glm::mat4(1.0f), glm::vec3(1.3f, itemSelectorYpos[size - 2], ZOrder::z_FlatChecker)) * glm::scale(glm::mat4(1.0f), scale);
+		itemSelectData.Translate = glm::translate(glm::mat4(1.0f), glm::vec3(1.3f, itemSelectorYpos[itemSelectorHeight - 2], ZOrder::z_FlatChecker)) * glm::scale(glm::mat4(1.0f), scale);
+
+		int yEmbadePos[13]{ 0, };
+		int k = 12;
+		for (int i = 12; i >= 0; --i)
+		{
+			if (itemVariation[i])
+			{
+				yEmbadePos[i] = k;
+				--k;
+			}
+		}
+		int xEmbadePos[13][5]{ 0, };
+		for (int i = 0; i < 13; ++i)
+		{
+			int k = 0;
+			for (int j = 0; j < 5; ++j)
+			{
+				if (itemInPos[i][j])
+				{
+					xEmbadePos[i][j] = k;
+					++k;
+				}
+			}
+		}
+
+		for (int i = 0; i < itemSelectData.CurrentTeamItemVector.size(); ++i)
+		{
+			int xBaseIndex = itemSelectData.CurrentTeamItemVector[i].ItemNumber % 5;
+			int yBaseIndex = itemSelectData.CurrentTeamItemVector[i].ItemNumber / 5;
+
+			int embadedIndexX = xEmbadePos[yBaseIndex][xBaseIndex];
+			int embadedIndexY = yEmbadePos[yBaseIndex];
+
+			itemSelectData.CurrentTeamItemVector[i].Translate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, ZOrder::z_FlatCheckerImg)) *
+				glm::scale(glm::mat4(1.0f), glm::vec3(0.053f, 0.09422f, 1.0f));
+
+			itemSelectData.CurrentTeamItemVector[i].Translate[3][0] = itemLeftBase + embadedIndexX * itemXOffset;
+			itemSelectData.CurrentTeamItemVector[i].Translate[3][1] = item13BottomBase + (12 - embadedIndexY) * itemYOffset;
+		}
+
 
 		return ItemSelectorInfo::OnEmergy;
 	}
 	
 	Gear::EnumType ItemSelectorOnEmergy::Handle(int entityID, const Gear::Command & cmd)
 	{
-		auto& positionX = data.Translate[3][0];
+		auto& positionX = itemSelectData.Translate[3][0];
 		positionX -= 0.02f;
-
 
 		if (positionX < 0.8f)
 		{
 			positionX = 0.8f;
-			Gear::Renderer2D::DrawFixedQuad(data.Translate, data.ItemSelectorTexture);
+			Gear::Renderer2D::DrawFixedQuad(itemSelectData.Translate, itemSelectData.ItemSelectorTexture);
 			return ItemSelectorInfo::OnSelect;
 		}
 		else
 		{
-			Gear::Renderer2D::DrawFixedQuad(data.Translate, data.ItemSelectorTexture);
+			Gear::Renderer2D::DrawFixedQuad(itemSelectData.Translate, itemSelectData.ItemSelectorTexture);
 		}
 
-		int strSize = data.DrawItemTypeStr.size();
+		int strSize = itemSelectData.DrawItemTypeStr.size();
 		for (int i = strSize - 1; i >= 0; --i)
 		{
-			Font::PrintFont(glm::vec3(data.Translate[3][0] - itemTypeStrXOffset, itemTypeStrBottomYpos + (strSize - i - 1) * itemTypeStrYOffset, ZOrder::z_FlatFont), 
-				glm::vec3(0.025f, 0.03f, 1.0f), data.DrawItemTypeStr[i], FontType::GrayTinySmall, 0.01f);
+			Font::PrintFont(glm::vec3(itemSelectData.Translate[3][0] - itemTypeStrXOffset, itemTypeStrBottomYpos + (strSize - i - 1) * itemTypeStrYOffset, ZOrder::z_FlatFont), 
+				glm::vec3(0.025f, 0.03f, 1.0f), itemSelectData.DrawItemTypeStr[i], FontType::GrayTinySmall, 0.01f);
+		}
+
+		for (int i = 0; i < itemSelectData.CurrentTeamItemVector.size(); ++i)
+		{
+			itemSelectData.CurrentTeamItemVector[i].Translate[3][0] -= 0.02f;
+			Gear::Renderer2D::DrawFixedQuad(itemSelectData.CurrentTeamItemVector[i].Translate, itemSelectData.CurrentTeamItemVector[i].Texture);
 		}
 
 		return ItemSelectorInfo::OnEmergy;
@@ -137,7 +193,7 @@ namespace InGame {
 
 	Gear::EnumType ItemSelectorOnSink::Handle(int entityID, const Gear::Command & cmd)
 	{
-		auto& positionX = data.Translate[3][0];
+		auto& positionX = itemSelectData.Translate[3][0];
 		positionX += 0.02f;
 
 		if (positionX > 1.3f)
@@ -146,13 +202,18 @@ namespace InGame {
 			return ItemSelectorInfo::OnNotActivate;
 		}
 
-		Gear::Renderer2D::DrawFixedQuad(data.Translate, data.ItemSelectorTexture);
+		Gear::Renderer2D::DrawFixedQuad(itemSelectData.Translate, itemSelectData.ItemSelectorTexture);
 		
-		int strSize = data.DrawItemTypeStr.size();
+		int strSize = itemSelectData.DrawItemTypeStr.size();
 		for (int i = strSize - 1; i >= 0; --i)
 		{
-			Font::PrintFont(glm::vec3(data.Translate[3][0] - itemTypeStrXOffset, itemTypeStrBottomYpos + (strSize - i - 1) * itemTypeStrYOffset, ZOrder::z_FlatFont), 
-				glm::vec3(0.025f, 0.03f, 1.0f), data.DrawItemTypeStr[i], FontType::GrayTinySmall, 0.01f);
+			Font::PrintFont(glm::vec3(itemSelectData.Translate[3][0] - itemTypeStrXOffset, itemTypeStrBottomYpos + (strSize - i - 1) * itemTypeStrYOffset, ZOrder::z_FlatFont), 
+				glm::vec3(0.025f, 0.03f, 1.0f), itemSelectData.DrawItemTypeStr[i], FontType::GrayTinySmall, 0.01f);
+		}
+		for (int i = 0; i < itemSelectData.CurrentTeamItemVector.size(); ++i)
+		{
+			itemSelectData.CurrentTeamItemVector[i].Translate[3][0] += 0.02f;
+			Gear::Renderer2D::DrawFixedQuad(itemSelectData.CurrentTeamItemVector[i].Translate, itemSelectData.CurrentTeamItemVector[i].Texture);
 		}
 
 		return ItemSelectorInfo::OnSink;
@@ -160,19 +221,26 @@ namespace InGame {
 
 	Gear::EnumType ItemSelectorOnSelect::Handle(int entityID, const Gear::Command & cmd)
 	{
-		Gear::Renderer2D::DrawFixedQuad(data.Translate, data.ItemSelectorTexture);
+		Gear::Renderer2D::DrawFixedQuad(itemSelectData.Translate, itemSelectData.ItemSelectorTexture);
 
-		int strSize = data.DrawItemTypeStr.size();
+		int strSize = itemSelectData.DrawItemTypeStr.size();
 		for (int i = strSize - 1; i >= 0; --i)
 		{
-			auto str = data.DrawItemTypeStr[i];
+			auto str = itemSelectData.DrawItemTypeStr[i];
 			int strlen = str.length();
 
 			float adjustXoffset = (3 - strlen) * 0.005f;
 
-			Font::PrintFont(glm::vec3(data.Translate[3][0] - itemTypeStrXOffset - adjustXoffset, itemTypeStrBottomYpos + (strSize - i - 1) * itemTypeStrYOffset, ZOrder::z_FlatFont),
-				glm::vec3(0.025f, 0.03f, 1.0f), data.DrawItemTypeStr[i], FontType::GrayTinySmall, 0.01f);
+			Font::PrintFont(glm::vec3(itemSelectData.Translate[3][0] - itemTypeStrXOffset - adjustXoffset, itemTypeStrBottomYpos + (strSize - i - 1) * itemTypeStrYOffset, ZOrder::z_FlatFont),
+				glm::vec3(0.025f, 0.03f, 1.0f), itemSelectData.DrawItemTypeStr[i], FontType::GrayTinySmall, 0.01f);
 		}
+
+		auto& itemVector = itemSelectData.CurrentTeamItemVector;
+		for (int i = 0; i < itemSelectData.CurrentTeamItemVector.size(); ++i)
+		{
+			Gear::Renderer2D::DrawFixedQuad(itemVector[i].Translate,itemVector[i].Texture);
+		}
+
 
 		return ItemSelectorInfo::OnSelect;
 	}

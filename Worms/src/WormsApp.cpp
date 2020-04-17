@@ -182,6 +182,29 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RightFlatBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightFlatBazukaOn.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("RightUpBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightUpBazukaOn.png", 1, 32));
 		
+		//Icon
+		Gear::TextureStorage::AddTexture2D("Low Gravity", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Low Gravity.png"));
+		Gear::TextureStorage::AddTexture2D("Bazooka", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Bazooka.png"));
+		Gear::TextureStorage::AddTexture2D("Grenade", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Grenade.png"));
+		Gear::TextureStorage::AddTexture2D("Shotgun", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Shotgun.png"));
+		Gear::TextureStorage::AddTexture2D("Fire Punch", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Fire Punch.png"));
+		Gear::TextureStorage::AddTexture2D("Dynamite", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Dynamite.png"));
+		Gear::TextureStorage::AddTexture2D("Air Strike", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Air strike.png"));
+		Gear::TextureStorage::AddTexture2D("Blow Torch", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Blow Torch.png"));
+		Gear::TextureStorage::AddTexture2D("Ninja Rope", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Ninja Rope.png"));
+		Gear::TextureStorage::AddTexture2D("Super Banana", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Super Banana.png"));
+		Gear::TextureStorage::AddTexture2D("Holy Grenade", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Holy Grenade.png"));
+		Gear::TextureStorage::AddTexture2D("Petrol Bomb", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Petrol Bomb.png"));
+		Gear::TextureStorage::AddTexture2D("Mad Cow", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Mad Cow.png"));
+		Gear::TextureStorage::AddTexture2D("Skip Go", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Skip Go.png"));
+		Gear::TextureStorage::AddTexture2D("Homing Pigeon", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Homing Pigeon.png"));
+		Gear::TextureStorage::AddTexture2D("Homing Missile", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Homing Missile.png"));
+		Gear::TextureStorage::AddTexture2D("Mortar", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Mortar.png"));
+		Gear::TextureStorage::AddTexture2D("Sheep Launcher", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Sheep Launcher.png"));
+		Gear::TextureStorage::AddTexture2D("Banana", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Banana.png"));
+		Gear::TextureStorage::AddTexture2D("Teleport", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Teleport.png"));
+		Gear::TextureStorage::AddTexture2D("Surrender", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Surrender.png"));
+
 		//Fly
 		Gear::TextureStorage::AddFrameTexture2D("LeftWormFly", Gear::FrameTexture2D::Create("assets/textures/Worm/Fly/LeftWormFly.png", 3, 32));
 		Gear::TextureStorage::AddFrameTexture2D("RightWormFly", Gear::FrameTexture2D::Create("assets/textures/Worm/Fly/RightWormFly.png", 3, 32));
@@ -228,21 +251,28 @@ public:
 		initData.Mapinfo = InGame::GetMapInfo("City");
 		std::string names[] = { "Sunwoo", "Younghwan", "TaeHwan", "Meongcheriya", "Chanho..TT", "Junsoo"};
 		
-		std::vector<std::pair<InGame::ItemInfo::Number, int>> itemList;
+		std::vector<InGame::ItemInfo::ItemDescprition> itemList;
 
-		//itemList.push_back({ InGame::ItemInfo::LowGravity, -1 });
-		itemList.push_back({ InGame::ItemInfo::Bazooka, -1 });
-		itemList.push_back({ InGame::ItemInfo::Grenade, -1 });
-		itemList.push_back({ InGame::ItemInfo::ShotGun, -1 });
-		itemList.push_back({ InGame::ItemInfo::Uppercut, -1 });
-		itemList.push_back({ InGame::ItemInfo::Dynamite, -1 });
-		itemList.push_back({ InGame::ItemInfo::Strike, -1 });
-		//itemList.push_back({ InGame::ItemInfo::Welding, -1 });
-		itemList.push_back({ InGame::ItemInfo::Rope, -1 });
-		itemList.push_back({ InGame::ItemInfo::SupperBanana, -1 });
-		itemList.push_back({ InGame::ItemInfo::MolotovCocktail, -1 });
-		itemList.push_back({ InGame::ItemInfo::MadCow, -1 });
-		itemList.push_back({ InGame::ItemInfo::Turnover, -1 });
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Bazooka, "Bazooka", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Grenade, "Grenade", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Shotgun, "Shotgun", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Banana, "Banana", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Teleport, "Teleport", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::SkipGo, "Skip Go", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Surrender, "Surrender", -1, 0));
+		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::LowGravity, "Low Gravity", -1, 0));
+		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::FirePunch, "Fire Punch", -1, 0));
+		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Dynamite, "Dynamite", -1, 0));
+		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::AirStrike, "Air Strike", -1, 0));
+		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::BlowTorch, "Blow Torch", -1, 0));
+		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::NinjaRope, "Ninja Rope", -1, 0));
+		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::SupperBanana, "Super Banana", -1, 0));
+		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::PetrolBomb, "Petrol Bomb", -1, 0));
+		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::MadCow, "Mad Cow", -1, 0));
+		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::HomingMissile, "Homing Missile", -1, 0));
+		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::HomingPigeon, "Homing Pigeon", -1, 0));
+		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::SheepLauncher, "Sheep Launcher", -1, 0));
+		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Mortar, "Mortar", -1, 0));
 
 		InGame::TeamInfo team1;
 		InGame::TeamInfo team2;

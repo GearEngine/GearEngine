@@ -22,7 +22,7 @@ namespace InGame {
 		});
 
 
-		std::unordered_map<std::string, std::vector<std::pair<ItemInfo::Number, int>>> TeamItems;
+		std::unordered_map<std::string, std::vector<ItemInfo::ItemDescprition>> TeamItems;
 		for (int i = 0; i < initData.Teams.size(); ++i)
 		{
 			TeamItems.insert({ initData.Teams[i].TeamName, initData.Teams[i].TeamItem });
