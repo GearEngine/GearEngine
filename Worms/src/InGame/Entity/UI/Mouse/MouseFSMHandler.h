@@ -9,6 +9,9 @@ namespace InGame {
 	static float RightClickDelay = 0.2f;
 	static float LeftClickDelay = 0.1f;
 
+	std::pair<float, float>& GetMousePickPoint();
+	std::pair<float, float>& GetMousePos();
+
 	class MouseOnGameRunningHandler : public Gear::FSM::InputHandler
 	{
 
@@ -77,11 +80,12 @@ namespace InGame {
 		float MouseSensitiveY = 0.00177f;
 
 		int worldID;
+		int ItemSelectorID;
 
 		Gear::Ref<Gear::Timer> timer;
 		Gear::Ref<Gear::Animation2D> virtualItemSelectCursor;
 		Gear::Ref<Gear::Status> worldStatus;
-		
+		Gear::Ref<Gear::FSM> ItemSelectorFSM;
 
 		glm::mat4 mouseTranslate;
 

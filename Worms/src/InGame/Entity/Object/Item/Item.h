@@ -13,7 +13,7 @@ namespace InGame {
 
 	public:
 		static void init(const InitiateData& initData);
-		Gear::Ref<ItemBullet> GetItem(Item::Name name);
+		Gear::Ref<ItemBullet> GetItem(ItemInfo::Number number);
 		static inline ItemPool* Get() { return s_Inst; }
 
 	private:

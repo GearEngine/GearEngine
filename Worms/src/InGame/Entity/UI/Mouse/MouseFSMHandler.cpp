@@ -6,6 +6,7 @@ namespace InGame {
 	std::pair<float, float> m_CurrentPosition;
 	std::pair<float, float> m_QuitPosition;
 	std::pair<float, float> m_VirtualItemMousePos;
+	std::pair<float, float> m_VirtualItemMousePickPoint;
 
 	void MouseOnItemWindowHandler::init(int entityID)
 	{
@@ -14,7 +15,10 @@ namespace InGame {
 		worldID = Gear::EntitySystem::GetEntityIDFromName("World");
 		worldStatus = Gear::EntitySystem::GetStatus(worldID);
 
-		m_VirtualItemMousePos.first = 0.65f;
+		ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
+		ItemSelectorFSM = Gear::EntitySystem::GetFSM(ItemSelectorID);
+
+		m_VirtualItemMousePos.first = 1.2f;
 		m_VirtualItemMousePos.second = -0.7f;
 		inFirst = false;
 	}
@@ -56,15 +60,21 @@ namespace InGame {
 
 		float dx = x - 640;
 		float dy = 360 - y;
-
-		if (std::abs(dx) + std::abs(dy) != 0.0f)
+		
+		unsigned int itemSelectorState = ItemSelectorFSM->GetCurrentState();
+		if (itemSelectorState == 3 || itemSelectorState == 4)
 		{
-			m_VirtualItemMousePos.first += dx * MouseSensitiveX;
-			m_VirtualItemMousePos.second += dy * MouseSensitiveY;
-
-			mouseTranslate[3][0] = m_VirtualItemMousePos.first;
-			mouseTranslate[3][1] = m_VirtualItemMousePos.second;
+			if (std::abs(dx) + std::abs(dy) != 0.0f)
+			{
+				m_VirtualItemMousePos.first += dx * MouseSensitiveX;
+				m_VirtualItemMousePos.second += dy * MouseSensitiveY;
+			}
 		}
+		mouseTranslate[3][0] = m_VirtualItemMousePos.first;
+		mouseTranslate[3][1] = m_VirtualItemMousePos.second;
+
+		m_VirtualItemMousePickPoint.first = mouseTranslate[3][0] - 0.02f;
+		m_VirtualItemMousePickPoint.second = mouseTranslate[3][1] + 0.02f;
 
 		Gear::Renderer2D::DrawFixedAnimation(mouseTranslate, virtualItemSelectCursor);
 
@@ -87,6 +97,15 @@ namespace InGame {
 			}
 		}
 		return WorldState::OnItemWindow;
+	}
+
+	std::pair<float, float>& GetMousePickPoint()
+	{
+		return m_VirtualItemMousePickPoint;
+	}
+	std::pair<float, float>& GetMousePos()
+	{
+		return m_VirtualItemMousePos;
 	}
 }
 

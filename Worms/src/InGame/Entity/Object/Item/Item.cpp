@@ -22,19 +22,12 @@ namespace InGame {
 		}
 	}
 
-	Gear::Ref<ItemBullet> ItemPool::GetItem(Item::Name name)
+	Gear::Ref<ItemBullet> ItemPool::GetItem(ItemInfo::Number number)
 	{
-		switch (name)
+		switch (number)
 		{
-		case InGame::Item::Bazooka:
+		case InGame::ItemInfo::Bazooka:
 			return m_bazooka;
-			break;
-		case InGame::Item::ShotGun:
-			break;
-		case InGame::Item::Grenade:
-			break;
-		case InGame::Item::ItemMax:
-			break;
 		}
 	}
 

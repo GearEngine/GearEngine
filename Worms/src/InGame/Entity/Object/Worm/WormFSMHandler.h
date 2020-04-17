@@ -150,41 +150,40 @@ namespace InGame {
 		}
 	};
 
+	inline void SetReadyItemUseAnimation(int entityID, WormInfo::DirectionType dir)
+	{
+		auto status = Gear::EntitySystem::GetStatus(entityID);
+		auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+		ItemInfo::Number curSettedItem = std::any_cast<ItemInfo::Number>(status->GetStat(WormInfo::SelectedItem));
+
+		if (curSettedItem == ItemInfo::Number::Bazooka)
+		{
+			switch (dir)
+			{
+			case InGame::WormInfo::LeftFlat:
+				animator->PlayAnimation(WormState::OnLeftFlatBazukaReady);
+				break;
+			case InGame::WormInfo::RightFlat:
+				animator->PlayAnimation(WormState::OnRightFlatBazukaReady);
+				break;
+			case InGame::WormInfo::LeftUp:
+				animator->PlayAnimation(WormState::OnLeftUpBazukaReady);
+				break;
+			case InGame::WormInfo::RightUp:
+				animator->PlayAnimation(WormState::OnRightUpBazukaReady);
+				break;
+			case InGame::WormInfo::LeftDown:
+				animator->PlayAnimation(WormState::OnLeftDownBazukaReady);
+				break;
+			case InGame::WormInfo::RightDown:
+				animator->PlayAnimation(WormState::OnRightDownBazukaReady);
+				break;
+			}
+		}
+	}
+
 	class WormOnBreathHandler : public Gear::FSM::InputHandler
 	{
-		inline void SetReadyItemUseAnimation(int entityID, WormInfo::DirectionType dir)
-		{
-			auto status = Gear::EntitySystem::GetStatus(entityID);
-			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
-			Item::Name curSettedItem = std::any_cast<Item::Name>(status->GetStat(WormInfo::SelectedItem));
-
-			if (curSettedItem == Item::Bazooka)
-			{
-				switch (dir)
-				{
-				case InGame::WormInfo::LeftFlat:
-					animator->PlayAnimation(WormState::OnLeftFlatBazukaReady);
-					break;
-				case InGame::WormInfo::RightFlat:
-					animator->PlayAnimation(WormState::OnRightFlatBazukaReady);
-					break;
-				case InGame::WormInfo::LeftUp:
-					animator->PlayAnimation(WormState::OnLeftUpBazukaReady);
-					break;
-				case InGame::WormInfo::RightUp:
-					animator->PlayAnimation(WormState::OnRightUpBazukaReady);
-					break;
-				case InGame::WormInfo::LeftDown:
-					animator->PlayAnimation(WormState::OnLeftDownBazukaReady);
-					break;
-				case InGame::WormInfo::RightDown:
-					animator->PlayAnimation(WormState::OnRightDownBazukaReady);
-					break;
-				}
-			}
-
-		}
-
 		bool firstIn = true;
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
@@ -792,10 +791,10 @@ namespace InGame {
 		inline void SetWeaponOnAnimator(int entityID)
 		{
 			
-			auto item = std::any_cast<Item::Name>(status->GetStat(WormInfo::SelectedItem));
+			auto item = std::any_cast<ItemInfo::Number>(status->GetStat(WormInfo::SelectedItem));
 			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
 
-			if (item == Item::Bazooka)
+			if (item == ItemInfo::Number::Bazooka)
 			{
 				switch (dir)
 				{
@@ -836,6 +835,7 @@ namespace InGame {
 				status->SetNeedHandleData(WormStatusHandleType::DisplayAim, false);
 				firstFireAngle = FixedFireAngle;
 			}
+
 			float moveSpeed = std::any_cast<float>(status->GetStat(WormInfo::Stat::MoveSpeed));
 
 			if (animator->loopCompleted())
@@ -1093,6 +1093,7 @@ namespace InGame {
 		Gear::Ref<Gear::Animator> animator;
 		Gear::Ref<Gear::FSM> FSM;
 
+		ItemInfo::Number weapon;
 		int TimerCheckerID;
 		Gear::Ref<Gear::Status> timerStatus;
 
@@ -1130,10 +1131,10 @@ namespace InGame {
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			auto status = Gear::EntitySystem::GetStatus(entityID);
 
-			auto weapon = std::any_cast<Item::Name>(status->GetStat(WormInfo::SelectedItem));
+			weapon = std::any_cast<ItemInfo::Number>(status->GetStat(WormInfo::SelectedItem));
 			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
 
-			if (weapon == Item::Bazooka)
+			if (weapon == ItemInfo::Number::Bazooka)
 			{
 				switch (dir)
 				{
@@ -1216,7 +1217,7 @@ namespace InGame {
 				if (shootPower >= 10.0f)
 				{
 					shootPower = 10.0f;
-					auto item = ITEM_POOL->GetItem(std::any_cast<Item::Name>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem)));
+					auto item = ITEM_POOL->GetItem(std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem)));
 					item->init(position, angle, shootPower * powerRate, entityID);
 
 					FSM->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
@@ -1226,13 +1227,16 @@ namespace InGame {
 					timerStatus->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
 
 					AfterShoot(entityID);
+					auto teamName = std::any_cast<std::string>(status->GetStat(WormInfo::TeamName));
+					Gear::EventSystem::DispatchEvent(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(weapon, teamName)));
+
 					OnOut(entityID);
 					return WormState::OnItemWithdraw;
 				}
 				return WormState::OnUseItem;
 			}
 
-			auto item = ITEM_POOL->GetItem(std::any_cast<Item::Name>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem)));
+			auto item = ITEM_POOL->GetItem(std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem)));
 			item->init(position, angle, shootPower * powerRate, entityID);
 			FSM->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
 			status->SetNeedHandleData(WormStatusHandleType::DisplayAim, true);
@@ -1244,6 +1248,9 @@ namespace InGame {
 			}
 
 			AfterShoot(entityID);
+			auto teamName = std::any_cast<std::string>(status->GetStat(WormInfo::TeamName));
+			Gear::EventSystem::DispatchEvent(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(weapon, teamName)));
+
 			OnOut(entityID);
 			return WormState::OnItemWithdraw;
 		}
@@ -1381,19 +1388,34 @@ namespace InGame {
 
 	class WormOnWaitingHandler : public Gear::FSM::InputHandler
 	{
+		Gear::Ref<Gear::Physics2D> physics;
+		Gear::Ref<Gear::Status> status;
+
+		inline void Awake(int entityID)
+		{
+			physics = Gear::EntitySystem::GetPhysics2D(entityID);
+			status = Gear::EntitySystem::GetStatus(entityID);
+			OnAwake = false;
+		}
+
+		inline void OnOut(int entityID) override
+		{
+			status->SetStat(WormInfo::MyTurn, true);
+			status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(0.5f, 0.0f)));
+			Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::RunningStart, 0, entityID)));
+		}
+
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
-			auto status = Gear::EntitySystem::GetStatus(entityID);
-
+			if (OnAwake)
+			{
+				Awake(entityID);
+			}
 			float moveSpeed = std::any_cast<float>(status->GetStat(WormInfo::Stat::MoveSpeed));
-
+			
 			if (cmd.KeyType != NONE_COMMAND)
 			{
-				status->SetStat(WormInfo::MyTurn, true);
-				GR_TRACE("Push DisplayPosChage +0.5f at Worm FSM OnWaiting Handler");
-				status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(0.5f, 0.0f)));
-				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::RunningStart, 0, entityID)));
+				OnOut(entityID);
 			}
 			if (cmd.KeyType == WormCommand::Left)
 			{
@@ -1421,6 +1443,8 @@ namespace InGame {
 				timer->Start();
 				return WormState::OnReadyBackJump;
 			}
+			
+
 			return WormState::OnWaiting;
 		}
 	};

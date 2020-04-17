@@ -9,9 +9,10 @@ namespace InGame {
 		{
 			World,
 			Explosion,
-			WormMove,
+			Worm,
 			MouseMove,
 			MouseClick,
+			Timer
 		};
 	}
 
@@ -34,12 +35,13 @@ namespace InGame {
 
 	struct ExplosionData
 	{
-		ExplosionData(const glm::vec2 position, Explosion::Size size)
-			: Position(position), Size(size)
-		{
-		}
-		glm::vec2 Position;
+		ExplosionData(const glm::vec2 position, Explosion::Size size, unsigned int itemNumber = 0xffffffffu, int fromEntityID = -1)
+			: Position(position), Size(size), ItemNumber(itemNumber), FromEntityID(fromEntityID)
+		{}
 
+		glm::vec2 Position;
+		int FromEntityID;
+		unsigned int ItemNumber;
 		Explosion::Size Size;
 	};
 
@@ -60,6 +62,17 @@ namespace InGame {
 		WorldDataType DataType;
 		std::any Data;
 		int EntityID;
+	};
+
+	struct UseItemData
+	{
+		UseItemData(unsigned int itemNumber, const std::string& teamName)
+			: ItemNumber(itemNumber), TeamName(teamName)
+		{
+		}
+
+		unsigned int ItemNumber;
+		std::string TeamName;
 	};
 
 	struct DamageData

@@ -183,6 +183,8 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RightUpBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightUpBazukaOn.png", 1, 32));
 		
 		//Icon
+		Gear::TextureStorage::AddTexture2D("ItemHighlighter", Gear::Texture2D::Create("assets/textures/Weapon/Icon/ItemHighlighter.png"));
+		
 		Gear::TextureStorage::AddTexture2D("Low Gravity", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Low Gravity.png"));
 		Gear::TextureStorage::AddTexture2D("Bazooka", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Bazooka.png"));
 		Gear::TextureStorage::AddTexture2D("Grenade", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Grenade.png"));
@@ -204,6 +206,7 @@ public:
 		Gear::TextureStorage::AddTexture2D("Banana", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Banana.png"));
 		Gear::TextureStorage::AddTexture2D("Teleport", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Teleport.png"));
 		Gear::TextureStorage::AddTexture2D("Surrender", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Surrender.png"));
+		Gear::TextureStorage::AddTexture2D("Pneumatic Dril", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Pneumatic Dril.png"));
 
 		//Fly
 		Gear::TextureStorage::AddFrameTexture2D("LeftWormFly", Gear::FrameTexture2D::Create("assets/textures/Worm/Fly/LeftWormFly.png", 3, 32));
@@ -253,13 +256,14 @@ public:
 		
 		std::vector<InGame::ItemInfo::ItemDescprition> itemList;
 
-		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Bazooka, "Bazooka", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Bazooka, "Bazooka", 3, 0));
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Grenade, "Grenade", -1, 0));
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Shotgun, "Shotgun", -1, 0));
-		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Banana, "Banana", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Banana, "Banana", 1, 3));
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Teleport, "Teleport", -1, 0));
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::SkipGo, "Skip Go", -1, 0));
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Surrender, "Surrender", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::PneumaticDril, "Pneumatic Dril", -1, 0));
 		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::LowGravity, "Low Gravity", -1, 0));
 		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::FirePunch, "Fire Punch", -1, 0));
 		//itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Dynamite, "Dynamite", -1, 0));

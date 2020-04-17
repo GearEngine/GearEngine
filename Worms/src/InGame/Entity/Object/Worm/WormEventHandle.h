@@ -72,6 +72,8 @@ namespace InGame {
 
 	class WormWorldEventHandler : public Gear::EventHandler
 	{
+		bool timerSetted = false;
+
 		inline void handleAnimator(int entityID, unsigned int prevState)
 		{
 			auto status = Gear::EntitySystem::GetStatus(entityID);
@@ -105,10 +107,10 @@ namespace InGame {
 		{
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			auto status = Gear::EntitySystem::GetStatus(entityID);
-			auto item = std::any_cast<Item::Name>(status->GetStat(WormInfo::SelectedItem));
+			auto item = std::any_cast<ItemInfo::Number>(status->GetStat(WormInfo::SelectedItem));
 			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
 
-			if (item == Item::Bazooka)
+			if (item == ItemInfo::Number::Bazooka)
 			{
 				switch (dir)
 				{
@@ -134,57 +136,6 @@ namespace InGame {
 			}
 		}
 
-		inline virtual void Handle(std::any data, int entityID, bool& handled) override
-		{
-			auto worldData = std::any_cast<WorldData>(data);
-
-			if (worldData.DataType == WorldDataType::PrepareNextPhase)
-			{
-				auto status = Gear::EntitySystem::GetStatus(entityID);
-				if (!Gear::EntitySystem::IsComponenetActivate(entityID, Gear::ComponentID::Controller))
-				{
-					handled = true;
-					return;
-				}
-				auto FSM = Gear::EntitySystem::GetFSM(entityID);
-				auto prevState = FSM->GetCurrentState();
-				if (prevState == WormState::OnReadyItemUse)
-				{
-					ItemWithdraw(entityID);
-					FSM->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
-					prevState = WormState::OnItemWithdraw;
-					FSM->SetCurrentState(WormState::OnItemWithdraw);
-					
-				}
-
-				if (prevState != WormState::OnBreath && prevState != WormState::OnWaiting)
-				{
-					handled = false;
-					return;
-				}
-				if (prevState == WormState::OnWaiting)
-				{
-					status->SetNeedHandleData(WormStatusHandleType::WaitingDisplay, true);
-				}
-
-				handled = true;
-				handleAnimator(entityID, prevState);
-
-				FSM->SetCurrentState(WormState::OnTurnOver);
-				auto timer = Gear::EntitySystem::GetTimer(entityID);
-				timer->SetTimer(1.5f);
-				timer->Start();
-
-				if (prevState != WormState::OnWaiting)
-				{
-					status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair( -0.2f, 0.0f )));
-				}
-			}
-			if (worldData.DataType == WorldDataType::NewStart)
-			{
-				handled = true;
-			}
-
-		}
+		virtual void Handle(std::any data, int entityID, bool& handled) override;
 	};
 }

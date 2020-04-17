@@ -4,61 +4,48 @@
 
 namespace InGame {
 
+
+	struct ItemSelectorDrawData
+	{
+		Gear::Ref<Gear::Texture2D> ItemSelectorTexture;
+		Gear::Ref<Gear::Texture2D> ItemHighLighter;
+		std::vector<ItemInfo::ItemDescprition> CurrentTeamItemVector;
+		std::vector<std::pair<Gear::Ref<Gear::Texture2D>, std::pair<float, float>>> DrawItemInfoList;
+		std::vector<std::string> DrawItemTypeStr;
+
+		glm::mat4 Translate;
+		glm::mat4 ItemHighlighterTranslate;
+
+		glm::vec3 ItemNameBasePos;
+		glm::vec3 ItemQuantityPos;
+		float ItemNameOffset;
+
+		glm::vec3 strScale;
+	};
+	
+	ItemInfo::Number& GetSettedItem();
+	ItemSelectorDrawData& GetItemSelectorDrawData();
+
+	class ItemSelectorWormEventHandler : public Gear::EventHandler
+	{
+		void Handle(std::any data, int entityID, bool& handled) override;
+	};
+
 	class ItemSelectorMouseClickEventHandler : public Gear::EventHandler
 	{
 		Gear::Ref<Gear::FSM> FSM;
 
 		bool inFirst = true;
+		int worldID;
+		int currentWormID;
 
 		void init(int entityID)
 		{
 			FSM = Gear::EntitySystem::GetFSM(entityID);
+			worldID = Gear::EntitySystem::GetEntityIDFromName("World");
 		}
 
-		inline void Handle(std::any data, int entityID, bool& handled) override
-		{
-			if (inFirst)
-			{
-				init(entityID);
-			}
-
-			auto keycode = std::any_cast<int>(data);
-			auto curState = FSM->GetCurrentState();
-
-			if (keycode == GR_MOUSE_BUTTON_RIGHT)
-			{
-				if (curState == ItemSelectorInfo::State::OnNotActivate)
-				{
-					GR_TRACE("On Item Selector Get Right Button Click Event");
-					FSM->SetCurrentState(ItemSelectorInfo::State::OnUpdate);
-					handled = true;
-					return;
-				}
-				if (curState == ItemSelectorInfo::State::OnSink)
-				{
-					FSM->SetCurrentState(ItemSelectorInfo::State::OnEmergy);
-					handled = true;
-					return;
-				}
-				if (curState == ItemSelectorInfo::State::OnEmergy || curState == ItemSelectorInfo::State::OnSelect ||
-					curState == ItemSelectorInfo::State::OnSelectOnNotTurn)
-				{
-					FSM->SetCurrentState(ItemSelectorInfo::State::OnSink);
-					handled = true;
-					return;
-				}
-			}
-			if (keycode == GR_MOUSE_BUTTON_LEFT)
-			{
-				if (curState != ItemSelectorInfo::State::OnSelect)
-				{
-					handled = true;
-					return;
-				}
-			}
-
-			handled = true;
-		}
+		void Handle(std::any data, int entityID, bool& handled) override;
 
 	};
 

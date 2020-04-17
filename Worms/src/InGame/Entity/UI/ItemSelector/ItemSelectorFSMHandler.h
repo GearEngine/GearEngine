@@ -3,15 +3,7 @@
 
 namespace InGame {
 
-	struct ItemSelectorDrawData
-	{
-		Gear::Ref<Gear::Texture2D> ItemSelectorTexture;
-		std::vector<ItemInfo::ItemDescprition> CurrentTeamItemVector;
-		std::vector<std::pair<Gear::Ref<Gear::Texture2D>, std::pair<float, float>>> DrawItemInfoList;
-		std::vector<std::string> DrawItemTypeStr;
-
-		glm::mat4 Translate;
-	};
+	
 
 	class ItemSelectorOnNotActivate : public Gear::FSM::InputHandler
 	{

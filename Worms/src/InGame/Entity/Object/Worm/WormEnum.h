@@ -105,6 +105,8 @@ namespace InGame {
 			SetTimer4,
 			SetTimer5,
 			ChangeWorm,
+			LeftMouseClick,
+			RightMouseClick
 		};
 	}
 

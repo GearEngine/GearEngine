@@ -39,10 +39,12 @@ namespace InGame {
 			{
 				auto status = Gear::EntitySystem::GetStatus(entityID);
 				auto power = std::any_cast<float>(status->GetStat(Item::Info::Power));
+				auto from = std::any_cast<int>(status->GetStat(Item::Info::From));
+				auto number = (unsigned int)std::any_cast<ItemInfo::Number>(status->GetStat(Item::Info::Number));
 				auto size = std::any_cast<Explosion::Size>(status->GetStat(Item::Info::ExplosionSize));
 				auto text = std::any_cast<Explosion::Text>(status->GetStat(Item::Info::ExplosionText));
-
-				Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(checkPosition, size)));
+				
+				Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(checkPosition, size, number,from)));
 				auto explosion = EffectPool::GetExplosion(size, text);
 				explosion->init(checkPosition);
 				ObjectLayer::s_Explosion.push_back(explosion);

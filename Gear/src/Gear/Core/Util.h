@@ -21,10 +21,29 @@ namespace Gear {
 				CenterY = Bottom + Height / 2;
 			}
 
+			void ResetPos(float centerX, float centerY, float halfWidth, float halfHeight)
+			{
+				CenterX = centerX;
+				CenterY = centerY;
+
+				Left = CenterX - halfWidth;
+				Right = CenterX + halfWidth;
+				Top = CenterY + halfHeight;
+				Bottom = CenterY - halfHeight;
+			}
+
 			float Left, Top, Right, Bottom;
 			float CenterX, CenterY;
 			float Width, Height;
 		};
+
+		inline bool IsPointRectCollision(const std::pair<float, float>& point, const FRect& rect)
+		{
+			if ((rect.Left < point.first && point.first < rect.Right) &&
+				(rect.Bottom < point.second && point.second < rect.Top))
+				return true;
+			return false;
+		}
 
 		inline float GetRndFloat(float zeroToNum)
 		{

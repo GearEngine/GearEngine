@@ -109,6 +109,7 @@ namespace Gear {
 			m_CurrentFrameX = 0;
 			m_CurrentFrameY = 0;
 		}
+		m_CompleteOneLoop = false;
 		m_OnAnimation = true;
 	}
 

@@ -34,6 +34,9 @@ namespace InGame {
 
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::MouseClick);
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::MouseClick, Gear::CreateRef<ItemSelectorMouseClickEventHandler>());
+		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Worm);
+		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::Worm, Gear::CreateRef<ItemSelectorWormEventHandler>());
+
 	}
 
 

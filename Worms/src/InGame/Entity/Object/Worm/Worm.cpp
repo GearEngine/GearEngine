@@ -249,7 +249,7 @@ namespace InGame {
 		Gear::EntitySystem::SetStatus(m_ID, {
 			{ WormInfo::Stat::Name, wormData.Name}, { WormInfo::Stat::TeamColor, teamData.TeamColor }, { WormInfo::Stat::TeamName, teamData.TeamName }, 
 			{ WormInfo::Stat::Hp, wormData.Hp }, { WormInfo::Stat::FireAngle, 15.0f },
-			{ WormInfo::Stat::FirePower, 0.0f}, { WormInfo::Stat::SelectedItem, Item::Bazooka }, 
+			{ WormInfo::Stat::FirePower, 0.0f}, { WormInfo::Stat::SelectedItem, ItemInfo::Number::Bazooka }, 
 			{ WormInfo::Stat::NameBorderOffset, 1.36f }, { WormInfo::Stat::HpBorderOffset, 0.8f }, { WormInfo::Stat::ZRenderOffset, wormData.AdditionalZRenderOffset },
 			{ WormInfo::Stat::Direction, wormData.Direction}, { WormInfo::Stat::MoveSpeed, initData.WormMoveSpeed } ,
 			{ WormInfo::Stat::MyTurn, false }, { WormInfo::Stat::Damage, 0 }, {WormInfo::Stat::SelfDamage , 0}

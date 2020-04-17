@@ -1081,6 +1081,7 @@ namespace InGame {
 			if (m_ExternalVector.y < 0.0f)
 			{
 				m_GenPastTime += ts;
+				m_ExternalVector.x *= 0.985f;
 
 				if (m_GenPastTime > m_GenSmokeDelay)
 				{

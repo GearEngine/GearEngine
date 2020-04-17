@@ -4,14 +4,6 @@ namespace InGame {
 
 	namespace Item {
 
-		enum Name : unsigned int
-		{
-			Bazooka,
-			ShotGun,
-			Grenade,
-			ItemMax
-		};
-
 		enum State : unsigned int
 		{
 			OnGoing,
@@ -22,7 +14,7 @@ namespace InGame {
 		enum Info : unsigned int
 		{
 			Power, Angle, WindAdjustRatio, ExplosionSize,
-			ExplosionText, From
+			ExplosionText, From, Number
 		};
 
 	}

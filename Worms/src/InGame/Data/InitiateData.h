@@ -107,23 +107,25 @@ namespace InGame {
 			SupperBanana, HollyGrenade, FlameThrower, Tambourine, RiddleBomb,
 			PetrolBomb, Skunk, Ceramics, FireShipStrike, CarpetStrike,
 			MadCow, OldWoman, Dunkey, Sanctuary, Ammageddon,
-			SkipGo, Surrender, TurnChange, Freeze, MagicMissile
+			SkipGo, Surrender, TurnChange, Freeze, MagicMissile,
+			ItemEnd
 		};
 
 		struct ItemDescprition
 		{
-			ItemDescprition(Number number, const std::string& name, int quantity, int limitTrun)
-				: ItemNumber(number), Name(name), Quantity(quantity), LimitTurn(limitTrun)
+			ItemDescprition(Number number, const std::string& name, int quantity, int remainTurn)
+				: ItemNumber(number), Name(name), Quantity(quantity), RemainTurn(remainTurn)
 			{
 				Texture = Gear::TextureStorage::GetTexture2D(Name);
 			}
 
 			Number ItemNumber;
 			Gear::Ref<Gear::Texture2D> Texture;
+			Gear::Util::FRect collisionRect;
 			std::string Name;
 			glm::mat4 Translate;
 			int Quantity;
-			int LimitTurn;
+			int RemainTurn;
 		};
 	}
 
@@ -148,7 +150,7 @@ namespace InGame {
 		float WindowHeight = Gear::WINDOW_HEIGHT;
 		float WindowAspectRatio = Gear::WINDOW_WIDTH / (float)Gear::WINDOW_HEIGHT;
 		
-		float LimitTurnTime = 45.0f;
+		float LimitTurnTime = 6.0f;
 		int LimitSuddenDeathTurn = 10;
 		
 		int WormMaxHP = 20;
