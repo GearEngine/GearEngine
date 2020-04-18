@@ -34,6 +34,7 @@ namespace InGame {
 	class ItemSelectorMouseClickEventHandler : public Gear::EventHandler
 	{
 		Gear::Ref<Gear::FSM> FSM;
+		Gear::Ref<Gear::FSM> WorldFSM;
 
 		bool inFirst = true;
 		int worldID;
@@ -43,11 +44,11 @@ namespace InGame {
 		{
 			FSM = Gear::EntitySystem::GetFSM(entityID);
 			worldID = Gear::EntitySystem::GetEntityIDFromName("World");
+			WorldFSM = Gear::EntitySystem::GetFSM(worldID);
 		}
 
 		void Handle(std::any data, int entityID, bool& handled) override;
 
 	};
-
 
 }

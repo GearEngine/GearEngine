@@ -79,6 +79,8 @@ namespace InGame {
 		float MouseSensitiveX = 0.001f;
 		float MouseSensitiveY = 0.00177f;
 
+		Gear::Util::FRect itemSelectorRect;
+
 		int worldID;
 		int ItemSelectorID;
 

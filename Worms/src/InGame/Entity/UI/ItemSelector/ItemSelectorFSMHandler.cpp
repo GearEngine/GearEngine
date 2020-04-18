@@ -134,6 +134,10 @@ namespace InGame {
 
 		itemSelectData.Translate = glm::translate(glm::mat4(1.0f), glm::vec3(1.3f, itemSelectorYpos[itemSelectorHeight - 2], ZOrder::z_FlatChecker)) * glm::scale(glm::mat4(1.0f), scale);
 
+		auto itemSelectorBox = Gear::Util::FRect();
+		itemSelectorBox.ResetPos(0.82f, itemSelector2Ypos + (itemSelectorHeight - 2) * 0.052f, 0.17f, (itemSelectorHeight) * 0.052f);
+		status->SetStat(ItemSelectorInfo::Stat::ItemSelectorBox, itemSelectorBox);
+
 		int yEmbadePos[13]{ 0, };
 		int k = 12;
 		for (int i = 12; i >= 0; --i)
@@ -254,6 +258,11 @@ namespace InGame {
 
 	Gear::EnumType ItemSelectorOnSelect::Handle(int entityID, const Gear::Command & cmd)
 	{
+		if (OnAwake)
+		{
+			Awake(entityID);
+		}
+
 		auto& itemSelectData = GetItemSelectorDrawData();
 		Gear::Renderer2D::DrawFixedQuad(itemSelectData.Translate, itemSelectData.ItemSelectorTexture);
 
@@ -326,6 +335,10 @@ namespace InGame {
 			SettedItem = ItemInfo::Number::ItemEnd;
 		}
 
+		if (worldFSM->GetCurrentState() == WorldState::OnWaiting)
+		{
+			return ItemSelectorInfo::OnSink;
+		}
 		return ItemSelectorInfo::OnSelect;
 	}
 

@@ -20,7 +20,7 @@ namespace InGame {
 		enum Stat : unsigned int
 		{
 			ItemList,
-			CurrentTeam,
+			ItemSelectorBox
 		};
 
 		enum Size : unsigned int

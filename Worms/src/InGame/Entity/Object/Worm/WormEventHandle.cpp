@@ -9,7 +9,6 @@ void InGame::WormWorldEventHandler::Handle(std::any data, int entityID, bool & h
 
 	if (worldData.DataType == WorldDataType::PrepareNextPhase)
 	{
-		GR_TRACE("Worm get PrepareNextPhase event");
 		auto status = Gear::EntitySystem::GetStatus(entityID);
 		if (!Gear::EntitySystem::IsComponenetActivate(entityID, Gear::ComponentID::Controller))
 		{
@@ -25,58 +24,30 @@ void InGame::WormWorldEventHandler::Handle(std::any data, int entityID, bool & h
 			prevState = WormState::OnItemWithdraw;
 			FSM->SetCurrentState(WormState::OnItemWithdraw);
 		}
-		if (prevState != WormState::OnBreath && prevState != WormState::OnWaiting && prevState != WormState::OnNothing)
+		if (prevState != WormState::OnBreath && prevState != WormState::OnWaiting && prevState != WormState::OnNotMyTurn && prevState != WormState::OnNothing)
 		{
 			handled = false;
 			return;
 		}
+		
+
+		auto timer = Gear::EntitySystem::GetTimer(entityID);
+		FSM->SetCurrentState(WormState::OnTurnOver);
+		timer->SetTimer(1.5f);
+		timer->Start();
+		handleAnimator(entityID, prevState);
+
 		if (prevState == WormState::OnWaiting)
 		{
 			status->SetNeedHandleData(WormStatusHandleType::WaitingDisplay, true);
+			status->SetNeedHandleData(WormStatusHandleType::Display, false);
 		}
-
-		auto timer = Gear::EntitySystem::GetTimer(entityID);
-		if (!timerSetted)
-		{
-			FSM->SetCurrentState(WormState::OnTurnOver);
-			timer->SetTimer(1.5f);
-			timer->Start();
-			handleAnimator(entityID, prevState);
-			timerSetted = true;
-		}
-
-		if (prevState != WormState::OnWaiting)
+		else
 		{
 			status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 0.0f)));
 		}
-
-		if (timer->isExpired())
-		{
-			int damagedWormCount = 0;
-			for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
-			{
-				if (WorldWormData::s_LivingWorms[i] == entityID)
-				{
-					continue;
-				}
-				auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
-				if (curState == WormState::OnNothing || curState == WormState::OnUnderWater)
-				{
-					++damagedWormCount;
-				}
-			}
-
-			if (!damagedWormCount)
-			{
-				handled = true;
-				timerSetted = false;
-				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
-			}
-		}
-	}
-	if (worldData.DataType == WorldDataType::NewStart)
-	{
 		handled = true;
+		return;
 	}
-
+	handled = true;
 }

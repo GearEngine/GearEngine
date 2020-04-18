@@ -20,6 +20,7 @@ namespace InGame {
 
 		m_VirtualItemMousePos.first = 1.2f;
 		m_VirtualItemMousePos.second = -0.7f;
+
 		inFirst = false;
 	}
 
@@ -41,8 +42,12 @@ namespace InGame {
 		mouseTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(m_VirtualItemMousePos.first, m_VirtualItemMousePos.second, ZOrder::z_FlatMouse))
 			* glm::scale(glm::mat4(1.0f), glm::vec3(0.16f, 0.16f, 1.0f));
 
+		itemSelectorRect = std::any_cast<Gear::Util::FRect>(Gear::EntitySystem::GetStatus(ItemSelectorID)->GetStat(1u));
+
 		needReset = false;
 	}
+
+
 
 	Gear::EnumType MouseOnItemWindowHandler::Handle(int entityID, const Gear::Command & cmd)
 	{
@@ -56,18 +61,35 @@ namespace InGame {
 			reset();
 		}
 
-		auto[x, y] = Gear::Input::GetMousePosition();
-
-		float dx = x - 640;
-		float dy = 360 - y;
-		
 		unsigned int itemSelectorState = ItemSelectorFSM->GetCurrentState();
 		if (itemSelectorState == 3 || itemSelectorState == 4)
 		{
+			auto[x, y] = Gear::Input::GetMousePosition();
+
+			float dx = x - 640;
+			float dy = 360 - y;
+
 			if (std::abs(dx) + std::abs(dy) != 0.0f)
 			{
 				m_VirtualItemMousePos.first += dx * MouseSensitiveX;
 				m_VirtualItemMousePos.second += dy * MouseSensitiveY;
+			}
+
+			if (m_VirtualItemMousePos.first < itemSelectorRect.Left)
+			{
+				m_VirtualItemMousePos.first = itemSelectorRect.Left;
+			}
+			if (m_VirtualItemMousePos.first > itemSelectorRect.Right)
+			{
+				m_VirtualItemMousePos.first = itemSelectorRect.Right;
+			}
+			if (m_VirtualItemMousePos.second < itemSelectorRect.Bottom)
+			{
+				m_VirtualItemMousePos.second = itemSelectorRect.Bottom;
+			}
+			if (m_VirtualItemMousePos.second > itemSelectorRect.Top)
+			{
+				m_VirtualItemMousePos.second = itemSelectorRect.Top;
 			}
 		}
 		mouseTranslate[3][0] = m_VirtualItemMousePos.first;

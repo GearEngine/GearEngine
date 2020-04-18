@@ -42,14 +42,14 @@ namespace InGame {
 		{
 			//std::thread LoadingThread = std::thread(workFunk, initData);
 
-			std::thread InitThread = std::thread([&]() {
+			//std::thread InitThread = std::thread([&]() {
 				PushLayer(new UILayer(initData));
 				PushLayer(new BackGroundLayer(initData));
 				PushLayer(new ObjectLayer(initData));
-			});
+			//);
 
 			//LoadingThread.join();
-			InitThread.join();
+			//InitThread.join();
 		}
 
 		inline virtual void Update(Gear::Timestep ts) override

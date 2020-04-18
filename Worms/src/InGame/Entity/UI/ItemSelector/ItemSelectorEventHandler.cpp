@@ -34,10 +34,19 @@ namespace InGame {
 
 		if (keycode == GR_MOUSE_BUTTON_RIGHT)
 		{
+			auto worldState = WorldFSM->GetCurrentState();
+			if (worldState == WorldState::OnWaiting || worldState == WorldState::InGameStart || worldState == WorldState::OnStart)
+			{
+				handled = true;
+				return;
+			}
 			if (curState == ItemSelectorInfo::State::OnNotActivate)
 			{
 				GR_TRACE("On Item Selector Get Right Button Click Event");
 				FSM->SetCurrentState(ItemSelectorInfo::State::OnUpdate);
+				int mouseID = Gear::EntitySystem::GetEntityIDFromName("Mouse");
+				auto mouseHandler = Gear::EntitySystem::GetFSM(mouseID)->GetHandler(WorldState::OnItemWindow);
+				mouseHandler->OnOut(mouseID);
 				handled = true;
 				return;
 			}

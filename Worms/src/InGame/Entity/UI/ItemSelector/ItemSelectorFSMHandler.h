@@ -23,6 +23,15 @@ namespace InGame {
 
 	class ItemSelectorOnSelect : public Gear::FSM::InputHandler
 	{
+		int worldID;
+		Gear::Ref<Gear::FSM> worldFSM;
+
+		virtual void Awake(int entityID) override
+		{
+			worldID = Gear::EntitySystem::GetEntityIDFromName("World");
+			worldFSM = Gear::EntitySystem::GetFSM(worldID);
+			OnAwake = false;
+		}
 		virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override;
 
 	};

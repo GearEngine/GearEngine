@@ -1310,24 +1310,18 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			static bool firstIn = true;
-			if (firstIn)
-			{
-				firstIn = false;
-				Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
-			}
-
 			if (!Gear::EntitySystem::GetTimer(entityID)->isExpired())
 			{
 				return WormState::OnTurnOver;
 			}
-
+			GR_TRACE("Worm On tunrover");
 			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 			auto status = Gear::EntitySystem::GetStatus(entityID);
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			physics->SetExternalVector({ 0.0f, 0.0f });
 			physics->SetPixelCollisionHandler("Move");
 			status->SetStat(WormInfo::MyTurn, false);
+			Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
 
 			WormInfo::DirectionType dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Stat::Direction));
 			switch (dir)
@@ -1353,7 +1347,10 @@ namespace InGame {
 			}
 			animator->ResumeAnimation();
 
-			firstIn = true;
+			int worldID = Gear::EntitySystem::GetEntityIDFromName("World");
+			auto worldFSM = Gear::EntitySystem::GetFSM(worldID);
+			worldFSM->SetCurrentState(8u);
+
 			return WormState::OnNotMyTurn;
 		}
 	};
