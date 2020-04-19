@@ -40,6 +40,16 @@ void main()
 		color = texture(u_Texture, v_TexCoord);
 		if(maskColor.x == 0 && maskColor.y == 0 && maskColor.z == 0)
 			discard;
+		else
+		{
+			if(maskColor.x != 1 && maskColor.y != 1 && maskColor.z != 1)
+			{
+				color.x = 0.56;
+				color.y = 0.751;
+				color.z = 0.9;
+				
+			}
+		}
 	}
 	else
 	{

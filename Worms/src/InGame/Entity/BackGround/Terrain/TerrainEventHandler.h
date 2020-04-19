@@ -16,6 +16,17 @@ namespace InGame {
 
 			auto textureLocalPosition = Gear::Coord2DManger::Get()->GetTextureLocalPosition_From_WorlPosition(explosion.Position, terrainTranslate);
 
+			SetCircle(textureLocalPosition, width, height, explosion, _data, 3, 25);
+			SetCircle(textureLocalPosition, width, height, explosion, _data, 0, 0);
+
+			mask->SetData(_data, width * height * 4);
+
+			GR_TRACE("No.{0} Entity : Terrain Damaged by explosion", entityID);
+			handled = true;
+		}
+
+		void SetCircle(glm::vec2 textureLocalPosition, int width, int height,InGame::ExplosionData explosion, unsigned int* _data, int r, int color)
+		{
 			float x = textureLocalPosition.x * width;
 			float y = textureLocalPosition.y * height;
 			float radius;
@@ -35,6 +46,8 @@ namespace InGame {
 				radius = 100.0f;
 				break;
 			}
+
+			radius += r;
 
 			int mHeight = -(radius + 1);
 
@@ -60,13 +73,13 @@ namespace InGame {
 					{
 						continue;
 					}
-					_data[width * yPos + xPos] = 0;
+					if (_data[width * yPos + xPos] == 0xffffffff){
+						_data[width * yPos + xPos] = color;
+					}
+					if(_data[width * yPos + xPos] == 25)
+						_data[width * yPos + xPos] = color;
 				}
 			}
-			mask->SetData(_data, width * height * 4);
-
-			GR_TRACE("No.{0} Entity : Terrain Damaged by explosion", entityID);
-			handled = true;
 		}
 	};
 	/*void BackGroundLayer::DestroyMask(float x, float y, float radius)
