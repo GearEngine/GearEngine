@@ -91,6 +91,18 @@ namespace InGame {
 			OnLeftUpGrenadeOn, OnRightUpGrenadeOn,
 			OnLeftDownGrenadeOn, OnRightDownGrenadeOn,
 
+			OnLeftFlatBananaReady, OnRightFlatBananaReady,
+			OnLeftUpBananaReady, OnRightUpBananaReady,
+			OnLeftDownBananaReady, OnRightDownBananaReady,
+
+			OnLeftFlatBananaWithdraw, OnRightFlatBananaWithdraw,
+			OnLeftUpBananaWithdraw, OnRightUpBananaWithdraw,
+			OnLeftDownBananaWithdraw, OnRightDownBananaWithdraw,
+
+			OnLeftFlatBananaOn, OnRightFlatBananaOn,
+			OnLeftUpBananaOn, OnRightUpBananaOn,
+			OnLeftDownBananaOn, OnRightDownBananaOn,
+
 			OnLeftFlatStuck, OnRightFlatStuck,
 			OnLeftUpStuck, OnRightUpStuck,
 			OnLeftDownStuck, OnRightDownStuck,

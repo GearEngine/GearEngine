@@ -3,6 +3,7 @@
 
 #include "Bazooka/Bazooka.h"
 #include "Grenade/Grenade.h"
+#include "Banana/Banana.h"
 
 namespace InGame {
 
@@ -27,6 +28,7 @@ namespace InGame {
 		
 		Gear::Ref<Bazooka> m_Bazooka;
 		Gear::Ref<Grenade> m_Grenade;
+		Gear::Ref<Banana> m_Banana;
 	};
 	
 	#define ITEM_POOL ItemPool::Get()

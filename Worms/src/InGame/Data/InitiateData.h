@@ -109,7 +109,7 @@ namespace InGame {
 			PetrolBomb, Skunk, Ceramics, FireShipStrike, CarpetStrike,
 			MadCow, OldWoman, Dunkey, Sanctuary, Ammageddon,
 			SkipGo, Surrender, TurnChange, Freeze, MagicMissile,
-			ItemEnd
+			BabyBanana, ItemEnd
 		};
 
 		struct ItemDescprition

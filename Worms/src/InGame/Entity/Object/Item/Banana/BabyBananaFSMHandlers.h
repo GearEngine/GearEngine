@@ -1,22 +1,32 @@
 #pragma once
 
 #include "../ItemEnum.h"
+#include "InGame/Entity/Object/Worm/WormEnum.h"
 
 namespace InGame {
 
-	class BazookaOnGoingHandler : public Gear::FSM::InputHandler
+	class BabyBananaOnGoingHandler : public Gear::FSM::InputHandler
 	{
-		const float m_GenExhaustDelay = 0.03f;
-		float m_pastTime = 0.0f;
-		
-	private:
-		Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override;
-		float WindAdjustRatio;
+		Gear::Ref<Gear::Timer> timer;
+
+		virtual void Awake(int entityID)
+		{
+			timer = Gear::EntitySystem::GetTimer(entityID);
+			OnAwake = false;
+		}
+
+		inline Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			if (OnAwake)
+			{
+				Awake(entityID);
+			}
+			return Item::State::OnGoing;
+		}
 	};
 
-	class BazookaOnUnderWater : public Gear::FSM::InputHandler
+	class BabyBananaOnUnderWater : public Gear::FSM::InputHandler
 	{
-
 		Gear::Ref<Gear::Animator2D> animator;
 		Gear::Ref<Gear::Transform2D> transform;
 		Gear::Ref<Gear::FrameTexture2D> missileTexture;
@@ -25,7 +35,7 @@ namespace InGame {
 		{
 			animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			transform = Gear::EntitySystem::GetTransform2D(entityID);
-			missileTexture = Gear::TextureStorage::GetFrameTexture2D("BazukaBullet");
+			missileTexture = Gear::TextureStorage::GetFrameTexture2D("BananaBullet");
 			animator->StopAnimation();
 		}
 
@@ -35,20 +45,20 @@ namespace InGame {
 			{
 				Awake(entityID);
 			}
+
 			Gear::Renderer2D::DrawFrameQuad(transform->GetTranslate(), missileTexture, 0, 31, glm::vec4(1.0f, 1.0f, 1.0f, 0.3f));
 
 			if (transform->GetPosition().y < -19.0f)
 			{
-				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
 				Gear::EntitySystem::RegisterInActivateEntity(entityID);
 			}
-
 			return Item::State::OnUnderWater;
 		}
 	};
 
-	class BazookaOnExplosion : public Gear::FSM::InputHandler
+	class BabyBananaOnExplosion : public Gear::FSM::InputHandler
 	{
 		Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override;
 	};
+
 }

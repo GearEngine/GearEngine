@@ -204,6 +204,30 @@ namespace InGame {
 				break;
 			}
 		}
+		if (curSettedItem == ItemInfo::Number::Banana)
+		{
+			switch (dir)
+			{
+			case InGame::WormInfo::LeftFlat:
+				animator->PlayAnimation(WormState::OnLeftFlatBananaReady);
+				break;
+			case InGame::WormInfo::RightFlat:
+				animator->PlayAnimation(WormState::OnRightFlatBananaReady);
+				break;
+			case InGame::WormInfo::LeftUp:
+				animator->PlayAnimation(WormState::OnLeftUpBananaReady);
+				break;
+			case InGame::WormInfo::RightUp:
+				animator->PlayAnimation(WormState::OnRightUpBananaReady);
+				break;
+			case InGame::WormInfo::LeftDown:
+				animator->PlayAnimation(WormState::OnLeftDownBananaReady);
+				break;
+			case InGame::WormInfo::RightDown:
+				animator->PlayAnimation(WormState::OnRightDownBananaReady);
+				break;
+			}
+		}
 	}
 
 	class WormOnBreathHandler : public Gear::FSM::InputHandler
@@ -868,6 +892,31 @@ namespace InGame {
 				}
 				animator->SetFrameY(int(31 - firstFireAngle));
 			}
+			if (item == ItemInfo::Number::Banana)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->SetCurrentAnimation(WormState::OnLeftFlatBananaOn);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->SetCurrentAnimation(WormState::OnRightFlatBananaOn);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->SetCurrentAnimation(WormState::OnLeftUpBananaOn);
+					break;
+				case InGame::WormInfo::RightUp:
+					animator->SetCurrentAnimation(WormState::OnRightUpBananaOn);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->SetCurrentAnimation(WormState::OnLeftDownBananaOn);
+					break;
+				case InGame::WormInfo::RightDown:
+					animator->SetCurrentAnimation(WormState::OnRightDownBananaOn);
+					break;
+				}
+				animator->SetFrameY(int(31 - firstFireAngle));
+			}
 		}
 
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
@@ -1228,6 +1277,30 @@ namespace InGame {
 					break;
 				case InGame::WormInfo::RightDown:
 					animator->PlayAnimation(WormState::OnRightDownGrenadeWithdraw);
+					break;
+				}
+			}
+			if (weapon == ItemInfo::Number::Banana)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->PlayAnimation(WormState::OnLeftFlatBananaWithdraw);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->PlayAnimation(WormState::OnRightFlatBananaWithdraw);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->PlayAnimation(WormState::OnLeftUpBananaWithdraw);
+					break;
+				case InGame::WormInfo::RightUp:
+					animator->PlayAnimation(WormState::OnRightUpBananaWithdraw);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->PlayAnimation(WormState::OnLeftDownBananaWithdraw);
+					break;
+				case InGame::WormInfo::RightDown:
+					animator->PlayAnimation(WormState::OnRightDownBananaWithdraw);
 					break;
 				}
 			}

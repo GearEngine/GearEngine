@@ -9,12 +9,14 @@ namespace InGame {
 	{
 		m_Bazooka.reset(new Bazooka(initData));
 		m_Grenade.reset(new Grenade(initData));
+		m_Banana.reset(new Banana(initData));
 	}
 
 	ItemPool::~ItemPool()
 	{
 		m_Bazooka.reset();
 		m_Grenade.reset();
+		m_Banana.reset();
 	}
 
 	void ItemPool::init(const InitiateData& initData)
@@ -33,6 +35,8 @@ namespace InGame {
 			return m_Bazooka;
 		case ItemInfo::Grenade:
 			return m_Grenade;
+		case ItemInfo::Banana:
+			return m_Banana;
 		}
 	}
 

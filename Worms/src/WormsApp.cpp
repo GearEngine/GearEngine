@@ -101,6 +101,7 @@ public:
 		//Bullet
 		Gear::TextureStorage::AddFrameTexture2D("BazukaBullet", Gear::FrameTexture2D::Create("assets/textures/Weapon/BazukaBullet.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("GrenadeBullet", Gear::FrameTexture2D::Create("assets/textures/Weapon/GrenadeBullet.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("BananaBullet", Gear::FrameTexture2D::Create("assets/textures/Weapon/BananaBullet.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("Exhaust1", Gear::FrameTexture2D::Create("assets/textures/Effect/Exhaust/Exhaust1.png", 1, 28));
 
 		//Worm
@@ -169,6 +170,7 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RightDownAfterDamagedSliding", Gear::FrameTexture2D::Create("assets/textures/Worm/Fallen/RightDownAfterDamagedSliding.png", 1, 36));
 		
 		//Weapon
+		//Bazooka
 		Gear::TextureStorage::AddFrameTexture2D("LeftDownBazukaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/LeftDownBazukaReady.png", 1, 7));
 		Gear::TextureStorage::AddFrameTexture2D("LeftFlatBazukaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/LeftFlatBazukaReady.png", 1, 7));
 		Gear::TextureStorage::AddFrameTexture2D("LeftUpBazukaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/LeftUpBazukaReady.png", 1, 7));
@@ -183,6 +185,7 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RightFlatBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightFlatBazukaOn.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("RightUpBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightUpBazukaOn.png", 1, 32));
 		
+		//Grenade
 		Gear::TextureStorage::AddFrameTexture2D("LeftDownGrenadeReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/LeftDownGrenadeReady.png", 1, 10));
 		Gear::TextureStorage::AddFrameTexture2D("LeftFlatGrenadeReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/LeftFlatGrenadeReady.png", 1, 10));
 		Gear::TextureStorage::AddFrameTexture2D("LeftUpGrenadeReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/LeftUpGrenadeReady.png", 1, 10));
@@ -196,6 +199,22 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RightDownGrenadeOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/RightDownGrenadeOn.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("RightFlatGrenadeOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/RightFlatGrenadeOn.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("RightUpGrenadeOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/RightUpGrenadeOn.png", 1, 32));
+
+		//Banana
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownBananaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Banana/LeftDownBananaReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatBananaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Banana/LeftFlatBananaReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpBananaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Banana/LeftUpBananaReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownBananaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Banana/RightDownBananaReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatBananaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Banana/RightFlatBananaReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpBananaReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Banana/RightUpBananaReady.png", 1, 10));
+
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownBananaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Banana/LeftDownBananaOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatBananaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Banana/LeftFlatBananaOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpBananaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Banana/LeftUpBananaOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownBananaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Banana/RightDownBananaOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatBananaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Banana/RightFlatBananaOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpBananaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Banana/RightUpBananaOn.png", 1, 32));
+
 
 		//Icon
 		Gear::TextureStorage::AddTexture2D("ItemHighlighter", Gear::Texture2D::Create("assets/textures/Weapon/Icon/ItemHighlighter.png"));
@@ -275,7 +294,7 @@ public:
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Bazooka, "Bazooka", -1, 0));
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Grenade, "Grenade", -1, 0));
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Shotgun, "Shotgun", -1, 0));
-		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Banana, "Banana", 1, 3));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Banana, "Banana", 3, 0));
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Teleport, "Teleport", -1, 0));
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::SkipGo, "Skip Go", -1, 0));
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Surrender, "Surrender", -1, 0));

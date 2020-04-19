@@ -51,19 +51,24 @@ namespace InGame {
 				float damageRatio = 1.0f - distance / radius;
 
 				glm::vec2 externalVector = glm::normalize(glm::vec2(dx, dy));
+				externalVector = glm::vec2(externalVector.x * externalRatio * damageRatio, externalVector.y * externalRatio * damageRatio);
 
 				auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 				auto FSM = Gear::EntitySystem::GetFSM(entityID);
 				auto status = Gear::EntitySystem::GetStatus(entityID);
+				auto& curExternalVector = physics->GetExternalVector();
+				curExternalVector.x += externalVector.x;
+				curExternalVector.y += externalVector.y;
 
-				status->SetStat(WormInfo::Damage, int(damageRatio * power));
+				auto curDamage = std::any_cast<int>(status->GetStat(WormInfo::Damage));
+				status->SetStat(WormInfo::Damage, int(damageRatio * power + curDamage));
 
 				FSM->SetCurrentState(WormState::OnAttacked);
 				GR_TRACE("{0} OnAttacked", Gear::EntitySystem::GetEntity(entityID)->GetName());
 
 				physics->ActivateGravity();
+				physics->ResetGravityAccelation();
 				physics->SetPixelCollisionHandler("OnAir");
-				physics->SetExternalVector(glm::vec2(externalVector.x * externalRatio * damageRatio, externalVector.y * externalRatio * damageRatio));
 			}
 			
 			handled = true;
@@ -131,6 +136,54 @@ namespace InGame {
 					return;
 				case InGame::WormInfo::RightDown:
 					animator->PlayAnimation(WormState::OnRightDownBazukaWithdraw);
+					return;
+				}
+			}
+			if (item == ItemInfo::Number::Banana)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->PlayAnimation(WormState::OnLeftFlatBananaWithdraw);
+					return;
+				case InGame::WormInfo::RightFlat:
+					animator->PlayAnimation(WormState::OnRightFlatBananaWithdraw);
+					return;
+				case InGame::WormInfo::LeftUp:
+					animator->PlayAnimation(WormState::OnLeftUpBananaWithdraw);
+					return;
+				case InGame::WormInfo::RightUp:
+					animator->PlayAnimation(WormState::OnRightUpBananaWithdraw);
+					return;
+				case InGame::WormInfo::LeftDown:
+					animator->PlayAnimation(WormState::OnLeftDownBananaWithdraw);
+					return;
+				case InGame::WormInfo::RightDown:
+					animator->PlayAnimation(WormState::OnRightDownBananaWithdraw);
+					return;
+				}
+			}
+			if (item == ItemInfo::Number::Grenade)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->PlayAnimation(WormState::OnLeftFlatGrenadeWithdraw);
+					return;
+				case InGame::WormInfo::RightFlat:
+					animator->PlayAnimation(WormState::OnRightFlatGrenadeWithdraw);
+					return;
+				case InGame::WormInfo::LeftUp:
+					animator->PlayAnimation(WormState::OnLeftUpGrenadeWithdraw);
+					return;
+				case InGame::WormInfo::RightUp:
+					animator->PlayAnimation(WormState::OnRightUpGrenadeWithdraw);
+					return;
+				case InGame::WormInfo::LeftDown:
+					animator->PlayAnimation(WormState::OnLeftDownGrenadeWithdraw);
+					return;
+				case InGame::WormInfo::RightDown:
+					animator->PlayAnimation(WormState::OnRightDownGrenadeWithdraw);
 					return;
 				}
 			}
