@@ -1,12 +1,13 @@
 #include "wmpch.h"
-#include "Bazooka.h"
+#include "Grenade.h"
 
-#include "BazookaFSMHandlers.h"
+#include "GrenadeFSMHandlers.h"
 #include "../ItemPixelCollisionHandler.h"
+#include "../ItemStatusHandler.h"
 
 namespace InGame {
 
-	Bazooka::Bazooka(const InitiateData& initData)
+	Grenade::Grenade(const InitiateData & initData)
 	{
 		m_ID = Gear::EntitySystem::CreateEntity(false);
 
@@ -14,15 +15,15 @@ namespace InGame {
 			Gear::ComponentID::FSM, Gear::ComponentID::Timer, Gear::ComponentID::Drawer,
 			Gear::ComponentID::Status, Gear::ComponentID::Transform, Gear::ComponentID::Physics,
 			Gear::ComponentID::Animator
-		});
+			});
 
 		Gear::EntitySystem::SetAnimator(m_ID, {
-			{ Item::State::OnGoing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("BazukaBullet"), 0.0f) }
-		});
+			{ Item::State::OnGoing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("GrenadeBullet"), 0.0f) }
+			});
 
 		Gear::EntitySystem::SetFSM(m_ID, {
-			{ Item::State::OnGoing, new BazookaOnGoingHandler }, { Item::State::OnUnderWater, new BazookaOnUnderWater},
-			{ Item::State::OnExplosion, new BazookaOnExplosion },
+			{ Item::State::OnGoing, new GrenadeOnGoingHandler }, { Item::State::OnUnderWater, new GrenadeOnUnderWater},
+			{ Item::State::OnExplosion, new GrenadeOnExplosion },
 		});
 
 		auto mask = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName + "Mask");
@@ -34,20 +35,24 @@ namespace InGame {
 
 		Gear::EntitySystem::SetPhysics(m_ID, true, 20.f, -0.1f);
 		Gear::EntitySystem::SetPixelCollision(m_ID, { 255, 255, 255 }, mask, maskTranslate, {
-			{ "MissilePC", Gear::CreateRef<MissileTypePCHandler>() },
+			{ "GrenadePC", Gear::CreateRef<GrenadeTypePCHandler>() },
 			{ "GeneralWeaponUnderWater", Gear::CreateRef<GaneralWeaponOnUnderWater>() }
 		});
 
 		Gear::EntitySystem::SetStatus(m_ID, {
 			{ Item::Info::Angle, 0.0f}, { Item::Info::Power, 50.0f }, {Item::Info::ExplosionText, Explosion::Text::Foom}, {Item::Info::ExplosionSize, Explosion::Size::Size50},
-			{ Item::Info::From, -1}, { Item::Info::Number, ItemInfo::Number::Bazooka},
+			{ Item::Info::From, -1}, { Item::Info::Number, ItemInfo::Number::Bazooka}
 		});
 	}
 
-	void Bazooka::init(const glm::vec3 & position, float initAngle, float initPower, int From, float explosionTime)
+	void Grenade::init(const glm::vec3 & position, float initAngle, float initPower, int From, float explosionTime)
 	{
+
 		Gear::EntitySystem::ActivateEntity(m_ID);
 		Gear::EntitySystem::GetFSM(m_ID)->SetCurrentState(Item::State::OnGoing);
+		auto timer = Gear::EntitySystem::GetTimer(m_ID);
+		timer->SetTimer(explosionTime + 0.1f);
+		timer->Start();
 
 		glm::vec3 pos = position;
 		pos.z = ZOrder::z_Item;
@@ -56,7 +61,7 @@ namespace InGame {
 		auto physics = Gear::EntitySystem::GetPhysics2D(m_ID);
 		glm::vec2 ExternalVector(initPower * glm::cos(glm::radians(initAngle)), initPower * glm::sin(glm::radians(initAngle)));
 		physics->SetExternalVector(ExternalVector);
-		physics->SetPixelCollisionHandler("MissilePC");
+		physics->SetPixelCollisionHandler("GrenadePC");
 
 		Gear::EntitySystem::GetStatus(m_ID)->SetStat(Item::Info::From, From);
 	}

@@ -7,11 +7,14 @@ namespace InGame {
 
 	ItemPool::ItemPool(const InitiateData & initData)
 	{
-		m_bazooka.reset(new Bazooka(initData));
+		m_Bazooka.reset(new Bazooka(initData));
+		m_Grenade.reset(new Grenade(initData));
 	}
 
 	ItemPool::~ItemPool()
 	{
+		m_Bazooka.reset();
+		m_Grenade.reset();
 	}
 
 	void ItemPool::init(const InitiateData& initData)
@@ -26,8 +29,10 @@ namespace InGame {
 	{
 		switch (number)
 		{
-		case InGame::ItemInfo::Bazooka:
-			return m_bazooka;
+		case ItemInfo::Bazooka:
+			return m_Bazooka;
+		case ItemInfo::Grenade:
+			return m_Grenade;
 		}
 	}
 

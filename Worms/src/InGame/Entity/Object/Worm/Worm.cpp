@@ -86,6 +86,11 @@ namespace InGame {
 		{
 			bazukaReadyAniOrder.push_back({ 0, 6 - i });
 		}
+		std::vector<std::pair<int, int>> GrenadeReadyAniOrder;
+		for (int i = 0; i < 10; ++i)
+		{
+			GrenadeReadyAniOrder.push_back({ 0, 9 - i });
+		}
 
 		std::vector<std::pair<int, int>> dyingAniOrder;
 		for (int i = 0; i < 60; ++i)
@@ -185,6 +190,27 @@ namespace InGame {
 			{ WormState::OnRightUpBazukaWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpBazukaReady"), 0.02f, false)},
 			{ WormState::OnRightDownBazukaWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownBazukaReady"), 0.02f, false)},
 
+			{ WormState::OnLeftFlatGrenadeReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatGrenadeReady"), 0.02f, GrenadeReadyAniOrder, false)},
+			{ WormState::OnLeftUpGrenadeReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpGrenadeReady"), 0.02f, GrenadeReadyAniOrder, false)},
+			{ WormState::OnLeftDownGrenadeReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownGrenadeReady"), 0.02f, GrenadeReadyAniOrder, false)},
+			{ WormState::OnRightFlatGrenadeReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatGrenadeReady"), 0.02f, GrenadeReadyAniOrder, false)},
+			{ WormState::OnRightUpGrenadeReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpGrenadeReady"), 0.02f, GrenadeReadyAniOrder, false)},
+			{ WormState::OnRightDownGrenadeReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownGrenadeReady"), 0.02f, GrenadeReadyAniOrder, false)},
+
+			{ WormState::OnLeftFlatGrenadeOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatGrenadeOn"), 0.02f, false)},
+			{ WormState::OnLeftUpGrenadeOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpGrenadeOn"), 0.02f, false)},
+			{ WormState::OnLeftDownGrenadeOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownGrenadeOn"), 0.02f, false)},
+			{ WormState::OnRightFlatGrenadeOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatGrenadeOn"), 0.02f, false)},
+			{ WormState::OnRightUpGrenadeOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpGrenadeOn"), 0.02f, false)},
+			{ WormState::OnRightDownGrenadeOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownGrenadeOn"), 0.02f, false)},
+
+			{ WormState::OnLeftFlatGrenadeWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatGrenadeReady"), 0.02f, false)},
+			{ WormState::OnLeftUpGrenadeWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpGrenadeReady"), 0.02f, false)},
+			{ WormState::OnLeftDownGrenadeWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownGrenadeReady"), 0.02f, false)},
+			{ WormState::OnRightFlatGrenadeWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatGrenadeReady"), 0.02f, false)},
+			{ WormState::OnRightUpGrenadeWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpGrenadeReady"), 0.02f, false)},
+			{ WormState::OnRightDownGrenadeWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownGrenadeReady"), 0.02f, false)},
+
 			{ WormState::OnLeftFly,	Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftWormFly"), 0.02f, false)},
 			{ WormState::OnRightFly, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightWormFly"), 0.02f, false)},
 			
@@ -251,8 +277,9 @@ namespace InGame {
 			{ WormInfo::Stat::Hp, wormData.Hp }, { WormInfo::Stat::FireAngle, 15.0f },
 			{ WormInfo::Stat::FirePower, 0.0f}, { WormInfo::Stat::SelectedItem, ItemInfo::Number::Bazooka }, 
 			{ WormInfo::Stat::NameBorderOffset, 1.36f }, { WormInfo::Stat::HpBorderOffset, 0.8f }, { WormInfo::Stat::ZRenderOffset, wormData.AdditionalZRenderOffset },
-			{ WormInfo::Stat::Direction, wormData.Direction}, { WormInfo::Stat::MoveSpeed, initData.WormMoveSpeed } ,
-			{ WormInfo::Stat::MyTurn, false }, { WormInfo::Stat::Damage, 0 }, {WormInfo::Stat::SelfDamage , 0}
+			{ WormInfo::Stat::Direction, wormData.Direction}, { WormInfo::Stat::MoveSpeed, initData.WormMoveSpeed },
+			{ WormInfo::Stat::MyTurn, false }, { WormInfo::Stat::Damage, 0 }, {WormInfo::Stat::SelfDamage , 0},
+			{ WormInfo::Stat::ItemExplosionTime, 3.0f }
 		});
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {

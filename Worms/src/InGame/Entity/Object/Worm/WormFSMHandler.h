@@ -180,6 +180,30 @@ namespace InGame {
 				break;
 			}
 		}
+		if (curSettedItem == ItemInfo::Number::Grenade)
+		{
+			switch (dir)
+			{
+			case InGame::WormInfo::LeftFlat:
+				animator->PlayAnimation(WormState::OnLeftFlatGrenadeReady);
+				break;
+			case InGame::WormInfo::RightFlat:
+				animator->PlayAnimation(WormState::OnRightFlatGrenadeReady);
+				break;
+			case InGame::WormInfo::LeftUp:
+				animator->PlayAnimation(WormState::OnLeftUpGrenadeReady);
+				break;
+			case InGame::WormInfo::RightUp:
+				animator->PlayAnimation(WormState::OnRightUpGrenadeReady);
+				break;
+			case InGame::WormInfo::LeftDown:
+				animator->PlayAnimation(WormState::OnLeftDownGrenadeReady);
+				break;
+			case InGame::WormInfo::RightDown:
+				animator->PlayAnimation(WormState::OnRightDownGrenadeReady);
+				break;
+			}
+		}
 	}
 
 	class WormOnBreathHandler : public Gear::FSM::InputHandler
@@ -819,6 +843,31 @@ namespace InGame {
 				}
 				animator->SetFrameY(int(31 - firstFireAngle));
 			}
+			if (item == ItemInfo::Number::Grenade)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->SetCurrentAnimation(WormState::OnLeftFlatGrenadeOn);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->SetCurrentAnimation(WormState::OnRightFlatGrenadeOn);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->SetCurrentAnimation(WormState::OnLeftUpGrenadeOn);
+					break;
+				case InGame::WormInfo::RightUp:
+					animator->SetCurrentAnimation(WormState::OnRightUpGrenadeOn);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->SetCurrentAnimation(WormState::OnLeftDownGrenadeOn);
+					break;
+				case InGame::WormInfo::RightDown:
+					animator->SetCurrentAnimation(WormState::OnRightDownGrenadeOn);
+					break;
+				}
+				animator->SetFrameY(int(31 - firstFireAngle));
+			}
 		}
 
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
@@ -944,23 +993,23 @@ namespace InGame {
 
 			if (cmd.KeyType == WormCommand::SetTimer1)
 			{
-
+				status->SetStat(WormInfo::Stat::ItemExplosionTime, 1.0f);
 			}
 			if (cmd.KeyType == WormCommand::SetTimer2)
 			{
-
+				status->SetStat(WormInfo::Stat::ItemExplosionTime, 2.0f);
 			}
 			if (cmd.KeyType == WormCommand::SetTimer3)
 			{
-
+				status->SetStat(WormInfo::Stat::ItemExplosionTime, 3.0f);
 			}
 			if (cmd.KeyType == WormCommand::SetTimer4)
 			{
-
+				status->SetStat(WormInfo::Stat::ItemExplosionTime, 4.0f);
 			}
 			if (cmd.KeyType == WormCommand::SetTimer5)
 			{
-
+				status->SetStat(WormInfo::Stat::ItemExplosionTime, 5.0f);
 			}
 
 			return WormState::OnReadyItemUse;
@@ -1158,6 +1207,30 @@ namespace InGame {
 					break;
 				}
 			}
+			if (weapon == ItemInfo::Number::Grenade)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->PlayAnimation(WormState::OnLeftFlatGrenadeWithdraw);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->PlayAnimation(WormState::OnRightFlatGrenadeWithdraw);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->PlayAnimation(WormState::OnLeftUpGrenadeWithdraw);
+					break;
+				case InGame::WormInfo::RightUp:
+					animator->PlayAnimation(WormState::OnRightUpGrenadeWithdraw);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->PlayAnimation(WormState::OnLeftDownGrenadeWithdraw);
+					break;
+				case InGame::WormInfo::RightDown:
+					animator->PlayAnimation(WormState::OnRightDownGrenadeWithdraw);
+					break;
+				}
+			}
 		}
 
 		inline void Awake(int entityID) override
@@ -1218,7 +1291,8 @@ namespace InGame {
 				{
 					shootPower = 10.0f;
 					auto item = ITEM_POOL->GetItem(std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem)));
-					item->init(position, angle, shootPower * powerRate, entityID);
+					auto explosionTime = std::any_cast<float>(status->GetStat(WormInfo::Stat::ItemExplosionTime));
+					item->init(position, angle, shootPower * powerRate, entityID, explosionTime);
 
 					FSM->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
 					status->SetNeedHandleData(WormStatusHandleType::DisplayAim, true);
@@ -1237,7 +1311,8 @@ namespace InGame {
 			}
 
 			auto item = ITEM_POOL->GetItem(std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem)));
-			item->init(position, angle, shootPower * powerRate, entityID);
+			auto explosionTime = std::any_cast<float>(status->GetStat(WormInfo::Stat::ItemExplosionTime));
+			item->init(position, angle, shootPower * powerRate, entityID, explosionTime);
 			FSM->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
 			status->SetNeedHandleData(WormStatusHandleType::DisplayAim, true);
 			timerStatus->PushNeedHandleData(1, Gear::Status::StatHandleData(0));

@@ -132,6 +132,7 @@ namespace Gear {
 #else
 #define GR_PROFILE_BEGIN_SESSION(name, filepath)
 #define GR_PROFILE_END_SESSION()
+
 #define GR_PROFILE_SCOPE(name)
 #define GR_PROFILE_FUNCTION()
 #endif

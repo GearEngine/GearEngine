@@ -31,6 +31,7 @@ namespace InGame {
 			Direction,
 			MoveSpeed,
 			MyTurn,
+			ItemExplosionTime,
 			SelfDamage,
 			Damage,
 			StatEnd

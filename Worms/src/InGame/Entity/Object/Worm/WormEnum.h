@@ -79,6 +79,18 @@ namespace InGame {
 			OnLeftUpBazukaOn, OnRightUpBazukaOn,
 			OnLeftDownBazukaOn, OnRightDownBazukaOn,
 
+			OnLeftFlatGrenadeReady, OnRightFlatGrenadeReady,
+			OnLeftUpGrenadeReady, OnRightUpGrenadeReady,
+			OnLeftDownGrenadeReady, OnRightDownGrenadeReady,
+
+			OnLeftFlatGrenadeWithdraw, OnRightFlatGrenadeWithdraw,
+			OnLeftUpGrenadeWithdraw, OnRightUpGrenadeWithdraw,
+			OnLeftDownGrenadeWithdraw, OnRightDownGrenadeWithdraw,
+
+			OnLeftFlatGrenadeOn, OnRightFlatGrenadeOn,
+			OnLeftUpGrenadeOn, OnRightUpGrenadeOn,
+			OnLeftDownGrenadeOn, OnRightDownGrenadeOn,
+
 			OnLeftFlatStuck, OnRightFlatStuck,
 			OnLeftUpStuck, OnRightUpStuck,
 			OnLeftDownStuck, OnRightDownStuck,

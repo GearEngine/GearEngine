@@ -98,8 +98,9 @@ public:
 
 		Gear::TextureStorage::AddFrameTexture2D("Flame", Gear::FrameTexture2D::Create("assets/textures/Effect/Explosion/Flame1.png", 1, 32));
 		
-		//Weapon
+		//Bullet
 		Gear::TextureStorage::AddFrameTexture2D("BazukaBullet", Gear::FrameTexture2D::Create("assets/textures/Weapon/BazukaBullet.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("GrenadeBullet", Gear::FrameTexture2D::Create("assets/textures/Weapon/GrenadeBullet.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("Exhaust1", Gear::FrameTexture2D::Create("assets/textures/Effect/Exhaust/Exhaust1.png", 1, 28));
 
 		//Worm
@@ -182,6 +183,20 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RightFlatBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightFlatBazukaOn.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("RightUpBazukaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Bazuka/RightUpBazukaOn.png", 1, 32));
 		
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownGrenadeReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/LeftDownGrenadeReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatGrenadeReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/LeftFlatGrenadeReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpGrenadeReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/LeftUpGrenadeReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownGrenadeReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/RightDownGrenadeReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatGrenadeReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/RightFlatGrenadeReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpGrenadeReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/RightUpGrenadeReady.png", 1, 10));
+
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownGrenadeOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/LeftDownGrenadeOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatGrenadeOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/LeftFlatGrenadeOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpGrenadeOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/LeftUpGrenadeOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownGrenadeOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/RightDownGrenadeOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatGrenadeOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/RightFlatGrenadeOn.png", 1, 32));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpGrenadeOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Grenade/RightUpGrenadeOn.png", 1, 32));
+
 		//Icon
 		Gear::TextureStorage::AddTexture2D("ItemHighlighter", Gear::Texture2D::Create("assets/textures/Weapon/Icon/ItemHighlighter.png"));
 		
@@ -293,7 +308,7 @@ public:
 		team2.TeamColor = InGame::TeamColor::Red;
 		team2.nWorm = 3;
 		team2.TeamIcon = Gear::TextureStorage::GetTexture2D("USA");
-		team2.TeamItem = itemList2;
+		team2.TeamItem = itemList;
 		
 		
 		initData.Teams.push_back(team1);
