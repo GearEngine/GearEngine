@@ -271,7 +271,8 @@ namespace InGame {
 			}
 			animator->ResumeAnimation();
 
-			if (timer->isExpired())
+			bool isItemUse = std::any_cast<bool>(status->GetStat(WormInfo::Stat::UsedItem));
+			if (timer->isExpired() && !isItemUse)
 			{
 				SetReadyItemUseAnimation(entityID, dir);
 				firstIn = true;
@@ -1067,10 +1068,23 @@ namespace InGame {
 
 	class WormOnItemWithdraw : public Gear::FSM::InputHandler
 	{
+		Gear::Ref<Gear::Animator2D> animator;
+		Gear::Ref<Gear::Status> status;
+		Gear::Ref<Gear::Timer> timer;
+
+		inline void Awake(int entityID) override
+		{
+			animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			status = Gear::EntitySystem::GetStatus(entityID);
+			timer = Gear::EntitySystem::GetTimer(entityID);
+		}
+
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
-			auto status = Gear::EntitySystem::GetStatus(entityID);
+			if (OnAwake)
+			{
+				Awake(entityID);
+			}
 
 			if (animator->loopCompleted())
 			{
@@ -1096,9 +1110,42 @@ namespace InGame {
 					animator->PlayAnimation(WormState::OnRightDownBreath);
 					break;
 				}
-				return WormState::OnNothing;
+				timer->SetTimer(3.0f);
+				timer->Start();
+				return WormState::OnAfterUseItem;
 			}
 			return WormState::OnItemWithdraw;
+		}
+	};
+
+	class WormOnAfterUseItem : public Gear::FSM::InputHandler
+	{
+		Gear::Ref<Gear::Timer> timer;
+		Gear::Ref<Gear::Status> status;
+		bool inFirst = true;
+
+		inline void OnOut(int entityID) override
+		{
+			inFirst = true;
+		}
+
+		inline void Awake(int entityID) override
+		{
+			timer = Gear::EntitySystem::GetTimer(entityID);
+			status = Gear::EntitySystem::GetStatus(entityID);
+
+			OnAwake = false;
+		}
+
+		inline Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			if (OnAwake)
+			{
+				Awake(entityID);
+			}
+			status->SetStat(WormInfo::Stat::UsedItem, true);
+			status->PushNeedHandleData(WormStatusHandleType::AfterUseItem, Gear::Status::StatHandleData(2.0f));
+			return WormState::OnBreath;
 		}
 	};
 
@@ -1329,10 +1376,11 @@ namespace InGame {
 
 			float tick = timer->GetTick();
 			float angle = GetAngle(entityID);
-			glm::vec3 position = transform->GetPosition();
+  			
 
 			if (cmd.KeyType == WormCommand::UseItem)
 			{
+				glm::vec3 position = transform->GetPosition();
 				pastTime += tick;
 				if (pastTime > blobAddDelay)
 				{
@@ -1363,6 +1411,7 @@ namespace InGame {
 				if (shootPower >= 10.0f)
 				{
 					shootPower = 10.0f;
+					glm::vec3 position = transform->GetPosition();
 					auto item = ITEM_POOL->GetItem(std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem)));
 					auto explosionTime = std::any_cast<float>(status->GetStat(WormInfo::Stat::ItemExplosionTime));
 					item->init(position, angle, shootPower * powerRate, entityID, explosionTime);
@@ -1383,6 +1432,7 @@ namespace InGame {
 				return WormState::OnUseItem;
 			}
 
+			glm::vec3 position = transform->GetPosition();
 			auto item = ITEM_POOL->GetItem(std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem)));
 			auto explosionTime = std::any_cast<float>(status->GetStat(WormInfo::Stat::ItemExplosionTime));
 			item->init(position, angle, shootPower * powerRate, entityID, explosionTime);

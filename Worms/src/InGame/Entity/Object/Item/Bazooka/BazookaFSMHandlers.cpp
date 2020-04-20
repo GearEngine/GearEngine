@@ -8,8 +8,11 @@ namespace InGame {
 	
 	Gear::EnumType BazookaOnGoingHandler::Handle(int entityID, const Gear::Command & cmd)
 	{
-		auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
-		auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+		if (OnAwake)
+		{
+			Awake(entityID);
+		}
+		
 		auto tick = Gear::EntitySystem::GetTimer(entityID)->GetTick();
 
 		auto externalVector = physics->GetExternalVector();

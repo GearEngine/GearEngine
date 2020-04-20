@@ -34,6 +34,7 @@ namespace InGame {
 			OnUnderWater,
 			OnAfterDamaged,
 			OnNothing,
+			OnAfterUseItem,
 
 			OnLeftFlatMove, OnRightFlatMove,
 			OnLeftUpMove, OnRightUpMove,
@@ -144,6 +145,7 @@ namespace InGame {
 			Damaged,
 			DisplayDamage,
 			DisplayAim,
+			AfterUseItem
 		};
 	}
 

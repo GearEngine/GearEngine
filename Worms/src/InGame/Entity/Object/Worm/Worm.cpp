@@ -264,7 +264,8 @@ namespace InGame {
 			{ WormState::OnUnderWater, new WormOnUnderWaterHandler },	{ WormState::OnDamaged, new WormOnDamagedHandler },
 			{ WormState::OnAfterDamaged, new WormOnAfterDamaged }, { WormState::OnReadyItemUse, new WormOnReadyItemUseHandler },
 			{ WormState::OnItemWithdraw, new WormOnItemWithdraw }, { WormState::OnUseItem, new WormOnUseItemHandler },
-			{ WormState::OnAttacked, new WormOnAttackedHandler }, { WormState::OnDye, new WormOnDyeHandler }
+			{ WormState::OnAttacked, new WormOnAttackedHandler }, { WormState::OnDye, new WormOnDyeHandler },
+			{ WormState::OnAfterUseItem, new WormOnAfterUseItem }
 		});
 
 		//Set Controller
@@ -300,7 +301,7 @@ namespace InGame {
 			{ WormInfo::Stat::NameBorderOffset, 1.36f }, { WormInfo::Stat::HpBorderOffset, 0.8f }, { WormInfo::Stat::ZRenderOffset, wormData.AdditionalZRenderOffset },
 			{ WormInfo::Stat::Direction, wormData.Direction}, { WormInfo::Stat::MoveSpeed, initData.WormMoveSpeed },
 			{ WormInfo::Stat::MyTurn, false }, { WormInfo::Stat::Damage, 0 }, {WormInfo::Stat::SelfDamage , 0},
-			{ WormInfo::Stat::ItemExplosionTime, 3.0f }
+			{ WormInfo::Stat::ItemExplosionTime, 3.0f }, { WormInfo::Stat::UsedItem, false }
 		});
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {
@@ -309,7 +310,8 @@ namespace InGame {
 			{ WormStatusHandleType::DisplayPosChange, Gear::CreateRef<WormChangeDisplayPosHanlder>() },
 			{ WormStatusHandleType::Damaged, Gear::CreateRef<WormGetDamageHanlder>() },
 			{ WormStatusHandleType::DisplayDamage, Gear::CreateRef<WormDisplayDamageHanlder>() },
-			{ WormStatusHandleType::DisplayAim, Gear::CreateRef<WormDisplayAimHandler>() }
+			{ WormStatusHandleType::DisplayAim, Gear::CreateRef<WormDisplayAimHandler>() },
+			{ WormStatusHandleType::AfterUseItem, Gear::CreateRef<WormAfterUseItemHanlder>() }
 		});
 
 		auto NameBorder = Gear::TextureStorage::GetTexture2D("WormNameBorder");

@@ -335,7 +335,7 @@ namespace InGame {
 			auto status = Gear::EntitySystem::GetStatus(entityID);
 			if (inFirst)
 			{
-				//GR_TRACE("Worm Enter WormGetDamageHanlder {0}", Gear::EntitySystem::GetEntity(entityID)->GetName());
+				GR_TRACE("Worm Enter WormGetDamageHanlder {0}", Gear::EntitySystem::GetEntity(entityID)->GetName());
 				inFirst = false;
 				pastTime = 0.0f;
 			}
@@ -486,5 +486,95 @@ namespace InGame {
 			}
 		}
 	};
+	class WormAfterUseItemHanlder : public Gear::Status::StatusHandler
+	{
+		bool inFirst = true;
+		bool OnAwake = true;
+		bool turnOffController = true;
 
+		float delay;
+		float pastTime = 0.0f;
+		Gear::Ref<Gear::Timer> timer;
+		Gear::Ref<Gear::FSM> FSM;
+		Gear::Ref<Gear::Status> status;
+		Gear::Ref<Gear::Animator2D> animator;
+
+		void Awake(int entityID)
+		{
+			timer = Gear::EntitySystem::GetTimer(entityID);
+			FSM = Gear::EntitySystem::GetFSM(entityID);
+			status = Gear::EntitySystem::GetStatus(entityID);
+			animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			OnAwake = false;
+		}
+		
+		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
+		{
+			if (OnAwake)
+			{
+				Awake(entityID);
+			}
+			if (inFirst)
+			{
+				delay = std::any_cast<float>(data.Data);
+				pastTime = 0.0f;
+				inFirst = false;
+			}
+
+			if (pastTime > delay)
+			{
+				auto curState = FSM->GetCurrentState();
+				if (turnOffController)
+				{
+					Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+					if (curState == WormState::OnMove)
+					{
+						Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVectorX(0.0f);
+						auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
+						switch (dir)
+						{
+						case InGame::WormInfo::LeftFlat:
+							animator->PlayAnimation(WormState::OnLeftFlatBreath);
+							break;
+						case InGame::WormInfo::RightFlat:
+							animator->PlayAnimation(WormState::OnRightFlatBreath);
+							break;
+						case InGame::WormInfo::LeftUp:
+							animator->PlayAnimation(WormState::OnLeftUpBreath);
+							break;
+						case InGame::WormInfo::RightUp:
+							animator->PlayAnimation(WormState::OnRightUpBreath);
+							break;
+						case InGame::WormInfo::LeftDown:
+							animator->PlayAnimation(WormState::OnLeftDownBreath);
+							break;
+						case InGame::WormInfo::RightDown:
+							animator->PlayAnimation(WormState::OnRightDownBreath);
+							break;
+						}
+					}
+					turnOffController = false;
+				}
+				
+				if (curState == WormState::OnAttacked)
+				{
+					data.Handled = true;
+					turnOffController = true;
+					return;
+				}
+				if (FSM->GetCurrentState() == WormState::OnBreath)
+				{
+					FSM->SetCurrentState(WormState::OnNothing);
+					turnOffController = true;
+					data.Handled = true;
+				}
+			}
+			else
+			{
+				float tick = timer->GetTick();
+				pastTime += tick;
+			}
+			
+		}
+	};
 }

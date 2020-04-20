@@ -169,8 +169,10 @@ namespace InGame {
 				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
 				{
 					auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
-					if (!(curState == WormState::OnNothing || curState == WormState::OnNotMyTurn))
+					//GR_TRACE("{0} {1}", Gear::EntitySystem::GetEntity(WorldWormData::s_LivingWorms[i])->GetName(), curState);
+					if (curState != WormState::OnNothing && curState != WormState::OnNotMyTurn)
 					{
+						//GR_TRACE("{0} is Not onNothing and onNotMyturn", Gear::EntitySystem::GetEntity(WorldWormData::s_LivingWorms[i])->GetName());
 						return;
 					}
 					if(curState == WormState::OnNothing)

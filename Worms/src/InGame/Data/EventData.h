@@ -35,12 +35,13 @@ namespace InGame {
 
 	struct ExplosionData
 	{
-		ExplosionData(const glm::vec2 position, Explosion::Size size, unsigned int itemNumber = 0xffffffffu, int fromEntityID = -1)
-			: Position(position), Size(size), ItemNumber(itemNumber), FromEntityID(fromEntityID)
+		ExplosionData(const glm::vec2 position, Explosion::Size size, float power, unsigned int itemNumber = 0xffffffffu, int fromEntityID = -1)
+			: Position(position), Size(size), Power(power), ItemNumber(itemNumber), FromEntityID(fromEntityID)
 		{}
 
 		glm::vec2 Position;
 		int FromEntityID;
+		float Power;
 		unsigned int ItemNumber;
 		Explosion::Size Size;
 	};

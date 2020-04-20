@@ -25,6 +25,7 @@ namespace InGame {
 			auto FSM = Gear::EntitySystem::GetFSM(entityID);
 			float angle = Gear::Util::GetAngleFromXY(m_ExternalVector->x, m_ExternalVector->y);
 
+			GR_TRACE("{0} {1}", m_TargetPos->x, m_TargetPos->y);
 			glm::vec2 checkPosition(m_TargetPos->x + radius * glm::cos(glm::radians(angle)), m_TargetPos->y + radius * glm::sin(glm::radians(angle)));
 
 			auto textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(checkPosition, *m_PixelCollisionTargetTextureTranslate);
@@ -43,7 +44,7 @@ namespace InGame {
 				auto size = std::any_cast<Explosion::Size>(status->GetStat(Item::Info::ExplosionSize));
 				auto text = std::any_cast<Explosion::Text>(status->GetStat(Item::Info::ExplosionText));
 				
-				Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(checkPosition, size, number,from)));
+				Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(checkPosition, size, power,number,from)));
 				auto explosion = EffectPool::GetExplosion(size, text);
 				explosion->init(checkPosition);
 				ObjectLayer::s_Explosion.push_back(explosion);
@@ -84,7 +85,7 @@ namespace InGame {
 				auto text = std::any_cast<Explosion::Text>(status->GetStat(Item::Info::ExplosionText));
 				auto& position = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition();
 
-				Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(position, size, number, from)));
+				Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(position, size, power, number, from)));
 				auto explosion = EffectPool::GetExplosion(size, text);
 				explosion->init(position);
 				ObjectLayer::s_Explosion.push_back(explosion);
@@ -99,10 +100,10 @@ namespace InGame {
 				Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(Item::State::OnExplosion);
 
 				int shooterID = std::any_cast<int>(status->GetStat(Item::Info::From));
-				auto shooterStatus = Gear::EntitySystem::GetStatus(shooterID);
 
 				Gear::EntitySystem::GetPhysics2D(entityID)->SetPixelCollisionHandler("GeneralWeaponUnderWater");
 
+				auto shooterStatus = Gear::EntitySystem::GetStatus(shooterID);
 				shooterStatus->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 1.0f)));
 				return;
 			}
@@ -216,7 +217,7 @@ namespace InGame {
 				auto size = std::any_cast<Explosion::Size>(status->GetStat(Item::Info::ExplosionSize));
 				auto text = std::any_cast<Explosion::Text>(status->GetStat(Item::Info::ExplosionText));
 
-				Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(checkPosition, size, number, from)));
+				Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(checkPosition, size, power, number, from)));
 				auto explosion = EffectPool::GetExplosion(size, text);
 				explosion->init(checkPosition);
 				ObjectLayer::s_Explosion.push_back(explosion);

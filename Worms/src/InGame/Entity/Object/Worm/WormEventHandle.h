@@ -24,26 +24,22 @@ namespace InGame {
 			{
 			case Explosion::Size::Size25:
 				radius = 25.0f * additionalRadiusRatio / 37.0f;
-				power = 25.0f;
 				externalRatio = 7.5f;
 				break;
 			case Explosion::Size::Size50:
 				radius = 50.0f * additionalRadiusRatio / 37.0f;
-				power = 50.0f;
 				externalRatio = 10.0f;
 				break;
 			case Explosion::Size::Size75:
 				radius = 75.0f * additionalRadiusRatio / 37.0f;
-				power = 75.0f;
 				externalRatio = 12.5f;
 				break;
 			case Explosion::Size::Size100:
 				radius = 100.0f * additionalRadiusRatio / 37.0f;
-				power = 100.0f;
 				externalRatio = 15.0f;
 				break;
 			}
-
+			power = explosion.Power;
 			Gear::EventSystem::DispatchEventOnce(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::DamageWorm)));
 
 			if (distance < radius)

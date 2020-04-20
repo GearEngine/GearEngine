@@ -34,6 +34,7 @@ namespace InGame {
 			ItemExplosionTime,
 			SelfDamage,
 			Damage,
+			UsedItem,
 			StatEnd
 		};
 		

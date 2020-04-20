@@ -16,14 +16,14 @@ namespace InGame {
 			Gear::ComponentID::Animator
 		});
 
-		Gear::EntitySystem::SetAnimator(m_ID, {
-			{ Item::State::OnGoing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("BazukaBullet"), 0.0f) }
-		});
-
 		Gear::EntitySystem::SetFSM(m_ID, {
 			{ Item::State::OnGoing, new BazookaOnGoingHandler }, { Item::State::OnUnderWater, new BazookaOnUnderWater},
 			{ Item::State::OnExplosion, new BazookaOnExplosion },
 		});
+
+		Gear::EntitySystem::SetAnimator(m_ID, {
+			{ Item::State::OnGoing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("BazukaBullet"), 0.0f) }
+			});
 
 		auto mask = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName + "Mask");
 		int width = mask->GetWidth();
@@ -39,8 +39,8 @@ namespace InGame {
 		});
 
 		Gear::EntitySystem::SetStatus(m_ID, {
-			{ Item::Info::Angle, 0.0f}, { Item::Info::Power, 50.0f }, {Item::Info::ExplosionText, Explosion::Text::Foom}, {Item::Info::ExplosionSize, Explosion::Size::Size50},
-			{ Item::Info::From, -1}, { Item::Info::Number, ItemInfo::Number::Bazooka},
+			{ Item::Info::Angle, 0.0f}, { Item::Info::Power, 50.0f }, {Item::Info::ExplosionText, Explosion::Text::Foom}, {Item::Info::ExplosionSize, Explosion::Size::Size75},
+			{ Item::Info::From, -1}, { Item::Info::Number, ItemInfo::Number::Bazooka },
 		});
 	}
 

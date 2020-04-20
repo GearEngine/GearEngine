@@ -6,9 +6,20 @@ namespace InGame {
 
 	class BazookaOnGoingHandler : public Gear::FSM::InputHandler
 	{
+	public:
 		const float m_GenExhaustDelay = 0.03f;
 		float m_pastTime = 0.0f;
 		
+		Gear::Ref<Gear::Physics2D> physics;
+		Gear::Ref<Gear::Animator2D> animator;
+
+		virtual void Awake(int entityID) override
+		{
+			animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			physics = Gear::EntitySystem::GetPhysics2D(entityID); 
+			OnAwake = false;
+			WindAdjustRatio = 0.7f;
+		}
 	private:
 		Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override;
 		float WindAdjustRatio;

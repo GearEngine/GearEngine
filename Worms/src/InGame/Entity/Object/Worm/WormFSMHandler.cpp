@@ -79,7 +79,7 @@ namespace InGame {
 
 			GRAVE_POOL->ActivateGrave(GraveInfo::_1, wormPosition);
 
-			Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(position, Explosion::Size::Size25)));
+			Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(position, Explosion::Size::Size25, 25.0f)));
 
 			Gear::EntitySystem::RegisterInActivateEntity(entityID);
 		}
