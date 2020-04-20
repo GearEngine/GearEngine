@@ -40,7 +40,7 @@ namespace InGame {
 		});
 
 		Gear::EntitySystem::SetStatus(m_ID, {
-			{ Item::Info::Angle, 0.0f}, { Item::Info::Power, 100.0f }, {Item::Info::ExplosionText, Explosion::Text::Poot}, {Item::Info::ExplosionSize, Explosion::Size::Size100},
+			{ Item::Info::Angle, 0.0f}, { Item::Info::Power, 100.0f }, {Item::Info::ExplosionText, Explosion::Text::Poot}, {Item::Info::ExplosionSize, Explosion::Size::Size75},
 			{ Item::Info::From, -1}, { Item::Info::Number, ItemInfo::Number::BabyBanana }
 		});
 	}

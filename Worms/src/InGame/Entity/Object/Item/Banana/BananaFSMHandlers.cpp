@@ -16,7 +16,7 @@ namespace InGame {
 			auto Position = Transform->GetPosition();
 			for (auto& BabyBanana : BabyBananas)
 			{
-				BabyBanana->init(Position, Gear::Util::GetRndFloatFromTo(70.0f, 110.0f), Gear::Util::GetRndFloatFromTo(10.f, 15.0f), entityID);
+				BabyBanana->init(Position, Gear::Util::GetRndFloatFromTo(80.0f, 100.0f), Gear::Util::GetRndFloatFromTo(13.f, 18.0f), entityID);
 			}
 		}
 		
@@ -29,7 +29,6 @@ namespace InGame {
 				return Item::State::OnExplosion;
 			}
 		}
-
 		
 		Gear::EntitySystem::RegisterInActivateEntity(entityID);
 		InFirst = true;
