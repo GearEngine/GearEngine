@@ -43,6 +43,10 @@ namespace InGame {
 			{ Item::Info::Angle, 0.0f}, { Item::Info::Power, 50.0f }, {Item::Info::ExplosionText, Explosion::Text::Foom}, {Item::Info::ExplosionSize, Explosion::Size::Size75},
 			{ Item::Info::From, -1}, { Item::Info::Number, ItemInfo::Number::Grenade }
 		});
+
+		Gear::EntitySystem::SetStatusHanlder(m_ID, { 
+			{ Item::StatusHandleType::DisplayRemainTime, Gear::CreateRef<ItemRemainTimeDisplayHanlder>()}
+		});
 	}
 
 	void Grenade::init(const glm::vec3 & position, float initAngle, float initPower, int From, float explosionTime)
@@ -63,7 +67,9 @@ namespace InGame {
 		physics->SetExternalVector(ExternalVector);
 		physics->SetPixelCollisionHandler("GrenadePC");
 
-		Gear::EntitySystem::GetStatus(m_ID)->SetStat(Item::Info::From, From);
+		auto statsu = Gear::EntitySystem::GetStatus(m_ID);
+		statsu->SetStat(Item::Info::From, From);
+		statsu->PushNeedHandleData(Item::StatusHandleType::DisplayRemainTime, Gear::Status::StatHandleData(0));
 	}
 
 }

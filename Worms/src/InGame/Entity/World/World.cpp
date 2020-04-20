@@ -38,7 +38,8 @@ namespace InGame {
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {
 			{ WorldStatusHandleType::DisplayWaitingCount, Gear::CreateRef<WorldDisplayWaitingCountHandler>() },
-			{ WorldStatusHandleType::DisplayTeamInfo, Gear::CreateRef<WorldDisplayTeamInfoHandler>() }
+			{ WorldStatusHandleType::DisplayTeamInfo, Gear::CreateRef<WorldDisplayTeamInfoHandler>() },
+			{ WorldStatusHandleType::DisplayMassage, Gear::CreateRef<WorldDisplayMasageHandler>() },
 		});
 
 		auto status = Gear::EntitySystem::GetStatus(m_ID);

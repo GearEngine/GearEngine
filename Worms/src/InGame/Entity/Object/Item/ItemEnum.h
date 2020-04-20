@@ -17,5 +17,9 @@ namespace InGame {
 			ExplosionText, From, Number, Baby
 		};
 
+		enum StatusHandleType : unsigned int
+		{
+			DisplayRemainTime
+		};
 	}
 }

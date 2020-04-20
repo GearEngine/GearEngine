@@ -31,6 +31,8 @@ public:
 		Gear::TextureStorage::AddTexture2D("RedHpBar", Gear::Texture2D::Create("assets/textures/UI/RedHp.png"));
 		Gear::TextureStorage::AddTexture2D("BlueHpBar", Gear::Texture2D::Create("assets/textures/UI/BlueHp.png"));
 		Gear::TextureStorage::AddTexture2D("WhiteHpBar", Gear::Texture2D::Create("assets/textures/UI/WhiteHp.png"));
+		Gear::TextureStorage::AddTexture2D("ItemTimer", Gear::Texture2D::Create("assets/textures/UI/ItemTimer.png"));
+		Gear::TextureStorage::AddTexture2D("WorldMassageBorder", Gear::Texture2D::Create("assets/textures/UI/WorldMassageBorder.png"));
 
 		Gear::TextureStorage::AddTexture2D("ItemSelector2", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/2.png"));
 		Gear::TextureStorage::AddTexture2D("ItemSelector3", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/3.png"));

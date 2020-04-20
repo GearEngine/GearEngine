@@ -40,7 +40,8 @@ namespace InGame {
 		enum : unsigned int
 		{
 			DisplayWaitingCount,
-			DisplayTeamInfo
+			DisplayTeamInfo,
+			DisplayMassage
 		};
 
 	}

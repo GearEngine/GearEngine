@@ -62,7 +62,6 @@ namespace InGame {
 		physics->SetExternalVector(ExternalVector);
 		physics->SetPixelCollisionHandler("BabyPC");
 
-		Gear::EntitySystem::GetStatus(m_ID)->SetStat(Item::Info::From, From);
-
+		
 	}
 }

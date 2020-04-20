@@ -199,4 +199,55 @@ namespace InGame {
 			}
 		}
 	};
+
+	class WorldDisplayMasageHandler : public Gear::Status::StatusHandler
+	{
+		bool inFirst = true;
+		bool OnAwake = true;
+		float pastTime = 0.0f;
+		float duration = 2.0f;
+
+		Gear::Ref<Gear::Timer> timer;
+		Gear::Ref<Gear::Texture2D> massageBorder;
+
+		glm::mat4 m_Translate;
+		glm::vec3 m_FontScale;
+
+		WorldMassage massage;
+
+		inline void Awake(int entityID)
+		{
+			timer = Gear::EntitySystem::GetTimer(entityID);
+			massageBorder = Gear::TextureStorage::GetTexture2D("WorldMassageBorder");
+
+			m_Translate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.82f, ZOrder::z_FlatChecker)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.05f, 0.05f, 1.0f));
+			m_FontScale = glm::vec3(0.04f, 0.04f, ZOrder::z_FlatFont);
+		}
+
+		inline void init(int entityID)
+		{
+			pastTime = 0.0f;
+			inFirst = false;
+		}
+
+		inline void OnOut(int entityID)
+		{
+			inFirst = true;
+		}
+
+		inline void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
+		{
+			if (OnAwake)
+			{
+				Awake(entityID);
+			}
+			if (inFirst)
+			{
+				init(entityID);
+				massage = std::any_cast<WorldMassage>(data.Data);
+			}
+
+			
+		}
+	};
 }

@@ -86,5 +86,11 @@ namespace InGame {
 		std::string WormTeamName;
 	};
 
+	struct WorldMassage
+	{
+		FontType::Type type;
+		std::string str;
+	};
+
 }
 
