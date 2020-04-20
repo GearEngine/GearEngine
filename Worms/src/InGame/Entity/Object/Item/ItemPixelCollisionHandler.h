@@ -171,7 +171,7 @@ namespace InGame {
 
 						externalVector.x = externalVector.x * coef;
 						externalVector.y = -externalVector.y * coef;
-						std::cout << externalVector.x << " " << externalVector.y << std::endl;
+						//std::cout << externalVector.x << " " << externalVector.y << std::endl;
 						if (fabsf(externalVector.x) < 1 && fabsf(externalVector.y) < 1)
 						{
 							externalVector.x = 0.f;
@@ -190,7 +190,7 @@ namespace InGame {
 
 						externalVector.x = externalVector.x * coef;
 						externalVector.y = -externalVector.y *coef;
-						std::cout << externalVector.x << " " << externalVector.y << std::endl;
+						//std::cout << externalVector.x << " " << externalVector.y << std::endl;
 
 						if (fabsf(externalVector.x) < 1 && fabsf(externalVector.y) < 1)
 						{
@@ -211,7 +211,7 @@ namespace InGame {
 
 						externalVector.x = -externalVector.x *coef;
 						externalVector.y = externalVector.y * coef;
-						std::cout << externalVector.x << " " << externalVector.y << std::endl;
+						//std::cout << externalVector.x << " " << externalVector.y << std::endl;
 						if (fabsf(externalVector.x) < 1 && fabsf(externalVector.y) < 1)
 						{
 							externalVector.x = 0.f;
@@ -230,7 +230,7 @@ namespace InGame {
 
 						externalVector.x = -externalVector.x *coef;
 						externalVector.y = externalVector.y * coef;
-						std::cout << externalVector.x << " " << externalVector.y << std::endl;
+						//std::cout << externalVector.x << " " << externalVector.y << std::endl;
 						if (fabsf(externalVector.x) < 1 && fabsf(externalVector.y) < 1)
 						{
 							externalVector.x = 0.f;

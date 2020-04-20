@@ -1,6 +1,8 @@
 #include "WormEventHandle.h"
+
 #include "InGame/Entity/Object/Effects/Effects.h"
 #include "InGame/Entity/Object/Item/Item.h"
+#include "InGame/Entity/World/WorldState.h"
 
 namespace InGame {
 
@@ -225,6 +227,30 @@ namespace InGame {
 				break;
 			case InGame::WormInfo::RightDown:
 				animator->PlayAnimation(WormState::OnRightDownBananaReady);
+				break;
+			}
+		}
+		if (curSettedItem == ItemInfo::Number::SkipGo)
+		{
+			switch (dir)
+			{
+			case InGame::WormInfo::LeftFlat:
+				animator->PlayAnimation(WormState::OnLeftFlatSkipGoReady);
+				break;
+			case InGame::WormInfo::RightFlat:
+				animator->PlayAnimation(WormState::OnRightFlatSkipGoReady);
+				break;
+			case InGame::WormInfo::LeftUp:
+				animator->PlayAnimation(WormState::OnLeftUpSkipGoReady);
+				break;
+			case InGame::WormInfo::RightUp:
+				animator->PlayAnimation(WormState::OnRightUpSkipGoReady);
+				break;
+			case InGame::WormInfo::LeftDown:
+				animator->PlayAnimation(WormState::OnLeftDownSkipGoReady);
+				break;
+			case InGame::WormInfo::RightDown:
+				animator->PlayAnimation(WormState::OnRightDownSkipGoReady);
 				break;
 			}
 		}
@@ -807,14 +833,20 @@ namespace InGame {
 		bool afterReadyAni = false;
 		float actualFireAngle;
 		float firstFireAngle;
+		int worldID;
 		const float FixedFireAngle = 15.0f;
+
 
 		Gear::Ref<Gear::Animator2D> animator;
 		Gear::Ref<Gear::Status> status;
 		Gear::Ref<Gear::Physics2D> physics;
 		Gear::Ref<Gear::Timer> timer;
+		Gear::Ref<Gear::Status> worldStatus;
+		std::string itemStr;
+		bool canChangeTime = false;
 
 		int timerCheckerID;
+		ItemInfo::Number curItem;
 		Gear::Ref<Gear::Status> timerStatus;
 
 		inline void Awake(int entityID) override
@@ -826,6 +858,8 @@ namespace InGame {
 
 			timerCheckerID = Gear::EntitySystem::GetEntityIDFromName("Timer");
 			timerStatus = Gear::EntitySystem::GetStatus(timerCheckerID);
+			worldID = Gear::EntitySystem::GetEntityIDFromName("World");
+			worldStatus = Gear::EntitySystem::GetStatus(worldID);
 			OnAwake = false;
 		}
 
@@ -840,10 +874,9 @@ namespace InGame {
 		inline void SetWeaponOnAnimator(int entityID)
 		{
 			
-			auto item = std::any_cast<ItemInfo::Number>(status->GetStat(WormInfo::SelectedItem));
 			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
 
-			if (item == ItemInfo::Number::Bazooka)
+			if (curItem == ItemInfo::Number::Bazooka)
 			{
 				switch (dir)
 				{
@@ -867,8 +900,9 @@ namespace InGame {
 					break;
 				}
 				animator->SetFrameY(int(31 - firstFireAngle));
+				canChangeTime = false;
 			}
-			if (item == ItemInfo::Number::Grenade)
+			if (curItem == ItemInfo::Number::Grenade)
 			{
 				switch (dir)
 				{
@@ -892,8 +926,10 @@ namespace InGame {
 					break;
 				}
 				animator->SetFrameY(int(31 - firstFireAngle));
+				itemStr = "Grenade";
+				canChangeTime = true;
 			}
-			if (item == ItemInfo::Number::Banana)
+			if (curItem == ItemInfo::Number::Banana)
 			{
 				switch (dir)
 				{
@@ -917,6 +953,34 @@ namespace InGame {
 					break;
 				}
 				animator->SetFrameY(int(31 - firstFireAngle));
+				itemStr = "Banana";
+				canChangeTime = true;
+			}
+			if (curItem == ItemInfo::Number::SkipGo)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->SetCurrentAnimation(WormState::OnLeftFlatSkipGoOn);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->SetCurrentAnimation(WormState::OnRightFlatSkipGoOn);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->SetCurrentAnimation(WormState::OnLeftUpSkipGoOn);
+					break;
+				case InGame::WormInfo::RightUp:
+					animator->SetCurrentAnimation(WormState::OnRightUpSkipGoOn);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->SetCurrentAnimation(WormState::OnLeftDownSkipGoOn);
+					break;
+				case InGame::WormInfo::RightDown:
+					animator->SetCurrentAnimation(WormState::OnRightDownSkipGoOn);
+					break;
+				}
+				animator->ResumeAnimation();
+				canChangeTime = false;
 			}
 		}
 
@@ -931,7 +995,13 @@ namespace InGame {
 			{
 				inFirst = false;
 				actualFireAngle = (int)std::any_cast<float>(status->GetStat(WormInfo::FireAngle));
-				status->SetNeedHandleData(WormStatusHandleType::DisplayAim, false);
+
+				curItem = std::any_cast<ItemInfo::Number>(status->GetStat(WormInfo::SelectedItem));
+
+				if (curItem != ItemInfo::Number::SkipGo)
+				{
+					status->SetNeedHandleData(WormStatusHandleType::DisplayAim, false);
+				}
 				firstFireAngle = FixedFireAngle;
 			}
 
@@ -943,39 +1013,42 @@ namespace InGame {
 				afterReadyAni = true;
 			}
 
-			if (!SettedAngle && afterReadyAni)
+			if (curItem != ItemInfo::Number::SkipGo)
 			{
-				if ((int)firstFireAngle != (int)actualFireAngle)
+				if (!SettedAngle && afterReadyAni)
 				{
-					if (firstFireAngle > actualFireAngle)
+					if ((int)firstFireAngle != (int)actualFireAngle)
 					{
-						if (std::abs(firstFireAngle - actualFireAngle) >= 2.0f)
+						if (firstFireAngle > actualFireAngle)
 						{
-							firstFireAngle -= 2;
+							if (std::abs(firstFireAngle - actualFireAngle) >= 2.0f)
+							{
+								firstFireAngle -= 2;
+							}
+							else
+							{
+								firstFireAngle -= 1;
+
+							}
 						}
 						else
 						{
-							firstFireAngle -= 1;
-
+							if (std::abs(actualFireAngle - firstFireAngle) >= 2.0f)
+							{
+								firstFireAngle += 2;
+							}
+							else
+							{
+								firstFireAngle += 1;
+							}
 						}
 					}
 					else
 					{
-						if (std::abs(actualFireAngle - firstFireAngle) >= 2.0f)
-						{
-							firstFireAngle += 2;
-						}
-						else
-						{
-							firstFireAngle += 1;
-						}
+						SettedAngle = true;
 					}
+					animator->SetFrameY((int)31 - firstFireAngle);
 				}
-				else
-				{
-					SettedAngle = true;
-				}
-				animator->SetFrameY((int)31 - firstFireAngle);
 			}
 
 			if (cmd.KeyType == WormCommand::BackJump)
@@ -1008,8 +1081,17 @@ namespace InGame {
 			}
 			if (cmd.KeyType == WormCommand::UseItem)
 			{
-				timerStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(0));
-				return WormState::OnUseItem;
+				if (curItem != ItemInfo::Number::SkipGo)
+				{
+					timerStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(0));
+					return WormState::OnUseItem;
+				}
+				else
+				{
+					timerStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(0));
+					status->PushNeedHandleData(WormStatusHandleType::SkipGo, Gear::Status::StatHandleData(0));
+					return WormState::OnNothing;
+				}
 			}
 			if (SettedAngle)
 			{
@@ -1041,26 +1123,45 @@ namespace InGame {
 				}
 			}
 
-			if (cmd.KeyType == WormCommand::SetTimer1)
+			if (canChangeTime)
 			{
-				status->SetStat(WormInfo::Stat::ItemExplosionTime, 1.0f);
+				if (cmd.KeyType == WormCommand::SetTimer1)
+				{
+					status->SetStat(WormInfo::Stat::ItemExplosionTime, 1.0f);
+					std::string str = itemStr + ", 1 sec, MIN Bounce";
+					worldStatus->PopNeedHandleData(WorldStatusHandleType::DisplayMassage);
+					worldStatus->PushNeedHandleData(WorldStatusHandleType::DisplayMassage, Gear::Status::StatHandleData(WorldMassage(str, FontType::White)));
+				}
+				if (cmd.KeyType == WormCommand::SetTimer2)
+				{
+					status->SetStat(WormInfo::Stat::ItemExplosionTime, 2.0f);
+					std::string str = itemStr + ", 2 sec, MIN Bounce";
+					worldStatus->PopNeedHandleData(WorldStatusHandleType::DisplayMassage);
+					worldStatus->PushNeedHandleData(WorldStatusHandleType::DisplayMassage, Gear::Status::StatHandleData(WorldMassage(str, FontType::White)));
+				}
+				if (cmd.KeyType == WormCommand::SetTimer3)
+				{
+					status->SetStat(WormInfo::Stat::ItemExplosionTime, 3.0f);
+					std::string str = itemStr + ", 3 sec, MIN Bounce";
+					worldStatus->PopNeedHandleData(WorldStatusHandleType::DisplayMassage);
+					worldStatus->PushNeedHandleData(WorldStatusHandleType::DisplayMassage, Gear::Status::StatHandleData(WorldMassage(str, FontType::White)));
+				}
+				if (cmd.KeyType == WormCommand::SetTimer4)
+				{
+					status->SetStat(WormInfo::Stat::ItemExplosionTime, 4.0f);
+					std::string str = itemStr + ", 4 sec, MIN Bounce";
+					worldStatus->PopNeedHandleData(WorldStatusHandleType::DisplayMassage);
+					worldStatus->PushNeedHandleData(WorldStatusHandleType::DisplayMassage, Gear::Status::StatHandleData(WorldMassage(str, FontType::White)));
+				}
+				if (cmd.KeyType == WormCommand::SetTimer5)
+				{
+					status->SetStat(WormInfo::Stat::ItemExplosionTime, 5.0f);
+					std::string str = itemStr + ", 5 sec, MIN Bounce";
+					worldStatus->PopNeedHandleData(WorldStatusHandleType::DisplayMassage);
+					worldStatus->PushNeedHandleData(WorldStatusHandleType::DisplayMassage, Gear::Status::StatHandleData(WorldMassage(str, FontType::White)));
+				}
 			}
-			if (cmd.KeyType == WormCommand::SetTimer2)
-			{
-				status->SetStat(WormInfo::Stat::ItemExplosionTime, 2.0f);
-			}
-			if (cmd.KeyType == WormCommand::SetTimer3)
-			{
-				status->SetStat(WormInfo::Stat::ItemExplosionTime, 3.0f);
-			}
-			if (cmd.KeyType == WormCommand::SetTimer4)
-			{
-				status->SetStat(WormInfo::Stat::ItemExplosionTime, 4.0f);
-			}
-			if (cmd.KeyType == WormCommand::SetTimer5)
-			{
-				status->SetStat(WormInfo::Stat::ItemExplosionTime, 5.0f);
-			}
+			
 
 			return WormState::OnReadyItemUse;
 		}
@@ -1570,7 +1671,7 @@ namespace InGame {
 
 			int worldID = Gear::EntitySystem::GetEntityIDFromName("World");
 			auto worldFSM = Gear::EntitySystem::GetFSM(worldID);
-			worldFSM->SetCurrentState(8u);
+			worldFSM->SetCurrentState(WorldState::OnWaiting);
 
 			return WormState::OnNotMyTurn;
 		}

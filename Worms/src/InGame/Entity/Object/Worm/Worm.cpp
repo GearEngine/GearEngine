@@ -98,6 +98,17 @@ namespace InGame {
 			dyingAniOrder.push_back({ 0, 59 - i });
 		}
 
+		std::vector<std::pair<int, int>> skipReadyAniOrder;
+		for (int i = 0; i < 5; ++i)
+		{
+			skipReadyAniOrder.push_back({ 0, 4 - i });
+		}
+		std::vector<std::pair<int, int>> skipOnAniOrder;
+		for (int i = 0; i < 9; ++i)
+		{
+			skipOnAniOrder.push_back({ 0, 8 - i });
+		}
+
 		Gear::Ref<Gear::Animation2D> empty;
 		auto drawn = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Drawn"), 0.03f, true);
 		drawn->SetTintColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.3f));
@@ -232,6 +243,20 @@ namespace InGame {
 			{ WormState::OnRightUpBananaWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpBananaReady"), 0.02f, false) },
 			{ WormState::OnRightDownBananaWithdraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownBananaReady"), 0.02f, false) },
 
+			{ WormState::OnLeftFlatSkipGoReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatSkipGoReady"), 0.02f, skipReadyAniOrder, false) },
+			{ WormState::OnLeftUpSkipGoReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpSkipGoReady"), 0.02f, skipReadyAniOrder, false) },
+			{ WormState::OnLeftDownSkipGoReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownSkipGoReady"), 0.02f, skipReadyAniOrder, false) },
+			{ WormState::OnRightFlatSkipGoReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatSkipGoReady"), 0.02f, skipReadyAniOrder, false) },
+			{ WormState::OnRightUpSkipGoReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpSkipGoReady"), 0.02f, skipReadyAniOrder, false) },
+			{ WormState::OnRightDownSkipGoReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownSkipGoReady"), 0.02f, skipReadyAniOrder, false) },
+
+			{ WormState::OnLeftFlatSkipGoOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatSkipGoOn"), 0.04f, skipOnAniOrder, true) },
+			{ WormState::OnLeftUpSkipGoOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpSkipGoOn"), 0.04f, skipOnAniOrder, true) },
+			{ WormState::OnLeftDownSkipGoOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownSkipGoOn"), 0.04f, skipOnAniOrder, true) },
+			{ WormState::OnRightFlatSkipGoOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatSkipGoOn"), 0.04f, skipOnAniOrder, true) },
+			{ WormState::OnRightUpSkipGoOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpSkipGoOn"), 0.04f, skipOnAniOrder, true) },
+			{ WormState::OnRightDownSkipGoOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownSkipGoOn"), 0.04f, skipOnAniOrder, true) },
+
 			{ WormState::OnLeftFly,	Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftWormFly"), 0.02f, false)},
 			{ WormState::OnRightFly, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightWormFly"), 0.02f, false)},
 			
@@ -311,7 +336,8 @@ namespace InGame {
 			{ WormStatusHandleType::Damaged, Gear::CreateRef<WormGetDamageHanlder>() },
 			{ WormStatusHandleType::DisplayDamage, Gear::CreateRef<WormDisplayDamageHanlder>() },
 			{ WormStatusHandleType::DisplayAim, Gear::CreateRef<WormDisplayAimHandler>() },
-			{ WormStatusHandleType::AfterUseItem, Gear::CreateRef<WormAfterUseItemHanlder>() }
+			{ WormStatusHandleType::AfterUseItem, Gear::CreateRef<WormAfterUseItemHanlder>() },
+			{ WormStatusHandleType::SkipGo, Gear::CreateRef<WormSkipGoHanlder>() }
 		});
 
 		auto NameBorder = Gear::TextureStorage::GetTexture2D("WormNameBorder");

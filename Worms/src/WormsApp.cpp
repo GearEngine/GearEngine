@@ -32,7 +32,7 @@ public:
 		Gear::TextureStorage::AddTexture2D("BlueHpBar", Gear::Texture2D::Create("assets/textures/UI/BlueHp.png"));
 		Gear::TextureStorage::AddTexture2D("WhiteHpBar", Gear::Texture2D::Create("assets/textures/UI/WhiteHp.png"));
 		Gear::TextureStorage::AddTexture2D("ItemTimer", Gear::Texture2D::Create("assets/textures/UI/ItemTimer.png"));
-		//Gear::TextureStorage::AddTexture2D("WorldMassageBorder", Gear::Texture2D::Create("assets/textures/UI/WorldMassageBorder.png"));
+		Gear::TextureStorage::AddTexture2D("WorldMassageBorder", Gear::Texture2D::Create("assets/textures/UI/WorldMassageBorder.png"));
 
 		Gear::TextureStorage::AddTexture2D("ItemSelector2", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/2.png"));
 		Gear::TextureStorage::AddTexture2D("ItemSelector3", Gear::Texture2D::Create("assets/textures/UI/ItemSelector/3.png"));
@@ -217,6 +217,20 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RightFlatBananaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Banana/RightFlatBananaOn.png", 1, 32));
 		Gear::TextureStorage::AddFrameTexture2D("RightUpBananaOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Banana/RightUpBananaOn.png", 1, 32));
 
+		//SkipGo
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownSkipGoReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/SkipGo/LeftDownSkipGoReady.png", 1, 5));
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatSkipGoReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/SkipGo/LeftFlatSkipGoReady.png", 1, 5));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpSkipGoReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/SkipGo/LeftUpSkipGoReady.png", 1, 5));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownSkipGoReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/SkipGo/RightDownSkipGoReady.png", 1, 5));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatSkipGoReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/SkipGo/RightFlatSkipGoReady.png", 1, 5));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpSkipGoReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/SkipGo/RightUpSkipGoReady.png", 1, 5));
+
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownSkipGoOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/SkipGo/LeftDownSkipGoOn.png", 1, 9));
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatSkipGoOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/SkipGo/LeftFlatSkipGoOn.png", 1, 9));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpSkipGoOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/SkipGo/LeftUpSkipGoOn.png", 1, 9));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownSkipGoOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/SkipGo/RightDownSkipGoOn.png", 1, 9));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatSkipGoOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/SkipGo/RightFlatSkipGoOn.png", 1, 9));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpSkipGoOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/SkipGo/RightUpSkipGoOn.png", 1, 9));
 
 		//Icon
 		Gear::TextureStorage::AddTexture2D("ItemHighlighter", Gear::Texture2D::Create("assets/textures/Weapon/Icon/ItemHighlighter.png"));

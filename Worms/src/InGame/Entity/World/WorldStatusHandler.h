@@ -202,6 +202,7 @@ namespace InGame {
 
 	class WorldDisplayMasageHandler : public Gear::Status::StatusHandler
 	{
+
 		bool inFirst = true;
 		bool OnAwake = true;
 		float pastTime = 0.0f;
@@ -212,30 +213,34 @@ namespace InGame {
 
 		glm::mat4 m_Translate;
 		glm::vec3 m_FontScale;
-
+		glm::vec3 m_FontPosition;
+		
 		WorldMassage massage;
+		std::string massageStr;
+		FontType::Type fontType;
 
-		inline void Awake(int entityID)
+		void Awake(int entityID)
 		{
 			timer = Gear::EntitySystem::GetTimer(entityID);
 			massageBorder = Gear::TextureStorage::GetTexture2D("WorldMassageBorder");
 
-			m_Translate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.82f, ZOrder::z_FlatChecker)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.05f, 0.05f, 1.0f));
-			m_FontScale = glm::vec3(0.04f, 0.04f, ZOrder::z_FlatFont);
+			m_Translate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.88f, ZOrder::z_FlatChecker)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.7f, 0.07f, 1.0f));
+			m_FontPosition = glm::vec3(0.05f, 0.88f, ZOrder::z_FlatFont);
+			m_FontScale = glm::vec3(0.04f, 0.06f, 1.0f);
 		}
 
-		inline void init(int entityID)
+		void init(int entityID)
 		{
 			pastTime = 0.0f;
 			inFirst = false;
 		}
 
-		inline void OnOut(int entityID) override
+		void OnOut() override
 		{
 			inFirst = true;
 		}
 
-		inline void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
+		void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
 		{
 			if (OnAwake)
 			{
@@ -245,9 +250,21 @@ namespace InGame {
 			{
 				init(entityID);
 				massage = std::any_cast<WorldMassage>(data.Data);
+				massageStr = massage.Str;
+				fontType = massage.Type;
 			}
 
-			
+			pastTime += timer->GetTick();
+
+			Gear::Renderer2D::DrawFixedQuad(m_Translate, massageBorder);
+			Font::PrintFont(m_FontPosition, m_FontScale, massageStr, fontType, 0.02f);
+
+			if (pastTime > duration)
+			{
+				data.Handled = true;
+				OnOut();
+				return;
+			}
 		}
 	};
 }

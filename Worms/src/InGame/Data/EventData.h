@@ -88,8 +88,14 @@ namespace InGame {
 
 	struct WorldMassage
 	{
-		FontType::Type type;
-		std::string str;
+		WorldMassage() = default;
+
+		WorldMassage(const std::string& str, FontType::Type type)
+			: Str(str), Type(type)
+		{}
+
+		FontType::Type Type;
+		std::string Str;
 	};
 
 }

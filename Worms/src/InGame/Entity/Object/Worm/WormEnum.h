@@ -104,6 +104,14 @@ namespace InGame {
 			OnLeftUpBananaOn, OnRightUpBananaOn,
 			OnLeftDownBananaOn, OnRightDownBananaOn,
 
+			OnLeftFlatSkipGoOn, OnRightFlatSkipGoOn,
+			OnLeftUpSkipGoOn, OnRightUpSkipGoOn,
+			OnLeftDownSkipGoOn, OnRightDownSkipGoOn,
+
+			OnLeftFlatSkipGoReady, OnRightFlatSkipGoReady,
+			OnLeftUpSkipGoReady, OnRightUpSkipGoReady,
+			OnLeftDownSkipGoReady, OnRightDownSkipGoReady,
+
 			OnLeftFlatStuck, OnRightFlatStuck,
 			OnLeftUpStuck, OnRightUpStuck,
 			OnLeftDownStuck, OnRightDownStuck,
@@ -145,7 +153,8 @@ namespace InGame {
 			Damaged,
 			DisplayDamage,
 			DisplayAim,
-			AfterUseItem
+			AfterUseItem,
+			SkipGo
 		};
 	}
 

@@ -47,6 +47,7 @@ namespace Gear {
 			{
 				if (needHandle->first == type)
 				{
+					m_StatusHandlers[type]->OnOut();
 					m_NeedHandleList.erase(needHandle);
 					return;
 				}

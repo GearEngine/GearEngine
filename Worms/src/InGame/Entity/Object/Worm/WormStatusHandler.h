@@ -355,6 +355,94 @@ namespace InGame {
 		}
 	};
 
+	class WormSkipGoHanlder : public Gear::Status::StatusHandler
+	{
+		bool OnAwake = true;
+		bool inFirst = true;
+		bool aniChanged = false;
+		Gear::Ref<Gear::Timer> timer;
+		Gear::Ref<Gear::FSM> FSM;
+		Gear::Ref<Gear::Animator2D> animator;
+		Gear::Ref<Gear::Status> status;
+		Gear::Ref<Gear::Status> timerStatus;
+
+		float pastTime = 0.0f;
+		float TurnOverDelay = 3.0f;
+
+		void Awake(int entityID)
+		{
+			timer = Gear::EntitySystem::GetTimer(entityID);
+			FSM = Gear::EntitySystem::GetFSM(entityID);
+			animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			status = Gear::EntitySystem::GetStatus(entityID);
+
+			int timerID = Gear::EntitySystem::GetEntityIDFromName("Timer");
+			timerStatus = Gear::EntitySystem::GetStatus(timerID);
+		}
+
+		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
+		{
+			if (OnAwake)
+			{
+				Awake(entityID);
+			}
+
+			if (inFirst)
+			{
+				status->RegisterPushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 1.0f)));
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::TeamInfoBlinkOff)));
+				timerStatus->PushNeedHandleData(2u, Gear::Status::StatHandleData(0));
+				inFirst = false;
+			}
+
+			pastTime += timer->GetTick();
+
+			if (pastTime > TurnOverDelay)
+			{
+				inFirst = true;
+				bool aniChanged = false;
+				data.Handled = true;
+				pastTime = 0.0f;
+				timer->SetTimer(1.0f);
+				FSM->SetCurrentState(WormState::OnNotMyTurn);
+
+				status->SetStat(WormInfo::MyTurn, false);
+				Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
+				return;
+			}
+
+			if (animator->GetFrameIdx().second == 6 && !aniChanged)
+			{
+				WormInfo::DirectionType dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Stat::Direction));
+				switch (dir)
+				{
+				case WormInfo::DirectionType::LeftFlat:
+					animator->SetCurrentAnimation(WormState::OnLeftFlatBreath);
+					break;
+				case WormInfo::DirectionType::LeftUp:
+					animator->SetCurrentAnimation(WormState::OnLeftUpBreath);
+					break;
+				case WormInfo::DirectionType::LeftDown:
+					animator->SetCurrentAnimation(WormState::OnLeftDownBreath);
+					break;
+				case WormInfo::DirectionType::RightFlat:
+					animator->SetCurrentAnimation(WormState::OnRightFlatBreath);
+					break;
+				case WormInfo::DirectionType::RightUp:
+					animator->SetCurrentAnimation(WormState::OnRightUpBreath);
+					break;
+				case WormInfo::DirectionType::RightDown:
+					animator->SetCurrentAnimation(WormState::OnRightDownBreath);
+					break;
+				}
+				animator->ResumeAnimation();
+				aniChanged = true;
+			}
+		}
+	};
+
 	class WormDisplayDamageHanlder : public Gear::Status::StatusHandler
 	{
 		bool firstIn = true;
