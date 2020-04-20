@@ -16,7 +16,7 @@ namespace InGame {
 				int shooter = std::any_cast<int>(Gear::EntitySystem::GetStatus(entityID)->GetStat(Item::Info::From));
 				auto shooterStatus = Gear::EntitySystem::GetStatus(shooter);
 
-				shooterStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(std::make_pair( -0.2f, 0.0f )));
+				shooterStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(std::make_pair(-0.2f, 0.0f)));
 
 				*m_ExternalVector = { 0.0f, 0.0f };
 				return;
@@ -43,8 +43,8 @@ namespace InGame {
 				auto number = (unsigned int)std::any_cast<ItemInfo::Number>(status->GetStat(Item::Info::Number));
 				auto size = std::any_cast<Explosion::Size>(status->GetStat(Item::Info::ExplosionSize));
 				auto text = std::any_cast<Explosion::Text>(status->GetStat(Item::Info::ExplosionText));
-				
-				Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(checkPosition, size, power,number,from)));
+
+				Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(checkPosition, size, power, number, from)));
 				auto explosion = EffectPool::GetExplosion(size, text);
 				explosion->init(checkPosition);
 				ObjectLayer::s_Explosion.push_back(explosion);
@@ -61,8 +61,8 @@ namespace InGame {
 
 				int shooterID = std::any_cast<int>(status->GetStat(Item::Info::From));
 				auto shooterStatus = Gear::EntitySystem::GetStatus(shooterID);
-				
-				shooterStatus->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair( -0.2f, 1.0f )));
+
+				shooterStatus->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 1.0f)));
 			}
 		}
 	};
@@ -149,11 +149,20 @@ namespace InGame {
 
 					textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(checkPosition, *m_PixelCollisionTargetTextureTranslate);
 
+					//
 					ItemOnTexturePositionX = textureLocalPosition.x * m_TargetTextureWidth;
 					ItemOnTexturePositionY = textureLocalPosition.y * m_TargetTextureHeight;
 
-					pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX, ItemOnTexturePositionY });
-					if (pixel != m_TargetPixelColor)
+
+					const int offset = 6;
+					//pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX -3, ItemOnTexturePositionY });
+					auto leftside = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX - offset, ItemOnTexturePositionY });
+					auto rightside = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX + offset, ItemOnTexturePositionY });
+					auto bottomside = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX , ItemOnTexturePositionY - offset });
+					auto topside = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX , ItemOnTexturePositionY + offset });
+
+					const float coef = 0.5f;
+					if (bottomside != m_TargetPixelColor)
 					{
 						m_TargetPos->x = checkPosition.x;
 						m_TargetPos->y = checkPosition.y;
@@ -161,9 +170,73 @@ namespace InGame {
 						auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 						auto& externalVector = physics->GetExternalVector();
 
-						externalVector.x = -externalVector.x * 0.8f;
-						externalVector.y = -externalVector.y * 0.7f;
+						externalVector.x = externalVector.x * coef;
+						externalVector.y = -externalVector.y * coef;
+						std::cout << externalVector.x << " " << externalVector.y << std::endl;
+						if (fabsf(externalVector.x) < 1 && fabsf(externalVector.y) < 1)
+						{
+							externalVector.x = 0.f;
+							externalVector.y = 0.f;
+						}
+						break;
+					}
 
+					if (topside != m_TargetPixelColor)
+					{
+						m_TargetPos->x = checkPosition.x;
+						m_TargetPos->y = checkPosition.y;
+
+						auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
+						auto& externalVector = physics->GetExternalVector();
+
+						externalVector.x = externalVector.x * coef;
+						externalVector.y = -externalVector.y *coef;
+						std::cout << externalVector.x << " " << externalVector.y << std::endl;
+
+						if (fabsf(externalVector.x) < 1 && fabsf(externalVector.y) < 1)
+						{
+							externalVector.x = 0.f;
+							externalVector.y = 0.f;
+						}
+
+						break;
+					}
+
+					if (leftside != m_TargetPixelColor)
+					{
+						m_TargetPos->x = checkPosition.x;
+						m_TargetPos->y = checkPosition.y;
+
+						auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
+						auto& externalVector = physics->GetExternalVector();
+
+						externalVector.x = -externalVector.x *coef;
+						externalVector.y = externalVector.y * coef;
+						std::cout << externalVector.x << " " << externalVector.y << std::endl;
+						if (fabsf(externalVector.x) < 1 && fabsf(externalVector.y) < 1)
+						{
+							externalVector.x = 0.f;
+							externalVector.y = 0.f;
+						}
+						break;
+					}
+
+					if (rightside != m_TargetPixelColor)
+					{
+						m_TargetPos->x = checkPosition.x;
+						m_TargetPos->y = checkPosition.y;
+
+						auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
+						auto& externalVector = physics->GetExternalVector();
+
+						externalVector.x = -externalVector.x *coef;
+						externalVector.y = externalVector.y * coef;
+						std::cout << externalVector.x << " " << externalVector.y << std::endl;
+						if (fabsf(externalVector.x) < 1 && fabsf(externalVector.y) < 1)
+						{
+							externalVector.x = 0.f;
+							externalVector.y = 0.f;
+						}
 						break;
 					}
 				}
