@@ -232,6 +232,7 @@ namespace InGame {
 			int hp = std::any_cast<int>(Gear::EntitySystem::GetStatus(s_CurrentActivatedWormID)->GetStat(WormInfo::Hp));
 			if (hp != 0 && Gear::EntitySystem::IsEntityActivated(s_CurrentActivatedWormID))
 			{
+				Gear::EntitySystem::GetStatus(s_CurrentActivatedWormID)->SetStat(WormInfo::UsedItem, false);
 				break;
 			}
 		}

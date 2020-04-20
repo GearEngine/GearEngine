@@ -1143,9 +1143,32 @@ namespace InGame {
 			{
 				Awake(entityID);
 			}
-			status->SetStat(WormInfo::Stat::UsedItem, true);
-			status->PushNeedHandleData(WormStatusHandleType::AfterUseItem, Gear::Status::StatHandleData(2.0f));
-			return WormState::OnBreath;
+
+			bool isUsedItem = std::any_cast<bool>(status->GetStat(WormInfo::Stat::UsedItem));
+			if (!isUsedItem)
+			{
+				status->SetStat(WormInfo::Stat::UsedItem, true);
+				auto itemExplosionTime = std::any_cast<float>(status->GetStat(WormInfo::Stat::ItemExplosionTime));
+				ItemInfo::Number curItem = std::any_cast<ItemInfo::Number>(status->GetStat(WormInfo::Stat::SelectedItem));
+
+				switch (curItem)
+				{
+				case ItemInfo::Number::Bazooka:
+					status->PushNeedHandleData(WormStatusHandleType::AfterUseItem, Gear::Status::StatHandleData(std::make_pair(2.0f, 2.2f)));
+					break;
+				case ItemInfo::Number::Grenade:
+					status->PushNeedHandleData(WormStatusHandleType::AfterUseItem, Gear::Status::StatHandleData(std::make_pair(2.0f, itemExplosionTime + 0.5f)));
+					break;
+				case ItemInfo::Number::Banana:
+					status->PushNeedHandleData(WormStatusHandleType::AfterUseItem, Gear::Status::StatHandleData(std::make_pair(2.0f, itemExplosionTime + 1.0f)));
+					break;
+				}
+				return WormState::OnBreath;
+			}
+			else
+			{
+				return WormState::OnNothing;
+			}
 		}
 	};
 

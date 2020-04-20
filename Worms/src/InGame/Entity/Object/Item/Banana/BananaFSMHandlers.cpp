@@ -20,6 +20,7 @@ namespace InGame {
 			}
 		}
 		
+		
 		for (auto& BabyBanana : BabyBananas)
 		{
 			int BabyBananaID = BabyBanana->GetID();
@@ -28,6 +29,8 @@ namespace InGame {
 				return Item::State::OnExplosion;
 			}
 		}
+
+		
 		Gear::EntitySystem::RegisterInActivateEntity(entityID);
 		InFirst = true;
 		return Item::State::OnExplosion;

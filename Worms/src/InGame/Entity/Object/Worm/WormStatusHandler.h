@@ -493,6 +493,7 @@ namespace InGame {
 		bool turnOffController = true;
 
 		float delay;
+		float afterDelay;
 		float pastTime = 0.0f;
 		Gear::Ref<Gear::Timer> timer;
 		Gear::Ref<Gear::FSM> FSM;
@@ -516,7 +517,9 @@ namespace InGame {
 			}
 			if (inFirst)
 			{
-				delay = std::any_cast<float>(data.Data);
+				auto delays = std::any_cast<std::pair<float, float>>(data.Data);
+				delay = delays.first;
+				afterDelay = delays.second;
 				pastTime = 0.0f;
 				inFirst = false;
 			}
@@ -555,26 +558,29 @@ namespace InGame {
 					}
 					turnOffController = false;
 				}
-				
-				if (curState == WormState::OnAttacked)
-				{
-					data.Handled = true;
-					turnOffController = true;
-					return;
-				}
+			}
+
+			float tick = timer->GetTick();
+			pastTime += tick;
+			
+			if (pastTime > afterDelay)
+			{
 				if (FSM->GetCurrentState() == WormState::OnBreath)
 				{
-					FSM->SetCurrentState(WormState::OnNothing);
+					FSM->SetCurrentState(WormState::OnAfterUseItem);
 					turnOffController = true;
 					data.Handled = true;
+					inFirst = true;
+					return;
+				}
+				else
+				{
+					turnOffController = true;
+					data.Handled = true;
+					inFirst = true;
+					return;
 				}
 			}
-			else
-			{
-				float tick = timer->GetTick();
-				pastTime += tick;
-			}
-			
 		}
 	};
 }

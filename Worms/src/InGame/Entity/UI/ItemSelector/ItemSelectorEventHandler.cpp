@@ -121,12 +121,12 @@ namespace InGame {
 					if ((*it).Quantity == 0)
 					{
 						itemVector.erase(it);
+						erased = true;
 					}
 					auto status = Gear::EntitySystem::GetStatus(entityID);
 					auto itemlist = std::any_cast<std::unordered_map<std::string, std::vector<ItemInfo::ItemDescprition>>>(status->GetStat(ItemSelectorInfo::Stat::ItemList));
 					itemlist[currentTeam] = itemVector;
 					status->SetStat(ItemSelectorInfo::ItemList, itemlist);
-					erased = true;
 					break;
 				}
 			}
