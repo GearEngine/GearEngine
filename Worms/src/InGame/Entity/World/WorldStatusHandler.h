@@ -230,7 +230,7 @@ namespace InGame {
 			inFirst = false;
 		}
 
-		inline void OnOut(int entityID)
+		inline void OnOut(int entityID) override
 		{
 			inFirst = true;
 		}

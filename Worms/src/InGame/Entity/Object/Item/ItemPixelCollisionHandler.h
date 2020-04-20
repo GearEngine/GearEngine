@@ -25,7 +25,6 @@ namespace InGame {
 			auto FSM = Gear::EntitySystem::GetFSM(entityID);
 			float angle = Gear::Util::GetAngleFromXY(m_ExternalVector->x, m_ExternalVector->y);
 
-			GR_TRACE("{0} {1}", m_TargetPos->x, m_TargetPos->y);
 			glm::vec2 checkPosition(m_TargetPos->x + radius * glm::cos(glm::radians(angle)), m_TargetPos->y + radius * glm::sin(glm::radians(angle)));
 
 			auto textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(checkPosition, *m_PixelCollisionTargetTextureTranslate);

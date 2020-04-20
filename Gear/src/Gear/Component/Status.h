@@ -26,7 +26,7 @@ namespace Gear {
 		class StatusHandler
 		{
 		public:
-			virtual void OnOut(int entityID);
+			virtual void OnOut(int entityID) {}
 			virtual void Handle(int entityID, StatHandleData& data, std::unordered_map<EnumType, std::any>& statusList) = 0;
 		};
 
