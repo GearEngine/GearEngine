@@ -11,6 +11,7 @@ namespace InGame {
 		Gear::Ref<Gear::FSM> m_FSM;
 		glm::vec3 m_FontScale;
 		glm::mat4 m_translate;
+		float positionOffset = 0.5f;
 
 		void init(int entityID)
 		{
@@ -38,8 +39,8 @@ namespace InGame {
 			float remainTime = timer->GetRemainTime() + 0.9f;
 			auto position = m_Transform->GetPosition();
 
-			m_translate[3][0] = position.x - 0.4f;
-			m_translate[3][1] = position.y + 0.4f;
+			m_translate[3][0] = position.x - 0.5f;
+			m_translate[3][1] = position.y + 0.5f;
 			
 			if (remainTime >= 3)
 			{

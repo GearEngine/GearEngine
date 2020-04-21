@@ -24,9 +24,14 @@ namespace InGame {
 			damageDisplay = true;
 		}
 
-		if (transform->GetPosition().y < -19.f)
+		if (transform->GetPosition().y < -18.5f && !sendDyeEvent)
 		{
 			Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::WormDie, 0, entityID)));
+			sendDyeEvent = true;
+		}
+
+		if (transform->GetPosition().y < -19.f)
+		{
 			Gear::EntitySystem::RegisterInActivateEntity(entityID);
 
 			int damagedWormCount = 0;

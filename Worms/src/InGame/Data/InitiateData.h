@@ -157,7 +157,7 @@ namespace InGame {
 		float LimitTurnTime = 45.0f;
 		int LimitSuddenDeathTurn = 10;
 		
-		int WormMaxHP = 150;
+		int WormMaxHP = 100;
 
 		MapInfo Mapinfo;
 		float WormMoveSpeed = 1.0f;

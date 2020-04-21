@@ -1312,7 +1312,7 @@ namespace InGame {
 				switch (curItem)
 				{
 				case ItemInfo::Number::Bazooka:
-					status->PushNeedHandleData(WormStatusHandleType::AfterUseItem, Gear::Status::StatHandleData(std::make_pair(2.0f, 2.2f)));
+					status->PushNeedHandleData(WormStatusHandleType::AfterUseItem, Gear::Status::StatHandleData(std::make_pair(2.0f, 2.1f)));
 					break;
 				case ItemInfo::Number::Grenade:
 					status->PushNeedHandleData(WormStatusHandleType::AfterUseItem, Gear::Status::StatHandleData(std::make_pair(2.0f, itemExplosionTime + 0.5f)));
@@ -1422,6 +1422,7 @@ namespace InGame {
 		ItemInfo::Number weapon;
 		int TimerCheckerID;
 		Gear::Ref<Gear::Status> timerStatus;
+		WormInfo::DirectionType dir;
 
 		inline float GetAngle(int entityID)
 		{
@@ -1430,7 +1431,7 @@ namespace InGame {
 
 			float nativeFireAngle = std::any_cast<float>(status->GetStat(WormInfo::FireAngle));
 			auto WormPosition = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition();
-			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
+			dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
 
 			if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat || dir == WormInfo::DirectionType::LeftUp)
 			{
@@ -1458,7 +1459,6 @@ namespace InGame {
 			auto status = Gear::EntitySystem::GetStatus(entityID);
 
 			weapon = std::any_cast<ItemInfo::Number>(status->GetStat(WormInfo::SelectedItem));
-			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
 
 			if (weapon == ItemInfo::Number::Bazooka)
 			{
@@ -1595,6 +1595,7 @@ namespace InGame {
 					glm::vec3 position = transform->GetPosition();
 					auto item = ITEM_POOL->GetItem(std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem)));
 					auto explosionTime = std::any_cast<float>(status->GetStat(WormInfo::Stat::ItemExplosionTime));
+					
 					item->init(position, angle, shootPower * powerRate, entityID, explosionTime);
 
 					FSM->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
@@ -1740,6 +1741,7 @@ namespace InGame {
 		Gear::Ref<Gear::Timer> timer;
 		Gear::Ref<Gear::Status> status;
 
+		bool sendDyeEvent = false;
 		bool damageDisplay = false;
 
 		void Awake(int entityID) override

@@ -67,9 +67,9 @@ namespace InGame {
 		physics->SetExternalVector(ExternalVector);
 		physics->SetPixelCollisionHandler("GrenadePC");
 
-		auto statsu = Gear::EntitySystem::GetStatus(m_ID);
-		statsu->SetStat(Item::Info::From, From);
-		statsu->PushNeedHandleData(Item::StatusHandleType::DisplayRemainTime, Gear::Status::StatHandleData(0));
+		auto status = Gear::EntitySystem::GetStatus(m_ID);
+		status->SetStat(Item::Info::From, From);
+		status->PushNeedHandleData(Item::StatusHandleType::DisplayRemainTime, Gear::Status::StatHandleData(0));
 	}
 
 }

@@ -8,10 +8,14 @@ namespace InGame {
 	class GrenadeOnGoingHandler : public Gear::FSM::InputHandler
 	{
 		Gear::Ref<Gear::Timer> timer;
-		
+		Gear::Ref<Gear::Physics2D> physics;
+		Gear::Ref<Gear::Transform2D> transform;
+
 		virtual void Awake(int entityID)
 		{
 			timer = Gear::EntitySystem::GetTimer(entityID);
+			physics = Gear::EntitySystem::GetPhysics2D(entityID);
+			transform = Gear::EntitySystem::GetTransform2D(entityID);
 			OnAwake = false;
 		}
 
@@ -21,6 +25,12 @@ namespace InGame {
 			{
 				Awake(entityID);
 			}
+
+			float& angle = transform->GetRotation();
+			auto& externalVector = physics->GetExternalVector();
+			float externalVectorPower = std::abs(externalVector.x) + std::abs(externalVector.y);
+			angle -= externalVectorPower * timer->GetTick() * 0.8f;
+			
 
 			if (timer->isExpired())
 			{

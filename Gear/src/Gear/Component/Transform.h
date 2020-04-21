@@ -32,7 +32,7 @@ namespace Gear {
 		glm::mat4& GetTranslate();
 		inline glm::vec3& GetPosition() { return m_Position; }
 		inline glm::vec2& GetScale() { return m_Scale; }
-		inline float GetRotation() { return m_Rotation; }
+		inline float& GetRotation() { return m_Rotation; }
 
 	private:
 		void intialize();

@@ -68,7 +68,7 @@ namespace InGame {
 
 	class GrenadeTypePCHandler : public Gear::Physics2D::PixelCollisionHander
 	{
-		float radius = 0.2f;
+		float radius = 0.1f;
 		bool explosionDone = false;
 
 		inline virtual void Handle(int entityID) override
@@ -120,128 +120,152 @@ namespace InGame {
 				return;
 			}
 
-			auto FSM = Gear::EntitySystem::GetFSM(entityID);
-			float angle = Gear::Util::GetAngleFromXY(m_ExternalVector->x, m_ExternalVector->y);
-
-			//ÆøÅºÀÇ ¿ùµåÁÂÇ¥
-			glm::vec2 checkPosition(m_TargetPos->x + radius * glm::cos(glm::radians(angle)), m_TargetPos->y + radius * glm::sin(glm::radians(angle)));
-
-			//¸¶½ºÅ©ÀÇ ·ÎÄÃÁÂÇ¥
-			auto textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(checkPosition, *m_PixelCollisionTargetTextureTranslate);
-
-			//¸¶½ºÅ©ÀÇ ÀÎµ¦½º
-			float ItemOnTexturePositionX = textureLocalPosition.x * m_TargetTextureWidth;
-			float ItemOnTexturePositionY = textureLocalPosition.y * m_TargetTextureHeight;
-
-			//¸¶½ºÅ©ÀÇ ÀÎµ¦½º·Î ÇÈ¼¿°¡Á®¿À±â
-			auto pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX, ItemOnTexturePositionY });
-
-			if (pixel == m_TargetPixelColor)
+			glm::vec2 checkPosition;
+			glm::vec3 pixel;
+			float ItemOnTexturePositionX;
+			float ItemOnTexturePositionY;
+			bool leftCollision = false, rightCollision = false;
+			bool downCollision = false, upCollision = false;
+			
+			//Up 
+			checkPosition.x = m_TargetPos->x;
+			checkPosition.y = m_TargetPos->y;
+			if (m_ExternalVector->y > 0.0f)
 			{
-				//adjustPosition
-				float repositionRadius = radius;
-				while (1)
+				checkPosition.y = m_TargetPos->y + radius;
+				auto textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(checkPosition, *m_PixelCollisionTargetTextureTranslate);
+				ItemOnTexturePositionX = textureLocalPosition.x * m_TargetTextureWidth;
+				ItemOnTexturePositionY = textureLocalPosition.y * m_TargetTextureHeight;
+				pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX, ItemOnTexturePositionY });
+				if (pixel == m_TargetPixelColor)
 				{
-					repositionRadius -= 0.1f;
-					checkPosition.x = m_TargetPos->x + repositionRadius * glm::cos(glm::radians(angle));
-					checkPosition.y = m_TargetPos->y + repositionRadius * glm::sin(glm::radians(angle));
-
-					textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(checkPosition, *m_PixelCollisionTargetTextureTranslate);
-
-					//
-					ItemOnTexturePositionX = textureLocalPosition.x * m_TargetTextureWidth;
-					ItemOnTexturePositionY = textureLocalPosition.y * m_TargetTextureHeight;
-
-
-					const int offset = 6;
-					//pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX -3, ItemOnTexturePositionY });
-					auto leftside = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX - offset, ItemOnTexturePositionY });
-					auto rightside = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX + offset, ItemOnTexturePositionY });
-					auto bottomside = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX , ItemOnTexturePositionY - offset });
-					auto topside = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX , ItemOnTexturePositionY + offset });
-
-					const float coef = 0.5f;
-					if (bottomside != m_TargetPixelColor)
+					int fixedYPos = 0;
+					for (int i = 1; i <= 40; ++i)
 					{
-						m_TargetPos->x = checkPosition.x;
-						m_TargetPos->y = checkPosition.y;
-
-						auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
-						auto& externalVector = physics->GetExternalVector();
-
-						externalVector.x = externalVector.x * coef;
-						externalVector.y = -externalVector.y * coef;
-						//std::cout << externalVector.x << " " << externalVector.y << std::endl;
-						if (fabsf(externalVector.x) < 1 && fabsf(externalVector.y) < 1)
+						fixedYPos = ItemOnTexturePositionY - i;
+						pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX, fixedYPos });
+						if (pixel != m_TargetPixelColor)
 						{
-							externalVector.x = 0.f;
-							externalVector.y = 0.f;
+							upCollision = true;
+							float localY = (fixedYPos) / m_TargetTextureHeight - 0.5f;
+							m_TargetPos->y = (*m_PixelCollisionTargetTextureTranslate)[1][1] * localY + (*m_PixelCollisionTargetTextureTranslate)[3][1];
+							m_ExternalVector->y = -m_ExternalVector->y;
+							m_ExternalVector->x *= 0.9f;
+							break;
 						}
-						break;
-					}
-
-					if (topside != m_TargetPixelColor)
-					{
-						m_TargetPos->x = checkPosition.x;
-						m_TargetPos->y = checkPosition.y;
-
-						auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
-						auto& externalVector = physics->GetExternalVector();
-
-						externalVector.x = externalVector.x * coef;
-						externalVector.y = -externalVector.y *coef;
-						//std::cout << externalVector.x << " " << externalVector.y << std::endl;
-
-						if (fabsf(externalVector.x) < 1 && fabsf(externalVector.y) < 1)
-						{
-							externalVector.x = 0.f;
-							externalVector.y = 0.f;
-						}
-
-						break;
-					}
-
-					if (leftside != m_TargetPixelColor)
-					{
-						m_TargetPos->x = checkPosition.x;
-						m_TargetPos->y = checkPosition.y;
-
-						auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
-						auto& externalVector = physics->GetExternalVector();
-
-						externalVector.x = -externalVector.x *coef;
-						externalVector.y = externalVector.y * coef;
-						//std::cout << externalVector.x << " " << externalVector.y << std::endl;
-						if (fabsf(externalVector.x) < 1 && fabsf(externalVector.y) < 1)
-						{
-							externalVector.x = 0.f;
-							externalVector.y = 0.f;
-						}
-						break;
-					}
-
-					if (rightside != m_TargetPixelColor)
-					{
-						m_TargetPos->x = checkPosition.x;
-						m_TargetPos->y = checkPosition.y;
-
-						auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
-						auto& externalVector = physics->GetExternalVector();
-
-						externalVector.x = -externalVector.x *coef;
-						externalVector.y = externalVector.y * coef;
-						//std::cout << externalVector.x << " " << externalVector.y << std::endl;
-						if (fabsf(externalVector.x) < 1 && fabsf(externalVector.y) < 1)
-						{
-							externalVector.x = 0.f;
-							externalVector.y = 0.f;
-						}
-						break;
 					}
 				}
-
-
 			}
+			//Down
+			else if (m_ExternalVector->y <= 0.0f)
+			{
+				checkPosition.y = m_TargetPos->y - radius;
+				auto textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(checkPosition, *m_PixelCollisionTargetTextureTranslate);
+				ItemOnTexturePositionX = textureLocalPosition.x * m_TargetTextureWidth;
+				ItemOnTexturePositionY = textureLocalPosition.y * m_TargetTextureHeight;
+				pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX, ItemOnTexturePositionY });
+				if (pixel == m_TargetPixelColor)
+				{
+					int fixedYPos = 0;
+					for (int i = 1; i <= 40; ++i)
+					{
+						fixedYPos = ItemOnTexturePositionY + i;
+						pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX, fixedYPos });
+						if (pixel != m_TargetPixelColor)
+						{
+							float localY = (fixedYPos) / m_TargetTextureHeight - 0.5f;
+							m_TargetPos->y = (*m_PixelCollisionTargetTextureTranslate)[1][1] * localY + (*m_PixelCollisionTargetTextureTranslate)[3][1];
+							if (m_ExternalVector->y < -7.0f)
+							{
+								m_ExternalVector->y = -m_ExternalVector->y * 0.5f;
+								m_ExternalVector->x *= 0.5f;
+							}
+							else if(m_ExternalVector->y < -5.0f)
+							{
+								m_ExternalVector->y = -m_ExternalVector->y * 0.6f;
+								m_ExternalVector->x *= 0.6f;
+							}
+							else if (m_ExternalVector->y < -3.0f)
+							{
+								m_ExternalVector->y = -m_ExternalVector->y * 0.7f;
+								m_ExternalVector->x *= 0.7f;
+							}
+							else
+							{
+								m_ExternalVector->y = -m_ExternalVector->y * 0.8f;
+								m_ExternalVector->x *= 0.8f;
+							}
+							downCollision = true;
+							break;
+						}
+					}
+				}
+			}
+
+			if (downCollision || upCollision)
+			{
+				return;
+			}
+
+			checkPosition.x = m_TargetPos->x;
+			checkPosition.y = m_TargetPos->y;
+			//left 
+			if (m_ExternalVector->x < 0.0f)
+			{
+				checkPosition.x = m_TargetPos->x - radius;
+				auto textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(checkPosition, *m_PixelCollisionTargetTextureTranslate);
+				ItemOnTexturePositionX = textureLocalPosition.x * m_TargetTextureWidth;
+				ItemOnTexturePositionY = textureLocalPosition.y * m_TargetTextureHeight;
+				pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX, ItemOnTexturePositionY });
+				if (pixel == m_TargetPixelColor)
+				{
+					leftCollision = true;
+					int fixedXPos = 0;
+					for (int i = 1; i <= 10; ++i)
+					{
+						fixedXPos = ItemOnTexturePositionX + i;
+						pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { fixedXPos, ItemOnTexturePositionY });
+						if (pixel != m_TargetPixelColor)
+						{
+							float localX = (fixedXPos) / m_TargetTextureWidth - 0.5f;
+							m_TargetPos->x = (*m_PixelCollisionTargetTextureTranslate)[0][0] * localX + (*m_PixelCollisionTargetTextureTranslate)[3][0];
+							break;
+						}
+					}
+				}
+			}
+			//right
+			else if(m_ExternalVector->x > 0.0f)
+			{
+				checkPosition.x = m_TargetPos->x + radius;
+				auto textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(checkPosition, *m_PixelCollisionTargetTextureTranslate);
+				ItemOnTexturePositionX = textureLocalPosition.x * m_TargetTextureWidth;
+				ItemOnTexturePositionY = textureLocalPosition.y * m_TargetTextureHeight;
+				pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX, ItemOnTexturePositionY });
+				if (pixel == m_TargetPixelColor)
+				{
+					rightCollision = true;
+					int fixedXPos = 0;
+					for (int i = 1; i < 10; ++i)
+					{
+						fixedXPos = ItemOnTexturePositionX - i;
+						pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { fixedXPos, ItemOnTexturePositionY });
+						if (pixel != m_TargetPixelColor)
+						{
+							float localX = (fixedXPos) / m_TargetTextureWidth - 0.5f;
+							m_TargetPos->x = (*m_PixelCollisionTargetTextureTranslate)[0][0] * localX + (*m_PixelCollisionTargetTextureTranslate)[3][0];
+							break;
+						}
+					}
+				}
+			}
+			if (leftCollision || rightCollision)
+			{
+				m_ExternalVector->x = -m_ExternalVector->x * 0.8f;
+			}
+
+
+			
 		}
 	};
 

@@ -61,7 +61,5 @@ namespace InGame {
 		glm::vec2 ExternalVector(initPower * glm::cos(glm::radians(initAngle)), initPower * glm::sin(glm::radians(initAngle)));
 		physics->SetExternalVector(ExternalVector);
 		physics->SetPixelCollisionHandler("BabyPC");
-
-		
 	}
 }

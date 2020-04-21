@@ -15,30 +15,14 @@ namespace InGame {
 		
 		auto tick = Gear::EntitySystem::GetTimer(entityID)->GetTick();
 
-		auto externalVector = physics->GetExternalVector();
-	
-		float angle = Gear::Util::GetAngleFromXY(externalVector.x, externalVector.y);
-		int textureIndex = angle / 360.0f * 31.0f - 7;
-		if (textureIndex < 0)
-		{
-			textureIndex += 31;
-		}
-
-		if (abs(externalVector.x) <= 0.0001f)
-		{
-			if (externalVector.y > 0.0f)
-			{
-				textureIndex = 0;
-			}
-			else
-			{
-				textureIndex = 15;
-			}
-		}
-		animator->SetFrameY(textureIndex);
 		float currentWind = BackGroundLayer::GetCurrentWind();
+		auto externalVector = physics->GetExternalVector();
 		externalVector.x += currentWind * tick * WindAdjustRatio;
 		physics->SetExternalVectorX(externalVector.x);
+
+		float angle = Gear::Util::GetAngleFromXY(externalVector.x, externalVector.y);
+		angle -= 90.0f;
+		transform->SetRotation(glm::radians(angle));
 
 		//Gen Exhaust
 		m_pastTime += tick;

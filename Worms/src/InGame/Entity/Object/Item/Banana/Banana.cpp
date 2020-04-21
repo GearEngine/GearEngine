@@ -49,7 +49,7 @@ namespace InGame {
 
 		Gear::EntitySystem::SetStatus(m_ID, {
 			{ Item::Info::Angle, 0.0f}, { Item::Info::Power, 75.0f }, {Item::Info::ExplosionText, Explosion::Text::Biff}, { Item::Info::ExplosionSize, Explosion::Size::Size75 },
-			{ Item::Info::From, -1}, { Item::Info::Number, ItemInfo::Number::Banana }, {Item::Info::Baby, babies}
+			{ Item::Info::From, -1}, { Item::Info::Number, ItemInfo::Number::Banana }, {Item::Info::Baby, babies }
 		});
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {
