@@ -133,5 +133,45 @@ namespace InGame {
 			return WorldState::OnQuitWindow;
 		}
 	};
+	
+	class WorldOnVictoryHandler : public Gear::FSM::InputHandler
+	{
+		bool inFirst = true;
+
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			if (inFirst)
+			{
+				inFirst = false;
+				for (int i = 0; i < WorldWormData::s_ActiveWorms.size(); ++i)
+				{
+					auto animator = Gear::EntitySystem::GetAnimator2D(WorldWormData::s_ActiveWorms[i]);
+					animator->PlayAnimation(WormState::OnVictory);
+				}
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, 0, WorldWormData::s_ActiveWorms[0])));
+			}
+			return WorldState::OnGameVictory;
+		}
+	};
+
+	class WorldOnDrawHandler : public Gear::FSM::InputHandler
+	{
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+
+			return WorldState::OnGameDraw;
+		}
+
+	};
+
+	class WorldOnGameEndHandler : public Gear::FSM::InputHandler
+	{
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			
+			return WorldState::OnGameEnd;
+		}
+
+	};
 
 }

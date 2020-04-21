@@ -5,6 +5,8 @@
 #include "InGame/Entity/Object/Item/Item.h"
 #include "InGame/Entity/Object/Grave/Grave.h"
 
+#include "InGame/Entity/World/World.h"
+
 namespace InGame {
 
 	std::unordered_map<std::string, std::vector<Gear::Ref<Worm>>> ObjectLayer::s_Worms = std::unordered_map<std::string, std::vector<Gear::Ref<Worm>>>();
@@ -199,10 +201,27 @@ namespace InGame {
 	{
 		static std::unordered_map<std::string, TeamInfo>::iterator prevTeamIter = s_TeamInfo.begin();
 
-		if (s_CurrentActivatedWormID != -1)
+		/*if (s_CurrentActivatedWormID != -1)
 		{
 			Gear::EntitySystem::GetFSM(s_CurrentActivatedWormID)->SetCurrentState(WormState::OnNotMyTurn);
+		}*/
+		TurnCheck();
+		int gameEndCheckResult = GameEndCheck();
+		if (gameEndCheckResult == 0)
+		{
+			int worldID = Gear::EntitySystem::GetEntityIDFromName("World");
+			auto worldFSM = Gear::EntitySystem::GetFSM(worldID);
+			worldFSM->SetCurrentState(WorldState::OnGameDraw);
+			return;
 		}
+		if (gameEndCheckResult == 1)
+		{
+			int worldID = Gear::EntitySystem::GetEntityIDFromName("World");
+			auto worldFSM = Gear::EntitySystem::GetFSM(worldID);
+			worldFSM->SetCurrentState(WorldState::OnGameVictory);
+			return;
+		}
+
 		while (1)
 		{
 			s_TeamIter++;
@@ -230,13 +249,47 @@ namespace InGame {
 			}
 			s_CurrentActivatedWormID = s_Worms[s_TeamIter->first][s_curWorm]->GetID();
 			int hp = std::any_cast<int>(Gear::EntitySystem::GetStatus(s_CurrentActivatedWormID)->GetStat(WormInfo::Hp));
-			if (hp != 0 && Gear::EntitySystem::IsEntityActivated(s_CurrentActivatedWormID))
+			bool isSurrender = std::any_cast<bool>(Gear::EntitySystem::GetStatus(s_CurrentActivatedWormID)->GetStat(WormInfo::Surrendered));
+			if (hp != 0 && Gear::EntitySystem::IsEntityActivated(s_CurrentActivatedWormID) && !isSurrender)
 			{
 				Gear::EntitySystem::GetStatus(s_CurrentActivatedWormID)->SetStat(WormInfo::UsedItem, false);
+				Gear::EntitySystem::GetStatus(s_CurrentActivatedWormID)->SetStat(WormInfo::TurnPassed, true);
 				break;
 			}
 		}
 		s_turnChanged = true;
+	}
+
+	int ObjectLayer::GameEndCheck()
+	{
+		std::set<TeamColor::Color> turnCheckSet;
+		for (int i = 0; i < WorldWormData::s_ActiveWorms.size(); ++i)
+		{
+			auto status = Gear::EntitySystem::GetStatus(WorldWormData::s_ActiveWorms[i]);
+			auto teamColor = std::any_cast<TeamColor::Color>(status->GetStat(WormInfo::TeamColor));
+			turnCheckSet.insert(teamColor);
+		}
+		return turnCheckSet.size();
+	}
+
+	void ObjectLayer::TurnCheck()
+	{
+		for (int i = 0; i < WorldWormData::s_ActiveWorms.size(); ++i)
+		{
+			auto status = Gear::EntitySystem::GetStatus(WorldWormData::s_ActiveWorms[i]);
+			bool turnPassed = std::any_cast<bool>(status->GetStat(WormInfo::TurnPassed));
+			if(!turnPassed)
+			{
+				return;
+			}
+		}
+
+		for (int i = 0; i < WorldWormData::s_ActiveWorms.size(); ++i)
+		{
+			auto status = Gear::EntitySystem::GetStatus(WorldWormData::s_ActiveWorms[i]);
+			status->SetStat(WormInfo::TurnPassed, false);
+		}
+		World::s_CurrentTurn += 1;
 	}
 
 }

@@ -23,6 +23,8 @@ namespace InGame {
 
 	public:
 		static void ChangeWorm();
+		static int GameEndCheck();
+		static void TurnCheck();
 
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Explosion;
 		static std::vector<Gear::Ref<ExplosionSmokeBunddle>> s_ExplosionSmoke;

@@ -15,6 +15,9 @@ namespace InGame {
 			OnQuitWindow,
 			OnPrepareNextPhase,
 			OnWaiting,
+			OnGameDraw,
+			OnGameVictory,
+			OnGameEnd,
 			InGameStart
 		};
 

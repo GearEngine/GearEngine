@@ -1,14 +1,6 @@
 #pragma once
 
 #include "InGame/Entity/UI/Checker/TimerEventHandler.h"
-//OnStart,
-//OnRunning,
-//OnWormsDying,
-//OnPrepareRun,
-//OnWindowSelect,
-//OnItemWindow,
-//OnQuitWindow,
-//OnPrepareNextPhase
 
 namespace InGame {
 

@@ -133,9 +133,9 @@ namespace InGame {
 		}
 		if (erased)
 		{
-			for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
+			for (int i = 0; i < WorldWormData::s_ActiveWorms.size(); ++i)
 			{
-				auto status = Gear::EntitySystem::GetStatus(WorldWormData::s_LivingWorms[i]);
+				auto status = Gear::EntitySystem::GetStatus(WorldWormData::s_ActiveWorms[i]);
 				auto team = std::any_cast<std::string>(status->GetStat(WormInfo::TeamName));
 
 				if (currentTeam == team)

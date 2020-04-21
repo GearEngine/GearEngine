@@ -34,6 +34,7 @@ namespace InGame {
 			OnUnderWater,
 			OnAfterDamaged,
 			OnNothing,
+			OnVictory,
 			OnAfterUseItem,
 
 			OnLeftFlatMove, OnRightFlatMove,
@@ -112,6 +113,14 @@ namespace InGame {
 			OnLeftUpSkipGoReady, OnRightUpSkipGoReady,
 			OnLeftDownSkipGoReady, OnRightDownSkipGoReady,
 
+			OnLeftFlatSurrenderOn, OnRightFlatSurrenderOn,
+			OnLeftUpSurrenderOn, OnRightUpSurrenderOn,
+			OnLeftDownSurrenderOn, OnRightDownSurrenderOn,
+
+			OnLeftFlatSurrenderReady, OnRightFlatSurrenderReady,
+			OnLeftUpSurrenderReady, OnRightUpSurrenderReady,
+			OnLeftDownSurrenderReady, OnRightDownSurrenderReady,
+
 			OnLeftFlatStuck, OnRightFlatStuck,
 			OnLeftUpStuck, OnRightUpStuck,
 			OnLeftDownStuck, OnRightDownStuck,
@@ -154,7 +163,8 @@ namespace InGame {
 			DisplayDamage,
 			DisplayAim,
 			AfterUseItem,
-			SkipGo
+			SkipGo,
+			Surrender
 		};
 	}
 

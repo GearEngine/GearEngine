@@ -10,6 +10,7 @@ namespace InGame {
 	{
 	public: 
 		static std::vector<int> s_LivingWorms;
+		static std::vector<int> s_ActiveWorms;
 		static std::queue<int> s_WaitingDyeQue;
 	};
 
@@ -109,9 +110,9 @@ namespace InGame {
 			if (worldData.DataType == WorldDataType::NewFollow)
 			{
 				bool isWorm = false;
-				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
+				for (int i = 0; i < WorldWormData::s_ActiveWorms.size(); ++i)
 				{
-					if (worldData.EntityID == WorldWormData::s_LivingWorms[i])
+					if (worldData.EntityID == WorldWormData::s_ActiveWorms[i])
 					{
 						isWorm = true;
 						break;
@@ -119,6 +120,13 @@ namespace InGame {
 				}
 
 				if (!isWorm)
+				{
+					handled = true;
+					return;
+				}
+
+				auto worldState = FSM->GetCurrentState();
+				if (worldState == WorldState::OnGameVictory)
 				{
 					handled = true;
 					return;
@@ -150,6 +158,58 @@ namespace InGame {
 			if (worldData.DataType == WorldDataType::TeamInfoBlinkOff)
 			{
 				status->SetStat(WorldInfo::TeamInfoBlink, false);
+				handled = true;
+				return;
+			}
+			if (worldData.DataType == WorldDataType::Surrender)
+			{
+				int surrenderWormID = worldData.EntityID;
+				auto womrStatus = Gear::EntitySystem::GetStatus(surrenderWormID);
+				auto teamName = std::any_cast<std::string>(womrStatus->GetStat(WormInfo::TeamName));
+
+				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
+				{
+					auto status = Gear::EntitySystem::GetStatus(WorldWormData::s_LivingWorms[i]);
+					auto team = std::any_cast<std::string>(status->GetStat(WormInfo::TeamName));
+					if (team == teamName)
+					{
+						if (surrenderWormID != WorldWormData::s_LivingWorms[i])
+						{
+							auto animator = Gear::EntitySystem::GetAnimator2D(WorldWormData::s_LivingWorms[i]);
+							auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
+							switch (dir)
+							{
+							case InGame::WormInfo::LeftFlat:
+								animator->PlayAnimation(WormState::OnLeftFlatSurrenderOn);
+								break;
+							case InGame::WormInfo::RightFlat:
+								animator->PlayAnimation(WormState::OnRightFlatSurrenderOn);
+								break;
+							case InGame::WormInfo::LeftUp:
+								animator->PlayAnimation(WormState::OnLeftUpSurrenderOn);
+								break;
+							case InGame::WormInfo::RightUp:
+								animator->PlayAnimation(WormState::OnRightUpSurrenderOn);
+								break;
+							case InGame::WormInfo::LeftDown:
+								animator->PlayAnimation(WormState::OnLeftDownSurrenderOn);
+								break;
+							case InGame::WormInfo::RightDown:
+								animator->PlayAnimation(WormState::OnRightDownSurrenderOn);
+								break;
+							}
+							status->SetStat(WormInfo::Surrendered, true);
+						}
+						for (auto it = WorldWormData::s_ActiveWorms.begin(); it != WorldWormData::s_ActiveWorms.end(); ++it)
+						{
+							if (*it == WorldWormData::s_LivingWorms[i])
+							{
+								WorldWormData::s_ActiveWorms.erase(it);
+								break;
+							}
+						}
+					}
+				}
 				handled = true;
 				return;
 			}
@@ -201,13 +261,19 @@ namespace InGame {
 			}
 			if (worldData.DataType == WorldDataType::NewStart)
 			{
-				FSM->SetCurrentState(WorldState::OnPrepareRun);
+				auto prevState = FSM->GetCurrentState();
+
+				if (prevState != WorldState::OnGameDraw && prevState != WorldState::OnGameVictory)
+				{
+					FSM->SetCurrentState(WorldState::OnPrepareRun);
+				}
 				handled = true;
 				return;
 			}
 			if (worldData.DataType == WorldDataType::CreatedWorm)
 			{
 				WorldWormData::s_LivingWorms.push_back(worldData.EntityID);
+				WorldWormData::s_ActiveWorms.push_back(worldData.EntityID);
 				handled = true;
 				return;
 			}
@@ -227,11 +293,19 @@ namespace InGame {
 			}
 			if (worldData.DataType == WorldDataType::WormDie)
 			{
-				for (auto worm = WorldWormData::s_LivingWorms.begin(); worm < WorldWormData::s_LivingWorms.end(); ++worm)
+				for (auto worm = WorldWormData::s_LivingWorms.begin(); worm != WorldWormData::s_LivingWorms.end(); ++worm)
 				{
 					if (*worm == worldData.EntityID)
 					{
 						WorldWormData::s_WaitingDyeQue.push(*worm);
+						for (auto activeWorm = WorldWormData::s_ActiveWorms.begin(); activeWorm != WorldWormData::s_ActiveWorms.end(); ++activeWorm)
+						{
+							if (*worm == *activeWorm)
+							{
+								WorldWormData::s_ActiveWorms.erase(activeWorm);
+								break;
+							}
+						}
 						WorldWormData::s_LivingWorms.erase(worm);
 						handled = true;
 						return;

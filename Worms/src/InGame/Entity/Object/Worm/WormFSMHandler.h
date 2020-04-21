@@ -254,6 +254,30 @@ namespace InGame {
 				break;
 			}
 		}
+		if (curSettedItem == ItemInfo::Number::Surrender)
+		{
+			switch (dir)
+			{
+			case InGame::WormInfo::LeftFlat:
+				animator->PlayAnimation(WormState::OnLeftFlatSurrenderReady);
+				break;
+			case InGame::WormInfo::RightFlat:
+				animator->PlayAnimation(WormState::OnRightFlatSurrenderReady);
+				break;
+			case InGame::WormInfo::LeftUp:
+				animator->PlayAnimation(WormState::OnLeftUpSurrenderReady);
+				break;
+			case InGame::WormInfo::RightUp:
+				animator->PlayAnimation(WormState::OnRightUpSurrenderReady);
+				break;
+			case InGame::WormInfo::LeftDown:
+				animator->PlayAnimation(WormState::OnLeftDownSurrenderReady);
+				break;
+			case InGame::WormInfo::RightDown:
+				animator->PlayAnimation(WormState::OnRightDownSurrenderReady);
+				break;
+			}
+		}
 	}
 
 	class WormOnBreathHandler : public Gear::FSM::InputHandler
@@ -982,6 +1006,32 @@ namespace InGame {
 				animator->ResumeAnimation();
 				canChangeTime = false;
 			}
+			if (curItem == ItemInfo::Number::Surrender)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->SetCurrentAnimation(WormState::OnLeftFlatSurrenderOn);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->SetCurrentAnimation(WormState::OnRightFlatSurrenderOn);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->SetCurrentAnimation(WormState::OnLeftUpSurrenderOn);
+					break;
+				case InGame::WormInfo::RightUp:
+					animator->SetCurrentAnimation(WormState::OnRightUpSurrenderOn);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->SetCurrentAnimation(WormState::OnLeftDownSurrenderOn);
+					break;
+				case InGame::WormInfo::RightDown:
+					animator->SetCurrentAnimation(WormState::OnRightDownSurrenderOn);
+					break;
+				}
+				animator->ResumeAnimation();
+				canChangeTime = false;
+			}
 		}
 
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
@@ -998,7 +1048,7 @@ namespace InGame {
 
 				curItem = std::any_cast<ItemInfo::Number>(status->GetStat(WormInfo::SelectedItem));
 
-				if (curItem != ItemInfo::Number::SkipGo)
+				if (curItem < ItemInfo::Number::SkipGo)
 				{
 					status->SetNeedHandleData(WormStatusHandleType::DisplayAim, false);
 				}
@@ -1013,7 +1063,7 @@ namespace InGame {
 				afterReadyAni = true;
 			}
 
-			if (curItem != ItemInfo::Number::SkipGo)
+			if (curItem < ItemInfo::Number::SkipGo)
 			{
 				if (!SettedAngle && afterReadyAni)
 				{
@@ -1081,15 +1131,22 @@ namespace InGame {
 			}
 			if (cmd.KeyType == WormCommand::UseItem)
 			{
-				if (curItem != ItemInfo::Number::SkipGo)
+				if (curItem < ItemInfo::Number::SkipGo)
 				{
 					timerStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(0));
 					return WormState::OnUseItem;
 				}
-				else
+				else if (curItem == ItemInfo::Number::SkipGo)
 				{
 					timerStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(0));
 					status->PushNeedHandleData(WormStatusHandleType::SkipGo, Gear::Status::StatHandleData(0));
+					return WormState::OnNothing;
+				}
+				else if (curItem == ItemInfo::Number::Surrender)
+				{
+					timerStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(0));
+					status->PushNeedHandleData(WormStatusHandleType::Surrender, Gear::Status::StatHandleData(0));
+
 					return WormState::OnNothing;
 				}
 			}

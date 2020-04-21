@@ -30,6 +30,7 @@ namespace InGame {
 		GetDamageWorm,
 		WormDie,
 		TeamInfoBlinkOff,
+		Surrender,
 		GameEnd
 	};
 

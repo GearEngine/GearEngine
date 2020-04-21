@@ -35,6 +35,8 @@ namespace InGame {
 			SelfDamage,
 			Damage,
 			UsedItem,
+			Surrendered,
+			TurnPassed,
 			StatEnd
 		};
 		

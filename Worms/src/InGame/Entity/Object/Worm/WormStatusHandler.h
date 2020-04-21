@@ -391,7 +391,7 @@ namespace InGame {
 			{
 				status->RegisterPushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 1.0f)));
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::TeamInfoBlinkOff)));
-				timerStatus->PushNeedHandleData(2u, Gear::Status::StatHandleData(0));
+				timerStatus->PushNeedHandleData(1u, Gear::Status::StatHandleData(0));
 				inFirst = false;
 			}
 
@@ -400,7 +400,7 @@ namespace InGame {
 			if (pastTime > TurnOverDelay)
 			{
 				inFirst = true;
-				bool aniChanged = false;
+				aniChanged = false;
 				data.Handled = true;
 				pastTime = 0.0f;
 				timer->SetTimer(1.0f);
@@ -574,6 +574,7 @@ namespace InGame {
 			}
 		}
 	};
+
 	class WormAfterUseItemHanlder : public Gear::Status::StatusHandler
 	{
 		bool inFirst = true;
@@ -668,6 +669,74 @@ namespace InGame {
 					inFirst = true;
 					return;
 				}
+			}
+		}
+	};
+
+	class WormSurrenderHanlder : public Gear::Status::StatusHandler
+	{
+		bool OnAwake = true;
+		bool inFirst = true;
+		bool SendSurrenderEvent = false;
+
+		Gear::Ref<Gear::Timer> timer;
+		Gear::Ref<Gear::FSM> FSM;
+		Gear::Ref<Gear::Animator2D> animator;
+		Gear::Ref<Gear::Status> status;
+		Gear::Ref<Gear::Status> timerStatus;
+
+		float pastTime = 0.0f;
+		float TurnOverDelay = 3.0f;
+		float teamSurrenderDelay = 2.0f;
+
+		void Awake(int entityID)
+		{
+			timer = Gear::EntitySystem::GetTimer(entityID);
+			FSM = Gear::EntitySystem::GetFSM(entityID);
+			animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			status = Gear::EntitySystem::GetStatus(entityID);
+
+			int timerID = Gear::EntitySystem::GetEntityIDFromName("Timer");
+			timerStatus = Gear::EntitySystem::GetStatus(timerID);
+		}
+
+		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
+		{
+			if (OnAwake)
+			{
+				Awake(entityID);
+			}
+
+			if (inFirst)
+			{
+				status->RegisterPushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 1.0f)));
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::TeamInfoBlinkOff)));
+				timerStatus->PushNeedHandleData(1u, Gear::Status::StatHandleData(0));
+				inFirst = false;
+				SendSurrenderEvent = false;
+			}
+
+			pastTime += timer->GetTick();
+
+			if (pastTime > teamSurrenderDelay && !SendSurrenderEvent)
+			{
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::Surrender, 0, entityID)));
+				SendSurrenderEvent = true;
+			}
+
+			if (pastTime > TurnOverDelay)
+			{
+				inFirst = true;
+				data.Handled = true;
+				pastTime = 0.0f;
+				timer->SetTimer(1.0f);
+				FSM->SetCurrentState(WormState::OnNotMyTurn);
+
+				status->SetStat(WormInfo::MyTurn, false);
+				Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+
+				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
+				return;
 			}
 		}
 	};

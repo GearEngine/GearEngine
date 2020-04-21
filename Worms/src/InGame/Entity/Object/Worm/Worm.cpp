@@ -116,6 +116,7 @@ namespace InGame {
 			{ WormState::OnNotMyTurn,		empty },
 			{ WormState::OnTurnOver,		empty },
 			{ WormState::OnUnderWater,		drawn },
+			{ WormState::OnVictory,		Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Victory"), 0.02f, true) },
 
 			{ WormState::OnRightFlatBreath, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatBreath"), 0.02f, birthAniOrder, true) },
 			{ WormState::OnRightUpBreath, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpBreath"), 0.02f, birthAniOrder, true) },
@@ -257,6 +258,20 @@ namespace InGame {
 			{ WormState::OnRightUpSkipGoOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpSkipGoOn"), 0.04f, skipOnAniOrder, true) },
 			{ WormState::OnRightDownSkipGoOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownSkipGoOn"), 0.04f, skipOnAniOrder, true) },
 
+			{ WormState::OnLeftFlatSurrenderReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatSurrenderReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnLeftUpSurrenderReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpSurrenderReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnLeftDownSurrenderReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownSurrenderReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightFlatSurrenderReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatSurrenderReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightUpSurrenderReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpSurrenderReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightDownSurrenderReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownSurrenderReady"), 0.02f, GrenadeReadyAniOrder, false) },
+
+			{ WormState::OnLeftFlatSurrenderOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatSurrenderOn"), 0.02f, true) },
+			{ WormState::OnLeftUpSurrenderOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpSurrenderOn"), 0.02f, true) },
+			{ WormState::OnLeftDownSurrenderOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownSurrenderOn"), 0.02f, true) },
+			{ WormState::OnRightFlatSurrenderOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatSurrenderOn"), 0.02f, true) },
+			{ WormState::OnRightUpSurrenderOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpSurrenderOn"), 0.02f, true) },
+			{ WormState::OnRightDownSurrenderOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownSurrenderOn"), 0.02f, true) },
+
 			{ WormState::OnLeftFly,	Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftWormFly"), 0.02f, false)},
 			{ WormState::OnRightFly, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightWormFly"), 0.02f, false)},
 			
@@ -326,7 +341,8 @@ namespace InGame {
 			{ WormInfo::Stat::NameBorderOffset, 1.36f }, { WormInfo::Stat::HpBorderOffset, 0.8f }, { WormInfo::Stat::ZRenderOffset, wormData.AdditionalZRenderOffset },
 			{ WormInfo::Stat::Direction, wormData.Direction}, { WormInfo::Stat::MoveSpeed, initData.WormMoveSpeed },
 			{ WormInfo::Stat::MyTurn, false }, { WormInfo::Stat::Damage, 0 }, {WormInfo::Stat::SelfDamage , 0},
-			{ WormInfo::Stat::ItemExplosionTime, 3.0f }, { WormInfo::Stat::UsedItem, false }
+			{ WormInfo::Stat::ItemExplosionTime, 3.0f }, { WormInfo::Stat::UsedItem, false }, {WormInfo::Stat::Surrendered, false },
+			{ WormInfo::Stat::TurnPassed, false }
 		});
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {
@@ -337,7 +353,8 @@ namespace InGame {
 			{ WormStatusHandleType::DisplayDamage, Gear::CreateRef<WormDisplayDamageHanlder>() },
 			{ WormStatusHandleType::DisplayAim, Gear::CreateRef<WormDisplayAimHandler>() },
 			{ WormStatusHandleType::AfterUseItem, Gear::CreateRef<WormAfterUseItemHanlder>() },
-			{ WormStatusHandleType::SkipGo, Gear::CreateRef<WormSkipGoHanlder>() }
+			{ WormStatusHandleType::SkipGo, Gear::CreateRef<WormSkipGoHanlder>() },
+			{ WormStatusHandleType::Surrender, Gear::CreateRef<WormSurrenderHanlder>() }
 		});
 
 		auto NameBorder = Gear::TextureStorage::GetTexture2D("WormNameBorder");

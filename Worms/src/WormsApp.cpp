@@ -108,9 +108,12 @@ public:
 
 		//Worm
 		Gear::TextureStorage::AddFrameTexture2D("Drawn", Gear::FrameTexture2D::Create("assets/textures/Worm/Drawn.png", 1, 4));
+		Gear::TextureStorage::AddFrameTexture2D("Victory", Gear::FrameTexture2D::Create("assets/textures/Worm/Victory.png", 1, 14));
 		Gear::TextureStorage::AddFrameTexture2D("LeftWormDying", Gear::FrameTexture2D::Create("assets/textures/Worm/Dying/LeftWormDying.png", 1, 60));
 		Gear::TextureStorage::AddFrameTexture2D("RightWormDying", Gear::FrameTexture2D::Create("assets/textures/Worm/Dying/RightWormDying.png", 1, 60));
-		
+		Gear::TextureStorage::AddFrameTexture2D("LeftWormFly", Gear::FrameTexture2D::Create("assets/textures/Worm/Fly/LeftWormFly.png", 3, 32));
+		Gear::TextureStorage::AddFrameTexture2D("RightWormFly", Gear::FrameTexture2D::Create("assets/textures/Worm/Fly/RightWormFly.png", 3, 32));
+
 		//walk
 		Gear::TextureStorage::AddFrameTexture2D("LeftFlatWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/Walk/LeftFlatWalk.png", 1, 15));
 		Gear::TextureStorage::AddFrameTexture2D("LeftUpWalk", Gear::FrameTexture2D::Create("assets/textures/Worm/Walk/LeftUpWalk.png", 1, 15));
@@ -232,6 +235,22 @@ public:
 		Gear::TextureStorage::AddFrameTexture2D("RightFlatSkipGoOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/SkipGo/RightFlatSkipGoOn.png", 1, 9));
 		Gear::TextureStorage::AddFrameTexture2D("RightUpSkipGoOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/SkipGo/RightUpSkipGoOn.png", 1, 9));
 
+		//Surrender
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownSurrenderReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Surrender/LeftDownSurrenderReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatSurrenderReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Surrender/LeftFlatSurrenderReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpSurrenderReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Surrender/LeftUpSurrenderReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownSurrenderReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Surrender/RightDownSurrenderReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatSurrenderReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Surrender/RightFlatSurrenderReady.png", 1, 10));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpSurrenderReady", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Surrender/RightUpSurrenderReady.png", 1, 10));
+
+		Gear::TextureStorage::AddFrameTexture2D("LeftDownSurrenderOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Surrender/LeftDownSurrenderOn.png", 1, 16));
+		Gear::TextureStorage::AddFrameTexture2D("LeftFlatSurrenderOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Surrender/LeftFlatSurrenderOn.png", 1, 16));
+		Gear::TextureStorage::AddFrameTexture2D("LeftUpSurrenderOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Surrender/LeftUpSurrenderOn.png", 1, 16));
+		Gear::TextureStorage::AddFrameTexture2D("RightDownSurrenderOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Surrender/RightDownSurrenderOn.png", 1, 16));
+		Gear::TextureStorage::AddFrameTexture2D("RightFlatSurrenderOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Surrender/RightFlatSurrenderOn.png", 1, 16));
+		Gear::TextureStorage::AddFrameTexture2D("RightUpSurrenderOn", Gear::FrameTexture2D::Create("assets/textures/Worm/OnWeapon/Surrender/RightUpSurrenderOn.png", 1, 16));
+
+
 		//Icon
 		Gear::TextureStorage::AddTexture2D("ItemHighlighter", Gear::Texture2D::Create("assets/textures/Weapon/Icon/ItemHighlighter.png"));
 		
@@ -258,10 +277,7 @@ public:
 		Gear::TextureStorage::AddTexture2D("Surrender", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Surrender.png"));
 		Gear::TextureStorage::AddTexture2D("Pneumatic Dril", Gear::Texture2D::Create("assets/textures/Weapon/Icon/Pneumatic Dril.png"));
 
-		//Fly
-		Gear::TextureStorage::AddFrameTexture2D("LeftWormFly", Gear::FrameTexture2D::Create("assets/textures/Worm/Fly/LeftWormFly.png", 3, 32));
-		Gear::TextureStorage::AddFrameTexture2D("RightWormFly", Gear::FrameTexture2D::Create("assets/textures/Worm/Fly/RightWormFly.png", 3, 32));
-
+		
 
 		//animation
 		std::vector<std::pair<int, int>> orderVector;
