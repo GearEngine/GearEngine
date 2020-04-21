@@ -31,6 +31,28 @@ namespace InGame {
 		void Handle(std::any data, int entityID, bool& handled) override;
 	};
 
+	class ItemSelectorTurnEventHandler : public Gear::EventHandler 
+	{
+		void Handle(std::any data, int entityID, bool& handled) override
+		{
+			auto status = Gear::EntitySystem::GetStatus(entityID);
+			auto itemlist = std::any_cast<std::unordered_map<std::string, std::vector<ItemInfo::ItemDescprition>>>(status->GetStat(ItemSelectorInfo::Stat::ItemList));
+
+			for (auto& teamItemlist : itemlist)
+			{
+				for (auto& item : teamItemlist.second)
+				{
+					if (item.RemainTurn)
+					{
+						item.RemainTurn -= 1;
+					}
+				}
+			}
+			status->SetStat(ItemSelectorInfo::Stat::ItemList, itemlist);
+			handled = true;
+		}
+	};
+
 	class ItemSelectorMouseClickEventHandler : public Gear::EventHandler
 	{
 		Gear::Ref<Gear::FSM> FSM;

@@ -137,6 +137,11 @@ namespace InGame {
 	class WorldOnVictoryHandler : public Gear::FSM::InputHandler
 	{
 		bool inFirst = true;
+		Gear::Ref<Gear::LateDrawer> lateDrawer;
+		Gear::Ref<Gear::Timer> timer;
+
+		float pastTime = 0.0f;
+		float fogDelay = 3.0f;
 
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
@@ -149,26 +154,77 @@ namespace InGame {
 					animator->PlayAnimation(WormState::OnVictory);
 				}
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, 0, WorldWormData::s_ActiveWorms[0])));
+				
+				lateDrawer = Gear::EntitySystem::GetLateDrawer(entityID);
+				timer = Gear::EntitySystem::GetTimer(entityID);
+				lateDrawer->ActivateStuff("Fog", Gear::Stuff::Quard);
+				lateDrawer->GetQuardStuff("Fog").Color.a = 0.0f;
 			}
+
+			if (pastTime > fogDelay)
+			{
+				auto& fog = lateDrawer->GetQuardStuff("Fog");
+				fog.Color.a += 0.005f;
+				if (fog.Color.a > 1.0f)
+				{
+					pastTime = 0.0f;
+					inFirst = true;
+					return WorldState::OnGameEnd;
+				}
+			}
+			else
+			{
+				pastTime += timer->GetTick();
+			}
+
 			return WorldState::OnGameVictory;
 		}
 	};
 
 	class WorldOnDrawHandler : public Gear::FSM::InputHandler
 	{
+		bool inFirst = true;
+		Gear::Ref<Gear::LateDrawer> lateDrawer;
+		Gear::Ref<Gear::Timer> timer;
+
+		float pastTime = 0.0f;
+		float fogDelay = 3.0f;
+
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 
-			return WorldState::OnGameDraw;
-		}
+			if (inFirst)
+			{
+				inFirst = false;
+				lateDrawer = Gear::EntitySystem::GetLateDrawer(entityID);
+				timer = Gear::EntitySystem::GetTimer(entityID);
+				lateDrawer->ActivateStuff("Fog", Gear::Stuff::Quard);
+				lateDrawer->GetQuardStuff("Fog").Color.a = 0.0f;
+			}
 
+			if (pastTime > fogDelay)
+			{
+				auto& fog = lateDrawer->GetQuardStuff("Fog");
+				fog.Color.a += 0.005f;
+				if (fog.Color.a > 1.0f)
+				{
+					pastTime = 0.0f;
+					inFirst = true;
+					return WorldState::OnGameEnd;
+				}
+			}
+			else
+			{
+				pastTime += timer->GetTick();
+			}
+			return WorldState::OnGameVictory;
+		}
 	};
 
 	class WorldOnGameEndHandler : public Gear::FSM::InputHandler
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			
 			return WorldState::OnGameEnd;
 		}
 

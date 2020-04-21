@@ -9,6 +9,7 @@ namespace EventChannel
 		Worm,
 		MouseMove,
 		MouseClick,
-		Timer
+		Timer,
+		Turn
 	};
 }

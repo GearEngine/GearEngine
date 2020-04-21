@@ -290,6 +290,7 @@ namespace InGame {
 			status->SetStat(WormInfo::TurnPassed, false);
 		}
 		World::s_CurrentTurn += 1;
+		Gear::EventSystem::DispatchEvent(EventChannel::Turn, Gear::EntityEvent(EventType::Turn, 0));
 	}
 
 }

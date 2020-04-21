@@ -12,7 +12,8 @@ namespace InGame {
 			Worm,
 			MouseMove,
 			MouseClick,
-			Timer
+			Timer,
+			Turn
 		};
 	}
 
