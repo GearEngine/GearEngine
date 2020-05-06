@@ -1,6 +1,7 @@
 #pragma once
 
 #include <thread>
+#include <filesystem>
 
 #include "Gear.h"
 #include "Common/GameType.h"

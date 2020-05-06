@@ -2,6 +2,20 @@
 
 namespace Gear {
 
+	struct TextureData
+	{
+		TextureData() = default;
+		TextureData(const std::string& path);
+
+		std::string Path;
+		unsigned char* Data;
+		int Width;
+		int Height;
+		int Channels;
+		uint32_t FrameX;
+		uint32_t FrameY;
+	};
+
 	class Texture
 	{
 	public:

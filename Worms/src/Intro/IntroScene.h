@@ -15,6 +15,7 @@ namespace Intro {
 		Gear::OrthographicCamera introCamera;
 
 	public:
+		static std::vector<Gear::TextureData> textureDatas;
 		static bool loadingComplete;
 		bool inFirst = true;
 		bool isEndScene = false;

@@ -4,6 +4,8 @@
 #include "Renderer.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
 
+#include "stb_image.h"
+
 namespace Gear {
 
 	Ref<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
@@ -46,5 +48,16 @@ namespace Gear {
 		}
 		GR_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
+	}
+
+	TextureData::TextureData(const std::string & path)
+	{
+		stbi_set_flip_vertically_on_load(1);
+		Data = nullptr;
+		{
+			GR_PROFILE_SCOPE("stbi_load - OpenGlTexture2D::OpenGLTexture2D(const std::string&)");
+			Data = stbi_load(path.c_str(), &Width, &Height, &Channels, 0);
+		}
+		GR_CORE_ASSERT(Data, "Failed to load image!");
 	}
 }

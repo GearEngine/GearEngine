@@ -4,11 +4,28 @@
 namespace Intro {
 
 	bool IntroScene::loadingComplete = false;
+	std::vector<Gear::TextureData> IntroScene::textureDatas = std::vector<Gear::TextureData>();
 
 	void ResourceLoading()
 	{
 		//Init Font
 		Font::Init();
+
+		std::string dir = std::experimental::filesystem::current_path().string();
+		dir += "/assets/textures";
+		std::vector<std::string> paths;
+		std::string png;
+
+		for (auto& p : std::experimental::filesystem::recursive_directory_iterator(dir))
+		{
+			std::string path = p.path().string();
+			int length = path.length();
+			if (path[length - 4] == '.')
+			{
+				IntroScene::textureDatas.emplace_back(Gear::TextureData(path));
+			}
+			png.clear();
+		}
 
 		//Intro2
 		Gear::TextureStorage::AddTexture2D("a1", Gear::Texture2D::Create("assets/textures/Intro/a1.png"));
@@ -21,8 +38,8 @@ namespace Intro {
 		Gear::TextureStorage::AddTexture2D("n", Gear::Texture2D::Create("assets/textures/Intro/n.png"));
 		Gear::TextureStorage::AddTexture2D("o", Gear::Texture2D::Create("assets/textures/Intro/o.png"));
 		Gear::TextureStorage::AddTexture2D("r", Gear::Texture2D::Create("assets/textures/Intro/r.png"));
-		Gear::TextureStorage::AddTexture2D("IntroBack", Gear::Texture2D::Create("assets/textures/Intro/back.png"));
-		Gear::TextureStorage::AddTexture2D("IntroTitle", Gear::Texture2D::Create("assets/textures/Intro/title.png"));
+		//Gear::TextureStorage::AddTexture2D("IntroBack", Gear::Texture2D::Create("assets/textures/Intro/back.png"));
+		//Gear::TextureStorage::AddTexture2D("IntroTitle", Gear::Texture2D::Create("assets/textures/Intro/title.png"));
 
 		//Load Texture
 		Gear::TextureStorage::AddTexture2D("Grad0", Gear::Texture2D::Create("assets/textures/BackGround/Grad0.png"));
