@@ -2,13 +2,13 @@
 #include <Gear/Core/EntryPoint.h>
 
 #include "Intro/IntroScene.h"
-
 class Worms : public Gear::Application
 {
 public:
 	Worms()
 	{
 		Gear::SceneManager::Get()->AddScene(new Intro::IntroScene);
+		
 		//Current Scene Setting
 		Gear::SceneManager::Get()->changeScene("IntroScene");
 	}

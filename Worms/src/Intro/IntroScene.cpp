@@ -10,6 +10,20 @@ namespace Intro {
 		//Init Font
 		Font::Init();
 
+		//Intro2
+		Gear::TextureStorage::AddTexture2D("a1", Gear::Texture2D::Create("assets/textures/Intro/a1.png"));
+		Gear::TextureStorage::AddTexture2D("a2", Gear::Texture2D::Create("assets/textures/Intro/a2.png"));
+		Gear::TextureStorage::AddTexture2D("d1", Gear::Texture2D::Create("assets/textures/Intro/d1.png"));
+		Gear::TextureStorage::AddTexture2D("d2", Gear::Texture2D::Create("assets/textures/Intro/d2.png"));
+		Gear::TextureStorage::AddTexture2D("e", Gear::Texture2D::Create("assets/textures/Intro/e.png"));
+		Gear::TextureStorage::AddTexture2D("g", Gear::Texture2D::Create("assets/textures/Intro/g.png"));
+		Gear::TextureStorage::AddTexture2D("m", Gear::Texture2D::Create("assets/textures/Intro/m.png"));
+		Gear::TextureStorage::AddTexture2D("n", Gear::Texture2D::Create("assets/textures/Intro/n.png"));
+		Gear::TextureStorage::AddTexture2D("o", Gear::Texture2D::Create("assets/textures/Intro/o.png"));
+		Gear::TextureStorage::AddTexture2D("r", Gear::Texture2D::Create("assets/textures/Intro/r.png"));
+		Gear::TextureStorage::AddTexture2D("IntroBack", Gear::Texture2D::Create("assets/textures/Intro/back.png"));
+		Gear::TextureStorage::AddTexture2D("IntroTitle", Gear::Texture2D::Create("assets/textures/Intro/title.png"));
+
 		//Load Texture
 		Gear::TextureStorage::AddTexture2D("Grad0", Gear::Texture2D::Create("assets/textures/BackGround/Grad0.png"));
 		Gear::TextureStorage::AddTexture2D("default", Gear::Texture2D::Create("assets/textures/Checkerboard.png"));
@@ -290,6 +304,6 @@ namespace Intro {
 		IntroScene::loadingComplete = true;
 	}
 
-	
+
 
 }

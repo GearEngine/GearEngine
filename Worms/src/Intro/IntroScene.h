@@ -1,5 +1,7 @@
 #pragma once
 
+#include "IntroScene2.h"
+
 namespace Intro {
 
 	void ResourceLoading();
@@ -14,10 +16,15 @@ namespace Intro {
 
 	public:
 		static bool loadingComplete;
+		bool inFirst = true;
+		bool isEndScene = false;
+		glm::vec4 alpha;
+		float pastTime = 0.0f;
+		float sceneChangeDelay = 3.0f;
 
 	public:
 		IntroScene()
-			: Scene("IntroScene"), introCamera(-1.7777f, 1.7777f, -1.0f, 1.0f)
+			: Scene("IntroScene"), introCamera(-1.7777f, 1.7777f, -1.0f, 1.0f), alpha(1.0f, 1.0f, 1.0f, 0.0f)
 		{
 			Gear::TextureStorage::AddTexture2D("Intro", Gear::Texture2D::Create("assets/textures/Intro/TEAM17.png"));
 
@@ -31,7 +38,7 @@ namespace Intro {
 		virtual void Update(Gear::Timestep ts) override
 		{
 
-			if (loadingComplete)
+			if (loadingComplete )
 			{
 				//GR_INFO("Resources Loading complete");
 			}
@@ -40,7 +47,46 @@ namespace Intro {
 			Gear::RenderCommand::Clear();
 
 			Gear::Renderer2D::BeginScene(introCamera);
-			Gear::Renderer2D::DrawQuad(introTranslate, introTexture);
+
+			if (!inFirst && !isEndScene)
+			{
+				if (Gear::Input::IsKeyPressd(GR_KEY_ENTER) || Gear::Input::IsKeyPressd(GR_KEY_ESCAPE) || Gear::Input::IsKeyPressd(GR_KEY_SPACE)
+					|| Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_RIGHT) || Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT) )
+				{
+					isEndScene = true;
+				}
+			}
+
+			if (isEndScene && !inFirst)
+			{
+				alpha.a -= 0.03f;
+				Gear::Renderer2D::DrawQuad(introTranslate, introTexture, alpha);
+				if (alpha.a <= 0.0f)
+				{
+					Gear::SceneManager::Get()->AddScene(new Intro::IntroScene2);
+					Gear::SceneManager::Get()->changeScene("IntroScene2");
+				}
+			}
+			else if (inFirst)
+			{
+				alpha.a += 0.05f;
+				if (alpha.a >= 1.0f)
+				{
+					alpha.a = 1.0f;
+					inFirst = false;
+				}
+				Gear::Renderer2D::DrawQuad(introTranslate, introTexture, alpha);
+			}
+			else
+			{
+				Gear::Renderer2D::DrawQuad(introTranslate, introTexture);
+				pastTime += ts;
+				if (pastTime >= sceneChangeDelay)
+				{
+					isEndScene = true;
+				}
+			}
+
 			Gear::Renderer2D::EndScene();
 		}
 
