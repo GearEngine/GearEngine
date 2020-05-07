@@ -10,18 +10,18 @@ void Font::Init()
 {
 	m_Fonts.resize(FontType::FontEnd);
 
-	m_Fonts[FontType::Red] = Gear::FrameTexture2D::Create("assets/textures/Font/Red.png", 1, 160);
-	m_Fonts[FontType::RedSmall] = Gear::FrameTexture2D::Create("assets/textures/Font/RedSmall.png", 1, 160);
-	m_Fonts[FontType::Blue] = Gear::FrameTexture2D::Create("assets/textures/Font/Blue.png", 1, 160);
-	m_Fonts[FontType::BlueSmall] = Gear::FrameTexture2D::Create("assets/textures/Font/BlueSmall.png", 1, 160);
-	m_Fonts[FontType::White] = Gear::FrameTexture2D::Create("assets/textures/Font/White.png", 1, 160);
-	m_Fonts[FontType::WhiteSmall] = Gear::FrameTexture2D::Create("assets/textures/Font/WhiteSmall.png", 1, 160);
-	m_Fonts[FontType::GraySmall] = Gear::FrameTexture2D::Create("assets/textures/Font/GraySmall.png", 1, 160);
-	m_Fonts[FontType::RedNumber] = Gear::FrameTexture2D::Create("assets/textures/Font/RedNumber.png", 1, 10);
-	m_Fonts[FontType::WhiteNumber] = Gear::FrameTexture2D::Create("assets/textures/Font/WhiteNumber.png", 1, 10);
-	m_Fonts[FontType::GrayNumber] = Gear::FrameTexture2D::Create("assets/textures/Font/GrayNumber.png", 1, 10);
-	m_Fonts[FontType::GrayTinySmall] = Gear::FrameTexture2D::Create("assets/textures/Font/GrayTinySmall.png", 1, 160);
-	m_Fonts[FontType::WhiteTinySmall] = Gear::FrameTexture2D::Create("assets/textures/Font/WhiteTinySmall.png", 1, 160);
+	m_Fonts[FontType::Red] = Gear::FrameTexture2D::Create("assets/Font/Red.png", 1, 160);
+	m_Fonts[FontType::RedSmall] = Gear::FrameTexture2D::Create("assets/Font/RedSmall.png", 1, 160);
+	m_Fonts[FontType::Blue] = Gear::FrameTexture2D::Create("assets/Font/Blue.png", 1, 160);
+	m_Fonts[FontType::BlueSmall] = Gear::FrameTexture2D::Create("assets/Font/BlueSmall.png", 1, 160);
+	m_Fonts[FontType::White] = Gear::FrameTexture2D::Create("assets/Font/White.png", 1, 160);
+	m_Fonts[FontType::WhiteSmall] = Gear::FrameTexture2D::Create("assets/Font/WhiteSmall.png", 1, 160);
+	m_Fonts[FontType::GraySmall] = Gear::FrameTexture2D::Create("assets/Font/GraySmall.png", 1, 160);
+	m_Fonts[FontType::RedNumber] = Gear::FrameTexture2D::Create("assets/Font/RedNumber.png", 1, 10);
+	m_Fonts[FontType::WhiteNumber] = Gear::FrameTexture2D::Create("assets/Font/WhiteNumber.png", 1, 10);
+	m_Fonts[FontType::GrayNumber] = Gear::FrameTexture2D::Create("assets/Font/GrayNumber.png", 1, 10);
+	m_Fonts[FontType::GrayTinySmall] = Gear::FrameTexture2D::Create("assets/Font/GrayTinySmall.png", 1, 160);
+	m_Fonts[FontType::WhiteTinySmall] = Gear::FrameTexture2D::Create("assets/Font/WhiteTinySmall.png", 1, 160);
 
 	for (int i = 0; i < 26; ++i)
 	{

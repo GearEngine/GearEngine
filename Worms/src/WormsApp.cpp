@@ -7,6 +7,9 @@ class Worms : public Gear::Application
 public:
 	Worms()
 	{
+		//Init Font
+		Font::Init();
+
 		Gear::SceneManager::Get()->AddScene(new Intro::IntroScene);
 		
 		//Current Scene Setting

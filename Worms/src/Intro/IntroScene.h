@@ -32,7 +32,7 @@ namespace Intro {
 			loadingThread = std::thread(ResourceLoading);
 			loadingThread.detach();
 
-			introTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(3.6f, 2.0f, 1.0f));
+			introTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(2.8f, 1.5f, 1.0f));
 			introTexture = Gear::TextureStorage::GetTexture2D("Intro");
 		}
 

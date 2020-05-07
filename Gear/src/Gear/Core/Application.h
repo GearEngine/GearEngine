@@ -22,6 +22,7 @@ namespace Gear {
 		void Run();
 
 		void OnEvent(Event& e);
+		void Quit();
 
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }

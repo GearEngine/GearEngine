@@ -59,6 +59,11 @@ namespace Gear {
 		}
 	}
 
+	void Application::Quit()
+	{
+		m_Running = false;
+	}
+
 	void Application::Run()
 	{
 		GR_PROFILE_FUNCTION();
