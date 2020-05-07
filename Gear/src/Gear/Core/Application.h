@@ -23,6 +23,7 @@ namespace Gear {
 
 		void OnEvent(Event& e);
 		void Quit();
+		inline void ActivateEntitySystem(bool active) { m_ActivatedEntitySystem = active; }
 
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
@@ -38,6 +39,7 @@ namespace Gear {
 
 		bool m_Running = true;
 		bool m_Minimized = false;
+		bool m_ActivatedEntitySystem = false;
 		Scene* m_CurScene;
 		float m_LastFrameTime = 0.0f;
 	private:

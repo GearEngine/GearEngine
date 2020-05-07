@@ -278,7 +278,7 @@ namespace InGame {
 			{ WormState::OnRightDying, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightWormDying"), 0.02f, dyingAniOrder, false)},
 			{ WormState::OnLeftDying, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftWormDying"), 0.02f, dyingAniOrder, false)},
 
-			{ WormState::OnUseItem,	Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.02f, true)},
+			//{ WormState::OnUseItem,	Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.02f, true)},
 		});
 		
 		//Set Transform

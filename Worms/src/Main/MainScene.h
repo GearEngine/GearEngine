@@ -178,6 +178,7 @@ namespace Main {
 		}
 
 		virtual void Update(Gear::Timestep ts) override;
+		void StartInGame();
 	};
 
 }

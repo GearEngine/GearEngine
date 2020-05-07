@@ -184,7 +184,7 @@ namespace InGame {
 			ret.MapName = "City";
 			ret.FloatingMaterial = "Leaf";
 			ret.TerrianBackName = "BlueMountain";
-			ret.Water = "BlueWater";
+			ret.Water = "BlueWaterWave";
 			ret.Grad = "Grad0";
 			ret.WaterRGB = { 50 / 255.0f, 59 / 255.0f, 126 / 255.0f, 1.0f };
 			ret.TerrainMaxX = 25.3f;

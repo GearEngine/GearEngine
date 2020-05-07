@@ -41,6 +41,30 @@ namespace Intro {
 					Gear::TextureStorage::AddTexture2D(textureDatas[i].Name, Gear::Texture2D::Create(textureDatas[i]));
 				}
 			}
+			//animation
+			std::vector<std::pair<int, int>> orderVector;
+			for (int i = 0; i < 32; ++i)
+			{
+				if (i < 16)
+				{
+					orderVector.push_back({ 0, i });
+				}
+				else
+				{
+					orderVector.push_back({ 0, 31 - i });
+				}
+			}
+			auto redArrow = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RedFollowingArrow"), 0.02f, orderVector, true);
+			auto blueArrow = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("BlueFollowingArrow"), 0.02f, orderVector, true);
+			redArrow->Start();
+			blueArrow->Start();
+			Gear::TextureStorage::AddAnimation("RedFollowArrow", redArrow);
+			Gear::TextureStorage::AddAnimation("BlueFollowArrow", blueArrow);
+
+			auto redCursor = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RedCursor"), 0.0f, true);
+			auto blueCursor = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("BlueCursor"), 0.0f, true);
+			Gear::TextureStorage::AddAnimation("RedCursor", redCursor);
+			Gear::TextureStorage::AddAnimation("BlueCursor", blueCursor);
 		}
 
 		Gear::RenderCommand::SetClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));

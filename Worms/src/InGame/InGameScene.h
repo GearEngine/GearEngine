@@ -9,9 +9,17 @@ namespace InGame {
 	class InGameScene : public Gear::Scene
 	{
 	public:
-		InGameScene(const std::string& name, Gear::Layer* imGuiLayer, const InitiateData& initData)
-			: Gear::Scene(name)
+		InGameScene(const InitiateData& initData)
+			: Gear::Scene("InGame")
 		{
+			//Create Event Channel
+			Gear::EventSystem::CreateChannel(EventChannel::World);
+			Gear::EventSystem::CreateChannel(EventChannel::Explosion);
+			Gear::EventSystem::CreateChannel(EventChannel::Worm);
+			Gear::EventSystem::CreateChannel(EventChannel::MouseMove);
+			Gear::EventSystem::CreateChannel(EventChannel::MouseClick);
+			Gear::EventSystem::CreateChannel(EventChannel::Timer);
+
 			PushLayer(new UILayer(initData));
 			PushLayer(new BackGroundLayer(initData));
 			PushLayer(new ObjectLayer(initData));

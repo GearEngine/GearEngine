@@ -4,7 +4,7 @@
 
 namespace Gear {
 
-	class Scene 
+	class Scene
 	{
 	public:
 		Scene(const std::string& name);
@@ -15,6 +15,7 @@ namespace Gear {
 		void PushOverlay(Layer* overlay);
 		void PopOverlay(Layer* overlay);
 
+		virtual void Init(const std::any& data) {};
 		virtual void Update(Timestep ts) = 0;
 		virtual bool PassFirstDelay() { return true; };
 		

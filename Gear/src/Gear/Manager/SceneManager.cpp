@@ -37,6 +37,30 @@ namespace Gear {
 		}
 	}
 
+	bool SceneManager::isSceneExist(const std::string& name)
+	{
+		auto scene = m_SceneStoradge.find(name);
+		if (scene != m_SceneStoradge.end())
+		{
+			return true;
+		}
+		return false;
+	}
+
+	Scene * SceneManager::GetScene(const std::string & name)
+	{
+		auto scene = m_SceneStoradge.find(name);
+		if (scene != m_SceneStoradge.end())
+		{
+			return scene->second;
+		}
+		else
+		{
+			GR_CORE_TRACE("{0} Scene dosn't Exist!", name);
+			return nullptr;
+		}
+	}
+
 	void SceneManager::EraseScene(const std::string & name)
 	{
 		auto scene = m_SceneStoradge.find(name);
