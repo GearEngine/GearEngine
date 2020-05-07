@@ -37,6 +37,7 @@ namespace Gear {
 	{
 	public:
 		OpenGLFrameTexture2D(const std::string &path, int frameX, int frameY);
+		OpenGLFrameTexture2D(const TextureData& data);
 		virtual ~OpenGLFrameTexture2D();
 
 		virtual uint32_t GetWidth() const override { return m_FrameWidth; }

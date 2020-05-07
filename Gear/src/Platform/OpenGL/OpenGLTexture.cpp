@@ -73,6 +73,7 @@ namespace Gear {
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const TextureData& data)
+		: m_Path(data.Path)
 	{
 		m_Data = data.Data;
 		m_Width = data.Width;
@@ -139,6 +140,7 @@ namespace Gear {
 	// Texture2D Buffer /////////////////////////////////////////
 	/////////////////////////////////////////////////////////////
 	OpenGLFrameTexture2D::OpenGLFrameTexture2D(const std::string & path, int frameX, int frameY)
+		: m_Path(path)
 	{
 		GR_PROFILE_FUNCTION();
 
@@ -180,6 +182,53 @@ namespace Gear {
 
 		DivideTexture(data);
 		stbi_image_free(data);
+	}
+
+	OpenGLFrameTexture2D::OpenGLFrameTexture2D(const TextureData & data)
+		: m_Path(data.Path)
+	{
+		m_Width = data.Width;
+		m_Height = data.Height;
+		m_FrameX = data.FrameX;
+		m_FrameY = data.FrameY;
+		m_FrameWidth = m_Width / m_FrameX;
+		m_FrameHeight = m_Height / m_FrameY;
+
+		m_RendererIDs.resize(m_FrameX);
+		for (auto& y : m_RendererIDs)
+			y.resize(m_FrameY);
+
+		GLenum internalFormat = 0, dataFormat = 0;
+
+		if (data.Channels == 4)
+		{
+			internalFormat = GL_RGBA8;
+			dataFormat = GL_RGBA;
+		}
+		else if (data.Channels == 3)
+		{
+			internalFormat = GL_RGB8;
+			dataFormat = GL_RGB;
+		}
+		m_InternalFormat = internalFormat;
+		m_DataFormat = dataFormat;
+		GR_CORE_ASSERT(internalFormat & dataFormat, "Format not supported!");
+
+		for (int i = 0; i < m_FrameX; ++i)
+		{
+			for (int j = 0; j < m_FrameY; ++j)
+			{
+				glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererIDs[i][j]);
+				glTextureStorage2D(m_RendererIDs[i][j], 1, m_InternalFormat, m_FrameWidth, m_FrameHeight);
+
+				glTextureParameteri(m_RendererIDs[i][j], GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTextureParameteri(m_RendererIDs[i][j], GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTextureParameteri(m_RendererIDs[i][j], GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTextureParameteri(m_RendererIDs[i][j], GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+				glTextureSubImage2D(m_RendererIDs[i][j], 0, 0, 0, m_FrameWidth, m_FrameHeight, m_DataFormat, GL_UNSIGNED_BYTE, data.Datas[i][j]);
+			}
+		}
 	}
 
 	OpenGLFrameTexture2D::~OpenGLFrameTexture2D()

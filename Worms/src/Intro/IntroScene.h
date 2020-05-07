@@ -15,13 +15,13 @@ namespace Intro {
 		Gear::OrthographicCamera introCamera;
 
 	public:
-		static std::vector<Gear::TextureData> textureDatas;
 		static bool loadingComplete;
 		bool inFirst = true;
 		bool isEndScene = false;
 		glm::vec4 alpha;
 		float pastTime = 0.0f;
 		float sceneChangeDelay = 3.0f;
+		bool resourceLoadGpu = false;
 
 	public:
 		IntroScene()
@@ -36,60 +36,7 @@ namespace Intro {
 			introTexture = Gear::TextureStorage::GetTexture2D("Intro");
 		}
 
-		virtual void Update(Gear::Timestep ts) override
-		{
-
-			if (loadingComplete )
-			{
-				//GR_INFO("Resources Loading complete");
-			}
-
-			Gear::RenderCommand::SetClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-			Gear::RenderCommand::Clear();
-
-			Gear::Renderer2D::BeginScene(introCamera);
-
-			if (!inFirst && !isEndScene)
-			{
-				if (Gear::Input::IsKeyPressd(GR_KEY_ENTER) || Gear::Input::IsKeyPressd(GR_KEY_ESCAPE) || Gear::Input::IsKeyPressd(GR_KEY_SPACE)
-					|| Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_RIGHT) || Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT) )
-				{
-					isEndScene = true;
-				}
-			}
-
-			if (isEndScene && !inFirst)
-			{
-				alpha.a -= 0.03f;
-				Gear::Renderer2D::DrawQuad(introTranslate, introTexture, alpha);
-				if (alpha.a <= 0.0f)
-				{
-					Gear::SceneManager::Get()->AddScene(new Intro::IntroScene2);
-					Gear::SceneManager::Get()->changeScene("IntroScene2");
-				}
-			}
-			else if (inFirst)
-			{
-				alpha.a += 0.05f;
-				if (alpha.a >= 1.0f)
-				{
-					alpha.a = 1.0f;
-					inFirst = false;
-				}
-				Gear::Renderer2D::DrawQuad(introTranslate, introTexture, alpha);
-			}
-			else
-			{
-				Gear::Renderer2D::DrawQuad(introTranslate, introTexture);
-				pastTime += ts;
-				if (pastTime >= sceneChangeDelay)
-				{
-					isEndScene = true;
-				}
-			}
-
-			Gear::Renderer2D::EndScene();
-		}
+		virtual void Update(Gear::Timestep ts) override;
 
 		void ChangeScene()
 		{

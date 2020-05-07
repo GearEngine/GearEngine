@@ -29,10 +29,7 @@ namespace Intro {
 		IntroScene2()
 			: Scene("IntroScene2"), introCamera(-1.7777f, 1.7777f, -1.0f, 1.0f), alpha(1.0f, 1.0f, 1.0f, 0.0f)
 		{
-			Gear::TextureStorage::AddTexture2D("IntroTitle", Gear::Texture2D::Create("assets/textures/Intro/title.png"));
-			Gear::TextureStorage::AddTexture2D("IntroBack", Gear::Texture2D::Create("assets/textures/Intro/back.png"));
-
-			titleTexture = Gear::TextureStorage::GetTexture2D("Grad0");
+			titleTexture = Gear::TextureStorage::GetTexture2D("IntroTitle");
 			backTexture = Gear::TextureStorage::GetTexture2D("IntroBack");
 
 			for (int i = 0; i < 10; ++i)

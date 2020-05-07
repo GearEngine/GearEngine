@@ -4,16 +4,30 @@ namespace Gear {
 
 	struct TextureData
 	{
+	private:
+		void SetFrameXY();
+		void DivideStore();
+
+	public:
 		TextureData() = default;
 		TextureData(const std::string& path);
+		void Free();
 
 		std::string Path;
+		std::string Name;
+
 		unsigned char* Data;
+		std::vector<std::vector<unsigned char*>> Datas;
+
 		int Width;
 		int Height;
 		int Channels;
-		uint32_t FrameX;
-		uint32_t FrameY;
+		uint32_t FrameX = 1;
+		uint32_t FrameY = 1;
+		int FrameWidth;
+		int FrameHeight;
+
+		bool isFrameData = false;
 	};
 
 	class Texture
@@ -32,6 +46,7 @@ namespace Gear {
 	public:
 		static Ref<Texture2D> Create(uint32_t width, uint32_t height);
 		static Ref<Texture2D> Create(const std::string& path);
+		static Ref<Texture2D> Create(const TextureData& data);
 
 		virtual unsigned char* GetData() const = 0;
 		virtual void SetData(void* data, uint32_t size) = 0;
@@ -44,6 +59,7 @@ namespace Gear {
 	{
 	public:
 		static Ref<FrameTexture2D> Create(const std::string& path, int frameX, int frameY);
+		static Ref<FrameTexture2D> Create(const TextureData& data);
 
 	public:
 		virtual void Bind(int indexX, int indexY, uint32_t slot = 0) const = 0;
