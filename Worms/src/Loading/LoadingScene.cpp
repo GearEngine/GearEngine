@@ -31,7 +31,7 @@ namespace Loading {
 		Gear::RenderCommand::SetClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 		Gear::RenderCommand::Clear();
 
-		Gear::Renderer2D::BeginScene(loadCamara);
+		Gear::Renderer2D::BeginScene(SceneBackground::UiCamera);
 
 		if (index < maxIndex)
 		{

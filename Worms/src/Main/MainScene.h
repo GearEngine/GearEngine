@@ -2,60 +2,6 @@
 
 namespace Main {
 
-	struct StarInfo
-	{
-		StarInfo() = default;
-		StarInfo(float x, float y, int index)
-		{
-			Transform = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 0.1f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.12444444f, 0.07f, 1.0f));
-			Index = index;
-
-			dx = Gear::Util::GetRndFloatFromTo(0.01f, 0.015f);
-			dy = 0.023f - dx;
-		}
-
-		void Update(Gear::Timestep ts)
-		{
-			Transform[3][0] += dx;
-			Transform[3][1] -= dy;
-
-			if (Transform[3][0] >= 1.3f)
-			{
-				Transform[3][0] = -1.27;
-			}
-			if (Transform[3][0] <= -1.28f)
-			{
-				Transform[3][0] = 1.3f;
-			}
-			if (Transform[3][1] >= 0.98f)
-			{
-				Transform[3][1] = -1.0f;
-			}
-			if (Transform[3][1] <= -1.0f)
-			{
-				Transform[3][1] = 0.98f;
-			}
-
-			pastTime += ts;
-			if (pastTime >= pastTime)
-			{
-				pastTime = 0.0f;
-				++Index;
-				if (Index >= 129)
-				{
-					Index = 0;
-				}
-			}
-		}
-
-		float pastTime = 0.0f;
-		float frameDelay = 0.1f;
-		float dx;
-		float dy;
-		int Index;
-		glm::mat4 Transform;
-	};
-
 	class MainScene : public Gear::Scene
 	{
 		float reductionRatio = 180.0f;
@@ -65,8 +11,6 @@ namespace Main {
 		bool inFirst = true;
 		glm::mat4 alphaTransform;
 		glm::vec4 alphaColor;
-
-		Gear::OrthographicCamera introCamera;
 
 		Gear::Ref<Gear::Texture2D> Grad;
 		glm::mat4 gradTransform;
@@ -108,15 +52,14 @@ namespace Main {
 		glm::mat4 cursorTransform;
 
 		Gear::Ref<Gear::FrameTexture2D> Star;
-		std::vector<StarInfo> starInfos;
-		const int MaxStar = 30;
+		std::vector<SceneBackground::StarInfo> starInfos;
 
 		std::pair<float, float> centerMousePos;
 		std::pair<float, float> virtualCursorPos;
 
 	public:
 		MainScene()
-			: Scene("MainScene"), introCamera(-1.7777f, 1.7777f, -1.0f, 1.0f), centerMousePos(640.0f, 360.0f), alphaColor(0.0f, 0.0f, 0.01f, 1.0f)
+			: Scene("MainScene"), centerMousePos(640.0f, 360.0f), alphaColor(0.0f, 0.0f, 0.01f, 1.0f)
 		{
 			Grad = Gear::TextureStorage::GetTexture2D("minigrad");
 			Logo = Gear::TextureStorage::GetTexture2D("wgn");
@@ -136,9 +79,9 @@ namespace Main {
 			QuitReady = Gear::TextureStorage::GetTexture2D("QuitReady");
 
 			Star = Gear::TextureStorage::GetFrameTexture2D("FallenStar");
-			for (int i = 0; i < MaxStar; ++i)
+			for (int i = 0; i < SceneBackground::MaxStar; ++i)
 			{
-				starInfos.push_back(StarInfo(Gear::Util::GetRndFloatFromTo(-1.28f, 1.37f), Gear::Util::GetRndFloatFromTo(-1.0f, 0.98f), Gear::Util::GetRndInt(128)));
+				starInfos.push_back(SceneBackground::StarInfo());
 			}
 
 			int gradWidth = Grad->GetWidth();
@@ -178,7 +121,5 @@ namespace Main {
 		}
 
 		virtual void Update(Gear::Timestep ts) override;
-		void StartInGame();
 	};
-
 }

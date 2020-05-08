@@ -11,7 +11,6 @@ namespace Intro {
 	private:
 		Gear::Ref<Gear::Texture2D> titleTexture;
 		Gear::Ref<Gear::Texture2D> backTexture;
-		Gear::OrthographicCamera introCamera;
 
 		Gear::Ref<Gear::Texture2D> amargeddonTexture[10];
 
@@ -28,7 +27,7 @@ namespace Intro {
 
 	public:
 		IntroScene2()
-			: Scene("IntroScene2"), introCamera(-1.7777f, 1.7777f, -1.0f, 1.0f), alpha(1.0f, 1.0f, 1.0f, 1.0f)
+			: Scene("IntroScene2"), alpha(1.0f, 1.0f, 1.0f, 1.0f)
 		{
 			titleTexture = Gear::TextureStorage::GetTexture2D("IntroTitle");
 			backTexture = Gear::TextureStorage::GetTexture2D("IntroBack");
@@ -57,7 +56,7 @@ namespace Intro {
 			Gear::RenderCommand::SetClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 			Gear::RenderCommand::Clear();
 
-			Gear::Renderer2D::BeginScene(introCamera);
+			Gear::Renderer2D::BeginScene(SceneBackground::UiCamera);
 
 			if (isEndScene)
 			{

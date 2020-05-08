@@ -12,7 +12,6 @@ namespace Intro {
 		std::thread loadingThread;
 		glm::mat4 introTranslate;
 		Gear::Ref<Gear::Texture2D> introTexture;
-		Gear::OrthographicCamera introCamera;
 
 	public:
 		static bool loadingComplete;
@@ -25,7 +24,7 @@ namespace Intro {
 
 	public:
 		IntroScene()
-			: Scene("IntroScene"), introCamera(-1.7777f, 1.7777f, -1.0f, 1.0f), alpha(1.0f, 1.0f, 1.0f, 0.0f)
+			: Scene("IntroScene"), alpha(1.0f, 1.0f, 1.0f, 0.0f)
 		{
 			Gear::TextureStorage::AddTexture2D("Intro", Gear::Texture2D::Create("assets/textures/Intro/TEAM17.png"));
 
