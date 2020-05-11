@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 namespace Gear {
 
 	namespace Util {
@@ -21,6 +23,7 @@ namespace Gear {
 				CenterY = Bottom + Height / 2;
 			}
 
+
 			void ResetPos(float centerX, float centerY, float halfWidth, float halfHeight)
 			{
 				CenterX = centerX;
@@ -30,6 +33,22 @@ namespace Gear {
 				Right = CenterX + halfWidth;
 				Top = CenterY + halfHeight;
 				Bottom = CenterY - halfHeight;
+			}
+
+			void Set(float centerX, float centerY, float halfWidth, float halfHeight)
+			{
+				CenterX = centerX;
+				CenterY = centerY;
+
+				Left = CenterX - halfWidth;
+				Right = CenterX + halfWidth;
+				Top = CenterY + halfHeight;
+				Bottom = CenterY - halfHeight;
+			}
+
+			void Set(const glm::mat4& transform)
+			{
+				Set(transform[3][0], transform[3][1], transform[0][0] / 2, transform[1][1] / 2);
 			}
 
 			float Left, Top, Right, Bottom;

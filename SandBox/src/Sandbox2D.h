@@ -14,6 +14,7 @@ public:
 	void OnUpdate(Gear::Timestep ts) override;
 	virtual void OnImGuiRender() override;
 	void OnEvent(Gear::Event& e) override;
+
 private:
 	Gear::OrthographicCameraController m_CameraController;
 

@@ -449,8 +449,37 @@ namespace Map {
 		}
 		return "";
 	}
-
 }
+
+namespace Main_Multi {
+
+	enum Ready : unsigned int
+	{
+		TurnTime,
+		RoundTime,
+		WinRequires,
+		WormSelect,
+		WormEnergy,
+		Teleportin,
+		Map,
+		MapSelector,
+		MapSelectorList,
+		Teams,
+		WeaponsOption,
+		GameOption,
+		GameSchemeSelector,
+		Delete,
+		Save,
+		Barraks,
+		TeamName,
+		Points,
+		CreateNewTeam,
+		StartGame,
+		Exit,
+		Max
+	};
+}
+
 
 namespace SceneBackground {
 

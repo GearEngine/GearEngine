@@ -100,26 +100,27 @@ namespace Main {
 			
 			float yOffset = 0.07f;
 			singleTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, 0.32f - yOffset, 0.2f)) * glm::scale(glm::mat4(1.0f), glm::vec3(multiWidth / reductionRatio2, multiHeight / reductionRatio2, 1.0f));
-			singleRect.ResetPos(-0.5f, 0.32f - yOffset, multiWidth / reductionRatio2 / 2, multiHeight / reductionRatio2 / 2);
-			
+			singleRect.Set(singleTransform);
 			multiTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.32f - yOffset, 0.2f)) * glm::scale(glm::mat4(1.0f), glm::vec3(multiWidth / reductionRatio2, multiHeight / reductionRatio2, 1.0f));
-			multiRect.ResetPos(0.5f, 0.32f - yOffset, multiWidth / reductionRatio2 / 2, multiHeight / reductionRatio2 / 2);
-
+			multiRect.Set(multiTransform);
 			netTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, -0.32f - yOffset, 0.2f)) * glm::scale(glm::mat4(1.0f), glm::vec3(multiWidth / reductionRatio2, multiHeight / reductionRatio2, 1.0f));
-			netRect.ResetPos(-0.5f, -0.32f - yOffset, multiWidth / reductionRatio2 / 2, multiHeight / reductionRatio2 / 2);
-
+			netRect.Set(netTransform);
 			optionsTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, -0.32f - yOffset, 0.2f)) * glm::scale(glm::mat4(1.0f), glm::vec3(multiWidth / reductionRatio2, multiHeight / reductionRatio2, 1.0f));
-			optionRect.ResetPos(0.5f, -0.32f - yOffset, multiWidth / reductionRatio2 / 2, multiHeight / reductionRatio2 / 2);
-
+			optionRect.Set(optionsTransform);
 			quitTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.71f, -0.8f, 0.2f)) * glm::scale(glm::mat4(1.0f), glm::vec3(quitWidth / reductionRatio2, quitHeight / reductionRatio2, 1.0f));
-			quitRect.ResetPos(0.71f, -0.8f, quitWidth / reductionRatio2 / 2, quitHeight / reductionRatio2 / 2);
-
+			quitRect.Set(quitTransform);
 			cursorTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.3f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.0888888f, 0.05f, 1.0f));
-
 
 			logoTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.8f, 0.2f)) * glm::scale(glm::mat4(1.0f), glm::vec3(logoWidth / reductionRatio2, logoHeight / reductionRatio2, 1.0f));
 		}
 
 		virtual void Update(Gear::Timestep ts) override;
+
+		virtual void Init(const std::any& data) override
+		{
+			cursorTransform[3][0] = 0.0f;
+			cursorTransform[3][1] = 0.0f;
+			virtualCursorPos = { 640.0f, 360.0f };
+		}
 	};
 }

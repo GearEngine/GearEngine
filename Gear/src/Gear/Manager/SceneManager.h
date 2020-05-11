@@ -18,6 +18,7 @@ namespace Gear {
 		void ScenePop();
 
 		void changeScene(const std::string& name);
+		void changeScene(const std::string& name, const std::any& data);
 		bool isSceneExist(const std::string& name);
 
 		inline Scene* GetCurrentScene() { return m_CurrentScene; }

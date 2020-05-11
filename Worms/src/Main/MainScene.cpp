@@ -8,10 +8,6 @@
 
 namespace Main {
 
-
-
-
-
 	void MainScene::Update(Gear::Timestep ts)
 	{
 		Gear::RenderCommand::SetClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -91,7 +87,7 @@ namespace Main {
 			{
 				cursorTransform[3][1] = -1.0f;
 			}
-			virtualCursorPos.first = cursorTransform[3][0] + 0.01f;
+			virtualCursorPos.first = cursorTransform[3][0] - 0.01f;
 			virtualCursorPos.second = cursorTransform[3][1] + 0.01f;
 		}
 
@@ -141,7 +137,7 @@ namespace Main {
 			{
 				if (Gear::SceneManager::Get()->isSceneExist("MultiScene")) 
 				{
-					Gear::SceneManager::Get()->changeScene("MultiScene");
+					Gear::SceneManager::Get()->changeScene("MultiScene", 0);
 				}
 				else
 				{

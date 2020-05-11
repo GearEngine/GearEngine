@@ -115,4 +115,16 @@ namespace Gear {
 		}
 	}
 
+	void SceneManager::changeScene(const std::string& name, const std::any& data)
+	{
+		auto scene = m_SceneStoradge.find(name);
+		if (scene != m_SceneStoradge.end())
+		{
+			if (m_CurrentScene != scene->second)
+			{
+				scene->second->Init(data);
+				m_CurrentScene = scene->second;
+			}
+		}
+	}
 }
