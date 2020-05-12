@@ -4,29 +4,147 @@ namespace Main {
 
 	class MapListLayer : public Gear::Layer
 	{
-		
-		std::vector<std::string> MapList;
+		std::vector<std::string> MapStrList;
 
-		const float mapSelectorScrollerTop = 0.3f;
-		const float mapSelectorScrollerBottom = -0.135f;
-		float mapSelectorScrollerMoveUnit;
+		const float ScrollerTop = 0.3f;
+		const float ScrollerBottom = -0.135f;
+		const float listFieldTop = 0.382f;
+		float fieldCenterX = -0.6748f;
+		float fieldFront = -1.124f;
+		float ScrollerMoveUnit;
+
+		int curListShowIndex = 0;
+		int maxListShowIndex;
+		int listIndexMax;
+		int showMapNameMax = 12;
+
+		int highlighterIndex = 0;
+
+		glm::mat4* ScrollerTransform;
+		Gear::Util::FRect* ScrollerRect;
+		bool* MouseOnList;
+
+		std::vector<glm::mat4> fieldTransforms;
+		std::vector<Gear::Util::FRect> fieldRects;
+
+		float MapSelectorDivideUnit;
+
+		//KeyDown
+		float keyPastTime = 0.0f;
+		float keyPressDeleay = 0.05f;
+		bool keypressReady = true;
+
+		//MousePress
+		float mousePressPastTime = 0.0f;
+		float mousePressDelay = 0.1f;
+		bool MousePressReady = false;
+
+		int* SelectedIndex;
 
 	public:
-		MapListLayer()
+		MapListLayer(glm::mat4* mapSelectorScrollerTransform, Gear::Util::FRect* scrollerRect, bool* mouseOnList, float mapselctorListHeight, float mapselectorListWidth, int* selectedIndex)
 			: Gear::Layer("ListLayer")
 		{
-			MapList.resize(Map::Max);
-			mapSelectorScrollerMoveUnit = mapSelectorScrollerTop - mapSelectorScrollerBottom / Map::Max;
+			MapStrList.resize(Map::Max);
+			ScrollerMoveUnit = (ScrollerTop - ScrollerBottom) / (Map::Max - showMapNameMax);
+			ScrollerTransform = mapSelectorScrollerTransform;
+			ScrollerRect = scrollerRect;
+			MouseOnList = mouseOnList;
+			SelectedIndex = selectedIndex;
+			*SelectedIndex = highlighterIndex;
+
+			listIndexMax = Map::Max;
+			maxListShowIndex = listIndexMax - showMapNameMax;
+			MapSelectorDivideUnit = (mapselctorListHeight - 0.022f) / showMapNameMax;
+
+			for (int i = 0; i < Map::Max; ++i)
+			{
+				MapStrList[i] = Map::GetName(i);
+			}
+
+			fieldTransforms.resize(showMapNameMax);
+			fieldRects.resize(showMapNameMax);
+			for (int i = 0; i < showMapNameMax; ++i)
+			{
+				fieldTransforms[i] = glm::translate(glm::mat4(1.0f), glm::vec3(fieldCenterX, listFieldTop - MapSelectorDivideUnit * i, 0.57f)) * glm::scale(glm::mat4(1.0f), glm::vec3(mapselectorListWidth - 0.07f, MapSelectorDivideUnit, 1.0f));
+				fieldRects[i].Set(fieldTransforms[i]);
+			}
+		}
+		
+		int GetShowIndex(int curIndex)
+		{
+			return curIndex - curListShowIndex;
+		}
+
+		int GetListIndex(int showIndex)
+		{
+			return showIndex + curListShowIndex;
+		}
+
+		void calcListShowIndex()
+		{
+			float scrollerY = (*ScrollerTransform)[3][1];
+			float dist = ScrollerTop - scrollerY;
+			curListShowIndex = dist / ScrollerMoveUnit;
+			if (curListShowIndex > maxListShowIndex)
+			{
+				curListShowIndex = maxListShowIndex - 13;
+			}
 		}
 
 		virtual void OnUpdate(Gear::Timestep ts) override
 		{
+			if (!keypressReady)
+			{
+				keyPastTime += ts;
+				if (keyPastTime > keyPressDeleay)
+				{
+					keyPastTime = 0.0f;
+					keypressReady = true;
+				}
+			}
+
+			if (!MousePressReady)
+			{
+				mousePressPastTime += ts;
+				if (mousePressPastTime > mousePressDelay)
+				{
+					mousePressPastTime = 0.0f;
+					MousePressReady = true;
+				}
+			}
+
+			if (keypressReady)
+			{
+				KeyInputLogic();
+			}
+
+			if (MousePressReady)
+			{
+				MousePressLogic();
+			}
+
+			*SelectedIndex = highlighterIndex;
+
+			if (curListShowIndex <= highlighterIndex && highlighterIndex < curListShowIndex + 12)
+			{
+				Gear::Renderer2D::DrawQuad(fieldTransforms[GetShowIndex(highlighterIndex)], glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+			}
+
+			for (int i = 0; i < showMapNameMax; ++i)
+			{
+				auto mapName = MapStrList[i + curListShowIndex];
+				Font::PrintFont(glm::vec3(fieldFront + mapName.length() * 0.5f * 0.024f, fieldTransforms[i][3][1], 0.58f), glm::vec3(0.05f, 0.05f, 1.0f), mapName, FontType::WhiteTinySmall, 0.025f, false);
+			}
 		}
 
-		
 		virtual void OnEvent(Gear::Event& e) override;
-		bool OnMouseScrolled(Gear::MouseScrolledEvent & e);
 
+		bool OnMouseScrolled(Gear::MouseScrolledEvent & e);
+		bool OnMouseClick(Gear::MouseButtonReleasedEvent& e);
+
+		void KeyInputLogic();
+		void MousePressLogic();
 	};
 
 	class MultiScene : public Gear::Scene
@@ -37,10 +155,16 @@ namespace Main {
 		float reductionRatio2 = 238.0f;
 		float reductionRatio3 = 240.0f;
 
+		//Cursor
 		Gear::Ref<Gear::FrameTexture2D> Cursor;
 		glm::mat4 cursorTransform;
-		std::pair<float, float> virtualCursorPos;
+	public:
+		static std::pair<float, float> virtualCursorPos;
+		static bool OnMapSelectorActive;
+
+	private:
 		std::pair<float, float> centerMousePos;
+		//
 
 		Gear::Ref<Gear::Texture2D> DivideBorder;
 		glm::mat4 TerrainBorderTransform;
@@ -61,7 +185,7 @@ namespace Main {
 		Gear::Ref<Gear::Texture2D> MapSelectorReady;
 		Gear::Util::FRect MapSelectorRect;
 		glm::mat4 mapSelectorTransform;
-		bool OnMapSelectorActive = false;
+		bool MouseOnMapList;
 
 		Gear::Util::FRect MapSelectorListRect;
 		glm::mat4 mapSelectorListTransform;
@@ -72,6 +196,9 @@ namespace Main {
 		Gear::Util::FRect MapSelectorScrollerRect;
 
 		glm::mat4 mapSelectorScrollerTransform;
+
+		Gear::Layer* MapSelectorLayer;
+		int mapSelectedIndex;
 		//
 
 		Gear::Ref<Gear::Texture2D> SchemeSelector;
@@ -81,7 +208,6 @@ namespace Main {
 
 		std::vector<Gear::Ref<Gear::Texture2D>> MapIcons;
 		glm::mat4 mapIconTransform;
-		unsigned int selectedMap;
 
 		Gear::Ref<Gear::Texture2D> SelectedTeam;
 		Gear::Util::FRect SelectedTeamRect;
@@ -91,6 +217,8 @@ namespace Main {
 		Gear::Ref<Gear::Texture2D> TeamListName;
 		Gear::Ref<Gear::Texture2D> TeamListPoints;
 		Gear::Util::FRect TeamListRect;
+		Gear::Util::FRect TeamListNameRect;
+		Gear::Util::FRect TeamListPointsRect;
 		glm::mat4 teamListTransform;
 
 		Gear::Ref<Gear::Texture2D> CreateTeam;
@@ -184,7 +312,6 @@ namespace Main {
 				auto mapName = Map::GetName(i);
 				MapIcons[i] = Gear::TextureStorage::GetTexture2D(mapName + "Icon");
 			}
-			selectedMap = Map::City;
 
 			Options.resize(BasicOption::OptionMax);
 			OptionsReady.resize(BasicOption::OptionMax);
@@ -243,9 +370,8 @@ namespace Main {
 			SchemeBorderTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.65f, -0.05f, 0.3f)) * glm::scale(glm::mat4(1.0f), glm::vec3(divideBorder2Width / reductionRatio2, divideBorder2Height / reductionRatio2, 1.0f));
 			BarrackBorderTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.65f, -0.05f, 0.3f)) * glm::scale(glm::mat4(1.0f), glm::vec3(divideBorder2Width / reductionRatio2, divideBorder2Height / reductionRatio2, 1.0f));
 			mapSelectorTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.65f, 0.46f, 0.3f)) * glm::scale(glm::mat4(1.0f), glm::vec3(mapSelectorWidth / reductionRatio2, mapSelectorHeight / reductionRatio2, 1.0f));
-			mapSelectorListTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.65f, 0.46f - (mapSelectorHeight + mapSelectorListHeight) / reductionRatio2 / 2, 0.4f)) * glm::scale(glm::mat4(1.0f), glm::vec3(mapSelectorListWidth / reductionRatio2, mapSelectorListHeight / reductionRatio2, 1.0f));
-			
-			mapSelectorScrollerTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.17f, 0.3f, 0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(mapSelectorScrollerWidth / reductionRatio2 , mapSelectorScrollerHeight / reductionRatio2, 1.0f));
+			mapSelectorListTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.65f, 0.46f - (mapSelectorHeight + mapSelectorListHeight) / reductionRatio2 / 2, 0.55f)) * glm::scale(glm::mat4(1.0f), glm::vec3(mapSelectorListWidth / reductionRatio2, mapSelectorListHeight / reductionRatio2, 1.0f));
+			mapSelectorScrollerTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.17f, 0.3f, 0.56f)) * glm::scale(glm::mat4(1.0f), glm::vec3(mapSelectorScrollerWidth / reductionRatio2, mapSelectorScrollerHeight / reductionRatio2, 1.0f));
 			mapIconTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.65f, 0.72f, 0.3f)) * glm::scale(glm::mat4(1.0f), glm::vec3(mapIconWidth / reductionRatio3, mapIconHeight / reductionRatio3, 1.0f));
 			selectedTeamTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.45f, 0.657f, 0.3f)) * glm::scale(glm::mat4(1.0f), glm::vec3(selectedTeamWidth / reductionRatio2, selectedTeamHeight / reductionRatio2, 1.0f));
 			teamListTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.65f, -0.01f, 0.3f)) * glm::scale(glm::mat4(1.0f), glm::vec3(teamListWidth / reductionRatio2, teamListHeight / reductionRatio2, 1.0f));
@@ -272,8 +398,12 @@ namespace Main {
 			StartRect.Set(startTransform);
 			ExitRect.Set(exitTransform);
 			MapSelectorListRect.Set(mapSelectorListTransform);
+			MapSelectorScrollerRect.Set(mapSelectorScrollerTransform);
+			TeamListNameRect.ResetPos(0.51f, 0.177f, 0.41f, 0.034f);
+			TeamListPointsRect.ResetPos(1.02f, 0.177f, 0.105f, 0.034f);
 
-			m_LayerStack.PushLayer(new MapListLayer());
+			MapSelectorLayer = new MapListLayer(&mapSelectorScrollerTransform, &MapSelectorScrollerRect, &MouseOnMapList, mapSelectorListTransform[1][1], mapSelectorListTransform[0][0], &mapSelectedIndex);
+			m_LayerStack.PushLayer(MapSelectorLayer);
 
 			OptionsRect.resize(BasicOption::OptionMax);
 			for (int i = 0; i < BasicOption::OptionMax; ++i)
@@ -289,6 +419,7 @@ namespace Main {
 
 		void CursorUpdate();
 		void DrawButtons();
+		void DrawFont();
 		void ButtonUpdate();
 		void MouseButtonClick();
 
@@ -329,6 +460,7 @@ namespace Main {
 			CursorUpdate();
 			ButtonUpdate();
 			DrawButtons();
+			DrawFont();
 
 			if (!readyMouseClick)
 			{
@@ -343,7 +475,7 @@ namespace Main {
 			if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT) && readyMouseClick)
 			{
 				readyMouseClick = false;
-				if (OnMapSelectorActive && !MouseOn[Main_Multi::MapSelectorList])
+				if (OnMapSelectorActive && (!MouseOn[Main_Multi::MapSelectorList] && !MouseOn[Main_Multi::MapSelector]))
 				{
 					OnMapSelectorActive = false;
 				}
@@ -353,13 +485,16 @@ namespace Main {
 				}
 			}
 
+			if (Gear::Input::IsKeyPressd(GR_KEY_ENTER) || Gear::Input::IsKeyPressd(GR_KEY_ESCAPE))
+			{
+				OnMapSelectorActive = false;
+			}
+
 			if (OnMapSelectorActive)
 			{
-				for (auto& layer : m_LayerStack)
-				{
-					layer->OnUpdate(ts);
-				}
+				MapSelectorLayer->OnUpdate(ts);
 			}
+
 			Gear::Renderer2D::DrawFrameQuad(cursorTransform, Cursor, 0, 0);
 			Gear::Renderer2D::EndScene();
 		}

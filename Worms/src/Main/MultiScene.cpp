@@ -4,19 +4,155 @@
 #include "Loading/LoadingScene.h"
 #include "GLFW/include/GLFW/glfw3.h"
 
-#include <functional>
-
 namespace Main {
-
 	void MapListLayer::OnEvent(Gear::Event & e)
 	{
 		Gear::EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<Gear::MouseScrolledEvent>(GR_BIND_EVENT_FN(MapListLayer::OnMouseScrolled));
+		dispatcher.Dispatch<Gear::MouseButtonReleasedEvent>(GR_BIND_EVENT_FN(MapListLayer::OnMouseClick));
+	}
+
+	bool MapListLayer::OnMouseClick(Gear::MouseButtonReleasedEvent& e)
+	{
+		
+		return true;
 	}
 
 	bool MapListLayer::OnMouseScrolled(Gear::MouseScrolledEvent & e)
 	{
-		return false;
+		if (!*MouseOnList)
+			return true;
+
+		float yOffset = e.GetYOffset();
+		if (yOffset > 0.0f)
+		{
+			(*ScrollerTransform)[3][1] += ScrollerMoveUnit;
+			if ((*ScrollerTransform)[3][1] > ScrollerTop)
+			{
+				(*ScrollerTransform)[3][1] = ScrollerTop;
+			}
+		}
+		else if (yOffset < 0.0f)
+		{
+			(*ScrollerTransform)[3][1] -= ScrollerMoveUnit;
+			if ((*ScrollerTransform)[3][1] < ScrollerBottom)
+			{
+				(*ScrollerTransform)[3][1] = ScrollerBottom;
+			}
+		}
+		(*ScrollerRect).Set(*ScrollerTransform);
+		calcListShowIndex();
+		return true;
+	}
+
+	void MapListLayer::KeyInputLogic()
+	{
+		if (curListShowIndex <= highlighterIndex && highlighterIndex < curListShowIndex + 12)
+		{
+			if (Gear::Input::IsKeyPressd(GR_KEY_UP))
+			{
+				keypressReady = false;
+				if (highlighterIndex != 0)
+				{
+					if (GetShowIndex(highlighterIndex) == 0)
+					{
+						--curListShowIndex;
+						(*ScrollerTransform)[3][1] += ScrollerMoveUnit;
+					}
+					--highlighterIndex;
+				}
+			}
+
+			if (Gear::Input::IsKeyPressd(GR_KEY_DOWN))
+			{
+				keypressReady = false;
+				if (highlighterIndex != listIndexMax - 1)
+				{
+					if (GetShowIndex(highlighterIndex) == 11)
+					{
+						++curListShowIndex;
+						(*ScrollerTransform)[3][1] -= ScrollerMoveUnit;
+					}
+					++highlighterIndex;
+				}
+			}
+		}
+		else
+		{
+			if (Gear::Input::IsKeyPressd(GR_KEY_UP))
+			{
+				keypressReady = false;
+				if (highlighterIndex == 0)
+				{
+					curListShowIndex = 0;
+					(*ScrollerTransform)[3][1] = ScrollerTop;
+				}
+				else
+				{
+					if (curListShowIndex < highlighterIndex)
+					{
+						--highlighterIndex;
+						curListShowIndex = highlighterIndex - 11;
+						(*ScrollerTransform)[3][1] = ScrollerTop - ScrollerMoveUnit * curListShowIndex;
+					}
+					else
+					{
+						--highlighterIndex;
+						curListShowIndex = highlighterIndex;
+						(*ScrollerTransform)[3][1] = ScrollerTop - ScrollerMoveUnit * curListShowIndex;
+					}
+				}
+			}
+
+			if (Gear::Input::IsKeyPressd(GR_KEY_DOWN))
+			{
+				keypressReady = false;
+				if (highlighterIndex == listIndexMax - 1)
+				{
+					curListShowIndex = maxListShowIndex;
+					(*ScrollerTransform)[3][1] = ScrollerBottom;
+				}
+				else
+				{
+					if (curListShowIndex < highlighterIndex)
+					{
+						++highlighterIndex;
+						curListShowIndex = highlighterIndex - 11;
+						(*ScrollerTransform)[3][1] = ScrollerTop - ScrollerMoveUnit * curListShowIndex;
+					}
+					else
+					{
+						++highlighterIndex;
+						curListShowIndex = highlighterIndex;
+						(*ScrollerTransform)[3][1] = ScrollerTop - ScrollerMoveUnit * curListShowIndex;
+					}
+				}
+			}
+		}
+	}
+
+	void MapListLayer::MousePressLogic()
+	{
+		if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT))
+		{
+			MousePressReady = false;
+			for (int i = 0; i < showMapNameMax; ++i)
+			{
+				if (Gear::Util::IsPointRectCollision(MultiScene::virtualCursorPos, fieldRects[i]))
+				{
+					int listIndex = GetListIndex(i);
+					if (highlighterIndex == listIndex)
+					{
+						MultiScene::OnMapSelectorActive = false;
+					}
+					else
+					{
+						highlighterIndex = listIndex;
+					}
+				}
+			}
+		}
+		
 	}
 
 	void StartInGame()
@@ -104,6 +240,9 @@ namespace Main {
 		}
 	}
 
+	std::pair<float, float> MultiScene::virtualCursorPos = { 0.0f, 0.0f };
+	bool MultiScene::OnMapSelectorActive = false;
+
 	void MultiScene::CursorUpdate()
 	{
 		auto mousePos = Gear::Input::GetMousePosition();
@@ -136,7 +275,7 @@ namespace Main {
 
 	void MultiScene::DrawButtons()
 	{
-		Gear::Renderer2D::DrawQuad(mapIconTransform, MapIcons[selectedMap]);
+		Gear::Renderer2D::DrawQuad(mapIconTransform, MapIcons[mapSelectedIndex]);
 		Gear::Renderer2D::DrawQuad(selectedTeamTransform, SelectedTeam);
 
 		if (MouseOn[Main_Multi::MapSelector] && !OnMapSelectorActive)
@@ -167,7 +306,7 @@ namespace Main {
 		{
 			Gear::Renderer2D::DrawQuad(teamListTransform, TeamListName);
 		}
-		else if(MouseOn[Main_Multi::Points])
+		else if (MouseOn[Main_Multi::Points])
 		{
 			Gear::Renderer2D::DrawQuad(teamListTransform, TeamListPoints);
 		}
@@ -257,18 +396,51 @@ namespace Main {
 		}
 	}
 
+	void MultiScene::DrawFont()
+	{
+		//Terrain
+		auto mapName = Map::GetName(mapSelectedIndex);
+		Font::PrintFont(glm::vec3(-1.12f + mapName.length() * 0.5f * 0.04f, mapSelectorTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), mapName, FontType::GraySmall, 0.04f, false);
+		Font::PrintFont(glm::vec3(TerrainBorderTransform[3][0] + 0.03f, TerrainBorderTransform[3][1] + TerrainBorderTransform[1][1] / 2, 0.55f), glm::vec3(0.07f, 0.07f, 1.0f), "Terrain", FontType::GraySmall, 0.04f, false);
+
+		//Scheme
+		Font::PrintFont(glm::vec3(SchemeBorderTransform[3][0] + 0.03f, SchemeBorderTransform[3][1] + SchemeBorderTransform[1][1] / 2, 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Scheme options", FontType::GraySmall, 0.04f, false);
+		Font::PrintFont(glm::vec3(schemeSelectorTransform[3][0] - 0.37f, schemeSelectorTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "[Default]", FontType::GraySmall, 0.04f, false);
+	
+		//Teams
+		Font::PrintFont(glm::vec3(TeamBorderTransform[3][0] + 0.03f, TeamBorderTransform[3][1] + TeamBorderTransform[1][1] / 2, 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Teams", FontType::GraySmall, 0.04f, false);
+		
+		//Baracks
+		Font::PrintFont(glm::vec3(BarrackBorderTransform[3][0] + 0.03f, BarrackBorderTransform[3][1] + BarrackBorderTransform[1][1] / 2, 0.55f), glm::vec3(0.07f, 0.07f, 1.0f), "Barracks", FontType::GraySmall, 0.04f, false);
+		Font::PrintFont(glm::vec3(createTeamTransform[3][0] + 0.03f, createTeamTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Create a new Team", FontType::GraySmall, 0.04f, false);
+		Font::PrintFont(glm::vec3(0.25f, 0.193f, 0.53f), glm::vec3(0.05f, 0.05f, 1.0f), "Team Name", FontType::GrayTinySmall, 0.027f, false);
+		Font::PrintFont(glm::vec3(1.03f, 0.193f, 0.53f), glm::vec3(0.05f, 0.05f, 1.0f), "Points", FontType::GrayTinySmall, 0.027f, false);
+
+		//GameStart
+		Font::PrintFont(glm::vec3(startTransform[3][0] + 0.03f, startTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Start the game", FontType::GraySmall, 0.04f, false);
+		Font::PrintFont(glm::vec3(exitTransform[3][0] + 0.03f, exitTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Exit", FontType::GraySmall, 0.04f, false);
+	
+		//Save delete
+		Font::PrintFont(glm::vec3(saveTransform[3][0] + 0.03f, saveTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Save", FontType::GraySmall, 0.04f, false);
+		Font::PrintFont(glm::vec3(deleteTransform[3][0] + 0.03f, deleteTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Delete", FontType::GraySmall, 0.04f, false);
+	}
+
 	void MultiScene::ButtonUpdate()
 	{
 		MouseOn.reset();
 
+		MouseOnMapList = false;
 		if (OnMapSelectorActive)
 		{
-			if(Gear::Util::IsPointRectCollision(virtualCursorPos, MapSelectorListRect))
+			if (Gear::Util::IsPointRectCollision(virtualCursorPos, MapSelectorListRect))
 			{
 				MouseOn[Main_Multi::MapSelectorList] = true;
+				MouseOnMapList = true;
 				return;
 			}
 		}
+
+		
 
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, StartRect))
 		{
@@ -318,6 +490,16 @@ namespace Main {
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, SelectedTeamRect))
 		{
 			MouseOn[Main_Multi::Teams] = true;
+			return;
+		}
+		if (Gear::Util::IsPointRectCollision(virtualCursorPos, TeamListNameRect))
+		{
+			MouseOn[Main_Multi::TeamName] = true;
+			return;
+		}
+		if (Gear::Util::IsPointRectCollision(virtualCursorPos, TeamListPointsRect))
+		{
+			MouseOn[Main_Multi::Points] = true;
 			return;
 		}
 		for (int i = 0; i < BasicOption::OptionMax; ++i)
