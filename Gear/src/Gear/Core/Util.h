@@ -90,5 +90,18 @@ namespace Gear {
 		}
 
 		float GetAngleFromXY(float x, float y);
+
+		inline std::vector<std::string> GetStrTokken(const std::string& path, const char delimiter)
+		{
+			std::vector<std::string> ret;
+			std::string token;
+			std::stringstream ss(path);
+
+			while (getline(ss, token, delimiter))
+			{
+				ret.push_back(token);
+			}
+			return ret;
+		}
 	}
 }

@@ -19,6 +19,7 @@ IncludeDir["ImGui"] = "Gear/vendor/imgui"
 IncludeDir["glm"] = "Gear/vendor/glm"
 IncludeDir["stb_image"] = "Gear/vendor/stb_image"
 IncludeDir["fmod"] = "Gear/vendor/fmod/include"
+IncludeDir["Json"] = "Gear/vendor/Json/include"
 
 include "Gear/vendor/Glad"
 include "Gear/vendor/GLFW"
@@ -45,7 +46,9 @@ project "Gear"
 		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
-		"%{prj.name}/vendor/fmod/include/**.h"
+		"%{prj.name}/vendor/fmod/include/**.h",
+		"%{prj.name}/vendor/fmod/include/**.h",
+		"%{prj.name}/vendor/Json/include/json.h"
 	}
 	
 	defines
@@ -61,11 +64,13 @@ project "Gear"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.fmod}"
+		"%{IncludeDir.fmod}",
+		"%{IncludeDir.Json}"
 	}
 	libdirs
 	{
 		"%{prj.name}/vendor/fmod/lib",
+		"%{prj.name}/vendor/Json/lib"
 	}
 	links
 	{
@@ -73,7 +78,8 @@ project "Gear"
 		"Glad",
 		"ImGui",
 		"opengl32.lib",
-		"fmod64_vc.lib"
+		"fmod64_vc.lib",
+		"jsoncpp.lib"
 	}
 
 	filter "system:windows"
@@ -175,7 +181,8 @@ project "Worms"
 		"%{prj.name}/src",
 		"Gear/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.fmod}"
+		"%{IncludeDir.fmod}",
+		"%{IncludeDir.Json}"
 	}
 	links
 	{

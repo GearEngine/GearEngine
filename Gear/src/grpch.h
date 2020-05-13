@@ -17,6 +17,7 @@
 #include <bitset>
 #include <unordered_map>
 #include <unordered_set>
+#include <filesystem>
 
 #include "Gear/Core/Log.h"
 #include "Gear/Core/Util.h"
@@ -26,6 +27,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/glm.hpp>
+#include <json.h>
 
 #ifdef GR_PLATFORM_WINDOWS
 	#include <Windows.h>

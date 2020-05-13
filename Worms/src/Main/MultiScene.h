@@ -2,6 +2,14 @@
 
 namespace Main {
 
+	struct MainTeamInfo
+	{
+		std::string name;
+		std::string teamIcon;
+
+	};
+
+
 	class MapListLayer : public Gear::Layer
 	{
 		std::vector<std::string> MapStrList;
@@ -145,6 +153,18 @@ namespace Main {
 
 		void KeyInputLogic();
 		void MousePressLogic();
+	};
+
+	class TeamSelectLayer : public Gear::Layer 
+	{
+
+	public:
+		TeamSelectLayer()
+			: Gear::Layer("TeamSelectLayer")
+		{
+
+		}
+
 	};
 
 	class MultiScene : public Gear::Scene

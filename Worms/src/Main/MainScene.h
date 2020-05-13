@@ -109,7 +109,7 @@ namespace Main {
 			optionRect.Set(optionsTransform);
 			quitTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.71f, -0.8f, 0.2f)) * glm::scale(glm::mat4(1.0f), glm::vec3(quitWidth / reductionRatio2, quitHeight / reductionRatio2, 1.0f));
 			quitRect.Set(quitTransform);
-			cursorTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.3f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.0888888f, 0.05f, 1.0f));
+			cursorTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.0888888f, 0.05f, 1.0f));
 
 			logoTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.8f, 0.2f)) * glm::scale(glm::mat4(1.0f), glm::vec3(logoWidth / reductionRatio2, logoHeight / reductionRatio2, 1.0f));
 		}
