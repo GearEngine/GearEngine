@@ -155,6 +155,109 @@ namespace Main {
 		
 	}
 
+	void BarracksLayer::sortTeamInfoListPoint()
+	{
+		std::sort(teamInfolist.begin(), teamInfolist.end(),
+			[](const BasicTeamInfo* t1, const BasicTeamInfo* t2)
+			{
+				if (t1->points > t2->points)
+				{
+					return true;
+				}
+				else if (t1->points < t2->points)
+				{
+					return false;
+				}
+
+				if (t1->playerType < t2->playerType)
+				{
+					return true;
+				}
+				else if (t1->playerType > t2->playerType)
+				{
+					return false;
+				}
+				else
+				{
+					int team1NameLength = t1->teamName.size();
+					int team2NameLength = t2->teamName.size();
+					int cmpLength = team1NameLength < team2NameLength ? team1NameLength : team2NameLength;
+
+					for (int i = 0; i < cmpLength; ++i)
+					{
+						if (t1->teamName[i] < t2->teamName[i])
+						{
+							return true;
+						}
+						else if (t1->teamName[i] > t2->teamName[i])
+						{
+							return false;
+						}
+					}
+					return team1NameLength == cmpLength;
+				}
+				return true;
+			}
+		);
+	}
+
+	void BarracksLayer::sortTeamInfoListName()
+	{
+		std::sort(teamInfolist.begin(), teamInfolist.end(),
+			[](const BasicTeamInfo* t1, const BasicTeamInfo* t2)
+			{
+				if (t1->playerType < t2->playerType)
+				{
+					return true;
+				}
+				else if (t1->playerType > t2->playerType)
+				{
+					return false;
+				}
+				else
+				{
+					int team1NameLength = t1->teamName.size();
+					int team2NameLength = t2->teamName.size();
+					int cmpLength = team1NameLength < team2NameLength ? team1NameLength : team2NameLength;
+
+					for (int i = 0; i < cmpLength; ++i)
+					{
+						if (t1->teamName[i] < t2->teamName[i])
+						{
+							return true;
+						}
+						else if (t1->teamName[i] > t2->teamName[i])
+						{
+							return false;
+						}
+					}
+					return team1NameLength == cmpLength;
+				}
+				return true;
+			}
+		);
+	}
+
+	void BarracksLayer::OnEvent(Gear::Event & e)
+	{
+		if (Gear::Util::IsPointRectCollision(MultiScene::virtualCursorPos, BorderRect))
+		{
+			Gear::EventDispatcher dispatcher(e);
+			dispatcher.Dispatch<Gear::MouseScrolledEvent>(GR_BIND_EVENT_FN(BarracksLayer::OnMouseScrolled));
+			dispatcher.Dispatch<Gear::MouseButtonPressedEvent>(GR_BIND_EVENT_FN(BarracksLayer::OnMouseClick));
+		}
+	}
+
+	bool BarracksLayer::OnMouseScrolled(Gear::MouseScrolledEvent & e)
+	{
+		return true;
+	}
+
+	bool BarracksLayer::OnMouseClick(Gear::MouseButtonPressedEvent & e)
+	{
+		return true;
+	}
+
 	void StartInGame()
 	{
 		//Temporary initData
@@ -201,7 +304,6 @@ namespace Main {
 		team2.nWorm = 3;
 		team2.TeamIcon = Gear::TextureStorage::GetTexture2D("USA");
 		team2.TeamItem = itemList;
-
 
 		initData.Teams.push_back(team1);
 		initData.Teams.push_back(team2);
@@ -706,5 +808,7 @@ namespace Main {
 	}
 
 
+
+	
 
 }

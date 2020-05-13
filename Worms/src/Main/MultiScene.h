@@ -2,11 +2,47 @@
 
 namespace Main {
 
-	struct MainTeamInfo
+	class BasicTeamInfo : public Gear::JsonAble
 	{
-		std::string name;
+	public:
+		std::string teamName;
 		std::string teamIcon;
+		unsigned int playerType;
+		int points;
+		std::vector<std::string> wormName;
 
+		BasicTeamInfo(const std::string& name = "")
+			: Gear::JsonAble(name)
+		{
+			wormName.resize(8);
+		}
+
+
+		virtual void Read(const Json::Value& value) override
+		{
+			teamName = value["teamName"].asString();
+			teamIcon = value["teamIcon"].asString();
+			points = value["points"].asInt();
+			playerType = value["playerType"].asUInt();
+
+			wormName.resize(8);
+			for (int i = 0; i < 8; ++i)
+			{
+				wormName[i] = value["wormName"][i].asString();
+			}
+		}
+		virtual void Write(Json::Value& value) override
+		{
+			value["teamName"] = teamName;
+			value["teamIcon"] = teamIcon;
+			value["points"] = points;
+			value["playerType"] = playerType;
+
+			for (int i = 0; i < 8; ++i)
+			{
+				value["wormName"][i] = wormName[i];
+			}
+		}
 	};
 
 
@@ -167,6 +203,98 @@ namespace Main {
 
 	};
 
+	class BarracksLayer : public Gear::Layer 
+	{
+		std::vector<BasicTeamInfo*> teamInfolist;
+		std::vector<Gear::Ref<Gear::Texture2D>> playerTypeIcons;
+		Gear::Util::FRect BorderRect;
+
+		float SelectorListBorderTop;
+		float SelectorListBorderBottom;
+		float filedYOffset;
+		float listShowMax = 6;
+		int curListShowIndex = 0;
+		glm::mat4 teamNameFiledTranform;
+		glm::mat4 playerTypeIconTransform;
+
+	public:
+		BarracksLayer(const Gear::Util::FRect& borderRect)
+			: Gear::Layer("BarraksLayer"), BorderRect(borderRect)
+		{
+			teamInfolist = Gear::JsonManager::Get()->ReadAll<BasicTeamInfo>("assets\\Data\\TeamInfo2");
+			sortTeamInfoListName();
+			float BorderHeight = BorderRect.Height - 0.034f * 2;
+			float BorderWidth = BorderRect.Width - 0.05f;
+			SelectorListBorderTop = BorderRect.CenterY - 0.034f + BorderHeight / 2;
+			SelectorListBorderBottom = BorderRect.CenterY - 0.034f - BorderHeight / 2;
+			filedYOffset = BorderHeight / listShowMax;
+
+			playerTypeIcons.resize(PlayerType::Max);
+			for (int i = 0; i < PlayerType::Max; ++i)
+			{
+				playerTypeIcons[i] = Gear::TextureStorage::GetTexture2D(PlayerType::GetName(i));
+			}
+			
+			playerTypeIconTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.17f, SelectorListBorderTop - filedYOffset / 2, 0.4f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.06f, 0.06f, 1.0f));
+			teamNameFiledTranform = glm::translate(glm::mat4(1.0f), glm::vec3(0.3f, SelectorListBorderTop - filedYOffset / 2, 0.4f)) * glm::scale(glm::mat4(1.0f), glm::vec3(BorderWidth, filedYOffset, 1.0f));
+		}
+
+		void sortTeamInfoListPoint();
+		void sortTeamInfoListName();
+
+		void DrawFont()
+		{
+			glm::mat4 tempFiledTrasform = teamNameFiledTranform;
+			for (int i = 0; i < listShowMax; ++i)
+			{
+				if (i)
+				{
+					tempFiledTrasform[3][1] -= filedYOffset;
+				}
+				std::string teamName = teamInfolist[i + curListShowIndex]->teamName;
+				int length = teamName.length();
+
+				Font::PrintFont(glm::vec3(tempFiledTrasform[3][0] - 0.03f + length * 0.5f * 0.024f, tempFiledTrasform[3][1], 0.5f), glm::vec3(0.05f, 0.05f, 1.0f), teamName, FontType::WhiteTinySmall, 0.025f, false);
+			}
+
+			tempFiledTrasform = teamNameFiledTranform;
+			tempFiledTrasform[3][0] += 0.74f;
+			for (int i = 0; i < listShowMax; ++i)
+			{
+				if (i)
+				{
+					tempFiledTrasform[3][1] -= filedYOffset;
+				}
+				Font::PrintFont(glm::vec3(tempFiledTrasform[3][0], tempFiledTrasform[3][1], 0.5f), glm::vec3(0.05f, 0.05f, 1.0f), std::to_string(teamInfolist[i + curListShowIndex]->points), FontType::WhiteTinySmall, 0.02f, false);
+			}
+
+		}
+
+		void DrawIcon()
+		{
+			glm::mat4 tempPlayerTypeTransform = playerTypeIconTransform;
+			for (int i = 0; i < PlayerType::Max; ++i)
+			{
+				if (i)
+				{
+					tempPlayerTypeTransform[3][1] -= filedYOffset;
+				}
+				Gear::Renderer2D::DrawQuad(tempPlayerTypeTransform, playerTypeIcons[teamInfolist[i + curListShowIndex]->playerType]);
+			}
+		}
+
+		virtual void OnUpdate(Gear::Timestep ts) override
+		{
+			DrawFont();
+			DrawIcon();
+		}
+
+		virtual void OnEvent(Gear::Event& e) override;
+		bool OnMouseScrolled(Gear::MouseScrolledEvent & e);
+		bool OnMouseClick(Gear::MouseButtonPressedEvent& e);
+
+	};
+
 	class MultiScene : public Gear::Scene
 	{
 		InGame::InitiateData initData;
@@ -240,6 +368,7 @@ namespace Main {
 		Gear::Util::FRect TeamListNameRect;
 		Gear::Util::FRect TeamListPointsRect;
 		glm::mat4 teamListTransform;
+		BarracksLayer* barraksLayer;
 
 		Gear::Ref<Gear::Texture2D> CreateTeam;
 		Gear::Ref<Gear::Texture2D> CreateTeamReady;
@@ -423,7 +552,9 @@ namespace Main {
 			TeamListPointsRect.ResetPos(1.02f, 0.177f, 0.105f, 0.034f);
 
 			MapSelectorLayer = new MapListLayer(&mapSelectorScrollerTransform, &MapSelectorScrollerRect, &MouseOnMapList, mapSelectorListTransform[1][1], mapSelectorListTransform[0][0], &mapSelectedIndex);
+			barraksLayer = new BarracksLayer(TeamListRect);
 			m_LayerStack.PushLayer(MapSelectorLayer);
+			m_LayerStack.PushLayer(barraksLayer);
 
 			OptionsRect.resize(BasicOption::OptionMax);
 			for (int i = 0; i < BasicOption::OptionMax; ++i)
@@ -435,6 +566,7 @@ namespace Main {
 			{
 				starInfos.push_back(SceneBackground::StarInfo());
 			}
+			
 		}
 
 		void CursorUpdate();
@@ -510,10 +642,12 @@ namespace Main {
 				OnMapSelectorActive = false;
 			}
 
+			//Layer Update
 			if (OnMapSelectorActive)
 			{
 				MapSelectorLayer->OnUpdate(ts);
 			}
+			barraksLayer->OnUpdate(ts);
 
 			Gear::Renderer2D::DrawFrameQuad(cursorTransform, Cursor, 0, 0);
 			Gear::Renderer2D::EndScene();

@@ -70,7 +70,6 @@ project "Gear"
 	libdirs
 	{
 		"%{prj.name}/vendor/fmod/lib",
-		"%{prj.name}/vendor/Json/lib"
 	}
 	links
 	{
@@ -94,16 +93,28 @@ project "Gear"
 		defines "GR_DEBUG"
 		runtime "Debug"
 		symbols "on"
+		libdirs
+		{
+			"%{prj.name}/vendor/Json/lib/Debug"
+		}
 	
 	filter "configurations:Release"
 		defines "GR_RELEASE"
 		runtime "Release"
 		optimize "on"
+		libdirs
+		{
+			"%{prj.name}/vendor/Json/lib/Release"
+		}
 	
 	filter "configurations:Dist"
 		defines "GR_DIST"
 		runtime "Release"
 		optimize "on"
+		libdirs
+		{
+			"%{prj.name}/vendor/Json/lib/Release"
+		}
 
 
 

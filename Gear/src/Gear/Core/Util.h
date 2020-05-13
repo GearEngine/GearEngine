@@ -17,12 +17,16 @@ namespace Gear {
 			FRect(float left, float top, float right, float bottom)
 				: Left(left), Top(top), Right(right), Bottom(bottom)
 			{
-				Width = Right - Left;
-				Height = Top - Bottom;
 				CenterX = Left + Width / 2;
 				CenterY = Bottom + Height / 2;
+				CalcHW();
 			}
 
+			void CalcHW()
+			{
+				Width = Right - Left;
+				Height = Top - Bottom;
+			}
 
 			void ResetPos(float centerX, float centerY, float halfWidth, float halfHeight)
 			{
@@ -33,6 +37,8 @@ namespace Gear {
 				Right = CenterX + halfWidth;
 				Top = CenterY + halfHeight;
 				Bottom = CenterY - halfHeight;
+
+				CalcHW();
 			}
 
 			void Set(float centerX, float centerY, float halfWidth, float halfHeight)
@@ -44,6 +50,8 @@ namespace Gear {
 				Right = CenterX + halfWidth;
 				Top = CenterY + halfHeight;
 				Bottom = CenterY - halfHeight;
+
+				CalcHW();
 			}
 
 			void Set(const glm::mat4& transform)

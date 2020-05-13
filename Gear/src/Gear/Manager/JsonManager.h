@@ -51,7 +51,7 @@ namespace Gear {
 				}
 			}
 
-			std::string checkpath = std::experimental::filesystem::current_path().string();
+			std::string checkpath = std::experimental::filesystem::current_path().string() + "\\" + path;
 			if (isJson)
 			{
 				checkpath = checkpath.substr(0, checkpath.length() - 5);
@@ -104,13 +104,13 @@ namespace Gear {
 			ret->SetName(name);
 
 			std::string fullpath = path + "\\" + name + ".json";
-			if (!experimental::filesystem::is_regular_file(fullpath))
+			if (!std::experimental::filesystem::is_regular_file(fullpath))
 			{
 				GR_CORE_ASSERT(false, "JsonManager::CreateFromRead {0} does't exist!", fullpath);
 				return nullptr;
 			}
 
-			ifstream input(fullpath, ifstream::binary);
+			std::ifstream input(fullpath, std::ifstream::binary);
 			if (!input)
 			{
 				GR_CORE_ASSERT(false, "JsonManager::CreateFromRead {0} does't exist!", fullpath);
@@ -132,13 +132,13 @@ namespace Gear {
 			TypeCheck<T>();
 
 			std::string fullpath = GetFullPath(path, data.Name);
-			if (fullpath.empty() || !experimental::filesystem::is_regular_file(fullpath))
+			if (fullpath.empty() || !std::experimental::filesystem::is_regular_file(fullpath))
 			{
 				GR_CORE_ASSERT(false, "JsonManager::Read {0} does't exist!", fullpath);
 				return;
 			}
 
-			ifstream input(fullpath, ifstream::binary);
+			std::ifstream input(fullpath, std::ifstream::binary);
 			Json::Reader reader;
 			Json::Value value;
 			reader.parse(input, value);
@@ -155,15 +155,15 @@ namespace Gear {
 			SetPath(path);
 
 			std::string fullpath = path;
-			if (experimental::filesystem::is_directory(path))
+			if (std::experimental::filesystem::is_directory(path))
 			{
-				fullpath += data.Name;
+				fullpath += ("\\" + data.Name + ".json");
 			}
 
 			Json::Value value;
 			data.Write(value);
 
-			ofstream ouput(fullpath, ios::out);
+			std::ofstream ouput(fullpath, std::ios::out);
 
 			ouput << value;
 			ouput.close();
@@ -181,7 +181,7 @@ namespace Gear {
 			Write(path, data);
 		}
 
-		//NOTE : Directory Must has Same type data
+		//NOTE : Directory Must have same type of data
 		template<typename T>
 		std::vector<T*> ReadAll(const std::string& path)
 		{

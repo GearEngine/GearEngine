@@ -340,6 +340,40 @@ namespace BasicOption {
 
 }
 
+namespace PlayerType
+{
+	enum Type : unsigned int
+	{
+		Human,
+		CPU1,
+		CPU2,
+		CPU3,
+		CPU4,
+		CPU5,
+		Max
+	};
+
+	inline std::string GetName(unsigned int type)
+	{
+		switch (type)
+		{
+		case PlayerType::Human:
+			return "Human";
+		case PlayerType::CPU1:
+			return "CPU1";
+		case PlayerType::CPU2:
+			return "CPU2";
+		case PlayerType::CPU3:
+			return "CPU3";
+		case PlayerType::CPU4:
+			return "CPU4";
+		case PlayerType::CPU5:
+			return "CPU5";
+		}
+		return "";
+	}
+}
+
 namespace Map {
 
 	const int MapMax = 33;
