@@ -207,27 +207,47 @@ namespace Main {
 	{
 		std::vector<BasicTeamInfo*> teamInfolist;
 		std::vector<Gear::Ref<Gear::Texture2D>> playerTypeIcons;
+		std::vector<Gear::Util::FRect> filedRects;
 		Gear::Util::FRect BorderRect;
 
 		float SelectorListBorderTop;
 		float SelectorListBorderBottom;
+
 		float filedYOffset;
-		float listShowMax = 6;
+		const int listShowMax = 6;
+
 		int curListShowIndex = 0;
+		int listShowIndexMax;
+
+		glm::vec4 scrollerColor;
+		float scrollerHighestYpos;
+		float scrollerLowestYpos;
+		float scrollerYOffset;
+		float ScrollerTop;
+		float ScrollerBottom;
+
 		glm::mat4 teamNameFiledTranform;
 		glm::mat4 playerTypeIconTransform;
+
+		//scroller
+		glm::mat4 scrollerTransform;
+
 
 	public:
 		BarracksLayer(const Gear::Util::FRect& borderRect)
 			: Gear::Layer("BarraksLayer"), BorderRect(borderRect)
 		{
 			teamInfolist = Gear::JsonManager::Get()->ReadAll<BasicTeamInfo>("assets\\Data\\TeamInfo2");
+			scrollerColor = glm::vec4(254.0f / 255.0f, 182.0f / 255.0f, 168.0f / 255.0f, 1.0f);
+
 			sortTeamInfoListName();
 			float BorderHeight = BorderRect.Height - 0.034f * 2;
 			float BorderWidth = BorderRect.Width - 0.05f;
 			SelectorListBorderTop = BorderRect.CenterY - 0.034f + BorderHeight / 2;
 			SelectorListBorderBottom = BorderRect.CenterY - 0.034f - BorderHeight / 2;
 			filedYOffset = BorderHeight / listShowMax;
+
+			float scrollerWidth = Gear::TextureStorage::GetTexture2D("MapListScroller")->GetWidth();
 
 			playerTypeIcons.resize(PlayerType::Max);
 			for (int i = 0; i < PlayerType::Max; ++i)
@@ -237,6 +257,28 @@ namespace Main {
 			
 			playerTypeIconTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.17f, SelectorListBorderTop - filedYOffset / 2, 0.4f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.06f, 0.06f, 1.0f));
 			teamNameFiledTranform = glm::translate(glm::mat4(1.0f), glm::vec3(0.3f, SelectorListBorderTop - filedYOffset / 2, 0.4f)) * glm::scale(glm::mat4(1.0f), glm::vec3(BorderWidth, filedYOffset, 1.0f));
+			scrollerTransform = glm::translate(glm::mat4(1.0f), glm::vec3(1.17f, 0.0f, 0.4f)) * glm::scale(glm::mat4(1.0f), glm::vec3(scrollerWidth / 238.0f, 0.0f, 1.0f));
+			ScrollerTop = SelectorListBorderTop - scrollerTransform[0][0] * 1.7f;
+			ScrollerBottom = SelectorListBorderBottom + scrollerTransform[0][0] * 1.7f;
+
+			filedRects.resize(listShowMax);
+			glm::mat4 temp = teamNameFiledTranform;
+			for (int i = 0; i < listShowMax; ++i)
+			{
+				if (i)
+				{
+					temp[3][1] -= filedYOffset;
+				}
+				filedRects[i].Set(temp);
+			}
+
+			RecalculateScrollerPos();
+		}
+
+		void pushTeamData(BasicTeamInfo* teamInfo) 
+		{
+			teamInfolist.push_back(teamInfo);
+			RecalculateScrollerPos();
 		}
 
 		void sortTeamInfoListPoint();
@@ -245,7 +287,10 @@ namespace Main {
 		void DrawFont()
 		{
 			glm::mat4 tempFiledTrasform = teamNameFiledTranform;
-			for (int i = 0; i < listShowMax; ++i)
+
+			int indexMax = listShowMax < teamInfolist.size() ? listShowMax : teamInfolist.size();
+
+			for (int i = 0; i < indexMax; ++i)
 			{
 				if (i)
 				{
@@ -259,7 +304,7 @@ namespace Main {
 
 			tempFiledTrasform = teamNameFiledTranform;
 			tempFiledTrasform[3][0] += 0.74f;
-			for (int i = 0; i < listShowMax; ++i)
+			for (int i = 0; i < indexMax; ++i)
 			{
 				if (i)
 				{
@@ -270,10 +315,57 @@ namespace Main {
 
 		}
 
+		void RecalculateScrollerPos()
+		{
+			int listSize = teamInfolist.size();
+			if (listSize < listShowMax)
+			{
+				listSize = 6;
+			}
+			listShowIndexMax = listSize - listShowMax;
+
+			//showIndex
+			if (listSize > 6)
+			{
+				if (curListShowIndex > listShowIndexMax)
+				{
+					curListShowIndex = listShowIndexMax;
+				}
+			}
+			else
+			{
+				curListShowIndex = 0;
+			}
+
+			//height
+			float scrollerHeight = listShowMax / (float)listSize * (ScrollerTop - ScrollerBottom);
+			scrollerTransform[1][1] = scrollerHeight;
+
+			//yPos
+			scrollerHighestYpos = ScrollerTop - scrollerHeight / 2;
+			scrollerLowestYpos = ScrollerBottom + scrollerHeight / 2;
+
+			float scrollerMaxDist = scrollerHighestYpos - scrollerLowestYpos;
+
+			if (listShowIndexMax > 0)
+			{
+				scrollerYOffset = scrollerMaxDist / (float)listShowIndexMax;
+			}
+			else
+			{
+				scrollerYOffset = 0.0f;
+			}
+
+			scrollerTransform[3][1] = scrollerHighestYpos - scrollerYOffset * curListShowIndex;
+
+		}
+
 		void DrawIcon()
 		{
 			glm::mat4 tempPlayerTypeTransform = playerTypeIconTransform;
-			for (int i = 0; i < PlayerType::Max; ++i)
+			int indexMax = listShowMax < teamInfolist.size() ? listShowMax : teamInfolist.size();
+
+			for (int i = 0; i < indexMax; ++i)
 			{
 				if (i)
 				{
@@ -287,12 +379,12 @@ namespace Main {
 		{
 			DrawFont();
 			DrawIcon();
+			Gear::Renderer2D::DrawQuad(scrollerTransform, scrollerColor);
 		}
 
 		virtual void OnEvent(Gear::Event& e) override;
 		bool OnMouseScrolled(Gear::MouseScrolledEvent & e);
 		bool OnMouseClick(Gear::MouseButtonPressedEvent& e);
-
 	};
 
 	class MultiScene : public Gear::Scene
@@ -357,10 +449,16 @@ namespace Main {
 		std::vector<Gear::Ref<Gear::Texture2D>> MapIcons;
 		glm::mat4 mapIconTransform;
 
+		//selectedTeam
 		Gear::Ref<Gear::Texture2D> SelectedTeam;
 		Gear::Util::FRect SelectedTeamRect;
 		glm::mat4 selectedTeamTransform;
 
+	public:
+		static std::vector<BasicTeamInfo*> selectedTeamList;
+	private:
+
+		//Barrack
 		Gear::Ref<Gear::Texture2D> TeamList;
 		Gear::Ref<Gear::Texture2D> TeamListName;
 		Gear::Ref<Gear::Texture2D> TeamListPoints;
@@ -587,6 +685,16 @@ namespace Main {
 			OptionsIndex[BasicOption::WormEnergy] = BasicOption::WormEnergy::WE150;
 			OptionsIndex[BasicOption::WormSelect] = BasicOption::WormSelect::WSOff;
 			OptionsIndex[BasicOption::Teleportin] = BasicOption::Teleportin::Off;
+
+			if (selectedTeamList.size())
+			{
+				for (int i = 0; i < selectedTeamList.size(); ++i)
+				{
+					barraksLayer->pushTeamData(selectedTeamList[i]);
+				}
+				barraksLayer->sortTeamInfoListName();
+				selectedTeamList.clear();
+			}
 
 			OnMapSelectorActive = false;
 		}

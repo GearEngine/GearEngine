@@ -250,11 +250,44 @@ namespace Main {
 
 	bool BarracksLayer::OnMouseScrolled(Gear::MouseScrolledEvent & e)
 	{
+		if (e.GetYOffset() < 0)
+		{
+			if (curListShowIndex < listShowIndexMax)
+			{
+				++curListShowIndex;
+				scrollerTransform[3][1] -= scrollerYOffset;
+			}
+		}
+		else
+		{
+			if (curListShowIndex > 0)
+			{
+				--curListShowIndex;
+				scrollerTransform[3][1] += scrollerYOffset;
+			}
+		}
+
 		return true;
 	}
 
 	bool BarracksLayer::OnMouseClick(Gear::MouseButtonPressedEvent & e)
 	{
+		int indexMax = 6;
+		if (teamInfolist.size() < indexMax)
+		{
+			indexMax = teamInfolist.size();
+		}
+
+		for (int i = 0; i < indexMax; ++i)
+		{
+			if (Gear::Util::IsPointRectCollision(MultiScene::virtualCursorPos, filedRects[i]))
+			{
+				MultiScene::selectedTeamList.push_back(teamInfolist[i + curListShowIndex]);
+				teamInfolist.erase(teamInfolist.begin() + i + curListShowIndex);
+				RecalculateScrollerPos();
+				break;
+			}
+		}
 		return true;
 	}
 
@@ -344,6 +377,7 @@ namespace Main {
 
 	std::pair<float, float> MultiScene::virtualCursorPos = { 0.0f, 0.0f };
 	bool MultiScene::OnMapSelectorActive = false;
+	std::vector<BasicTeamInfo*> MultiScene::selectedTeamList = std::vector<BasicTeamInfo*>();
 
 	void MultiScene::CursorUpdate()
 	{
