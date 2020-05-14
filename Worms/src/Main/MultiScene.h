@@ -191,18 +191,6 @@ namespace Main {
 		void MousePressLogic();
 	};
 
-	class TeamSelectLayer : public Gear::Layer 
-	{
-
-	public:
-		TeamSelectLayer()
-			: Gear::Layer("TeamSelectLayer")
-		{
-
-		}
-
-	};
-
 	class BarracksLayer : public Gear::Layer 
 	{
 		std::vector<BasicTeamInfo*> teamInfolist;
@@ -387,6 +375,110 @@ namespace Main {
 		bool OnMouseClick(Gear::MouseButtonPressedEvent& e);
 	};
 
+	class SelectedTeamLayer : public Gear::Layer
+	{
+		BarracksLayer* barracksLayer;
+
+		Gear::Util::FRect teamListBorderRect;
+		std::vector<Gear::Util::FRect> filedRects;
+		glm::mat4 filedTransform;
+		glm::mat4 playerTypeIconTransform;
+		const int teamListMax = 6;
+		float filedYOffset;
+		std::vector<Gear::Ref<Gear::Texture2D>> playerTypeIcons;
+
+		//button
+		std::vector<Gear::Ref<Gear::Texture2D>> wormCountTexture;
+		std::vector<Gear::Ref<Gear::Texture2D>> wormCountReadyTexture;
+
+		std::vector<int> wormCount;
+		glm::mat4 wormCountTransform;
+		std::vector<Gear::Util::FRect> wormCountRect;
+		std::bitset<6> mouseOnWormCount;
+
+	public:
+		SelectedTeamLayer(const Gear::Util::FRect& listBorderRect, BarracksLayer* _barracksLayer)
+			: Gear::Layer("SelectedTeamLayer")
+		{
+			playerTypeIcons.resize(6);
+			barracksLayer = _barracksLayer;
+
+			for (int i = 0; i < PlayerType::Max; ++i)
+			{
+				playerTypeIcons[i] = Gear::TextureStorage::GetTexture2D(PlayerType::GetName(i));
+			}
+
+			teamListBorderRect = listBorderRect;
+			filedYOffset = teamListBorderRect.Height / teamListMax;
+
+			filedTransform = glm::translate(glm::mat4(1.0f), glm::vec3(teamListBorderRect.CenterX, teamListBorderRect.CenterY + filedYOffset * 2.5f, 0.4f));
+			filedTransform[0][0] = teamListBorderRect.Width;
+			filedTransform[1][1] = filedYOffset;
+
+			playerTypeIconTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.162f, filedTransform[3][1], 0.4f));
+			playerTypeIconTransform[0][0] = 0.06f;
+			playerTypeIconTransform[1][1] = 0.06f;
+
+			glm::mat4 temp = filedTransform;
+			filedRects.resize(teamListMax);
+			for (int i = 0; i < teamListMax; ++i)
+			{
+				if (i)
+				{
+					temp[3][1] -= filedYOffset;
+				}
+				filedRects[i].Set(temp);
+			}
+
+
+			//Button
+			wormCountTexture.resize(TeamBasicOption::WormCount::Max);
+			wormCountReadyTexture.resize(TeamBasicOption::WormCount::Max);
+			for (int i = 0; i < TeamBasicOption::WormCount::Max; ++i)
+			{
+				std::string name = "WormCount" + std::to_string(i + 1);
+				wormCountTexture[i] = Gear::TextureStorage::GetTexture2D(name);
+				wormCountReadyTexture[i] = Gear::TextureStorage::GetTexture2D(name + "r");
+			}
+
+			float wormCountTextureWidth = wormCountTexture[0]->GetWidth();
+			float wormCountTextureHeight = wormCountTexture[0]->GetHeight();
+
+			wormCountTransform = glm::translate(glm::mat4(1.0f), glm::vec3(1.1f, filedTransform[3][1], 0.4f)) * glm::scale(glm::mat4(1.0f), glm::vec3(wormCountTextureWidth / 238.0f, wormCountTextureHeight / 238.0f, 1.0f));
+			glm::mat4 tempCountTransform = wormCountTransform;
+
+			wormCountRect.resize(teamListMax);
+			for (int i = 0; i < teamListMax; ++i)
+			{
+				if (i)
+				{
+					tempCountTransform[3][1] -= filedYOffset;
+				}
+				wormCountRect[i].Set(tempCountTransform);
+			}
+			
+			wormCount.resize(6, 3);
+		}
+
+		void DrawFont();
+		void DrawIcon();
+		void ButtonUpdate();
+		void DrawButton();
+
+		virtual void OnUpdate(Gear::Timestep ts) override
+		{
+			DrawFont();
+			DrawIcon();
+			ButtonUpdate();
+			DrawButton();
+		}
+
+		virtual void OnEvent(Gear::Event& e) override;
+		bool OnMouseClick(Gear::MouseButtonPressedEvent& e);
+		void resetBasicInfo();
+	};
+
+
 	class MultiScene : public Gear::Scene
 	{
 		InGame::InitiateData initData;
@@ -453,6 +545,7 @@ namespace Main {
 		Gear::Ref<Gear::Texture2D> SelectedTeam;
 		Gear::Util::FRect SelectedTeamRect;
 		glm::mat4 selectedTeamTransform;
+		SelectedTeamLayer* selectedTeamLayer;
 
 	public:
 		static std::vector<BasicTeamInfo*> selectedTeamList;
@@ -520,7 +613,6 @@ namespace Main {
 		MultiScene()
 			: Scene("MultiScene"), centerMousePos(640.0f, 360.0f)
 		{
-
 			Grad = Gear::TextureStorage::GetTexture2D("minigrad");
 
 			Cursor = Gear::TextureStorage::GetFrameTexture2D("Cursor");
@@ -651,8 +743,10 @@ namespace Main {
 
 			MapSelectorLayer = new MapListLayer(&mapSelectorScrollerTransform, &MapSelectorScrollerRect, &MouseOnMapList, mapSelectorListTransform[1][1], mapSelectorListTransform[0][0], &mapSelectedIndex);
 			barraksLayer = new BarracksLayer(TeamListRect);
+			selectedTeamLayer = new SelectedTeamLayer(SelectedTeamRect, barraksLayer);
 			m_LayerStack.PushLayer(MapSelectorLayer);
 			m_LayerStack.PushLayer(barraksLayer);
+			m_LayerStack.PushLayer(selectedTeamLayer);
 
 			OptionsRect.resize(BasicOption::OptionMax);
 			for (int i = 0; i < BasicOption::OptionMax; ++i)
@@ -755,6 +849,10 @@ namespace Main {
 			{
 				MapSelectorLayer->OnUpdate(ts);
 			}
+			if (selectedTeamList.size())
+			{
+				selectedTeamLayer->OnUpdate(ts);
+			}
 			barraksLayer->OnUpdate(ts);
 
 			Gear::Renderer2D::DrawFrameQuad(cursorTransform, Cursor, 0, 0);
@@ -782,8 +880,5 @@ namespace Main {
 		void StartGame();
 		void OnExit();
 	};
-
-
-
 
 }

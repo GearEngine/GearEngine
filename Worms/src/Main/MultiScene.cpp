@@ -282,13 +282,129 @@ namespace Main {
 		{
 			if (Gear::Util::IsPointRectCollision(MultiScene::virtualCursorPos, filedRects[i]))
 			{
-				MultiScene::selectedTeamList.push_back(teamInfolist[i + curListShowIndex]);
-				teamInfolist.erase(teamInfolist.begin() + i + curListShowIndex);
-				RecalculateScrollerPos();
+				if (MultiScene::selectedTeamList.size() < 6)
+				{
+					MultiScene::selectedTeamList.push_back(teamInfolist[i + curListShowIndex]);
+					teamInfolist.erase(teamInfolist.begin() + i + curListShowIndex);
+					RecalculateScrollerPos();
+				}
 				break;
 			}
 		}
 		return true;
+	}
+
+	void SelectedTeamLayer::DrawFont()
+	{
+		for (int i = 0; i < MultiScene::selectedTeamList.size(); ++i)
+		{
+			std::string name = MultiScene::selectedTeamList[i]->Name;
+			int length = name.length();
+			Font::PrintFont(glm::vec3(filedTransform[3][0] - 0.2f + length * 0.5f * 0.024f, filedTransform[3][1] - i * filedYOffset, 0.4f), glm::vec3(0.05f, 0.05f, 1.0f), name, FontType::WhiteTinySmall, 0.025f, false);
+		}
+	}
+
+	void SelectedTeamLayer::DrawIcon()
+	{
+		glm::mat4 tempTransform = playerTypeIconTransform;
+		for (int i = 0; i < MultiScene::selectedTeamList.size(); ++i)
+		{
+			if (i)
+			{
+				tempTransform[3][1] -= filedYOffset;
+			}
+			Gear::Renderer2D::DrawQuad(tempTransform, playerTypeIcons[MultiScene::selectedTeamList[i]->playerType]);
+		}
+	}
+
+	void SelectedTeamLayer::ButtonUpdate()
+	{
+		mouseOnWormCount.reset();
+
+		//WormCount
+		for (int i = 0; i < MultiScene::selectedTeamList.size(); ++i)
+		{
+			if (Gear::Util::IsPointRectCollision(MultiScene::virtualCursorPos, wormCountRect[i]))
+			{
+				mouseOnWormCount[i] = true;
+				break;
+			}
+
+		}
+	}
+
+	void SelectedTeamLayer::DrawButton()
+	{
+		//WormCount
+		glm::mat4 tempTransform = wormCountTransform;
+		for (int i = 0; i < MultiScene::selectedTeamList.size(); ++i)
+		{
+			if (i)
+			{
+				tempTransform[3][1] -= filedYOffset;
+			}
+			if (mouseOnWormCount[i])
+			{
+				Gear::Renderer2D::DrawQuad(tempTransform, wormCountReadyTexture[wormCount[i] - 1]);
+			}
+			else
+			{
+				Gear::Renderer2D::DrawQuad(tempTransform, wormCountTexture[wormCount[i] - 1]);
+			}
+		}
+	}
+
+	void SelectedTeamLayer::OnEvent(Gear::Event & e)
+	{
+		Gear::EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<Gear::MouseButtonPressedEvent>(GR_BIND_EVENT_FN(SelectedTeamLayer::OnMouseClick));
+	}
+
+	bool SelectedTeamLayer::OnMouseClick(Gear::MouseButtonPressedEvent & e)
+	{
+		//wormCountHandle
+		for (int i = 0; i < MultiScene::selectedTeamList.size(); ++i)
+		{
+			if (mouseOnWormCount[i])
+			{
+				if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT))
+				{
+					if (wormCount[i] < TeamBasicOption::Max)
+					{
+						++wormCount[i];
+					}
+				}
+				if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_RIGHT))
+				{
+					if (wormCount[i] > 1)
+					{
+						--wormCount[i];
+					}
+				}
+			}
+		}
+
+		for (int i = 0; i < MultiScene::selectedTeamList.size(); ++i)
+		{
+			if (Gear::Util::IsPointRectCollision(MultiScene::virtualCursorPos, filedRects[i]))
+			{
+				barracksLayer->pushTeamData(MultiScene::selectedTeamList[i]);
+				barracksLayer->sortTeamInfoListName();
+				MultiScene::selectedTeamList.erase(MultiScene::selectedTeamList.begin() + i);
+				for (int j = i; j < MultiScene::selectedTeamList.size(); ++j)
+				{
+					wormCount[j] = wormCount[j + 1];
+				}
+				resetBasicInfo();
+				break;
+			}
+		}
+		return false;
+	}
+
+	void SelectedTeamLayer::resetBasicInfo()
+	{
+		wormCount[MultiScene::selectedTeamList.size()] = 3;
 	}
 
 	void StartInGame()
@@ -840,9 +956,5 @@ namespace Main {
 	void MultiScene::StartGame()
 	{
 	}
-
-
-
-	
 
 }

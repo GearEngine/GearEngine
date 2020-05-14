@@ -27,7 +27,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/glm.hpp>
-#include <json.h>
+#include "../vendor/Json/include/json.h"
 
 #ifdef GR_PLATFORM_WINDOWS
 	#include <Windows.h>
