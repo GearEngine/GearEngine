@@ -360,7 +360,33 @@ namespace TeamBasicOption
 		Plus,
 		Minus,
 		None,
+		HMax,
 	};
+
+	enum Ally : unsigned int
+	{
+		a_1,
+		a_2,
+		a_3,
+		a_4,
+		a_5,
+		a_6,
+		AMax
+	};
+
+	inline std::string GetHandicapName(unsigned int type)
+	{
+		switch (type)
+		{
+		case TeamBasicOption::Plus:
+			return "Plus";
+		case TeamBasicOption::Minus:
+			return "Minus";
+		case TeamBasicOption::None:
+			return "None";
+		}
+		return "";
+	}
 }
 
 namespace PlayerType

@@ -388,9 +388,25 @@ namespace Main {
 		std::vector<Gear::Ref<Gear::Texture2D>> playerTypeIcons;
 
 		//button
+		//Handicap
+		std::vector<Gear::Ref<Gear::Texture2D>> handicapTexture;
+		std::vector<Gear::Ref<Gear::Texture2D>> handicapReadyTexture;
+		std::vector<int> handicapType;
+		glm::mat4 handicapTransform;
+		std::vector<Gear::Util::FRect> handicapRect;
+		std::bitset<6> mouseOnHandicap;
+
+		//Ally
+		std::vector<Gear::Ref<Gear::Texture2D>> allyTexture;
+		std::vector<Gear::Ref<Gear::Texture2D>> allyReadyTexture;
+		std::vector<int> allyType;
+		glm::mat4 allyTransform;
+		std::vector<Gear::Util::FRect> allyRect;
+		std::bitset<6> mouseOnAlly;
+
+		//wormCount
 		std::vector<Gear::Ref<Gear::Texture2D>> wormCountTexture;
 		std::vector<Gear::Ref<Gear::Texture2D>> wormCountReadyTexture;
-
 		std::vector<int> wormCount;
 		glm::mat4 wormCountTransform;
 		std::vector<Gear::Util::FRect> wormCountRect;
@@ -432,6 +448,61 @@ namespace Main {
 
 
 			//Button
+			//Handicap
+			handicapTexture.resize(TeamBasicOption::Handicap::HMax);
+			handicapReadyTexture.resize(TeamBasicOption::Handicap::HMax);
+			for (int i = 0; i < TeamBasicOption::Handicap::HMax; ++i)
+			{
+				std::string name = "Handicap" + TeamBasicOption::GetHandicapName(i);
+				handicapTexture[i] = Gear::TextureStorage::GetTexture2D(name);
+				handicapReadyTexture[i] = Gear::TextureStorage::GetTexture2D(name + "r");
+			}
+			handicapTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.86f, filedTransform[3][1], 0.4f));
+			handicapTransform[0][0] = 0.07f;
+			handicapTransform[1][1] = 0.07f;
+
+			glm::mat4 tempHandiTransform = handicapTransform;
+			handicapRect.resize(teamListMax);
+			for (int i = 0; i < teamListMax; ++i)
+			{
+				if (i)
+				{
+					tempHandiTransform[3][1] -= filedYOffset;
+				}
+				handicapRect[i].Set(tempHandiTransform);
+			}
+			handicapType.resize(teamListMax, TeamBasicOption::Handicap::None);
+
+			//Ally
+			allyTexture.resize(TeamBasicOption::Ally::AMax);
+			allyReadyTexture.resize(TeamBasicOption::Ally::AMax);
+			for (int i = 0; i < TeamBasicOption::Ally::AMax; ++i)
+			{
+				std::string name = "Ally" + std::to_string(i + 1);
+				allyTexture[i] = Gear::TextureStorage::GetTexture2D(name);
+				allyReadyTexture[i] = Gear::TextureStorage::GetTexture2D(name + "r");
+			}
+			allyTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.94f, filedTransform[3][1], 0.4f));
+			allyTransform[0][0] = 0.07f;
+			allyTransform[1][1] = 0.07f;
+
+			glm::mat4 tempAllyTransform = allyTransform;
+			allyRect.resize(teamListMax);
+			for (int i = 0; i < teamListMax; ++i)
+			{
+				if (i)
+				{
+					tempAllyTransform[3][1] -= filedYOffset;
+				}
+				allyRect[i].Set(tempAllyTransform);
+			}
+			allyType.resize(6);
+			for (int i = 0; i < 6; ++i)
+			{
+				allyType[i] = i;
+			}
+
+			//WormCount
 			wormCountTexture.resize(TeamBasicOption::WormCount::Max);
 			wormCountReadyTexture.resize(TeamBasicOption::WormCount::Max);
 			for (int i = 0; i < TeamBasicOption::WormCount::Max; ++i)
@@ -445,8 +516,8 @@ namespace Main {
 			float wormCountTextureHeight = wormCountTexture[0]->GetHeight();
 
 			wormCountTransform = glm::translate(glm::mat4(1.0f), glm::vec3(1.1f, filedTransform[3][1], 0.4f)) * glm::scale(glm::mat4(1.0f), glm::vec3(wormCountTextureWidth / 238.0f, wormCountTextureHeight / 238.0f, 1.0f));
+			
 			glm::mat4 tempCountTransform = wormCountTransform;
-
 			wormCountRect.resize(teamListMax);
 			for (int i = 0; i < teamListMax; ++i)
 			{
@@ -457,13 +528,15 @@ namespace Main {
 				wormCountRect[i].Set(tempCountTransform);
 			}
 			
-			wormCount.resize(6, 3);
+			wormCount.resize(teamListMax, TeamBasicOption::WormCount::_3);
+
 		}
 
 		void DrawFont();
 		void DrawIcon();
 		void ButtonUpdate();
 		void DrawButton();
+		int GetAllyCount();
 
 		virtual void OnUpdate(Gear::Timestep ts) override
 		{
@@ -529,7 +602,7 @@ namespace Main {
 
 		glm::mat4 mapSelectorScrollerTransform;
 
-		Gear::Layer* MapSelectorLayer;
+		MapListLayer* MapSelectorLayer;
 		int mapSelectedIndex;
 		//
 
@@ -858,6 +931,9 @@ namespace Main {
 			Gear::Renderer2D::DrawFrameQuad(cursorTransform, Cursor, 0, 0);
 			Gear::Renderer2D::EndScene();
 		}
+
+		bool allyCheck();
+		bool SettingInitData();
 
 		void ChangeTurnTime();
 		void ChangeRoundTime();
