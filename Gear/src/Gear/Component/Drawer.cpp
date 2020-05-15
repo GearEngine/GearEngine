@@ -13,6 +13,9 @@ namespace Gear {
 
 	Drawer2D::~Drawer2D()
 	{
+		m_Texture.reset();
+		m_Blending.reset();
+		m_Mask.reset();
 	}
 
 	void Drawer2D::Update(Timestep ts)

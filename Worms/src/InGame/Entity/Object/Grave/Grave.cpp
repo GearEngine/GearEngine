@@ -22,7 +22,7 @@ namespace InGame {
 			{ GraveInfo::State::OnUnderWater, new GraveOnUnderWaterHandler }
 		});
 
-		auto mask = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName + "Mask");
+		auto mask = initData.Mapinfo.Mask;
 		int width = mask->GetWidth();
 		int height = mask->GetHeight();
 		auto maskTranslate = glm::translate(glm::mat4(1.0f), initData.MapPosition)
@@ -137,6 +137,13 @@ namespace InGame {
 
 	void GravePool::init(const InitiateData & initData)
 	{
+		m_GraveType1.clear();
+		m_GraveType2.clear();
+		m_GraveType3.clear();
+		m_GraveType4.clear();
+		m_GraveType5.clear();
+		m_GraveType6.clear();
+
 		m_GraveType1.resize(15);
 		for (int i = 0; i < 15; ++i)
 		{

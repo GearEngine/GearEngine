@@ -549,6 +549,8 @@ namespace Main {
 		virtual void OnEvent(Gear::Event& e) override;
 		bool OnMouseClick(Gear::MouseButtonPressedEvent& e);
 		void resetBasicInfo();
+
+		friend class MultiScene;
 	};
 
 
@@ -839,9 +841,15 @@ namespace Main {
 		void DrawFont();
 		void ButtonUpdate();
 		void MouseButtonClick();
+		bool needClearInGame = false;
 
 		virtual void Init(const std::any& data) override
 		{
+			if (std::any_cast<int>(data) == -1)
+			{
+				needClearInGame = true;
+			}
+
 			virtualCursorPos = { 640.0f, 360.0f };
 			cursorTransform[3][0] = 0.0f;
 			cursorTransform[3][1] = 0.0f;
@@ -872,6 +880,13 @@ namespace Main {
 			Gear::RenderCommand::Clear();
 
 			Gear::Renderer2D::BeginScene(SceneBackground::UiCamera);
+
+			if (needClearInGame)
+			{
+				Gear::SceneManager::Get()->EraseScene("InGame");
+				Gear::EntitySystem::Shutdown();
+				needClearInGame = false;
+			}
 
 			for (int i = 0; i < SceneBackground::MaxStar; ++i)
 			{

@@ -2,8 +2,11 @@
 
 namespace InGame {
 
-	struct MapInfo
+	class MapInfo : public Gear::JsonAble
 	{
+	public:
+		Gear::Ref<Gear::Texture2D> Map;
+		Gear::Ref<Gear::Texture2D> Mask;
 		std::string MapName;
 		std::string TerrianBackName;
 		std::string FloatingMaterial;
@@ -12,6 +15,31 @@ namespace InGame {
 		glm::vec4 WaterRGB;
 		float TerrainMaxX;
 		float TerrainMinX;
+
+		void MapLoad()
+		{
+			Map = Gear::Texture2D::Create("assets\\Terrain\\" + MapName + ".png");
+			Mask = Gear::Texture2D::Create("assets\\Terrain\\" + MapName + "Mask.png");
+		}
+
+		virtual void Read(const Json::Value& value) override
+		{
+			Json::Value mapValue = value[Name];
+			MapName = Name;
+			TerrianBackName = mapValue["TerrianBackName"].asString();
+			FloatingMaterial = mapValue["FloatingMaterial"].asString();
+			Water = mapValue["Water"].asString();
+			Grad = mapValue["Grad"].asString();
+			WaterRGB = glm::vec4(mapValue["WR"].asFloat() / 255.0f, mapValue["WG"].asFloat() / 255.0f, mapValue["WB"].asFloat() / 255.0f, mapValue["WA"].asFloat() / 255.0f);
+			TerrainMaxX = mapValue["TerrainMaxX"].asFloat();
+			TerrainMinX = mapValue["TerrainMinX"].asFloat();
+		}
+
+		virtual void Write(Json::Value& value)
+		{
+
+		}
+
 	};
 
 	namespace WormInfo {
@@ -57,7 +85,30 @@ namespace InGame {
 		{
 			Red = WormInfo::Stat::StatEnd,
 			Blue,
+			Green,
+			Yellow,
+			Purple,
+			Sky
 		};
+
+		inline Color ConvertAllyToColor(unsigned int type)
+		{
+			switch (type)
+			{
+			case 0:
+				return Color::Red;
+			case 1:
+				return Color::Blue;
+			case 2:
+				return Color::Green;
+			case 3:
+				return Color::Yellow;
+			case 4:
+				return Color::Purple;
+			case 5:
+				return Color::Sky;
+			}
+		}
 	}
 
 	namespace GraveInfo {
@@ -174,25 +225,11 @@ namespace InGame {
 		int nTotalWorms = 0;
 	};
 
-	inline MapInfo GetMapInfo(std::string name)
+	inline MapInfo GetMapInfo(const std::string& mapName)
 	{
 		MapInfo ret;
-		bool find = false;
-
-		if (name == "City")
-		{
-			ret.MapName = "City";
-			ret.FloatingMaterial = "Leaf";
-			ret.TerrianBackName = "BlueMountain";
-			ret.Water = "BlueWaterWave";
-			ret.Grad = "Grad0";
-			ret.WaterRGB = { 50 / 255.0f, 59 / 255.0f, 126 / 255.0f, 1.0f };
-			ret.TerrainMaxX = 25.3f;
-			ret.TerrainMinX = -25.3f;
-			find = true;
-		}
-
-		GR_ASSERT(find, "Map Loading Fail!, There is no {0} Map", name);
+		ret.SetName(mapName);
+		Gear::JsonManager::Get()->Read("assets\\Data\\MapInfo\\MapInfo.json", ret);
 		return ret;
 	}
 }

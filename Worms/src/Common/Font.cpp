@@ -14,6 +14,14 @@ void Font::Init()
 	m_Fonts[FontType::RedSmall] = Gear::FrameTexture2D::Create("assets/Font/RedSmall.png", 1, 160);
 	m_Fonts[FontType::Blue] = Gear::FrameTexture2D::Create("assets/Font/Blue.png", 1, 160);
 	m_Fonts[FontType::BlueSmall] = Gear::FrameTexture2D::Create("assets/Font/BlueSmall.png", 1, 160);
+	m_Fonts[FontType::Green] = Gear::FrameTexture2D::Create("assets/Font/Green.png", 1, 160);
+	m_Fonts[FontType::GreenSmall] = Gear::FrameTexture2D::Create("assets/Font/GreenSmall.png", 1, 160);
+	m_Fonts[FontType::Yellow] = Gear::FrameTexture2D::Create("assets/Font/Yellow.png", 1, 160);
+	m_Fonts[FontType::YellowSmall] = Gear::FrameTexture2D::Create("assets/Font/YellowSmall.png", 1, 160);
+	m_Fonts[FontType::Purple] = Gear::FrameTexture2D::Create("assets/Font/Purple.png", 1, 160);
+	m_Fonts[FontType::PurpleSmall] = Gear::FrameTexture2D::Create("assets/Font/PurpleSmall.png", 1, 160);
+	m_Fonts[FontType::Sky] = Gear::FrameTexture2D::Create("assets/Font/Sky.png", 1, 160);
+	m_Fonts[FontType::SkySmall] = Gear::FrameTexture2D::Create("assets/Font/SkySmall.png", 1, 160);
 	m_Fonts[FontType::White] = Gear::FrameTexture2D::Create("assets/Font/White.png", 1, 160);
 	m_Fonts[FontType::WhiteSmall] = Gear::FrameTexture2D::Create("assets/Font/WhiteSmall.png", 1, 160);
 	m_Fonts[FontType::GraySmall] = Gear::FrameTexture2D::Create("assets/Font/GraySmall.png", 1, 160);

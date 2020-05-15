@@ -33,6 +33,7 @@ namespace Gear {
 	class EventSystem
 	{
 	private:
+		static void Reset();
 		static void Shutdown();
 
 	public:

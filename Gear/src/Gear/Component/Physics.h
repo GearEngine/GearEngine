@@ -19,7 +19,7 @@ namespace Gear {
 		Physics2D(int id)
 			: Physics(id)
 		{}
-		virtual ~Physics2D() = default;
+		virtual ~Physics2D() { m_PixelCollisionTargetTexture.reset(); }
 
 		class PixelCollisionHander
 		{

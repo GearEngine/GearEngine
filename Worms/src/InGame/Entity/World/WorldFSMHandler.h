@@ -98,7 +98,7 @@ namespace InGame {
 					}
 				}
 			}
-			return WorldState::OnWaiting;
+			return WorldState::OnWaiting; 
 		}
 	};
 
@@ -165,7 +165,7 @@ namespace InGame {
 			{
 				auto& fog = lateDrawer->GetQuardStuff("Fog");
 				fog.Color.a += 0.005f;
-				if (fog.Color.a > 1.0f)
+				if (fog.Color.a >= 1.0f)
 				{
 					pastTime = 0.0f;
 					inFirst = true;
@@ -206,7 +206,7 @@ namespace InGame {
 			{
 				auto& fog = lateDrawer->GetQuardStuff("Fog");
 				fog.Color.a += 0.005f;
-				if (fog.Color.a > 1.0f)
+				if (fog.Color.a >= 1.0f)
 				{
 					pastTime = 0.0f;
 					inFirst = true;
@@ -225,6 +225,16 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
+			Gear::Application::Get().ActivateEntitySystem(false);
+			Gear::SceneManager::Get()->changeScene("MultiScene", -1);
+
+			WorldWormData::s_ActiveWorms.clear();
+			WorldWormData::s_LivingWorms.clear();
+			while (!WorldWormData::s_WaitingDyeQue.empty())
+			{
+				WorldWormData::s_WaitingDyeQue.pop();
+			}
+
 			return WorldState::OnGameEnd;
 		}
 

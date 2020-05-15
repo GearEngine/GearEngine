@@ -25,7 +25,7 @@ namespace InGame {
 			{ Item::State::OnGoing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("BazukaBullet"), 0.0f) }
 			});
 
-		auto mask = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName + "Mask");
+		auto mask = initData.Mapinfo.Mask;
 		int width = mask->GetWidth();
 		int height = mask->GetHeight();
 

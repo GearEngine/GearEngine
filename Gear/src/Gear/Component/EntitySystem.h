@@ -37,8 +37,7 @@ namespace Gear {
 	class EntitySystem
 	{
 	private:
-		static void Init();
-		static void Shutdown();
+
 		static void EventHandle(Ref<Entity>& entity);
 
 	private:
@@ -63,6 +62,8 @@ namespace Gear {
 
 		static void Update(Timestep ts);
 		static void Render();
+		static void Init();
+		static void Shutdown();
 
 		static void ActivateEntity(int entityID);
 		static void InActivateComponent(int entityID, const std::vector<ComponentID::ID>& components);

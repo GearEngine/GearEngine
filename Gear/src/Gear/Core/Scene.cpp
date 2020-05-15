@@ -10,6 +10,7 @@ namespace Gear {
 
 	Scene::~Scene()
 	{
+		m_LayerStack.clear();
 	}
 
 	void Scene::PushLayer(Layer * layer)

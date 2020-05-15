@@ -8,7 +8,7 @@ namespace Gear {
 	{
 	public:
 		Scene(const std::string& name);
-		~Scene();
+		virtual ~Scene();
 
 		void PushLayer(Layer* layer);
 		void PopLayer(Layer* layer);

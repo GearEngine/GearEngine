@@ -28,8 +28,10 @@ namespace Gear {
 		Renderer::Init();
 
 		m_ImGuilayer = new ImGuiLayer;
-		EntitySystem::Init();
+		//EntitySystem::Init();
 		Coord2DManger::Init();
+
+		srand(time(NULL));
 	}
 
 	Application::~Application()

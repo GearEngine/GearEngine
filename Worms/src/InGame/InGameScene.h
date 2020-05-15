@@ -24,6 +24,9 @@ namespace InGame {
 			PushLayer(new BackGroundLayer(initData));
 			PushLayer(new ObjectLayer(initData));
 		}
+		virtual ~InGameScene()
+		{		
+		}
 
 		inline virtual void Update(Gear::Timestep ts) override
 		{

@@ -67,9 +67,15 @@ namespace Gear {
 		}
 	}
 
+	void EventSystem::Reset()
+	{
+		s_channelID = 0;
+		s_Channels.clear();
+	}
+
 	void EventSystem::Shutdown()
 	{
-		s_Channels.clear();
+		Reset();
 	}
 
 	void EventSystem::CreateChannel(ChannelType channel)

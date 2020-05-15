@@ -42,6 +42,18 @@ namespace InGame {
 				case InGame::TeamColor::Blue:
 					Font::PrintFont(printData.WaitingTimeFontPosition, glm::vec3(0.05f, 0.07f, 1.0f), outputStr, FontType::BlueSmall, 0.03f);
 					break;
+				case InGame::TeamColor::Green:
+					Font::PrintFont(printData.WaitingTimeFontPosition, glm::vec3(0.05f, 0.07f, 1.0f), outputStr, FontType::GreenSmall, 0.03f);
+					break;
+				case InGame::TeamColor::Yellow:
+					Font::PrintFont(printData.WaitingTimeFontPosition, glm::vec3(0.05f, 0.07f, 1.0f), outputStr, FontType::YellowSmall, 0.03f);
+					break;
+				case InGame::TeamColor::Purple:
+					Font::PrintFont(printData.WaitingTimeFontPosition, glm::vec3(0.05f, 0.07f, 1.0f), outputStr, FontType::PurpleSmall, 0.03f);
+					break;
+				case InGame::TeamColor::Sky:
+					Font::PrintFont(printData.WaitingTimeFontPosition, glm::vec3(0.05f, 0.07f, 1.0f), outputStr, FontType::SkySmall, 0.03f);
+					break;
 				}
 			}
 			
@@ -178,6 +190,22 @@ namespace InGame {
 							Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::BlueSmall, 0.02f);
 							Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("BlueHpBar"));
 							break;
+						case InGame::TeamColor::Green:
+							Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::GreenSmall, 0.02f);
+							Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("GreenHpBar"));
+							break;
+						case InGame::TeamColor::Yellow:
+							Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::YellowSmall, 0.02f);
+							Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("YellowHpBar"));
+							break;
+						case InGame::TeamColor::Purple:
+							Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::PurpleSmall, 0.02f);
+							Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("PurpleHpBar"));
+							break;
+						case InGame::TeamColor::Sky:
+							Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::SkySmall, 0.02f);
+							Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("SkyHpBar"));
+							break;
 						}
 					}
 				}
@@ -192,6 +220,22 @@ namespace InGame {
 					case InGame::TeamColor::Blue:
 						Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::BlueSmall, 0.02f);
 						Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("BlueHpBar"));
+						break;
+					case InGame::TeamColor::Green:
+						Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::GreenSmall, 0.02f);
+						Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("GreenHpBar"));
+						break;
+					case InGame::TeamColor::Yellow:
+						Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::YellowSmall, 0.02f);
+						Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("YellowHpBar"));
+						break;
+					case InGame::TeamColor::Purple:
+						Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::PurpleSmall, 0.02f);
+						Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("PurpleHpBar"));
+						break;
+					case InGame::TeamColor::Sky:
+						Font::PrintFont(teamInfoNamePos, glm::vec3(0.04f, 0.05f, 1.0f), teamName, FontType::SkySmall, 0.02f);
+						Gear::Renderer2D::DrawFixedQuad(hpTranslate, Gear::TextureStorage::GetTexture2D("SkyHpBar"));
 						break;
 					}
 				}

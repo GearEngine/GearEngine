@@ -15,8 +15,9 @@ namespace InGame {
 			Gear::ComponentID::Transform
 		});
 
-		auto map = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName);
-		auto mask = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.MapName + "Mask");
+		map = initData.Mapinfo.Map;
+		mask = initData.Mapinfo.Mask;
+		
 		int width = map->GetWidth();
 		int height = map->GetHeight();
 
@@ -35,6 +36,8 @@ namespace InGame {
 	{
 		Gear::EventSystem::UnSubscribeChannel(m_ID, EventChannel::Explosion);
 		Gear::EntitySystem::DeleteEntity(m_ID);
+		map.reset();
+		mask.reset();
 	}
 
 }

@@ -11,7 +11,14 @@ namespace Gear {
 			: Component(id)
 		{}
 
-		virtual ~Status() = default;
+		virtual ~Status()
+		{
+			for (auto handler = m_StatusHandlers.begin(); handler != m_StatusHandlers.end(); ++handler)
+			{
+				handler->second.reset();
+			}
+			m_StatusHandlers.clear();
+		}
 
 		struct StatHandleData
 		{

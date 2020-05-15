@@ -8,6 +8,7 @@ namespace Gear {
 
 	Controller::~Controller()
 	{
+		m_Commands.clear();
 	}
 
 	void Controller::Update(Timestep ts)

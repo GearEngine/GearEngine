@@ -16,7 +16,13 @@ namespace Gear {
 	class Entity
 	{
 	public:
-		Entity() {}
+		Entity() 
+		{
+			for (auto handler = m_EventHandler.begin(); handler != m_EventHandler.end(); ++handler)
+			{
+				handler->second.reset();
+			}
+		}
 	private:
 		Entity(int entityID, const std::string& name = "")
 			: m_EntityID(entityID), m_Name(name)

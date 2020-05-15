@@ -19,11 +19,11 @@ namespace Loading {
 	void LoadingScene::Init(const std::any& data)
 	{
 		InitData = std::any_cast<InGame::InitiateData>(data);
+		loadComplete = false;
 		loadingThread = std::thread(loadInGameScene);
 		loadingThread.detach();
-		loadComplete = false;
 		pastTime = 0.0f;
-		index = 0;
+		index = maxIndex - 1;
 	}
 
 	void LoadingScene::Update(Gear::Timestep ts)
@@ -33,19 +33,19 @@ namespace Loading {
 
 		Gear::Renderer2D::BeginScene(SceneBackground::UiCamera);
 
-		if (index < maxIndex)
+		if (index > 0)
 		{
 			pastTime += ts;
 			if (pastTime >= FrameDelay)
 			{
 				pastTime = 0.0f;
-				++index;
+				--index;
 			}
 		}
 		Gear::Renderer2D::DrawFrameQuad(loadingTransform, Loading, 0, index);
 		Gear::Renderer2D::EndScene();
 
-		if (index == maxIndex && loadComplete)
+		if (index == 0 && loadComplete)
 		{
 			Gear::SceneManager::Get()->AddScene(inGameScene);
 			Gear::SceneManager::Get()->changeScene("InGame");

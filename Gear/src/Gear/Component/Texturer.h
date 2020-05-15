@@ -34,6 +34,12 @@ namespace Gear {
 		Texturer2D(int id)
 			: Texturer(id)
 		{}
+		virtual ~Texturer2D()
+		{
+			m_Texture.reset();
+			m_Mask.reset();
+			m_BlendTexture.reset();
+		}
 
 	private:
 		virtual void Update(Timestep ts) override;

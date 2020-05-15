@@ -38,10 +38,21 @@ namespace Gear {
 		m_Texturer.resize(10000);
 		m_Status.resize(10000);
 		m_LateDrawers.resize(10000);
+
 	}
 
 	void EntitySystem::Shutdown()
 	{
+		s_EntityID = 0;
+		while (!m_SpareIDqueue.empty())
+		{
+			m_SpareIDqueue.pop();
+		}
+		while (!m_InActivateQueue.empty())
+		{
+			m_InActivateQueue.pop();
+		}
+
 		m_EntityPool.clear();
 		m_ActivateEntitys.clear();
 
@@ -118,6 +129,12 @@ namespace Gear {
 			{
 				event = entity->m_EventQueue.erase(event);
 				continue;
+			}
+
+			if (!entity->m_EventHandler[type])
+			{
+				GR_CORE_WARN("There is no Event handler");
+				return;
 			}
 
 			entity->m_EventHandler[type]->Handle(event->Data, entity->m_EntityID, event->handled);

@@ -64,6 +64,22 @@ namespace InGame {
 				Font::PrintFont(hpPosition, glm::vec3(0.5f, 0.5f, 1.0f), std::to_string(hp), FontType::BlueSmall, 0.3f, false);
 				Font::PrintFont(namePosition, glm::vec3(0.5f, 0.5f, 1.0f), name, FontType::BlueSmall, 0.3f, false);
 				break;
+			case InGame::TeamColor::Green:
+				Font::PrintFont(hpPosition, glm::vec3(0.5f, 0.5f, 1.0f), std::to_string(hp), FontType::GreenSmall, 0.3f, false);
+				Font::PrintFont(namePosition, glm::vec3(0.5f, 0.5f, 1.0f), name, FontType::GreenSmall, 0.3f, false);
+				break;
+			case InGame::TeamColor::Yellow:
+				Font::PrintFont(hpPosition, glm::vec3(0.5f, 0.5f, 1.0f), std::to_string(hp), FontType::YellowSmall, 0.3f, false);
+				Font::PrintFont(namePosition, glm::vec3(0.5f, 0.5f, 1.0f), name, FontType::YellowSmall, 0.3f, false);
+				break;
+			case InGame::TeamColor::Purple:
+				Font::PrintFont(hpPosition, glm::vec3(0.5f, 0.5f, 1.0f), std::to_string(hp), FontType::PurpleSmall, 0.3f, false);
+				Font::PrintFont(namePosition, glm::vec3(0.5f, 0.5f, 1.0f), name, FontType::PurpleSmall, 0.3f, false);
+				break;
+			case InGame::TeamColor::Sky:
+				Font::PrintFont(hpPosition, glm::vec3(0.5f, 0.5f, 1.0f), std::to_string(hp), FontType::SkySmall, 0.3f, false);
+				Font::PrintFont(namePosition, glm::vec3(0.5f, 0.5f, 1.0f), name, FontType::SkySmall, 0.3f, false);
+				break;
 			}
 		}
 	};
@@ -140,6 +156,42 @@ namespace InGame {
 					Gear::Renderer2D::DrawAnimation(arrowTranslate, blueArrow);
 				}
 					break;
+				case InGame::TeamColor::Green:
+				{
+					auto blueArrow = Gear::TextureStorage::GetAnimation2D("GreenFollowArrow");
+					blueArrow->Resume();
+					blueArrow->Update(timer->GetTick());
+					Gear::Renderer2D::DrawAnimation(arrowTranslate, blueArrow);
+					Gear::Renderer2D::DrawAnimation(arrowTranslate, blueArrow);
+				}
+				break;
+				case InGame::TeamColor::Yellow:
+				{
+					auto blueArrow = Gear::TextureStorage::GetAnimation2D("YellowFollowArrow");
+					blueArrow->Resume();
+					blueArrow->Update(timer->GetTick());
+					Gear::Renderer2D::DrawAnimation(arrowTranslate, blueArrow);
+					Gear::Renderer2D::DrawAnimation(arrowTranslate, blueArrow);
+				}
+				break;
+				case InGame::TeamColor::Purple:
+				{
+					auto blueArrow = Gear::TextureStorage::GetAnimation2D("PurpleFollowArrow");
+					blueArrow->Resume();
+					blueArrow->Update(timer->GetTick());
+					Gear::Renderer2D::DrawAnimation(arrowTranslate, blueArrow);
+					Gear::Renderer2D::DrawAnimation(arrowTranslate, blueArrow);
+				}
+				break;
+				case InGame::TeamColor::Sky:
+				{
+					auto blueArrow = Gear::TextureStorage::GetAnimation2D("SkyFollowArrow");
+					blueArrow->Resume();
+					blueArrow->Update(timer->GetTick());
+					Gear::Renderer2D::DrawAnimation(arrowTranslate, blueArrow);
+					Gear::Renderer2D::DrawAnimation(arrowTranslate, blueArrow);
+				}
+				break;
 				}
 			}
 
@@ -159,6 +211,22 @@ namespace InGame {
 				case InGame::TeamColor::Blue:
 					Font::PrintFont(hpPosition, glm::vec3(0.5f, 0.5f, 1.0f), std::to_string(hp), FontType::BlueSmall, 0.3f, false);
 					Font::PrintFont(namePosition, glm::vec3(0.5f, 0.5f, 1.0f), name, FontType::BlueSmall, 0.3f, false);
+					break;
+				case InGame::TeamColor::Green:
+					Font::PrintFont(hpPosition, glm::vec3(0.5f, 0.5f, 1.0f), std::to_string(hp), FontType::GreenSmall, 0.3f, false);
+					Font::PrintFont(namePosition, glm::vec3(0.5f, 0.5f, 1.0f), name, FontType::GreenSmall, 0.3f, false);
+					break;
+				case InGame::TeamColor::Yellow:
+					Font::PrintFont(hpPosition, glm::vec3(0.5f, 0.5f, 1.0f), std::to_string(hp), FontType::YellowSmall, 0.3f, false);
+					Font::PrintFont(namePosition, glm::vec3(0.5f, 0.5f, 1.0f), name, FontType::YellowSmall, 0.3f, false);
+					break;
+				case InGame::TeamColor::Purple:
+					Font::PrintFont(hpPosition, glm::vec3(0.5f, 0.5f, 1.0f), std::to_string(hp), FontType::PurpleSmall, 0.3f, false);
+					Font::PrintFont(namePosition, glm::vec3(0.5f, 0.5f, 1.0f), name, FontType::PurpleSmall, 0.3f, false);
+					break;
+				case InGame::TeamColor::Sky:
+					Font::PrintFont(hpPosition, glm::vec3(0.5f, 0.5f, 1.0f), std::to_string(hp), FontType::SkySmall, 0.3f, false);
+					Font::PrintFont(namePosition, glm::vec3(0.5f, 0.5f, 1.0f), name, FontType::SkySmall, 0.3f, false);
 					break;
 				}
 			}
@@ -281,6 +349,18 @@ namespace InGame {
 				break;
 			case InGame::TeamColor::Blue:
 				AimTexture = Gear::TextureStorage::GetFrameTexture2D("BlueAim");
+				break;
+			case InGame::TeamColor::Green:
+				AimTexture = Gear::TextureStorage::GetFrameTexture2D("GreenAim");
+				break;
+			case InGame::TeamColor::Yellow:
+				AimTexture = Gear::TextureStorage::GetFrameTexture2D("YellowAim");
+				break;
+			case InGame::TeamColor::Purple:
+				AimTexture = Gear::TextureStorage::GetFrameTexture2D("PurpleAim");
+				break;
+			case InGame::TeamColor::Sky:
+				AimTexture = Gear::TextureStorage::GetFrameTexture2D("SkyAim");
 				break;
 			}
 
@@ -509,6 +589,18 @@ namespace InGame {
 				break;
 			case TeamColor::Blue:
 				fontType = FontType::BlueSmall;
+				break;
+			case TeamColor::Green:
+				fontType = FontType::GreenSmall;
+				break;
+			case TeamColor::Yellow:
+				fontType = FontType::YellowSmall;
+				break;
+			case TeamColor::Purple:
+				fontType = FontType::PurpleSmall;
+				break;
+			case TeamColor::Sky:
+				fontType = FontType::SkySmall;
 				break;
 			}
 		}

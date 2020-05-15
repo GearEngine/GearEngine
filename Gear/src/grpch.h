@@ -18,6 +18,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <filesystem>
+#include <random>
 
 #include "Gear/Core/Log.h"
 #include "Gear/Core/Util.h"

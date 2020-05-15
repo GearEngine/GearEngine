@@ -35,6 +35,18 @@ namespace InGame {
 		case TeamColor::Blue:
 			virtualItemSelectCursor = Gear::TextureStorage::GetAnimation2D("BlueCursor");
 			break;
+		case TeamColor::Green:
+			virtualItemSelectCursor = Gear::TextureStorage::GetAnimation2D("GreenCursor");
+			break;
+		case TeamColor::Yellow:
+			virtualItemSelectCursor = Gear::TextureStorage::GetAnimation2D("YellowCursor");
+			break;
+		case TeamColor::Purple:
+			virtualItemSelectCursor = Gear::TextureStorage::GetAnimation2D("PurpleCursor");
+			break;
+		case TeamColor::Sky:
+			virtualItemSelectCursor = Gear::TextureStorage::GetAnimation2D("SkyCursor");
+			break;
 		}
 
 		virtualItemSelectCursor->SetFrameY(12);

@@ -15,6 +15,15 @@ namespace Gear{
 		void PopLayer(Layer* layer);
 		void PopOverlay(Layer* overlay);
 
+		void clear()
+		{
+			for (int i = 0; i < m_Layers.size(); ++i)
+			{
+				delete m_Layers[i];
+			}
+			m_Layers.clear();
+		}
+
 		std::vector<Layer*>::iterator begin() { return m_Layers.begin(); }
 		std::vector<Layer*>::iterator end() { return m_Layers.end(); }
 	public:

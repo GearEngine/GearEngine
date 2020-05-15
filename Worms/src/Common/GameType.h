@@ -285,7 +285,7 @@ namespace BasicOption {
 		return 0;
 	}
 
-	int GetWormEnergy(unsigned int type)
+	inline int GetWormEnergy(unsigned int type)
 	{
 		switch (type)
 		{

@@ -9,7 +9,7 @@ namespace InGame {
 	{
 	public:
 		ObjectLayer(const InitiateData& initData);
-		virtual ~ObjectLayer() = default;
+		virtual ~ObjectLayer();
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;

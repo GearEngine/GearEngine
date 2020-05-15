@@ -54,6 +54,13 @@ namespace InGame {
 		Gear::EventSystem::RegisterEventHandler(m_Transceiver, EventChannel::World, Gear::CreateRef<ObjLayerTransceiver>());
 	}
 
+	ObjectLayer::~ObjectLayer()
+	{
+		s_Worms.clear();
+		s_TeamInfo.clear();
+		s_WormTurnIndex.clear();
+	}
+
 	void ObjectLayer::OnAttach()
 	{
 	}

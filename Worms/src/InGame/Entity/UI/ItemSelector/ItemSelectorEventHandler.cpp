@@ -73,8 +73,9 @@ namespace InGame {
 			}
 
 			auto currentWormName = std::any_cast<std::string>(Gear::EntitySystem::GetStatus(worldID)->GetStat(WorldInfo::CurrentWorm));
+			auto currentTeamName = std::any_cast<std::string>(Gear::EntitySystem::GetStatus(worldID)->GetStat(WorldInfo::CurrnetTeam));
 			
-			currentWormID = Gear::EntitySystem::GetEntityIDFromName(currentWormName);
+			currentWormID = Gear::EntitySystem::GetEntityIDFromName(currentTeamName + currentWormName);
 			auto wormFSM = Gear::EntitySystem::GetFSM(currentWormID);
 			auto wormStatus = Gear::EntitySystem::GetStatus(currentWormID);
 

@@ -900,9 +900,16 @@ namespace Main {
 			return false;
 		}
 
+		//clear
+		initData.Teams.clear();
+		initData.Mapinfo.Map.reset();
+		initData.Mapinfo.Mask.reset();
+
+		//MapSetting
 		initData.Mapinfo = InGame::GetMapInfo(Map::GetName(mapSelectedIndex));
-		std::string names[] = { "Sunwoo", "Younghwan", "TaeHwan", "Meongcheriya", "Chanho..TT", "Junsoo" };
-		
+		initData.Mapinfo.MapLoad();
+
+		//ItemSetting
 		std::vector<InGame::ItemInfo::ItemDescprition> itemList;
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Bazooka, "Bazooka", -1, 0));
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Grenade, "Grenade", -1, 0));
@@ -912,43 +919,48 @@ namespace Main {
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::SkipGo, "Skip Go", -1, 0));
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Surrender, "Surrender", -1, 0));
 
-		InGame::TeamInfo team1;
-		InGame::TeamInfo team2;
-		team1.TeamName = "IL";
-		team1.TeamColor = InGame::TeamColor::Blue;
-		team1.nWorm = 3;
-		team1.TeamIcon = Gear::TextureStorage::GetTexture2D("Japan");
-		team1.TeamItem = itemList;
+		//BagicGameOption
+		initData.LimitTurnTime = BasicOption::GetTurnTime(OptionsIndex[BasicOption::Options::TurnTime]);
 
-		team2.TeamName = "KYUNG";
-		team2.TeamColor = InGame::TeamColor::Red;
-		team2.nWorm = 3;
-		team2.TeamIcon = Gear::TextureStorage::GetTexture2D("USA");
-		team2.TeamItem = itemList;
-
-		initData.Teams.push_back(team1);
-		initData.Teams.push_back(team2);
-
-		for (int i = 0; i < initData.Teams.size(); ++i)
+		//Team and Worms Setting
+		int flatCount = 0;
+		auto rng = std::default_random_engine{};
+		int wormEnergy = BasicOption::GetWormEnergy(OptionsIndex[BasicOption::Options::WormEnergy]);
+		for (int i = 0; i < selectedTeamList.size(); ++i)
 		{
-			for (int j = 0; j < initData.Teams[i].nWorm; ++j)
+			InGame::TeamInfo team;
+			team.TeamName = selectedTeamList[i]->Name;
+			team.TeamColor = InGame::TeamColor::ConvertAllyToColor(selectedTeamLayer->allyType[i]);
+			team.nWorm = selectedTeamLayer->wormCount[i] + 1;
+			team.TeamIcon = Gear::TextureStorage::GetTexture2D(selectedTeamList[i]->teamIcon);
+			team.TeamItem = itemList;
+
+			auto coppyWormNameList = selectedTeamList[i]->wormName;
+			std::shuffle(coppyWormNameList.begin(), coppyWormNameList.end(), rng);
+			for (int j = 0; j < team.nWorm; ++j)
 			{
 				InGame::WormSpecific worm;
-				int flatIndex = i * initData.Teams[i].nWorm + j;
-				worm.Name = names[i * initData.Teams[i].nWorm + j];
-				worm.AdditionalZRenderOffset = flatIndex * 0.02f;
+				worm.Name = selectedTeamList[i]->wormName[j];
+				worm.AdditionalZRenderOffset = flatCount * 0.02f;
 				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(initData.Mapinfo.TerrainMinX, initData.Mapinfo.TerrainMaxX), 5.0f, ZOrder::z_Worm);
-				worm.Hp = initData.WormMaxHP;
 				worm.Direction = (InGame::WormInfo::DirectionType)Gear::Util::GetRndInt(2);
-
-				initData.Teams[i].TotalWormHp += worm.Hp;
-				initData.Teams[i].worms.push_back(worm);
-				initData.nTotalWorms++;
+				worm.Hp = wormEnergy;
+				if(selectedTeamLayer->handicapType[i] == TeamBasicOption::Handicap::Plus)
+				{
+					worm.Hp += 25;
+				}
+				if (selectedTeamLayer->handicapType[i] == TeamBasicOption::Handicap::Minus)
+				{
+					worm.Hp -= 25;
+				}
+				team.TotalWormHp += worm.Hp;
+				team.worms.push_back(worm);
+				++initData.nTotalWorms;
+				++flatCount;
 			}
-			initData.Teams[i].CurrentTotalWormHp = initData.Teams[i].TotalWormHp;
+			team.CurrentTotalWormHp = team.TotalWormHp;
+			initData.Teams.push_back(team);
 		}
-
-		
 		return true;
 	}
 
@@ -1067,6 +1079,7 @@ namespace Main {
 			return;
 		}
 
+		Gear::EntitySystem::Init();
 		if (Gear::SceneManager::Get()->isSceneExist("LoadingScene"))
 		{
 			Gear::SceneManager::Get()->GetScene("LoadingScene")->Init(initData);

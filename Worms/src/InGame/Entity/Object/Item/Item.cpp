@@ -21,10 +21,11 @@ namespace InGame {
 
 	void ItemPool::init(const InitiateData& initData)
 	{
-		if (!s_Inst)
+		if (s_Inst)
 		{
-			s_Inst = new ItemPool(initData);
+			delete s_Inst;
 		}
+		s_Inst = new ItemPool(initData);
 	}
 
 	Gear::Ref<ItemBullet> ItemPool::GetItem(ItemInfo::Number number)
