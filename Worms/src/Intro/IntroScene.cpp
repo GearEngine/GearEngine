@@ -99,15 +99,37 @@ namespace Intro {
 			}
 			auto redArrow = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RedFollowingArrow"), 0.02f, orderVector, true);
 			auto blueArrow = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("BlueFollowingArrow"), 0.02f, orderVector, true);
+			auto GreenArrow = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("GreenFollowingArrow"), 0.02f, orderVector, true);
+			auto YellowArrow = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("YellowFollowingArrow"), 0.02f, orderVector, true);
+			auto SkyArrow = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("SkyFollowingArrow"), 0.02f, orderVector, true);
+			auto PurpleArrow = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("PurpleFollowingArrow"), 0.02f, orderVector, true);
+			
 			redArrow->Start();
 			blueArrow->Start();
+			GreenArrow->Start();
+			YellowArrow->Start();
+			SkyArrow->Start();
+			PurpleArrow->Start();
 			Gear::TextureStorage::AddAnimation("RedFollowArrow", redArrow);
 			Gear::TextureStorage::AddAnimation("BlueFollowArrow", blueArrow);
+			Gear::TextureStorage::AddAnimation("GreenFollowArrow", GreenArrow);
+			Gear::TextureStorage::AddAnimation("YellowFollowArrow", YellowArrow);
+			Gear::TextureStorage::AddAnimation("SkyFollowArrow", SkyArrow);
+			Gear::TextureStorage::AddAnimation("PurpleFollowArrow", PurpleArrow);
 
 			auto redCursor = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RedCursor"), 0.0f, true);
 			auto blueCursor = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("BlueCursor"), 0.0f, true);
+			auto greenCursor = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("GreenCursor"), 0.0f, true);
+			auto yellowCursor = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("YellowCursor"), 0.0f, true);
+			auto skyCursor = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("SkyCursor"), 0.0f, true);
+			auto purpleCursor = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("PurpleCursor"), 0.0f, true);
+			
 			Gear::TextureStorage::AddAnimation("RedCursor", redCursor);
 			Gear::TextureStorage::AddAnimation("BlueCursor", blueCursor);
+			Gear::TextureStorage::AddAnimation("GreenCursor", greenCursor);
+			Gear::TextureStorage::AddAnimation("YellowCursor", yellowCursor);
+			Gear::TextureStorage::AddAnimation("SkyCursor", skyCursor);
+			Gear::TextureStorage::AddAnimation("PurpleCursor", purpleCursor);
 		}
 
 		Gear::Renderer2D::EndScene();
