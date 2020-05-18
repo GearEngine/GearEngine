@@ -136,6 +136,7 @@ namespace InGame {
 
 				status->SetStat(WorldInfo::CurrnetTeam, changedWormData.first);
 				status->SetStat(WorldInfo::CurrentWorm, changedWormData.second);
+				status->SetStat(WorldInfo::CurrentTeamColor, std::any_cast<TeamColor::Color>(Gear::EntitySystem::GetStatus(worldData.EntityID)->GetStat(WormInfo::TeamColor)));
 				status->SetStat(WorldInfo::TeamInfoBlink, true);
 				status->PushNeedHandleData(WorldStatusHandleType::DisplayWaitingCount, Gear::Status::StatHandleData(WorldDenoteData(Gear::TextureStorage::GetTexture2D("WaitingTimeBorder"))));
 				worldTimer->SetTimer(5.0f);
@@ -146,6 +147,7 @@ namespace InGame {
 			if (worldData.DataType == WorldDataType::RunningStart)
 			{
 				status->SetNeedHandleData(WorldStatusHandleType::DisplayWaitingCount, false, true);
+				status->GetStatusHandler(WorldStatusHandleType::DisplayWaitingCount)->OnOut();
 				handled = true;
 				return;
 			}

@@ -542,6 +542,8 @@ namespace InGame {
 		float accumulateDamage = 0.0f;
 		float originHP;
 
+		unsigned int curState;
+
 		int mode;
 		//float partitialDamage;
 		FontType::Type fontType;
@@ -580,6 +582,7 @@ namespace InGame {
 			damageBorderPosition.x += 0.15f;
 			damageBorderTrans[3].z = ZOrder::z_CheckerImg;
 		
+			curState = std::any_cast<unsigned int>(Gear::EntitySystem::GetFSM(entityID)->GetCurrentState());
 
 			auto teamColor = std::any_cast<TeamColor::Color>(status->GetStat(WormInfo::TeamColor));
 			switch (teamColor)
@@ -648,9 +651,38 @@ namespace InGame {
 			
 			if (damageDisplayEnd)
 			{
+				if (!IS_PLAYING_SOUND(WormsSound::wormSpeech))
+				{
+					if (std::any_cast<int>(status->GetStat(WormInfo::Damage)) && totalDamage != 0)
+					{
+						switch (Gear::Util::GetRndInt(5))
+						{
+						case 0:
+							PLAY_SOUND_NAME("YOULLREGRETTHAT", WormsSound::wormSpeech);
+								break;
+						case 1:
+							PLAY_SOUND_NAME("REVENGE", WormsSound::wormSpeech);
+								break;
+						case 2:
+							PLAY_SOUND_NAME("EXCELLENT", WormsSound::wormSpeech);
+							break;
+						case 3:
+							PLAY_SOUND_NAME("OOPS", WormsSound::wormSpeech);
+							break;
+						case 4:
+							PLAY_SOUND_NAME("TRAITOR", WormsSound::wormSpeech);
+							break;
+						}
+					}
+					else if(curState != WormState::OnUnderWater)
+					{
+						PLAY_SOUND_NAME("STUPID", WormsSound::wormSpeech);
+					}
+				}
+
 				status->SetStat(WormInfo::Damage, 0);
 				status->SetStat(WormInfo::SelfDamage, 0);
-				
+
 				damageDisplayEnd = false;
 				firstIn = true;
 				totalDamage = 0;

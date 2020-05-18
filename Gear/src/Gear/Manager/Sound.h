@@ -37,6 +37,8 @@ namespace Gear {
 		void PauseChannel(SoundChannel channel);
 		void ResumeChannel(SoundChannel channel);
 		bool isPlaying(SoundChannel channel);
+		void SetVolue(SoundChannel channel, float volume);
+		void AllStop();
 		void Update();
 
 	private:
@@ -63,5 +65,5 @@ namespace Gear {
 #define GET_SOUND(name) Gear::SoundStorage::GetSound_(name)
 #define PLAY_SOUND(sound, channel) Gear::SoundSystem::Get()->PlaySound_(sound, channel)
 #define PLAY_SOUND_NAME(name, channel) Gear::SoundSystem::Get()->PlaySound_(GET_SOUND(name), channel)
-#define STOP_SOUND(channel) Gear::SoundSystem::Get()->StopChannel(channel);
+#define STOP_SOUND_CAHNNEL(channel) Gear::SoundSystem::Get()->StopChannel(channel);
 #define IS_PLAYING_SOUND(channel) Gear::SoundSystem::Get()->isPlaying(channel)

@@ -57,6 +57,13 @@ namespace Gear {
 		{
 			m_RegistedPushedList.push_back({ type, data });
 		}
+		inline Ref<StatusHandler> GetStatusHandler(EnumType type)
+		{
+			if (m_StatusHandlers.find(type) != m_StatusHandlers.end())
+			{
+				return m_StatusHandlers.find(type)->second;
+			}
+		}
 
 	private:
 		std::unordered_map<EnumType, std::any> m_StatList;

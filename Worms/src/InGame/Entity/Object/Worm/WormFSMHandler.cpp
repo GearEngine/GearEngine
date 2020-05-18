@@ -14,6 +14,11 @@ namespace InGame {
 			Awake(entityID);
 		}
 
+		if (!IS_PLAYING_SOUND(WormsSound::wormAct))
+		{
+			PLAY_SOUND_NAME("UnderWaterLoop", WormsSound::wormAct);
+		}
+
 		if (transform->GetPosition().y < -17.0f && !damageDisplay)
 		{
 			int hp = std::any_cast<int>(status->GetStat(WormInfo::Hp));
@@ -32,6 +37,7 @@ namespace InGame {
 
 		if (transform->GetPosition().y < -19.f)
 		{
+			STOP_SOUND_CAHNNEL(WormsSound::wormAct);
 			Gear::EntitySystem::RegisterInActivateEntity(entityID);
 
 			int damagedWormCount = 0;
@@ -65,6 +71,20 @@ namespace InGame {
 		{
 			Awake(entityID);
 		}
+
+		if (!dyeSound)
+		{
+			dyeSound = true;
+			if (Gear::Util::GetRndInt(2))
+			{
+				PLAY_SOUND_NAME("BYE1", WormsSound::wormSpeech);
+			}
+			else
+			{
+				PLAY_SOUND_NAME("BYE2", WormsSound::wormSpeech);
+			}
+		}
+
 		if (animator->loopCompleted())
 		{
 			auto wormPosition = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition();
@@ -85,7 +105,8 @@ namespace InGame {
 			GRAVE_POOL->ActivateGrave(GraveInfo::_1, wormPosition);
 
 			Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(position, Explosion::Size::Size25, 25.0f)));
-
+			
+			dyeSound = false;
 			Gear::EntitySystem::RegisterInActivateEntity(entityID);
 		}
 

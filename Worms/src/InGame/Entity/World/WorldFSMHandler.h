@@ -57,6 +57,7 @@ namespace InGame {
 			{
 				int damagedWormCount = 0;
 				//GR_TRACE("World On Waiting");
+
 				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
 				{
 					auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
@@ -89,7 +90,6 @@ namespace InGame {
 								timer->Start();
 							}
 						}
-
 						return WorldState::OnWaiting;
 					}
 					else
@@ -144,6 +144,8 @@ namespace InGame {
 		float pastTime = 0.0f;
 		float fogDelay = 3.0f;
 
+		bool clapPartSound = true;
+
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			if (inFirst)
@@ -160,6 +162,21 @@ namespace InGame {
 				timer = Gear::EntitySystem::GetTimer(entityID);
 				lateDrawer->ActivateStuff("Fog", Gear::Stuff::Quard);
 				lateDrawer->GetQuardStuff("Fog").Color.a = 0.0f;
+
+				PLAY_SOUND_NAME("VICTORY", WormsSound::wormSpeech);
+			}
+
+			if (!IS_PLAYING_SOUND(WormsSound::effect))
+			{
+				if (clapPartSound)
+				{
+					PLAY_SOUND_NAME("CrowdPart1", WormsSound::effect);
+				}
+				else
+				{
+					PLAY_SOUND_NAME("CrowdPart2", WormsSound::effect);
+				}
+				clapPartSound = !clapPartSound;
 			}
 
 			if (pastTime > fogDelay)
@@ -226,6 +243,7 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
+			Gear::SoundSystem::Get()->AllStop();
 			Gear::Application::Get().ActivateEntitySystem(false);
 			Gear::SceneManager::Get()->changeScene("MultiScene", -1);
 

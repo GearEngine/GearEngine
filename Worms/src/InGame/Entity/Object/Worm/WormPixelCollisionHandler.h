@@ -15,7 +15,6 @@ namespace InGame {
 	}
 
 	class WormOnAirPCHandler : public Gear::Physics2D::PixelCollisionHander
-		\
 	{
 		inline void StateHandle(int entityID, bool leftCollision, bool rightCollision)
 		{
@@ -69,9 +68,11 @@ namespace InGame {
 			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 			auto status = Gear::EntitySystem::GetStatus(entityID);
 			auto FSM = Gear::EntitySystem::GetFSM(entityID);
+			unsigned int wormState = FSM->GetCurrentState();
 
 			if (m_TargetPos->y < -13.0f)
 			{
+				PLAY_SOUND_NAME("Splash", WormsSound::wormAct);
 				FSM->SetCurrentState(WormState::OnUnderWater);
 
 				Gear::EntitySystem::GetAnimator2D(entityID)->PlayAnimation(WormState::OnUnderWater);
@@ -117,6 +118,10 @@ namespace InGame {
 					if (isCollion)
 					{
 						int fixedXpos;
+						if (wormState != WormState::OnJump && !IS_PLAYING_SOUND(WormsSound::wormSpeech))
+						{
+							PLAY_SOUND_NAME("OW" + std::to_string(Gear::Util::GetRndInt(3) + 1), WormsSound::wormSpeech);
+						}
 						for (int i = 1; i <= 10; ++i)
 						{
 							fixedXpos = (int)wormOnTexturePositionX + (xOffset - i);
@@ -154,6 +159,10 @@ namespace InGame {
 					if (isCollion)
 					{
 						int fixedXpos;
+						if (wormState != WormState::OnJump && !IS_PLAYING_SOUND(WormsSound::wormSpeech))
+						{
+							PLAY_SOUND_NAME("OW" + std::to_string(Gear::Util::GetRndInt(3) + 1), WormsSound::wormSpeech);
+						}
 						for (int i = 1; i <= 10; ++i)
 						{
 							fixedXpos = (int)wormOnTexturePositionX - (xOffset - i);
@@ -190,11 +199,15 @@ namespace InGame {
 
 			if (midPixel == m_TargetPixelColor)
 			{
-				auto curState = FSM->GetCurrentState();
+				auto curState = FSM->GetCurrentState();				
 				if (curState == WormState::OnSliding || curState == WormState::OnAttacked)
 				{
 					if (m_ExternalVector->y <= -20.f)
 					{
+						if (wormState != WormState::OnJump && !IS_PLAYING_SOUND(WormsSound::wormSpeech))
+						{
+							PLAY_SOUND_NAME("OW" + std::to_string(Gear::Util::GetRndInt(3) + 1), WormsSound::wormSpeech);
+						}
 						int fallenDamage = (int)((-m_ExternalVector->y - 20.0f) * 0.1f);
 						if (myTurn)
 						{

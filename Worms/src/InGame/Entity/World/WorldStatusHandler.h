@@ -6,6 +6,17 @@ namespace InGame {
 
 	class WorldDisplayWaitingCountHandler : public Gear::Status::StatusHandler
 	{
+		bool twoBeep = false;
+		bool oneBeep = false;
+		bool zeroBeep = false;
+
+		virtual void OnOut() override
+		{
+			twoBeep = false;
+			oneBeep = false;
+			zeroBeep = false;
+		}
+
 		inline void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
 		{
 			auto printData = std::any_cast<WorldDenoteData>(data.Data);
@@ -20,6 +31,31 @@ namespace InGame {
 			TeamColor::Color teamColor = std::any_cast<TeamColor::Color>(statlist[WorldInfo::CurrentTeamColor]);
 
 			Gear::Renderer2D::DrawFixedQuad(printData.WaitingTimeBorderTranslate, printData.WaitingTimeBorder);
+
+			if (remainTime <= 2.0f)
+			{
+				if (!twoBeep)
+				{
+					twoBeep = true;
+					PLAY_SOUND_NAME("TIMERTICK", WormsSound::effect);
+				}
+			}
+			if (remainTime <= 1.0f)
+			{
+				if (!oneBeep)
+				{
+					oneBeep = true;
+					PLAY_SOUND_NAME("TIMERTICK", WormsSound::effect);
+				}
+			}
+			if (remainTime <= 0.0f)
+			{
+				if (!zeroBeep)
+				{
+					zeroBeep = true;
+					PLAY_SOUND_NAME("TIMERTICK", WormsSound::effect);
+				}
+			}
 
 			elapsedTime += Gear::EntitySystem::GetTimer(entityID)->GetTick();
 			if (elapsedTime > blinkDelay)
@@ -60,6 +96,7 @@ namespace InGame {
 			if (remainTime == 0.0f)
 			{
 				onWhite = false;
+				OnOut();
 				data.Handled = true;
 			}
 		}

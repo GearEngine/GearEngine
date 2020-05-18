@@ -66,6 +66,12 @@ namespace InGame {
 	
 	class TimerOnRunningHandler : public Gear::FSM::InputHandler
 	{
+		bool hurrySound = false;
+		bool threeBeep = false;
+		bool twoBeep = false;
+		bool oneBeep = false;
+		bool zeroBeep = false;
+		
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			static const float blinkTerm = 0.3f;
@@ -79,6 +85,11 @@ namespace InGame {
 
 			if (remainTime <= 5.0f)
 			{
+				if (!hurrySound)
+				{
+					hurrySound = true;
+					PLAY_SOUND_NAME("HURRY", WormsSound::wormSpeech);
+				}
 				if (!onPressing)
 				{
 					onPressing = true;
@@ -89,6 +100,31 @@ namespace InGame {
 				{
 					blinkElapsed = 0.0f;
 					onRed = !onRed;
+				}
+			}
+
+			if (remainTime <= 3.0f)
+			{
+				if (!threeBeep)
+				{
+					threeBeep = true;
+					PLAY_SOUND_NAME("TIMERTICK", WormsSound::effect);
+				}
+			}
+			if (remainTime <= 2.0f)
+			{
+				if (!twoBeep)
+				{
+					twoBeep = true;
+					PLAY_SOUND_NAME("TIMERTICK", WormsSound::effect);
+				}
+			}
+			if (remainTime <= 1.0f)
+			{
+				if (!oneBeep)
+				{
+					oneBeep = true;
+					PLAY_SOUND_NAME("TIMERTICK", WormsSound::effect);
 				}
 			}
 
@@ -107,8 +143,10 @@ namespace InGame {
 
 			if (timer->isExpired())
 			{
+				PLAY_SOUND_NAME("BORING", WormsSound::wormSpeech);
 				Gear::EntitySystem::GetStatus(entityID)->PushNeedHandleData(TimerStatusHandleType::MoveDown, Gear::Status::StatHandleData(0));
 				onPressing = false;
+				hurrySound = false;
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::PrepareNextPhase)));
 				return WorldState::OnPrepareNextPhase;
 			}

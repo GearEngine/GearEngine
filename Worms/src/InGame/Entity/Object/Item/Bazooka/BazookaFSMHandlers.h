@@ -33,7 +33,7 @@ namespace InGame {
 		Gear::Ref<Gear::Animator2D> animator;
 		Gear::Ref<Gear::Transform2D> transform;
 		Gear::Ref<Gear::FrameTexture2D> missileTexture;
-
+		bool drawnSound = false;
 		inline void Awake(int entityID) override
 		{
 			animator = Gear::EntitySystem::GetAnimator2D(entityID);
@@ -49,11 +49,19 @@ namespace InGame {
 			{
 				Awake(entityID);
 			}
+
 			transform->SetRotation(0.0f);
 			Gear::Renderer2D::DrawFrameQuad(transform->GetTranslate(), missileTexture, 0, 31, glm::vec4(1.0f, 1.0f, 1.0f, 0.3f));
+			
+			if (!drawnSound)
+			{
+				drawnSound = true;
+				PLAY_SOUND_NAME("Splash", WormsSound::Water);
+			}
 
 			if (transform->GetPosition().y < -19.0f)
 			{
+				drawnSound = false;
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
 				Gear::EntitySystem::RegisterInActivateEntity(entityID);
 			}

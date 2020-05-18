@@ -236,11 +236,6 @@ namespace InGame {
 			{
 				s_TeamIter = s_TeamInfo.begin();
 			}
-			/*if (prevTeamIter == s_TeamIter)
-			{
-				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::GameEnd)));
-				return;
-			}*/
 			if (s_TeamIter->second.TotalWormHp != 0)
 			{
 				break;

@@ -79,9 +79,10 @@ namespace InGame {
 
 	void World::Update(Gear::Timestep ts)
 	{
-		if (!Gear::SoundSystem::Get()->isPlaying(WormsSound::bgm))
+		if (!IS_PLAYING_SOUND(WormsSound::bgm))
 		{
 			PLAY_SOUND_NAME(bgms[Gear::Util::GetRndInt(11)], WormsSound::bgm);
+			Gear::SoundSystem::Get()->SetVolue(WormsSound::bgm, 0.4f);
 		}
 	}
 

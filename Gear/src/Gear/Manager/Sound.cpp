@@ -104,6 +104,19 @@ namespace Gear {
 		return ret;
 	}
 
+	void SoundSystem::SetVolue(SoundChannel channel, float volume)
+	{
+		m_Channel[channel]->setVolume(volume);
+	}
+
+	void SoundSystem::AllStop()
+	{
+		for (int i = 0; i < SOUND_CHANNEL_MAX; ++i)
+		{
+			m_Channel[i]->stop();
+		}
+	}
+
 	void SoundSystem::Update()
 	{
 		s_System->update();

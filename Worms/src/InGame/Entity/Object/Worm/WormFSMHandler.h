@@ -112,6 +112,7 @@ namespace InGame {
 	{
 		Gear::Ref<Gear::Animator2D> animator;
 		Gear::Ref<Gear::Status> status;
+		bool dyeSound = false;
 
 		void Awake(int entityID) override
 		{
@@ -450,6 +451,7 @@ namespace InGame {
 				externalVector = { 3.4f, 4.0f };
 				onFirst = true;
 				backJump = false;
+				PLAY_SOUND_NAME("JUMP" + std::to_string(Gear::Util::GetRndInt(2) + 1), WormsSound::wormSpeech);
 				return WormState::OnJump;
 			}
 
@@ -552,6 +554,10 @@ namespace InGame {
 				}
 				externalVector = { 0.0f, 0.0f };
 				onFirst = true;
+				if (!backFlip)
+				{
+					PLAY_SOUND_NAME("JUMP" + std::to_string(Gear::Util::GetRndInt(2) + 1), WormsSound::wormSpeech);
+				}
 				backFlip = false;
 				return WormState::OnJump;
 			}
@@ -836,6 +842,7 @@ namespace InGame {
 			}
 			else
 			{
+				PLAY_SOUND_NAME("OW" + std::to_string(Gear::Util::GetRndInt(3) + 1), WormsSound::wormAct);
 				physics->SetPixelCollisionHandler("Sliding");
 				status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 1.0f)));
 				return WormState::OnSliding;
@@ -1177,22 +1184,26 @@ namespace InGame {
 					timerStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(0));
 					if (curItem == ItemInfo::Number::Bazooka)
 					{
+						PLAY_SOUND_NAME("WATCHTHIS", WormsSound::wormSpeech);
 						PLAY_SOUND_NAME("ROCKETPOWERUP", WormsSound::wormAct);
 					}
 					else if(curItem == ItemInfo::Number::Grenade || curItem == ItemInfo::Number::Banana)
 					{
+						PLAY_SOUND_NAME("FIRE", WormsSound::wormSpeech);
 						PLAY_SOUND_NAME("THROWPOWERUP", WormsSound::wormAct);
 					}
 					return WormState::OnUseItem;
 				}
 				else if (curItem == ItemInfo::Number::SkipGo)
 				{
+					PLAY_SOUND_NAME("COWARD", WormsSound::wormSpeech);
 					timerStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(0));
 					status->PushNeedHandleData(WormStatusHandleType::SkipGo, Gear::Status::StatHandleData(0));
 					return WormState::OnNothing;
 				}
 				else if (curItem == ItemInfo::Number::Surrender)
 				{
+					PLAY_SOUND_NAME("COWARD", WormsSound::wormSpeech);
 					timerStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(0));
 					status->PushNeedHandleData(WormStatusHandleType::Surrender, Gear::Status::StatHandleData(0));
 
@@ -1687,7 +1698,7 @@ namespace InGame {
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, 0, item->GetID())));
 			}
 
-			STOP_SOUND(WormsSound::wormAct);
+			STOP_SOUND_CAHNNEL(WormsSound::wormAct);
 			if (curItemNumber == ItemInfo::Number::Bazooka)
 			{
 				PLAY_SOUND_NAME("ROCKETRELEASE", WormsSound::wormAct);
@@ -1743,6 +1754,31 @@ namespace InGame {
 			}
 			else
 			{
+				if (std::any_cast<bool>(status->GetStat(WormInfo::Surrendered)))
+				{
+					auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
+					switch (dir)
+					{
+					case InGame::WormInfo::LeftFlat:
+						animator->PlayAnimation(WormState::OnLeftFlatSurrenderOn);
+						break;
+					case InGame::WormInfo::RightFlat:
+						animator->PlayAnimation(WormState::OnRightFlatSurrenderOn);
+						break;
+					case InGame::WormInfo::LeftUp:
+						animator->PlayAnimation(WormState::OnLeftUpSurrenderOn);
+						break;
+					case InGame::WormInfo::RightUp:
+						animator->PlayAnimation(WormState::OnRightUpSurrenderOn);
+						break;
+					case InGame::WormInfo::LeftDown:
+						animator->PlayAnimation(WormState::OnLeftDownSurrenderOn);
+						break;
+					case InGame::WormInfo::RightDown:
+						animator->PlayAnimation(WormState::OnRightDownSurrenderOn);
+						break;
+					}
+				}
 				return WormState::OnNotMyTurn;
 			}
 		}
@@ -1838,6 +1874,7 @@ namespace InGame {
 	{
 		Gear::Ref<Gear::Physics2D> physics;
 		Gear::Ref<Gear::Status> status;
+		bool startSound = false;
 
 		inline void Awake(int entityID)
 		{
@@ -1849,6 +1886,7 @@ namespace InGame {
 		inline void OnOut(int entityID) override
 		{
 			status->SetStat(WormInfo::MyTurn, true);
+			startSound = false;
 			status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(0.5f, 0.0f)));
 			Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::RunningStart, 0, entityID)));
 		}
@@ -1859,6 +1897,13 @@ namespace InGame {
 			{
 				Awake(entityID);
 			}
+			if (!startSound)
+			{
+				startSound = true;
+				PLAY_SOUND_NAME("YESSIR", WormsSound::wormSpeech);
+			}
+
+
 			float moveSpeed = std::any_cast<float>(status->GetStat(WormInfo::Stat::MoveSpeed));
 			
 			if (cmd.KeyType != NONE_COMMAND)

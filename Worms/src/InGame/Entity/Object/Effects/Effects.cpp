@@ -827,6 +827,8 @@ namespace InGame {
 			{
 				m_TextTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(basePosition, ZOrder::z_ExplosionText))* glm::scale(glm::mat4(1.0f), m_TextScale);
 			}
+
+			PLAY_SOUND_NAME("Explosion" + std::to_string(Gear::Util::GetRndInt(2) + 1), WormsSound::Weapon);
 		}
 
 		void ExplosionEffect::Update(float ts)
