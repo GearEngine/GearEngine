@@ -38,6 +38,7 @@ namespace Loading {
 			pastTime += ts;
 			if (pastTime >= FrameDelay)
 			{
+				PLAY_SOUND_NAME("LoadingTick", WormsSound::effect);
 				pastTime = 0.0f;
 				--index;
 			}

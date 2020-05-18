@@ -9,12 +9,14 @@ namespace Main {
 		float reductionRatio3 = 280.0f;
 
 		bool inFirst = true;
+		int prevOnCursorButton = -1;
 		glm::mat4 alphaTransform;
 		glm::vec4 alphaColor;
 
 		Gear::Ref<Gear::Texture2D> Grad;
 		glm::mat4 gradTransform;
 
+		bool isOnButton = false;
 		Gear::Ref<Gear::Texture2D> Single;
 		Gear::Ref<Gear::Texture2D> SingleReady;
 		bool mouseOnSingle = false;
@@ -56,6 +58,10 @@ namespace Main {
 
 		std::pair<float, float> centerMousePos;
 		std::pair<float, float> virtualCursorPos;
+
+		bool mouseClickReady = true;
+		float pastTime = 0.0f;
+		float mouseClickDelay = 0.3f;
 
 	public:
 		MainScene()
@@ -112,6 +118,8 @@ namespace Main {
 			cursorTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.5f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.0888888f, 0.05f, 1.0f));
 
 			logoTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.8f, 0.2f)) * glm::scale(glm::mat4(1.0f), glm::vec3(logoWidth / reductionRatio2, logoHeight / reductionRatio2, 1.0f));
+		
+			PLAY_SOUND_NAME("menu-loop_Stream", WormsSound::bgm);
 		}
 
 		virtual void Update(Gear::Timestep ts) override;

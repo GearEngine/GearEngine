@@ -15,16 +15,17 @@ namespace InGame {
 			if (inFirst)
 			{
 				inFirst = false;
-				timer->SetTimer(2.0f);
+				timer->SetTimer(0.5f);
 				timer->Start();
 			}
 			if (timer->isExpired())
 			{
 				inFirst = true;
 				LateDrawer->InActivateStuff("Fog", Gear::Stuff::Quard);
+				PLAY_SOUND_NAME("StartRound", WormsSound::effect);
 				return WorldState::OnStart;
 			}
-			LateDrawer->GetQuardStuff("Fog").Color.a -= 0.007f;
+			LateDrawer->GetQuardStuff("Fog").Color.a -= 0.01f;
 			return WorldState::InGameStart;
 		}
 	};

@@ -26,6 +26,7 @@ namespace InGame {
 	void UILayer::OnUpdate(Gear::Timestep ts)
 	{
 		m_Camera->OnUpdate(ts);
+		m_World->Update(ts);
 		Gear::RenderCommand::SetClearColor(m_ClearColor);
 		Gear::RenderCommand::Clear();
 

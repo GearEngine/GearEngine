@@ -70,9 +70,20 @@ namespace InGame {
 	{
 		float radius = 0.1f;
 		bool explosionDone = false;
+		bool awake = true;
+		ItemInfo::Number itemNumber;
+
+		void Awake(int entityID)
+		{
+			itemNumber = std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(entityID)->GetStat(Item::Info::Number));
+		}
 
 		inline virtual void Handle(int entityID) override
 		{
+			if (awake)
+			{
+				Awake(entityID);
+			}
 			auto timer = Gear::EntitySystem::GetTimer(entityID);
 			if (timer->isExpired())
 			{
@@ -204,6 +215,17 @@ namespace InGame {
 
 			if (downCollision || upCollision)
 			{
+				if (std::abs(m_ExternalVector->x) + std::abs(m_ExternalVector->y) > 1.0f)
+				{
+					if (itemNumber == ItemInfo::Number::Banana)
+					{
+						PLAY_SOUND_NAME("BananaImpact", WormsSound::Weapon);
+					}
+					if (itemNumber == ItemInfo::Number::Grenade)
+					{
+						PLAY_SOUND_NAME("GRENADEIMPACT", WormsSound::Weapon);
+					}
+				}
 				return;
 			}
 
@@ -261,6 +283,14 @@ namespace InGame {
 			}
 			if (leftCollision || rightCollision)
 			{
+				if (itemNumber == ItemInfo::Number::Banana)
+				{
+					PLAY_SOUND_NAME("BananaImpact", WormsSound::Weapon);
+				}
+				if (itemNumber == ItemInfo::Number::Grenade)
+				{
+					PLAY_SOUND_NAME("GRENADEIMPACT", WormsSound::Weapon);
+				}
 				m_ExternalVector->x = -m_ExternalVector->x * 0.8f;
 			}
 

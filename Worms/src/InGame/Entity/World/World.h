@@ -11,7 +11,8 @@ namespace InGame {
 		~World();
 
 		void Update(Gear::Timestep ts);
-		
+		std::vector<std::string> bgms;
+
 	public:
 		static float s_LimitTurnTime;
 		static int s_LimitSuddenDeathTurn;

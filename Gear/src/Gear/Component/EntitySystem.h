@@ -36,6 +36,7 @@ namespace Gear {
 
 	class EntitySystem
 	{
+		using SoundChannel = unsigned int;
 	private:
 
 		static void EventHandle(Ref<Entity>& entity);

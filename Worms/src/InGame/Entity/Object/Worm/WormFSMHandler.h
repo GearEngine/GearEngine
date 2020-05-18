@@ -6,8 +6,29 @@
 
 namespace InGame {
 
+	
+
 	class WormOnMoveHandler : public Gear::FSM::InputHandler
 	{
+		bool isCompress = true;
+
+		void WormOnMoveHandler::playWalkSound()
+		{
+			if (!IS_PLAYING_SOUND(WormsSound::wormWalk))
+			{
+				isCompress = !isCompress;
+				if (isCompress)
+				{
+					PLAY_SOUND_NAME("Walk-Compress", WormsSound::wormWalk);
+				}
+				else
+				{
+					PLAY_SOUND_NAME("Walk-Expand", WormsSound::wormWalk);
+				}
+			}
+		}
+
+
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			auto status = Gear::EntitySystem::GetStatus(entityID);
@@ -56,16 +77,19 @@ namespace InGame {
 			float moveSpeed = std::any_cast<float>(status->GetStat(WormInfo::MoveSpeed));
 			if (cmd.KeyType == WormCommand::Left)
 			{
+				playWalkSound();
 				physics->SetExternalVector(glm::vec2(-moveSpeed, 0.0f));
 				status->SetStat(WormInfo::Direction, WormInfo::DirectionType::LeftFlat);
 			}
 			if (cmd.KeyType == WormCommand::Right)
 			{
+				playWalkSound();
 				physics->SetExternalVector(glm::vec2(moveSpeed, 0.0f));
 				status->SetStat(WormInfo::Direction, WormInfo::DirectionType::RightFlat);
 			}
 			if (cmd.KeyType == WormCommand::Jump)
 			{
+				isCompress = true;
 				physics->SetExternalVector(glm::vec2(0.0f, 0.0f));
 				timer->SetTimer(0.2f);
 				timer->Start();
@@ -73,6 +97,7 @@ namespace InGame {
 			}
 			if (cmd.KeyType == WormCommand::BackJump)
 			{
+				isCompress = true;
 				physics->SetExternalVector(glm::vec2(0.0f, 0.0f));
 				timer->SetTimer(0.2f);
 				timer->Start();
@@ -480,7 +505,11 @@ namespace InGame {
 			{
 				if (cmd.KeyType == WormCommand::BackJump)
 				{
-					backFlip = true;
+					if (!backFlip)
+					{
+						backFlip = true;
+						PLAY_SOUND_NAME("WORMSPRING", WormsSound::wormAct);
+					}
 					if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat || dir == WormInfo::DirectionType::LeftUp)
 					{
 						externalVector.x = 0.7f;
@@ -621,6 +650,7 @@ namespace InGame {
 					animator->PlayAnimation(WormState::OnRightDownLand);
 					break;
 				}
+				PLAY_SOUND_NAME("WormLanding", WormsSound::wormAct);
 				return WormState::OnLand;
 			}
 		}
@@ -737,13 +767,23 @@ namespace InGame {
 
 	class WormOnStuckHandler : public Gear::FSM::InputHandler
 	{
+		bool popSound = false;
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			GR_TRACE("FSM on Stuck Worm : {0}", entityID);
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			if (!popSound)
+			{
+				if (animator->GetFrameIdx().second < 20)
+				{
+					popSound = true;
+					PLAY_SOUND_NAME("WORMPOP", WormsSound::wormAct);
+				}
+			}
 			if (animator->loopCompleted())
 			{
 				Gear::EntitySystem::GetPhysics2D(entityID)->SetPixelCollisionHandler("Move");
+				popSound = false;
 				return WormState::OnDamaged;
 			}
 			return WormState::OnStuck;
@@ -768,6 +808,7 @@ namespace InGame {
 
 			if (std::abs(verticalRatio) < 8.0f)
 			{
+				PLAY_SOUND_NAME("TWANG" + std::to_string(Gear::Util::GetRndInt(6) + 1), WormsSound::wormAct);
 				externalVector.x = 0.0f;
 				switch (dir)
 				{
@@ -1134,6 +1175,14 @@ namespace InGame {
 				if (curItem < ItemInfo::Number::SkipGo)
 				{
 					timerStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(0));
+					if (curItem == ItemInfo::Number::Bazooka)
+					{
+						PLAY_SOUND_NAME("ROCKETPOWERUP", WormsSound::wormAct);
+					}
+					else if(curItem == ItemInfo::Number::Grenade || curItem == ItemInfo::Number::Banana)
+					{
+						PLAY_SOUND_NAME("THROWPOWERUP", WormsSound::wormAct);
+					}
 					return WormState::OnUseItem;
 				}
 				else if (curItem == ItemInfo::Number::SkipGo)
@@ -1593,7 +1642,8 @@ namespace InGame {
 				{
 					shootPower = 10.0f;
 					glm::vec3 position = transform->GetPosition();
-					auto item = ITEM_POOL->GetItem(std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem)));
+					auto curItemNumber = std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem));
+					auto item = ITEM_POOL->GetItem(curItemNumber);
 					auto explosionTime = std::any_cast<float>(status->GetStat(WormInfo::Stat::ItemExplosionTime));
 					
 					item->init(position, angle, shootPower * powerRate, entityID, explosionTime);
@@ -1603,6 +1653,15 @@ namespace InGame {
 					Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, 0, item->GetID())));
 					Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::TeamInfoBlinkOff)));
 					timerStatus->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
+					
+					if (curItemNumber == ItemInfo::Number::Bazooka)
+					{
+						PLAY_SOUND_NAME("ROCKETRELEASE", WormsSound::wormAct);
+					}
+					else if(curItemNumber == ItemInfo::Number::Banana || curItemNumber == ItemInfo::Number::Grenade)
+					{
+						PLAY_SOUND_NAME("THROWRELEASE", WormsSound::wormAct);
+					}
 
 					AfterShoot(entityID);
 					auto teamName = std::any_cast<std::string>(status->GetStat(WormInfo::TeamName));
@@ -1615,7 +1674,8 @@ namespace InGame {
 			}
 
 			glm::vec3 position = transform->GetPosition();
-			auto item = ITEM_POOL->GetItem(std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem)));
+			auto curItemNumber = std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WormInfo::SelectedItem));
+			auto item = ITEM_POOL->GetItem(curItemNumber);
 			auto explosionTime = std::any_cast<float>(status->GetStat(WormInfo::Stat::ItemExplosionTime));
 			item->init(position, angle, shootPower * powerRate, entityID, explosionTime);
 			FSM->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
@@ -1625,6 +1685,16 @@ namespace InGame {
 			if (shootPower >= 4.0f)
 			{
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, 0, item->GetID())));
+			}
+
+			STOP_SOUND(WormsSound::wormAct);
+			if (curItemNumber == ItemInfo::Number::Bazooka)
+			{
+				PLAY_SOUND_NAME("ROCKETRELEASE", WormsSound::wormAct);
+			}
+			else if (curItemNumber == ItemInfo::Number::Banana || curItemNumber == ItemInfo::Number::Grenade)
+			{
+				PLAY_SOUND_NAME("THROWRELEASE", WormsSound::wormAct);
 			}
 
 			AfterShoot(entityID);

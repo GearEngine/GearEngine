@@ -7,6 +7,7 @@ namespace Gear {
 
 	class SoundPlayer : public Component
 	{
+		using SoundChannel = unsigned int;
 	public:
 		SoundPlayer(int id)
 			: Component(id)

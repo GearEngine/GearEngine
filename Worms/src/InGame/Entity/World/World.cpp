@@ -58,6 +58,17 @@ namespace InGame {
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::World);
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventChannel::World, Gear::CreateRef<WorldEventHandler>());
 
+		bgms.push_back("ingame-01-generic");
+		bgms.push_back("ingame-02-cavern");
+		bgms.push_back("ingame-03-jungle");
+		bgms.push_back("ingame-04-battlezone");
+		bgms.push_back("ingame-05-forest");
+		bgms.push_back("ingame-06-weird-alien-plan");
+		bgms.push_back("ingame-07-outerspace");
+		bgms.push_back("ingame-08-desert");
+		bgms.push_back("ingame-09-hell");
+		bgms.push_back("ingame-10-mech-workshop");
+		bgms.push_back("ingame-11-rain&surf");
 	}
 
 	World::~World()
@@ -68,6 +79,10 @@ namespace InGame {
 
 	void World::Update(Gear::Timestep ts)
 	{
+		if (!Gear::SoundSystem::Get()->isPlaying(WormsSound::bgm))
+		{
+			PLAY_SOUND_NAME(bgms[Gear::Util::GetRndInt(11)], WormsSound::bgm);
+		}
 	}
 
 }

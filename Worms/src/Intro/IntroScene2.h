@@ -4,8 +4,6 @@
 
 namespace Intro {
 
-	void ResourceLoading();
-
 	class IntroScene2 : public Gear::Scene
 	{
 	private:

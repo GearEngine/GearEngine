@@ -77,7 +77,7 @@ namespace Gear {
 			float time = (float)glfwGetTime();
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
-			
+
 			if (!m_Minimized)
 			{
 				m_CurScene = Gear::SceneManager::Get()->GetCurrentScene();
@@ -92,6 +92,7 @@ namespace Gear {
 					EntitySystem::Render();
 				}
 				
+				SoundSystem::Get()->Update();
 				/*m_ImGuilayer->Begin();
 				{
 					GR_PROFILE_SCOPE("LayerStack OnImGuiRender");

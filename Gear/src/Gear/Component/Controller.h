@@ -47,4 +47,9 @@ namespace Gear {
 		friend class EntitySystem;
 	};
 
+	class NetController : public Component
+	{
+
+	};
+
 }

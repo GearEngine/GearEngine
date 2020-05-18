@@ -6,7 +6,7 @@ namespace Intro {
 	bool IntroScene::loadingComplete = false;
 	std::vector<Gear::TextureData> textureDatas;
 
-	void ResourceLoading()
+	void TextureLoading()
 	{
 		std::string dir = std::experimental::filesystem::current_path().string();
 		dir += "/assets/textures";
@@ -21,6 +21,47 @@ namespace Intro {
 			}
 		}
 		IntroScene::loadingComplete = true;
+	}
+
+	std::string GetName(const std::string& path)
+	{
+		std::string ret;
+		int length = path.length();
+		int nameStartPoint;
+		for (int i = length - 1; i > 0; --i)
+		{
+			if (path[i] == '\\' || path[i] == '/')
+			{
+				nameStartPoint = i + 1;
+				break;
+			}
+		}
+		int nameLength = length - nameStartPoint - 4;
+		ret = path.substr(nameStartPoint, nameLength);
+		return ret;
+	}
+
+	void SoundLoading()
+	{
+		std::string dir = std::experimental::filesystem::current_path().string();
+		dir += "/assets/Sound";
+
+		for (auto& p : std::experimental::filesystem::recursive_directory_iterator(dir))
+		{
+			std::string path = p.path().string();
+			int length = path.length();
+			if (std::experimental::filesystem::is_regular_file(path))
+			{
+				if (path.substr(length - 10) == "Stream.wav")
+				{
+					ADD_SOUND(path, GetName(path), true, true);
+				}
+				else
+				{
+					ADD_SOUND(path, GetName(path), false, false);
+				}
+			}
+		}
 	}
 
 

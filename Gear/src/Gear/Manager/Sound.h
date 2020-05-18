@@ -2,13 +2,6 @@
 
 #include "fmod.hpp"
 
-enum SoundChannel
-{
-	BGM,
-	Effect,
-	Max = 100
-};
-
 namespace Gear {
 
 	class Sound
@@ -26,6 +19,9 @@ namespace Gear {
 
 	class SoundSystem
 	{
+		using SoundChannel = unsigned int;
+		#define SOUND_CHANNEL_MAX 100
+
 	private:
 		SoundSystem();
 
@@ -40,11 +36,13 @@ namespace Gear {
 		void StopChannel(SoundChannel channel);
 		void PauseChannel(SoundChannel channel);
 		void ResumeChannel(SoundChannel channel);
+		bool isPlaying(SoundChannel channel);
+		void Update();
 
 	private:
 		static FMOD::System* s_System;
 		static SoundSystem* s_Instance;
-		FMOD::Channel* m_Channel[SoundChannel::Max];
+		FMOD::Channel* m_Channel[SOUND_CHANNEL_MAX];
 	};
 
 	class SoundStorage 
@@ -63,4 +61,7 @@ namespace Gear {
 
 #define ADD_SOUND(path, name, loop, stream) Gear::SoundStorage::AddSound_(name, Gear::SoundSystem::CreateSound(path, loop, stream))
 #define GET_SOUND(name) Gear::SoundStorage::GetSound_(name)
-#define PLAY_SOUND(name, channel) Gear::SoundSystem::Get()->PlaySound_(name, channel)
+#define PLAY_SOUND(sound, channel) Gear::SoundSystem::Get()->PlaySound_(sound, channel)
+#define PLAY_SOUND_NAME(name, channel) Gear::SoundSystem::Get()->PlaySound_(GET_SOUND(name), channel)
+#define STOP_SOUND(channel) Gear::SoundSystem::Get()->StopChannel(channel);
+#define IS_PLAYING_SOUND(channel) Gear::SoundSystem::Get()->isPlaying(channel)

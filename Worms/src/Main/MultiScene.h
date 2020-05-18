@@ -684,6 +684,7 @@ namespace Main {
 		const float MouseClickDeleay = 0.2f;
 		float mouseClickPastTime = 0.0f;
 
+		int pastMouseOn = -1;
 	public:
 		MultiScene()
 			: Scene("MultiScene"), centerMousePos(640.0f, 360.0f)

@@ -14,14 +14,18 @@ namespace Gear {
 
 	Sound::~Sound()
 	{
-		m_Sound->release();
+		if (m_Sound != nullptr)
+		{
+			m_Sound->release();
+			m_Sound = nullptr;
+		}
 	}
 
 
 	SoundSystem::SoundSystem()
 	{
 		FMOD::System_Create(&s_System);
-		s_System->init(32, FMOD_INIT_NORMAL, nullptr);
+		s_System->init(SOUND_CHANNEL_MAX, FMOD_INIT_NORMAL, nullptr);
 	}
 
 	void SoundSystem::Destroy()
@@ -93,6 +97,20 @@ namespace Gear {
 		m_Channel[channel]->setPaused(false);
 	}
 
+	bool SoundSystem::isPlaying(SoundChannel channel)
+	{
+		bool ret;
+		m_Channel[channel]->isPlaying(&ret);
+		return ret;
+	}
+
+	void SoundSystem::Update()
+	{
+		s_System->update();
+	}
+
+	
+
 	void SoundStorage::AddSound_(const std::string & name, Ref<Sound> sound)
 	{
 		if (m_Sounds.find(name) == m_Sounds.end())
@@ -134,6 +152,9 @@ namespace Gear {
 
 	void SoundStorage::Clear()
 	{
-		m_Sounds.clear();
+		if (m_Sounds.size())
+		{
+			m_Sounds.clear();
+		}
 	}
 }

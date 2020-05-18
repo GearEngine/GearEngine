@@ -14,7 +14,7 @@ namespace Main {
 
 	bool MapListLayer::OnMouseClick(Gear::MouseButtonReleasedEvent& e)
 	{
-		
+
 		return true;
 	}
 
@@ -152,52 +152,52 @@ namespace Main {
 				}
 			}
 		}
-		
+
 	}
 
 	void BarracksLayer::sortTeamInfoListPoint()
 	{
 		std::sort(teamInfolist.begin(), teamInfolist.end(),
 			[](const BasicTeamInfo* t1, const BasicTeamInfo* t2)
+		{
+			if (t1->points > t2->points)
 			{
-				if (t1->points > t2->points)
-				{
-					return true;
-				}
-				else if (t1->points < t2->points)
-				{
-					return false;
-				}
-
-				if (t1->playerType < t2->playerType)
-				{
-					return true;
-				}
-				else if (t1->playerType > t2->playerType)
-				{
-					return false;
-				}
-				else
-				{
-					int team1NameLength = t1->teamName.size();
-					int team2NameLength = t2->teamName.size();
-					int cmpLength = team1NameLength < team2NameLength ? team1NameLength : team2NameLength;
-
-					for (int i = 0; i < cmpLength; ++i)
-					{
-						if (t1->teamName[i] < t2->teamName[i])
-						{
-							return true;
-						}
-						else if (t1->teamName[i] > t2->teamName[i])
-						{
-							return false;
-						}
-					}
-					return team1NameLength == cmpLength;
-				}
 				return true;
 			}
+			else if (t1->points < t2->points)
+			{
+				return false;
+			}
+
+			if (t1->playerType < t2->playerType)
+			{
+				return true;
+			}
+			else if (t1->playerType > t2->playerType)
+			{
+				return false;
+			}
+			else
+			{
+				int team1NameLength = t1->teamName.size();
+				int team2NameLength = t2->teamName.size();
+				int cmpLength = team1NameLength < team2NameLength ? team1NameLength : team2NameLength;
+
+				for (int i = 0; i < cmpLength; ++i)
+				{
+					if (t1->teamName[i] < t2->teamName[i])
+					{
+						return true;
+					}
+					else if (t1->teamName[i] > t2->teamName[i])
+					{
+						return false;
+					}
+				}
+				return team1NameLength == cmpLength;
+			}
+			return true;
+		}
 		);
 	}
 
@@ -205,36 +205,36 @@ namespace Main {
 	{
 		std::sort(teamInfolist.begin(), teamInfolist.end(),
 			[](const BasicTeamInfo* t1, const BasicTeamInfo* t2)
+		{
+			if (t1->playerType < t2->playerType)
 			{
-				if (t1->playerType < t2->playerType)
-				{
-					return true;
-				}
-				else if (t1->playerType > t2->playerType)
-				{
-					return false;
-				}
-				else
-				{
-					int team1NameLength = t1->teamName.size();
-					int team2NameLength = t2->teamName.size();
-					int cmpLength = team1NameLength < team2NameLength ? team1NameLength : team2NameLength;
-
-					for (int i = 0; i < cmpLength; ++i)
-					{
-						if (t1->teamName[i] < t2->teamName[i])
-						{
-							return true;
-						}
-						else if (t1->teamName[i] > t2->teamName[i])
-						{
-							return false;
-						}
-					}
-					return team1NameLength == cmpLength;
-				}
 				return true;
 			}
+			else if (t1->playerType > t2->playerType)
+			{
+				return false;
+			}
+			else
+			{
+				int team1NameLength = t1->teamName.size();
+				int team2NameLength = t2->teamName.size();
+				int cmpLength = team1NameLength < team2NameLength ? team1NameLength : team2NameLength;
+
+				for (int i = 0; i < cmpLength; ++i)
+				{
+					if (t1->teamName[i] < t2->teamName[i])
+					{
+						return true;
+					}
+					else if (t1->teamName[i] > t2->teamName[i])
+					{
+						return false;
+					}
+				}
+				return team1NameLength == cmpLength;
+			}
+			return true;
+		}
 		);
 	}
 
@@ -284,6 +284,7 @@ namespace Main {
 			{
 				if (MultiScene::selectedTeamList.size() < 6)
 				{
+					PLAY_SOUND_NAME("positive", WormsSound::effect);
 					MultiScene::selectedTeamList.push_back(teamInfolist[i + curListShowIndex]);
 					teamInfolist.erase(teamInfolist.begin() + i + curListShowIndex);
 					RecalculateScrollerPos();
@@ -436,6 +437,7 @@ namespace Main {
 			{
 				if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT))
 				{
+					PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 					++handicapType[i];
 					if (handicapType[i] >= TeamBasicOption::HMax)
 					{
@@ -445,6 +447,7 @@ namespace Main {
 				}
 				if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_RIGHT))
 				{
+					PLAY_SOUND_NAME("decreaseiconnumber", WormsSound::effect);
 					--handicapType[i];
 					if (handicapType[i] < 0)
 					{
@@ -462,6 +465,7 @@ namespace Main {
 			{
 				if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT))
 				{
+					PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 					++allyType[i];
 					if (allyType[i] >= TeamBasicOption::AMax)
 					{
@@ -471,6 +475,7 @@ namespace Main {
 				}
 				if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_RIGHT))
 				{
+					PLAY_SOUND_NAME("decreaseiconnumber", WormsSound::effect);
 					--allyType[i];
 					if (allyType[i] < 0)
 					{
@@ -488,6 +493,7 @@ namespace Main {
 			{
 				if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT))
 				{
+					PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 					if (wormCount[i] < TeamBasicOption::Max)
 					{
 						++wormCount[i];
@@ -496,6 +502,7 @@ namespace Main {
 				}
 				if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_RIGHT))
 				{
+					PLAY_SOUND_NAME("decreaseiconnumber", WormsSound::effect);
 					if (wormCount[i] > 0)
 					{
 						--wormCount[i];
@@ -509,6 +516,7 @@ namespace Main {
 		{
 			if (Gear::Util::IsPointRectCollision(MultiScene::virtualCursorPos, filedRects[i]))
 			{
+				PLAY_SOUND_NAME("changetoeditmode", WormsSound::effect);
 				barracksLayer->pushTeamData(MultiScene::selectedTeamList[i]);
 				barracksLayer->sortTeamInfoListName();
 				MultiScene::selectedTeamList.erase(MultiScene::selectedTeamList.begin() + i);
@@ -697,10 +705,10 @@ namespace Main {
 		//Scheme
 		Font::PrintFont(glm::vec3(SchemeBorderTransform[3][0] + 0.03f, SchemeBorderTransform[3][1] + SchemeBorderTransform[1][1] / 2, 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Scheme options", FontType::GraySmall, 0.04f, false);
 		Font::PrintFont(glm::vec3(schemeSelectorTransform[3][0] - 0.37f, schemeSelectorTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "[Default]", FontType::GraySmall, 0.04f, false);
-	
+
 		//Teams
 		Font::PrintFont(glm::vec3(TeamBorderTransform[3][0] + 0.03f, TeamBorderTransform[3][1] + TeamBorderTransform[1][1] / 2, 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Teams", FontType::GraySmall, 0.04f, false);
-		
+
 		//Baracks
 		Font::PrintFont(glm::vec3(BarrackBorderTransform[3][0] + 0.03f, BarrackBorderTransform[3][1] + BarrackBorderTransform[1][1] / 2, 0.55f), glm::vec3(0.07f, 0.07f, 1.0f), "Barracks", FontType::GraySmall, 0.04f, false);
 		Font::PrintFont(glm::vec3(createTeamTransform[3][0] + 0.03f, createTeamTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Create a new Team", FontType::GraySmall, 0.04f, false);
@@ -710,7 +718,7 @@ namespace Main {
 		//GameStart
 		Font::PrintFont(glm::vec3(startTransform[3][0] + 0.03f, startTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Start the game", FontType::GraySmall, 0.04f, false);
 		Font::PrintFont(glm::vec3(exitTransform[3][0] + 0.03f, exitTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Exit", FontType::GraySmall, 0.04f, false);
-	
+
 		//Save delete
 		Font::PrintFont(glm::vec3(saveTransform[3][0] + 0.03f, saveTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Save", FontType::GraySmall, 0.04f, false);
 		Font::PrintFont(glm::vec3(deleteTransform[3][0] + 0.03f, deleteTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Delete", FontType::GraySmall, 0.04f, false);
@@ -731,31 +739,54 @@ namespace Main {
 			}
 		}
 
-		
-
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, StartRect))
 		{
 			MouseOn[Main_Multi::StartGame] = true;
+			if (pastMouseOn != 0)
+			{
+				PLAY_SOUND_NAME("keyerase", WormsSound::effect);
+			}
+			pastMouseOn = 0;
 			return;
 		}
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, ExitRect))
 		{
 			MouseOn[Main_Multi::Exit] = true;
+			if (pastMouseOn != 1)
+			{
+				PLAY_SOUND_NAME("keyerase", WormsSound::effect);
+			}
+			pastMouseOn = 1;
 			return;
 		}
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, CreateTeamRect))
 		{
 			MouseOn[Main_Multi::CreateNewTeam] = true;
+			if (pastMouseOn != 2)
+			{
+				PLAY_SOUND_NAME("keyerase", WormsSound::effect);
+			}
+			pastMouseOn = 2;
 			return;
 		}
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, WeaponsOptionRect))
 		{
 			MouseOn[Main_Multi::WeaponsOption] = true;
+			if (pastMouseOn != 3)
+			{
+				PLAY_SOUND_NAME("keyerase", WormsSound::effect);
+			}
+			pastMouseOn = 3;
 			return;
 		}
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, GameOptionRect))
 		{
 			MouseOn[Main_Multi::GameOption] = true;
+			if (pastMouseOn != 4)
+			{
+				PLAY_SOUND_NAME("keyerase", WormsSound::effect);
+			}
+			pastMouseOn = 4;
 			return;
 		}
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, MapSelectorRect))
@@ -771,11 +802,21 @@ namespace Main {
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, SaveRect))
 		{
 			MouseOn[Main_Multi::Save] = true;
+			if (pastMouseOn != 5)
+			{
+				PLAY_SOUND_NAME("keyerase", WormsSound::effect);
+			}
+			pastMouseOn = 5;
 			return;
 		}
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, DeleteRect))
 		{
 			MouseOn[Main_Multi::Delete] = true;
+			if (pastMouseOn != 6)
+			{
+				PLAY_SOUND_NAME("keyerase", WormsSound::effect);
+			}
+			pastMouseOn = 6;
 			return;
 		}
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, SelectedTeamRect))
@@ -797,10 +838,16 @@ namespace Main {
 		{
 			if (Gear::Util::IsPointRectCollision(virtualCursorPos, OptionsRect[i]))
 			{
+				if (pastMouseOn != 7 + i)
+				{
+					PLAY_SOUND_NAME("keyerase", WormsSound::effect);
+				}
+				pastMouseOn = 7 + i;
 				MouseOn[i] = true;
+				return;
 			}
 		}
-
+		pastMouseOn = -1;
 	}
 
 
@@ -817,24 +864,31 @@ namespace Main {
 			}
 		}
 
+
 		switch (ReadyButton)
 		{
 		case Main_Multi::TurnTime:
+			PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 			ChangeTurnTime();
 			break;
 		case Main_Multi::RoundTime:
+			PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 			ChangeRoundTime();
 			break;
 		case Main_Multi::WinRequires:
+			PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 			ChangeWinRequires();
 			break;
 		case Main_Multi::WormSelect:
+			PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 			ChangeWormSelect();
 			break;
 		case Main_Multi::WormEnergy:
+			PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 			ChangeWormEenergy();
 			break;
 		case Main_Multi::Teleportin:
+			PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 			ChangeTeleportin();
 			break;
 		case Main_Multi::Map:
@@ -849,18 +903,22 @@ namespace Main {
 			OnTeams();
 			break;
 		case Main_Multi::WeaponsOption:
+			PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 			OnWeaponsSet();
 			break;
 		case Main_Multi::GameOption:
+			PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 			OnGameOptionSet();
 			break;
 		case Main_Multi::GameSchemeSelector:
 			OnSchemeSelector();
 			break;
 		case Main_Multi::Delete:
+			PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 			OnDelete();
 			break;
 		case Main_Multi::Save:
+			PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 			OnSave();
 			break;
 		case Main_Multi::Barraks:
@@ -873,12 +931,15 @@ namespace Main {
 			OnPoints();
 			break;
 		case Main_Multi::CreateNewTeam:
+			PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 			OnCreateNewTeam();
 			break;
 		case Main_Multi::StartGame:
+			PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 			StartGame();
 			break;
 		case Main_Multi::Exit:
+			PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
 			OnExit();
 			break;
 		}
@@ -945,7 +1006,7 @@ namespace Main {
 				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(initData.Mapinfo.TerrainMinX, initData.Mapinfo.TerrainMaxX), 5.0f, ZOrder::z_Worm);
 				worm.Direction = (InGame::WormInfo::DirectionType)Gear::Util::GetRndInt(2);
 				worm.Hp = wormEnergy;
-				if(selectedTeamLayer->handicapType[i] == TeamBasicOption::Handicap::Plus)
+				if (selectedTeamLayer->handicapType[i] == TeamBasicOption::Handicap::Plus)
 				{
 					worm.Hp += 25;
 				}
@@ -1080,6 +1141,7 @@ namespace Main {
 		}
 
 		Gear::EntitySystem::Init();
+		Gear::SoundSystem::Get()->StopChannel(WormsSound::bgm);
 		if (Gear::SceneManager::Get()->isSceneExist("LoadingScene"))
 		{
 			Gear::SceneManager::Get()->GetScene("LoadingScene")->Init(initData);

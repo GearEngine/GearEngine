@@ -4,12 +4,15 @@
 
 namespace Intro {
 
-	void ResourceLoading();
+	void TextureLoading();
+	void SoundLoading();
 
 	class IntroScene : public Gear::Scene
 	{
 	private:
-		std::thread loadingThread;
+		std::thread textureLoadingThread;
+		std::thread soundLoadingThread;
+
 		glm::mat4 introTranslate;
 		Gear::Ref<Gear::Texture2D> introTexture;
 
@@ -28,8 +31,10 @@ namespace Intro {
 		{
 			Gear::TextureStorage::AddTexture2D("Intro", Gear::Texture2D::Create("assets/textures/Intro/TEAM17.png"));
 
-			loadingThread = std::thread(ResourceLoading);
-			loadingThread.detach();
+			textureLoadingThread = std::thread(TextureLoading);
+			soundLoadingThread = std::thread(SoundLoading);
+			textureLoadingThread.detach();
+			soundLoadingThread.detach();
 
 			introTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(2.8f, 1.5f, 1.0f));
 			introTexture = Gear::TextureStorage::GetTexture2D("Intro");

@@ -96,27 +96,64 @@ namespace Main {
 		mouseOnMulti = false;
 		mouseOnOptions = false;
 		mouseOnQuit = false;
+		isOnButton = false;
 
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, singleRect))
 		{
 			mouseOnSingle = true;
+			isOnButton = true;
+			if (prevOnCursorButton != 0)
+			{
+				PLAY_SOUND_NAME("keyerase", WormsSound::effect);
+			}
+			prevOnCursorButton = 0;
 		}
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, netRect))
 		{
 			mouseOnNet = true;
+			isOnButton = true;
+			if (prevOnCursorButton != 1)
+			{
+				PLAY_SOUND_NAME("keyerase", WormsSound::effect);
+			}
+			prevOnCursorButton = 1;
 		}
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, multiRect))
 		{
 			mouseOnMulti = true;
+			isOnButton = true;
+			if (prevOnCursorButton != 2)
+			{
+				PLAY_SOUND_NAME("keyerase", WormsSound::effect);
+			}
+			prevOnCursorButton = 2;
 		}
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, optionRect))
 		{
 			mouseOnOptions = true;
+			isOnButton = true;
+			if (prevOnCursorButton != 3)
+			{
+				PLAY_SOUND_NAME("keyerase", WormsSound::effect);
+			}
+			prevOnCursorButton = 3;
 		}
 		if (Gear::Util::IsPointRectCollision(virtualCursorPos, quitRect))
 		{
 			mouseOnQuit = true;
+			isOnButton = true;
+			if (prevOnCursorButton != 4)
+			{
+				PLAY_SOUND_NAME("keyerase", WormsSound::effect);
+			}
+			prevOnCursorButton = 4;
 		}
+
+		if (!isOnButton)
+		{
+			prevOnCursorButton = -1;
+		}
+
 
 		for (int i = 0; i < SceneBackground::MaxStar; ++i)
 		{
@@ -127,25 +164,59 @@ namespace Main {
 		glfwSetCursorPos((GLFWwindow*)Gear::Application::Get().GetWindow().GetNativeWindow(), 640.0, 360.0);
 		Gear::Renderer2D::DrawFrameQuad(cursorTransform, Cursor, 0, 0);
 
-		if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT))
+		if (!mouseClickReady)
 		{
-			if (mouseOnQuit)
+			pastTime += ts;
+			if (pastTime > mouseClickDelay)
 			{
-				Gear::Application::Get().Quit();
+				pastTime = 0.0f;
+				mouseClickReady = true;
 			}
-			if (mouseOnMulti)
+		}
+
+		if (mouseClickReady)
+		{
+			if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT))
 			{
-				if (Gear::SceneManager::Get()->isSceneExist("MultiScene")) 
+				mouseClickReady = false;
+				if (mouseOnQuit)
 				{
-					Gear::SceneManager::Get()->changeScene("MultiScene", 0);
+					PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
+					Gear::Application::Get().Quit();
 				}
-				else
+				if (mouseOnMulti)
 				{
-					Gear::SceneManager::Get()->AddScene(new MultiScene);
-					Gear::SceneManager::Get()->changeScene("MultiScene");
+					PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
+					if (Gear::SceneManager::Get()->isSceneExist("MultiScene"))
+					{
+						Gear::SceneManager::Get()->changeScene("MultiScene", 0);
+					}
+					else
+					{
+						Gear::SceneManager::Get()->AddScene(new MultiScene);
+						Gear::SceneManager::Get()->changeScene("MultiScene");
+					}
+				}
+				if (mouseOnNet)
+				{
+					PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
+				}
+				if (mouseOnOptions)
+				{
+					PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
+				}
+				if (mouseOnSingle)
+				{
+					PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
+				}
+
+				if (!isOnButton)
+				{
+					PLAY_SOUND_NAME("cantclickhere", WormsSound::effect);
 				}
 			}
 		}
+		
 
 		if (inFirst)
 		{

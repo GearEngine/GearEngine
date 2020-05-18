@@ -624,3 +624,12 @@ namespace SceneBackground {
 		glm::mat4 Transform;
 	};
 }
+
+namespace WormsSound
+{
+	enum Channel : unsigned int
+	{
+		bgm, effect, wormSpeach, wormWalk, wormAct, Weapon
+	};
+
+}
