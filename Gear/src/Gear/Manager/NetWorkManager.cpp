@@ -18,6 +18,13 @@ namespace Gear {
 		}
 	}
 
+	void NetWorkManager::ConnectServer(const std::string& ip)
+	{
+		SocketAddress addr = *SocketAddressFactory::CreateIPv4FromString(ip);
+		m_ClientSock = SocketUtil::CreateTCPSocket(INET);
+		m_ClientSock->Connect(addr);
+	}
+
 	NetWorkManager * NetWorkManager::Get()
 	{
 		if (!s_Inst)

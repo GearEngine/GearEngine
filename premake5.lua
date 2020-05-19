@@ -59,6 +59,7 @@ project "Gear"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
+		"%{prj.name}/vendor/KSNetwork/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
@@ -69,7 +70,7 @@ project "Gear"
 	}
 	libdirs
 	{
-		"%{prj.name}/vendor/fmod/lib",
+		"%{prj.name}/vendor/fmod/lib"
 	}
 	links
 	{
@@ -78,7 +79,9 @@ project "Gear"
 		"ImGui",
 		"opengl32.lib",
 		"fmod64_vc.lib",
-		"jsoncpp.lib"
+		"jsoncpp.lib",
+		"KSNetwork.lib",
+		"ws2_32.lib"
 	}
 
 	filter "system:windows"
@@ -95,7 +98,8 @@ project "Gear"
 		symbols "on"
 		libdirs
 		{
-			"%{prj.name}/vendor/Json/lib/Debug"
+			"%{prj.name}/vendor/Json/lib/Debug",
+			"%{prj.name}/vendor/KSNetwork/lib/Debug"
 		}
 	
 	filter "configurations:Release"
@@ -104,7 +108,8 @@ project "Gear"
 		optimize "on"
 		libdirs
 		{
-			"%{prj.name}/vendor/Json/lib/Release"
+			"%{prj.name}/vendor/Json/lib/Release",
+			"%{prj.name}/vendor/KSNetwork/lib/Release"
 		}
 	
 	filter "configurations:Dist"
@@ -113,7 +118,8 @@ project "Gear"
 		optimize "on"
 		libdirs
 		{
-			"%{prj.name}/vendor/Json/lib/Release"
+			"%{prj.name}/vendor/Json/lib/Release",
+			"%{prj.name}/vendor/KSNetwork/lib/Release"
 		}
 
 
@@ -218,3 +224,45 @@ project "Worms"
 		defines "GR_DIST"
 		runtime "Release"
 		optimize "on"
+
+project "WormsServer"
+	location "WormsServer"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+	
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+	
+	links
+	{
+		"KSNetwork.lib",
+		"ws2_32.lib"
+	}
+	
+
+	filter "system:windows"
+		systemversion "latest"
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+		libdirs
+		{
+			"Gear/vendor/KSNetwork/lib/Debug"
+		}
+	
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
+		libdirs
+		{
+			"Gear/vendor/KSNetwork/lib/Release"
+		}

@@ -961,8 +961,8 @@ namespace Main {
 			return false;
 		}
 
-		initData.GameMode = GameMode::NetWork;
-		GameMode::Bit::ModeBit = GameMode::NetWork;
+		initData.GameMode = GameMode::Multi;
+		GameMode::Bit::ModeBit = GameMode::Multi;
 
 		//clear
 		initData.Teams.clear();

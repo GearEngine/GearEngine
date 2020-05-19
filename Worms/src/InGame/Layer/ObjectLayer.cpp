@@ -193,8 +193,14 @@ namespace InGame {
 	{
 		s_turnChanged = false;
 	
-		Gear::EntitySystem::ActivateComponent(s_CurrentActivatedWormID, { {Gear::ComponentID::NetController} });
-		//Gear::EntitySystem::ActivateComponent(s_CurrentActivatedWormID, { {Gear::ComponentID::Controller} });
+		if (GameMode::Bit::ModeBit == GameMode::NetWork)
+		{
+			Gear::EntitySystem::ActivateComponent(s_CurrentActivatedWormID, { {Gear::ComponentID::NetController} });
+		}
+		else
+		{
+			Gear::EntitySystem::ActivateComponent(s_CurrentActivatedWormID, { {Gear::ComponentID::Controller} });
+		}
 
 		auto FSM = Gear::EntitySystem::GetFSM(s_CurrentActivatedWormID);
 		auto status = Gear::EntitySystem::GetStatus(s_CurrentActivatedWormID);

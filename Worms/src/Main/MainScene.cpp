@@ -200,6 +200,7 @@ namespace Main {
 				if (mouseOnNet)
 				{
 					PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
+					StartNetwork();
 				}
 				if (mouseOnOptions)
 				{
@@ -231,5 +232,84 @@ namespace Main {
 		Gear::Renderer2D::EndScene();
 	}
 
-	
+	void MainScene::StartNetwork()
+	{
+		InGame::InitiateData initData;
+
+		Gear::NetWorkManager::Get()->ConnectServer("127.0.0.1:9190");
+
+		initData.GameMode = GameMode::NetWork;
+		GameMode::Bit::ModeBit = GameMode::NetWork;
+
+		//clear
+		initData.Teams.clear();
+		initData.Mapinfo.Map.reset();
+		initData.Mapinfo.Mask.reset();
+
+		//MapSetting
+		initData.Mapinfo = InGame::GetMapInfo(Map::GetName(Map::City));
+		initData.Mapinfo.MapLoad();
+
+		//ItemSetting
+		std::vector<InGame::ItemInfo::ItemDescprition> itemList;
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Bazooka, "Bazooka", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Grenade, "Grenade", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Shotgun, "Shotgun", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Banana, "Banana", 3, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Teleport, "Teleport", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::SkipGo, "Skip Go", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Surrender, "Surrender", -1, 0));
+
+		//BagicGameOption
+		initData.LimitTurnTime = BasicOption::GetTurnTime(BasicOption::TurnTime::TT45);
+
+		//Team and Worms Setting
+		int flatCount = 0;
+		auto rng = std::default_random_engine{};
+		int wormEnergy = BasicOption::GetWormEnergy(BasicOption::WormEnergy::WE150);
+		for (int i = 0; i < 2; ++i)
+		{
+			InGame::TeamInfo team;
+			team.TeamName = std::to_string(i + 1) + "-Up";
+			team.TeamColor = InGame::TeamColor::Color(i + 19);
+			team.nWorm = 3;
+			team.TeamIcon = Gear::TextureStorage::GetTexture2D("Japan");
+			team.TeamItem = itemList;
+
+			std::vector<std::string> nameList = {"Worm1", "Worm2", "Worm3"};
+			std::shuffle(nameList.begin(), nameList.end(), rng);
+			for (int j = 0; j < team.nWorm; ++j)
+			{
+				InGame::WormSpecific worm;
+				worm.Name = nameList[j];
+				worm.AdditionalZRenderOffset = flatCount * 0.02f;
+				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(initData.Mapinfo.TerrainMinX, initData.Mapinfo.TerrainMaxX), 5.0f, ZOrder::z_Worm);
+				worm.Direction = (InGame::WormInfo::DirectionType)Gear::Util::GetRndInt(2);
+				worm.Hp = wormEnergy;			
+				team.TotalWormHp += worm.Hp;
+				team.worms.push_back(worm);
+				++initData.nTotalWorms;
+				++flatCount;
+			}
+			team.CurrentTotalWormHp = team.TotalWormHp;
+			initData.Teams.push_back(team);
+		}
+		
+		Gear::EntitySystem::Init();
+		Gear::SoundSystem::Get()->StopChannel(WormsSound::bgm);
+		if (Gear::SceneManager::Get()->isSceneExist("LoadingScene"))
+		{
+			Gear::SceneManager::Get()->GetScene("LoadingScene")->Init(initData);
+			Gear::SceneManager::Get()->changeScene("LoadingScene");
+		}
+		else
+		{
+			auto loadingScene = new Loading::LoadingScene;
+			loadingScene->Init(initData);
+
+			Gear::SceneManager::Get()->AddScene(loadingScene);
+			Gear::SceneManager::Get()->changeScene("LoadingScene");
+		}
+
+	}
 }

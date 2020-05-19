@@ -49,14 +49,15 @@ namespace Gear {
 		{
 			return;
 		}
+		bool send = false;
 		for (auto& command : m_Commands)
 		{
 			if (command.KeyType == MOUSE_CLICKTYPE && m_ActivatedMouse)
 			{
 				if (Gear::Input::IsMouseButtonPressed(command.Keycode))
 				{
-					//NetWorkManager::Get()->Send(command);
-					temp = command;
+					NetWorkManager::Get()->Send<Command>(command);
+					send = true;
 					break;
 				}
 			}
@@ -64,18 +65,22 @@ namespace Gear {
 			{
 				if (Gear::Input::IsKeyPressd(command.Keycode))
 				{
-					//NetWorkManager::Get()->Send(command);
-					temp = command;
+					NetWorkManager::Get()->Send<Command>(command);
+					send = true;
 					break;
 				}
 			}
+		}
+
+		if (!send)
+		{
+			NetWorkManager::Get()->Send<Command>(Controller::s_None);
 		}
 	}
 
 	void NetController::ReceiveInput()
 	{
-		//m_Command = NetWorkManager::Get()->Reseive<Command>();
-		m_Command = temp;
+		m_Command = NetWorkManager::Get()->Reseive<Command>();
 	}
 
 }

@@ -226,11 +226,11 @@ namespace InGame {
 		std::vector<TeamInfo> Teams;
 		int nTotalWorms = 0;
 
-		virtual void Read(const Gear::InputMemoryStream& stream) override
+		virtual void Read(InputMemoryStream& stream) override
 		{
 
 		}
-		virtual void Write(Gear::OutputMemoryStream& stream) override
+		virtual void Write(OutputMemoryStream& stream) override
 		{
 
 		}

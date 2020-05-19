@@ -1,25 +1,22 @@
 #pragma once
 
-namespace Gear {
+#include "../../vendor/KSNetwork/include/HeaderShared.h"
 
-	class OutputMemoryStream {};
-	class InputMemoryStream {};
-	class TCPSocketPtr {};
+namespace Gear {
 
 	class PacketAble
 	{
 	public:
 		virtual void Write(OutputMemoryStream& stream) = 0;
-		virtual void Read(const InputMemoryStream& stream) = 0;
+		virtual void Read(InputMemoryStream& stream) = 0;
 	};
 
 	class NetWorkManager
 	{
 	private:
-		NetWorkManager() = default;
-		NetWorkManager(const std::string& serverIp)
-			: m_ServerIp(serverIp)
+		NetWorkManager()
 		{
+			SocketUtil::StaticInit();
 		}
 
 	public:
@@ -28,17 +25,18 @@ namespace Gear {
 		static NetWorkManager* Get();
 
 	public:
+		void ConnectServer(const std::string& ip);
 
 		template<typename T> 
-		void Send(const T& data)
+		void Send(T& data)
 		{
 			OutputMemoryStream out;
-			//data.Write(out);
+			data.Write(out);
 
-			/*char* Buffer = static_cast<char*>(malloc(1470));
+			char* Buffer = static_cast<char*>(malloc(1470));
 			memcpy(Buffer, out.GetBufferPtr(), out.GetLength());
 
-			clientSock->Send(Buffer, out.GetLength());*/
+			m_ClientSock->Send(Buffer, out.GetLength());
 		}
 
 		template<typename T>
@@ -46,17 +44,16 @@ namespace Gear {
 		{
 			T data;
 
-			/*char* Buffer = static_cast<char*>(malloc(1470));
-			int size = clientSock->Receive(Buffer, 1470);
+			char* Buffer = static_cast<char*>(malloc(1470));
+			int size = m_ClientSock->Receive(Buffer, 1470);
 			InputMemoryStream in(Buffer, size);
-			data.Read(in);*/
+			data.Read(in);
 
 			return data;
 		}
 
 	private:
 		static NetWorkManager* s_Inst;
-		std::string m_ServerIp;
 		TCPSocketPtr m_ClientSock; 
 	};
 

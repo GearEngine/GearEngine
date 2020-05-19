@@ -487,7 +487,14 @@ namespace InGame {
 				FSM->SetCurrentState(WormState::OnNotMyTurn);
 
 				status->SetStat(WormInfo::MyTurn, false);
-				Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+				if (GameMode::Bit::ModeBit == GameMode::NetWork)
+				{
+					Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::NetController });
+				}
+				else
+				{
+					Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+				}
 
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
 				return;
@@ -742,7 +749,14 @@ namespace InGame {
 				auto curState = FSM->GetCurrentState();
 				if (turnOffController)
 				{
-					Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+					if (GameMode::Bit::ModeBit == GameMode::NetWork)
+					{
+						Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::NetController });
+					}
+					else
+					{
+						Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+					}
 					if (curState == WormState::OnMove)
 					{
 						Gear::EntitySystem::GetPhysics2D(entityID)->SetExternalVectorX(0.0f);
@@ -857,7 +871,14 @@ namespace InGame {
 				FSM->SetCurrentState(WormState::OnNotMyTurn);
 
 				status->SetStat(WormInfo::MyTurn, false);
-				Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+				if (GameMode::Bit::ModeBit == GameMode::NetWork)
+				{
+					Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::NetController });
+				}
+				else
+				{
+					Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+				}
 
 				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
 				return;

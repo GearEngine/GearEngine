@@ -130,5 +130,7 @@ namespace Main {
 			cursorTransform[3][1] = 0.0f;
 			virtualCursorPos = { 640.0f, 360.0f };
 		}
+
+		void StartNetwork();
 	};
 }

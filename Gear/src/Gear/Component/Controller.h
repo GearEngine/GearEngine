@@ -25,13 +25,15 @@ namespace Gear {
 			return false;
 		}
 
-		virtual void Read(const InputMemoryStream& stream) override
+		virtual void Read(InputMemoryStream& stream) override
 		{
-			
+			stream.Read((unsigned int)KeyType);
+			stream.Read(Keycode);
 		}
 		virtual void Write(OutputMemoryStream& stream) override
 		{
-
+			stream.Write((unsigned int)KeyType);
+			stream.Write(Keycode);
 		}
 	};
 

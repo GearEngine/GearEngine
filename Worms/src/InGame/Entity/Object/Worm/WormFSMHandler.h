@@ -1818,7 +1818,14 @@ namespace InGame {
 			physics->SetExternalVector({ 0.0f, 0.0f });
 			physics->SetPixelCollisionHandler("Move");
 			status->SetStat(WormInfo::MyTurn, false);
-			Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+			if (GameMode::Bit::ModeBit == GameMode::NetWork)
+			{
+				Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::NetController });
+			}
+			else
+			{
+				Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+			}
 
 			WormInfo::DirectionType dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Stat::Direction));
 			switch (dir)
