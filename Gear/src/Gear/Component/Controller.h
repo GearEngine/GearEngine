@@ -7,14 +7,18 @@ namespace Gear {
 
 	struct Command : public PacketAble
 	{
-		Command() = default;
+		Command()
+		{
+			m_Type = 0;
+		};
 		Command(EnumType keytype, int keycode)
 			: KeyType(keytype), Keycode(keycode)
-		{}
+		{
+			m_Type = 0;
+		}
 		EnumType KeyType;
 		int Keycode;
 		glm::vec2 MouseMove;
-
 
 		bool operator==(const Command& cmd)
 		{
@@ -27,11 +31,13 @@ namespace Gear {
 
 		virtual void Read(InputMemoryStream& stream) override
 		{
+			stream.Read(m_Type);
 			stream.Read((unsigned int)KeyType);
 			stream.Read(Keycode);
 		}
 		virtual void Write(OutputMemoryStream& stream) override
 		{
+			stream.Write(m_Type);
 			stream.Write((unsigned int)KeyType);
 			stream.Write(Keycode);
 		}

@@ -7,6 +7,8 @@ namespace Gear {
 	class PacketAble
 	{
 	public:
+		unsigned int m_Type;
+
 		virtual void Write(OutputMemoryStream& stream) = 0;
 		virtual void Read(InputMemoryStream& stream) = 0;
 	};
@@ -27,9 +29,19 @@ namespace Gear {
 	public:
 		void ConnectServer(const std::string& ip);
 
+		template<typename T>
+		bool TypeCheck()
+		{
+			bool isPacketable = std::is_base_of<PacketAble, T>::value;
+			GR_CORE_ASSERT(isPacketable, "NetWorkManager::TypeCheck {0} Type is't derived from PacketAble!", typeid(T).name());
+			return isPacketable;
+		}
+
 		template<typename T> 
 		void Send(T& data)
 		{
+			TypeCheck<T>();
+
 			OutputMemoryStream out;
 			data.Write(out);
 
@@ -42,11 +54,13 @@ namespace Gear {
 		template<typename T>
 		T Reseive()
 		{
-			T data;
+			TypeCheck<T>();
 
 			char* Buffer = static_cast<char*>(malloc(1470));
 			int size = m_ClientSock->Receive(Buffer, 1470);
+
 			InputMemoryStream in(Buffer, size);
+			T data;
 			data.Read(in);
 
 			return data;

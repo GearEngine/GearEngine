@@ -646,3 +646,29 @@ namespace WormsSound
 	};
 
 }
+
+namespace WormsPacket
+{
+	enum Type : unsigned int
+	{
+		Cmd,
+		Start,
+		TurnChange,
+		WindCheck
+	};
+
+	struct StartPacket : public Gear::PacketAble
+	{
+		bool start;
+		virtual void Read(InputMemoryStream& stream) override
+		{
+			stream.Read(start);
+		}
+		virtual void Write(OutputMemoryStream& stream) override
+		{
+			stream.Write(start);
+		}
+	};
+
+
+}

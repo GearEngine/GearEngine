@@ -234,10 +234,10 @@ namespace Main {
 
 	void MainScene::StartNetwork()
 	{
-		InGame::InitiateData initData;
-
 		Gear::NetWorkManager::Get()->ConnectServer("127.0.0.1:9190");
+		Gear::NetWorkManager::Get()->Reseive<WormsPacket::StartPacket>();
 
+		InGame::InitiateData initData;
 		initData.GameMode = GameMode::NetWork;
 		GameMode::Bit::ModeBit = GameMode::NetWork;
 

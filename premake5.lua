@@ -235,6 +235,9 @@ project "WormsServer"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+	pchheader "wsvpch.h"
+	pchsource "WormsSever/src/wsvpch.cpp"
+
 	files
 	{
 		"%{prj.name}/src/**.h",
