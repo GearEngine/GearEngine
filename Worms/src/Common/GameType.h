@@ -563,6 +563,16 @@ namespace Main_Multi {
 	};
 }
 
+namespace GameMode {
+	 
+	enum Type : unsigned int
+	{
+		Multi, 
+		NetWork,
+	};
+
+	static unsigned int Mode;
+}
 
 namespace SceneBackground {
 

@@ -961,6 +961,9 @@ namespace Main {
 			return false;
 		}
 
+		initData.GameMode = GameMode::Multi;
+		GameMode::Mode = GameMode::Multi;
+
 		//clear
 		initData.Teams.clear();
 		initData.Mapinfo.Map.reset();

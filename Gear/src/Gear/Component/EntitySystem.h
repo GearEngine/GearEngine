@@ -21,6 +21,7 @@ namespace Gear {
 		{
 			Animator,
 			Controller,
+			NetController,
 			Drawer,
 			FSM,
 			Physics,
@@ -53,6 +54,8 @@ namespace Gear {
 		static void UpdateTexturer2D(int entityID, Timestep ts);
 		static void UpdateStatus(int entityID, Timestep ts);
 		static void UpdateLateDrawer(int entityID);
+		static void NetControllerSend(int entityID, Timestep ts);
+		static void NetControllerReceive(int entityID, Timestep ts);
 
 		static void InActivateEntity();
 
@@ -76,6 +79,7 @@ namespace Gear {
 
 		static void SetFSM(int entityID, const std::initializer_list<std::pair<const EnumType, FSM::InputHandler*>>& handlers);
 		static void SetController(int entityID, const std::initializer_list<Command>& commands);
+		static void SetNetController(int entityID, const std::initializer_list<Command>& commands);
 		static void SetAnimator(int entityID, const std::initializer_list < std::pair<const EnumType, Ref<Animation2D>>>& animationList);
 		static void SetTransform(int entityID, const glm::vec3& position, const float rotation, const glm::vec2& scale);
 		static void SetSoundPlayer(int entityID, const std::initializer_list<std::pair<const EnumType, std::pair<Ref<Sound>, SoundChannel>>>& sounds);
@@ -100,6 +104,7 @@ namespace Gear {
 		static Ref<Physics2D>		GetPhysics2D(int entityID);
 		static Ref<SoundPlayer>		GetSoundPlayer(int entityID);
 		static Ref<Controller>		GetController(int entityID);
+		static Ref<NetController>	GetNetController(int entityID);
 		static Ref<Timer>			GetTimer(int entityID);
 		static Ref<Texturer2D>		GetTexturer(int entityID);
 		static Ref<Status>			GetStatus(int entityID);
@@ -118,6 +123,7 @@ namespace Gear {
 		//Component Pool
 		static std::vector<Ref<Animator2D>>		m_Animators;
 		static std::vector<Ref<Controller>>		m_Controllers;
+		static std::vector<Ref<NetController>>	m_NetControllers;
 		static std::vector<Ref<FSM>>			m_FSMs;
 		static std::vector<Ref<SoundPlayer>>	m_SoundPlayers;
 		static std::vector<Ref<Transform2D>>	m_Transforms;

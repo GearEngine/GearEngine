@@ -175,6 +175,10 @@ namespace InGame {
 			}
 		}
 
+		if (GameMode::Mode == GameMode::NetWork)
+		{
+			Gear::EntitySystem::GetNetController(s_CurrentActivatedWormID)->SendInput();
+		}
 	}
 
 	void ObjectLayer::OnImGuiRender()

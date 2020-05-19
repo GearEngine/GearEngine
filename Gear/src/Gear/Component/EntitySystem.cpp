@@ -13,6 +13,7 @@ namespace Gear {
 
 	std::vector<Ref<Animator2D>>	EntitySystem::m_Animators = std::vector<Ref<Animator2D>>();
 	std::vector<Ref<Controller>>	EntitySystem::m_Controllers = std::vector<Ref<Controller>>();
+	std::vector<Ref<NetController>>	EntitySystem::m_NetControllers = std::vector<Ref<NetController>>();
 	std::vector<Ref<FSM>>			EntitySystem::m_FSMs = std::vector<Ref<FSM>>();
 	std::vector<Ref<SoundPlayer>>	EntitySystem::m_SoundPlayers = std::vector<Ref<SoundPlayer>>();
 	std::vector<Ref<Transform2D>>	EntitySystem::m_Transforms = std::vector<Ref<Transform2D>>();
@@ -29,6 +30,7 @@ namespace Gear {
 
 		m_Animators.resize(10000);
 		m_Controllers.resize(10000);
+		m_NetControllers.resize(10000);
 		m_Drawer.resize(10000);
 		m_FSMs.resize(10000);
 		m_Phisics.resize(10000);
@@ -67,6 +69,7 @@ namespace Gear {
 		m_Texturer.clear();
 		m_Status.clear();
 		m_LateDrawers.clear();
+		m_NetControllers.clear();
 
 		EventSystem::Shutdown();
 	}
@@ -86,6 +89,7 @@ namespace Gear {
 
 			UpdateTimer(id, ts);
 			UpdateController(id, ts);
+			NetControllerReceive(id, ts);
 			UpdateFSM(id, ts);
 			UpdateTransform2D(id, ts);
 			UpdatePhysics2D(id, ts);
@@ -165,10 +169,35 @@ namespace Gear {
 			return;
 		}
 
-		if (m_Controllers[entityID])
+		if (m_Controllers[entityID] && !m_NetControllers[entityID])
 		{
 			m_FSMs[entityID]->Handle(entityID, m_Controllers[entityID]->GetCommand());
 			m_Controllers[entityID]->ResetCommand();
+		}
+		else if (!m_Controllers[entityID] && m_NetControllers[entityID])
+		{
+			m_FSMs[entityID]->Handle(entityID, m_NetControllers[entityID]->GetCommand());
+			m_NetControllers[entityID]->ResetCommand();
+		}
+		else if (m_Controllers[entityID] && m_NetControllers[entityID])
+		{
+			auto userCmd = m_Controllers[entityID]->GetCommand();
+			auto netCmd = m_NetControllers[entityID]->GetCommand();
+
+			if (userCmd == Controller::s_None)
+			{
+				m_FSMs[entityID]->Handle(entityID, netCmd);
+			}
+			else if (netCmd == Controller::s_None)
+			{
+				m_FSMs[entityID]->Handle(entityID, userCmd);
+			}
+			else
+			{
+				m_FSMs[entityID]->Handle(entityID, netCmd);
+			}
+			m_Controllers[entityID]->ResetCommand();
+			m_NetControllers[entityID]->ResetCommand();
 		}
 		else
 		{
@@ -285,6 +314,24 @@ namespace Gear {
 		m_LateDrawers[entityID]->Render();
 	}
 
+	void EntitySystem::NetControllerSend(int entityID, Timestep ts)
+	{
+		if (!m_NetControllers[entityID] || !m_NetControllers[entityID]->m_OnActivate)
+		{
+			return;
+		}
+		m_NetControllers[entityID]->SendInput();
+	}
+
+	void EntitySystem::NetControllerReceive(int entityID, Timestep ts)
+	{
+		if (!m_NetControllers[entityID] || !m_NetControllers[entityID]->m_OnActivate)
+		{
+			return;
+		}
+		m_NetControllers[entityID]->ReceiveInput();
+	}
+
 	int EntitySystem::CreateEntity(bool activate, const std::string& name)
 	{
 		int entityID;
@@ -392,6 +439,7 @@ namespace Gear {
 			GR_CORE_TRACE("{0} entity deleted!", entityID);
 			m_Animators[entityID].reset();
 			m_Controllers[entityID].reset();
+			m_NetControllers[entityID].reset();
 			m_Drawer[entityID].reset();
 			m_FSMs[entityID].reset();
 			m_Phisics[entityID].reset();
@@ -418,6 +466,9 @@ namespace Gear {
 				break;
 			case ComponentID::ID::Controller:
 				if (!m_Controllers[entityID]) m_Controllers[entityID].reset(new Controller(entityID));
+				break;
+			case ComponentID::ID::NetController:
+				if (!m_NetControllers[entityID]) m_NetControllers[entityID].reset(new NetController(entityID));
 				break;
 			case ComponentID::ID::Drawer:
 				if (!m_Drawer[entityID]) m_Drawer[entityID].reset(new Drawer2D(entityID));
@@ -462,6 +513,9 @@ namespace Gear {
 			case ComponentID::ID::Controller:
 				m_Controllers[entityID].reset();
 				break;
+			case ComponentID::ID::NetController:
+				m_NetControllers[entityID].reset();
+				break;
 			case ComponentID::ID::Drawer:
 				m_Drawer[entityID].reset();
 				break;
@@ -505,6 +559,9 @@ namespace Gear {
 			case ComponentID::ID::Controller:
 				if (m_Controllers[entityID]) m_Controllers[entityID]->m_OnActivate = true;
 				break;
+			case ComponentID::ID::NetController:
+				if (m_NetControllers[entityID]) m_NetControllers[entityID]->m_OnActivate = true;
+				break;
 			case ComponentID::ID::Drawer:
 				if (m_Drawer[entityID]) m_Drawer[entityID]->m_OnActivate = true;
 				break;
@@ -547,6 +604,9 @@ namespace Gear {
 				break;
 			case ComponentID::ID::Controller:
 				if (m_Controllers[entityID]) m_Controllers[entityID]->m_OnActivate = false;
+				break;
+			case ComponentID::ID::NetController:
+				if (m_NetControllers[entityID]) m_NetControllers[entityID]->m_OnActivate = false;
 				break;
 			case ComponentID::ID::Drawer:
 				if (m_Drawer[entityID]) m_Drawer[entityID]->m_OnActivate = false;
@@ -609,6 +669,22 @@ namespace Gear {
 			return;
 		}
 		m_Controllers[entityID]->RegisterCommand(commands);
+	}
+
+	void EntitySystem::SetNetController(int entityID, const std::initializer_list<Command>& commands)
+	{
+		auto entity = m_EntityPool.find(entityID);
+		if (entity == m_EntityPool.end())
+		{
+			GR_CORE_WARN("{0} entity doesn't exist!", entityID);
+			return;
+		}
+		if (!m_NetControllers[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have NetController component!", entityID);
+			return;
+		}
+		m_NetControllers[entityID]->RegisterCommand(commands);
 	}
 
 	void EntitySystem::SetAnimator(int entityID, const std::initializer_list<std::pair<const EnumType, Ref<Animation2D>>>& animationList)
@@ -745,6 +821,9 @@ namespace Gear {
 			break;
 		case Gear::ComponentID::Controller:
 			if (m_Controllers[entityID]) return m_Controllers[entityID]->IsActivate();
+			break;
+		case Gear::ComponentID::NetController:
+			if (m_NetControllers[entityID]) return m_NetControllers[entityID]->IsActivate();
 			break;
 		case Gear::ComponentID::Drawer:
 			if (m_Drawer[entityID]) return m_Drawer[entityID]->IsActivate();
@@ -894,10 +973,20 @@ namespace Gear {
 	{
 		if (!m_Controllers[entityID])
 		{
-			GR_CORE_WARN("{0} entity doesn't have FSM component!", entityID);
+			GR_CORE_WARN("{0} entity doesn't have Controller component!", entityID);
 			return nullptr;
 		}
 		return m_Controllers[entityID];
+	}
+
+	Ref<NetController> EntitySystem::GetNetController(int entityID)
+	{
+		if (!m_NetControllers[entityID])
+		{
+			GR_CORE_WARN("{0} entity doesn't have NetController component!", entityID);
+			return nullptr;
+		}
+		return m_NetControllers[entityID];
 	}
 
 	Ref<Timer> EntitySystem::GetTimer(int entityID)

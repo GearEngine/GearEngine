@@ -132,7 +132,7 @@ namespace Gear {
 		}
 		else
 		{
-			GR_CORE_WARN("{0} aleady have!", name);
+			GR_CORE_WARN("SoundStorage::AddSound {0} aleady have!", name);
 		}
 	}
 

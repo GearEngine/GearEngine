@@ -1,11 +1,11 @@
 #pragma once
 
 #include "Component.h"
+#include "Gear/Manager/NetWorkManager.h"
 
 namespace Gear {
 
-
-	struct Command
+	struct Command : public PacketAble
 	{
 		Command() = default;
 		Command(EnumType keytype, int keycode)
@@ -14,6 +14,25 @@ namespace Gear {
 		EnumType KeyType;
 		int Keycode;
 		glm::vec2 MouseMove;
+
+
+		bool operator==(const Command& cmd)
+		{
+			if (cmd.KeyType == KeyType && cmd.Keycode == Keycode)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		virtual void Read(const InputMemoryStream& stream) override
+		{
+			
+		}
+		virtual void Write(OutputMemoryStream& stream) override
+		{
+
+		}
 	};
 
 	#define MOUSEMOVE_COMMAND 0xffffff
@@ -23,15 +42,15 @@ namespace Gear {
 	class Controller : public Component
 	{
 	public:
-		Controller(int id)
-			: Component(id)
+		Controller(int entityID)
+			: Component(entityID)
 		{}
 		virtual ~Controller();
 
 	private:
 		virtual void Update(Timestep ts) override;
 		inline void RegisterCommand(const std::initializer_list<Command>& commands) { m_Commands = commands; }
-		inline void ActivateMouseMove() { m_ActivatedMouse = true; }
+		inline void ActivateMouse(bool activate) { m_ActivatedMouse = activate; }
 		inline const Command& GetCommand() const { return m_Command; }
 		inline void ResetCommand() { m_Command = s_None; }
 
@@ -45,11 +64,32 @@ namespace Gear {
 		std::pair<float, float> m_PrevMousePos = {0.0f, 0.0f};
 
 		friend class EntitySystem;
+		friend class NetController;
 	};
 
 	class NetController : public Component
 	{
+	public:
+		NetController(int entityID)
+			: Component(entityID)
+		{}
+		virtual ~NetController();
+	public:
+		virtual void Update(Timestep ts) override;
 
+		void SendInput();
+		void ReceiveInput();
+		inline void RegisterCommand(const std::initializer_list<Command>& commands) { m_Commands = commands; }
+		inline void ActivateMouse(bool activate) { m_ActivatedMouse = activate; }
+		inline const Command& GetCommand() const { return m_Command; }
+		inline void ResetCommand() { m_Command = Controller::s_None; }
+
+	private:
+		std::vector<Command> m_Commands;
+		Command m_Command;
+		bool m_ActivatedMouse = false;
+
+		friend class EntitySystem;
 	};
 
 }

@@ -197,9 +197,11 @@ namespace InGame {
 	};
 	
 
-	struct InitiateData
+	struct InitiateData : public Gear::PacketAble
 	{
 		InitiateData() = default;
+
+		int GameMode;
 
 		float WindowWidth = Gear::WINDOW_WIDTH;
 		float WindowHeight = Gear::WINDOW_HEIGHT;
@@ -223,6 +225,15 @@ namespace InGame {
 
 		std::vector<TeamInfo> Teams;
 		int nTotalWorms = 0;
+
+		virtual void Read(const Gear::InputMemoryStream& stream) override
+		{
+
+		}
+		virtual void Write(Gear::OutputMemoryStream& stream) override
+		{
+
+		}
 	};
 
 	inline MapInfo GetMapInfo(const std::string& mapName)

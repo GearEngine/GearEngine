@@ -16,14 +16,25 @@ namespace InGame {
 		//Create Entity
 		m_ID = Gear::EntitySystem::CreateEntity(true, teamData.TeamName + wormData.Name);
 
+
+
 		//Attach Component
 		Gear::EntitySystem::AttachComponent(m_ID, {
 			Gear::ComponentID::Animator,	Gear::ComponentID::Drawer,
-			Gear::ComponentID::Controller,	Gear::ComponentID::Transform,
+			Gear::ComponentID::Transform,	Gear::ComponentID::Status,
 			Gear::ComponentID::Physics,		Gear::ComponentID::SoundPlayer,
-			Gear::ComponentID::FSM,			Gear::ComponentID::Timer,
-			Gear::ComponentID::Status
+			Gear::ComponentID::FSM,			Gear::ComponentID::Timer
 		});
+
+		if (initData.GameMode == GameMode::Multi)
+		{
+			Gear::EntitySystem::AttachComponent(m_ID, { Gear::ComponentID::Controller });
+		}
+		if (initData.GameMode == GameMode::NetWork)
+		{
+			Gear::EntitySystem::AttachComponent(m_ID, { Gear::ComponentID::Controller });
+		}
+
 
 		//Set Component specific
 		//Set Animator
@@ -309,16 +320,32 @@ namespace InGame {
 		});
 
 		//Set Controller
-		Gear::EntitySystem::SetController(m_ID, {
-			{ WormCommand::BackJump, GR_KEY_BACKSPACE },{ WormCommand::ChangeWorm, GR_KEY_TAB},
-			{ WormCommand::Jump, GR_KEY_ENTER },
-			{ WormCommand::Up, GR_KEY_UP },				{ WormCommand::Down, GR_KEY_DOWN },
-			{ WormCommand::Left, GR_KEY_LEFT },			{ WormCommand::Right, GR_KEY_RIGHT},
-			{ WormCommand::UseItem, GR_KEY_SPACE },		{ WormCommand::SetTimer1, GR_KEY_1},
-			{ WormCommand::SetTimer2, GR_KEY_2 },		{ WormCommand::SetTimer3, GR_KEY_3},
-			{ WormCommand::SetTimer4, GR_KEY_4 },		{ WormCommand::SetTimer5, GR_KEY_5},
-		});
-		Gear::EntitySystem::InActivateComponent(m_ID, { Gear::ComponentID::Controller });
+		if (initData.GameMode == GameMode::Multi)
+		{
+			Gear::EntitySystem::SetController(m_ID, {
+				{ WormCommand::BackJump, GR_KEY_BACKSPACE },{ WormCommand::ChangeWorm, GR_KEY_TAB},
+				{ WormCommand::Jump, GR_KEY_ENTER },
+				{ WormCommand::Up, GR_KEY_UP },				{ WormCommand::Down, GR_KEY_DOWN },
+				{ WormCommand::Left, GR_KEY_LEFT },			{ WormCommand::Right, GR_KEY_RIGHT},
+				{ WormCommand::UseItem, GR_KEY_SPACE },		{ WormCommand::SetTimer1, GR_KEY_1},
+				{ WormCommand::SetTimer2, GR_KEY_2 },		{ WormCommand::SetTimer3, GR_KEY_3},
+				{ WormCommand::SetTimer4, GR_KEY_4 },		{ WormCommand::SetTimer5, GR_KEY_5},
+			});
+			Gear::EntitySystem::InActivateComponent(m_ID, { Gear::ComponentID::Controller });
+		}
+		if (initData.GameMode == GameMode::NetWork)
+		{
+			Gear::EntitySystem::SetNetController(m_ID, {
+				{ WormCommand::BackJump, GR_KEY_BACKSPACE },{ WormCommand::ChangeWorm, GR_KEY_TAB},
+				{ WormCommand::Jump, GR_KEY_ENTER },
+				{ WormCommand::Up, GR_KEY_UP },				{ WormCommand::Down, GR_KEY_DOWN },
+				{ WormCommand::Left, GR_KEY_LEFT },			{ WormCommand::Right, GR_KEY_RIGHT},
+				{ WormCommand::UseItem, GR_KEY_SPACE },		{ WormCommand::SetTimer1, GR_KEY_1},
+				{ WormCommand::SetTimer2, GR_KEY_2 },		{ WormCommand::SetTimer3, GR_KEY_3},
+				{ WormCommand::SetTimer4, GR_KEY_4 },		{ WormCommand::SetTimer5, GR_KEY_5},
+			});
+			Gear::EntitySystem::InActivateComponent(m_ID, { Gear::ComponentID::NetController });
+		}
 
 		//Set physics
 		Gear::EntitySystem::SetPhysics(m_ID, false, 0.7f, 0.8f, 0.3f, 0.3f);

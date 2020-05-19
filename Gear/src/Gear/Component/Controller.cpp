@@ -23,7 +23,7 @@ namespace Gear {
 					break;
 				}
 			}
-			else 
+			else
 			{
 				if (Gear::Input::IsKeyPressd(command.Keycode))
 				{
@@ -32,6 +32,43 @@ namespace Gear {
 				}
 			}
 		}
+	}
+
+	NetController::~NetController()
+	{
+		m_Commands.clear();
+	}
+
+	void NetController::Update(Timestep ts)
+	{
+	}
+
+	void NetController::SendInput()
+	{
+		for (auto& command : m_Commands)
+		{
+			if (command.KeyType == MOUSE_CLICKTYPE && m_ActivatedMouse)
+			{
+				if (Gear::Input::IsMouseButtonPressed(command.Keycode))
+				{
+					NetWorkManager::Get()->Send(command);
+					break;
+				}
+			}
+			else
+			{
+				if (Gear::Input::IsKeyPressd(command.Keycode))
+				{
+					NetWorkManager::Get()->Send(command);
+					break;
+				}
+			}
+		}
+	}
+
+	void NetController::ReceiveInput()
+	{
+		m_Command = NetWorkManager::Get()->Reseive<Command>();
 	}
 
 }
