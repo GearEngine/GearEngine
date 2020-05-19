@@ -10,11 +10,23 @@ void InGame::WormWorldEventHandler::Handle(std::any data, int entityID, bool & h
 	if (worldData.DataType == WorldDataType::PrepareNextPhase)
 	{
 		auto status = Gear::EntitySystem::GetStatus(entityID);
-		if (!Gear::EntitySystem::IsComponenetActivate(entityID, Gear::ComponentID::Controller))
+		if (GameMode::Bit::ModeBit == GameMode::NetWork)
 		{
-			handled = true;
-			return;
+			if (!Gear::EntitySystem::IsComponenetActivate(entityID, Gear::ComponentID::NetController))
+			{
+				handled = true;
+				return;
+			}
 		}
+		else
+		{
+			if (!Gear::EntitySystem::IsComponenetActivate(entityID, Gear::ComponentID::Controller))
+			{
+				handled = true;
+				return;
+			}
+		}
+		
 		auto FSM = Gear::EntitySystem::GetFSM(entityID);
 		auto prevState = FSM->GetCurrentState();
 		if (prevState == WormState::OnReadyItemUse)

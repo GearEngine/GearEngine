@@ -82,10 +82,11 @@ namespace Gear {
 		inline void RegisterCommand(const std::initializer_list<Command>& commands) { m_Commands = commands; }
 		inline void ActivateMouse(bool activate) { m_ActivatedMouse = activate; }
 		inline const Command& GetCommand() const { return m_Command; }
-		inline void ResetCommand() { m_Command = Controller::s_None; }
+		inline void ResetCommand() { m_Command = Controller::s_None; temp = Controller::s_None; }
 
 	private:
 		std::vector<Command> m_Commands;
+		Command temp;
 		Command m_Command;
 		bool m_ActivatedMouse = false;
 

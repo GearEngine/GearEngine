@@ -21,7 +21,7 @@ namespace Gear {
 	protected:
 		int m_ID;
 
-	private:
+	protected:
 		bool m_OnActivate = true;
 	};
 

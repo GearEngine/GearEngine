@@ -36,10 +36,21 @@ namespace InGame {
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			auto timer = Gear::EntitySystem::GetTimer(entityID);
 
-			if (!Gear::EntitySystem::IsComponenetActivate(entityID, Gear::ComponentID::Controller))
+			if (GameMode::Bit::ModeBit == GameMode::Multi)
 			{
-				return WormState::OnBreath;
+				if (!Gear::EntitySystem::IsComponenetActivate(entityID, Gear::ComponentID::Controller))
+				{
+					return WormState::OnBreath;
+				}
 			}
+			else
+			{
+				if (!Gear::EntitySystem::IsComponenetActivate(entityID, Gear::ComponentID::NetController))
+				{
+					return WormState::OnBreath;
+				}
+			}
+			
 
 			if (cmd.KeyType == NONE_COMMAND || cmd.KeyType == WormCommand::Down || cmd.KeyType == WormCommand::Up)
 			{

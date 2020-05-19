@@ -571,7 +571,10 @@ namespace GameMode {
 		NetWork,
 	};
 
-	static unsigned int Mode;
+	struct Bit
+	{
+		static unsigned int ModeBit;
+	};
 }
 
 namespace SceneBackground {

@@ -32,7 +32,7 @@ namespace InGame {
 		}
 		if (initData.GameMode == GameMode::NetWork)
 		{
-			Gear::EntitySystem::AttachComponent(m_ID, { Gear::ComponentID::Controller });
+			Gear::EntitySystem::AttachComponent(m_ID, { Gear::ComponentID::NetController });
 		}
 
 
