@@ -1,2 +1,2 @@
-#include "../wsvpch.h"
+#include "wsvpch.h"
 #include "WormsPacket.h"

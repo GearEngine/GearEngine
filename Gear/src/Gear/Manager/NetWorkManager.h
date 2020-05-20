@@ -40,6 +40,17 @@ namespace Gear {
 		template<typename T> 
 		void Send(T& data)
 		{
+			if (onceSend)
+			{
+				GR_CORE_TRACE("Aleady Send!");
+				return;
+			}
+			if (onceReceive)
+			{
+				onceReceive = false;
+			}
+
+			onceSend = true;
 			TypeCheck<T>();
 
 			OutputMemoryStream out;
@@ -49,13 +60,12 @@ namespace Gear {
 			memcpy(Buffer, out.GetBufferPtr(), out.GetLength());
 
 			m_ClientSock->Send(Buffer, out.GetLength());
+			GR_CORE_TRACE("Send! {0}", typeid(T).name());
 		}
 
 		template<typename T>
-		T Reseive()
+		T Receive()
 		{
-			TypeCheck<T>();
-
 			char* Buffer = static_cast<char*>(malloc(1470));
 			int size = m_ClientSock->Receive(Buffer, 1470);
 
@@ -66,7 +76,36 @@ namespace Gear {
 			return data;
 		}
 
+		std::pair<char*, int> ReceiveInputStream()
+		{
+			if (onceReceive)
+			{
+				GR_CORE_TRACE("Already Receive");
+				return {nullptr, 0};
+			}
+			if (onceSend)
+			{
+				onceSend = false;
+			}
+
+			onceReceive = true;
+			char* Buffer = static_cast<char*>(malloc(1470));
+			int size = m_ClientSock->Receive(Buffer, 1470);
+			GR_CORE_TRACE("Receive!");
+
+			return { Buffer, size };
+		}
+
+		void Update()
+		{
+			onceReceive = false;
+			onceSend = false;
+		}
+		
 	private:
+
+		static bool onceSend;
+		static bool onceReceive;
 		static NetWorkManager* s_Inst;
 		TCPSocketPtr m_ClientSock; 
 	};

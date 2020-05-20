@@ -93,6 +93,7 @@ namespace Gear {
 				}
 				
 				SoundSystem::Get()->Update();
+				NetWorkManager::Get()->Update();
 				/*m_ImGuilayer->Begin();
 				{
 					GR_PROFILE_SCOPE("LayerStack OnImGuiRender");

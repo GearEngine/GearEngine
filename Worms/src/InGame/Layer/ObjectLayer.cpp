@@ -13,6 +13,7 @@ namespace InGame {
 	std::unordered_map<std::string, TeamInfo> ObjectLayer:: s_TeamInfo = std::unordered_map<std::string, TeamInfo>();
 	std::unordered_map<std::string, TeamInfo>::iterator ObjectLayer:: s_TeamIter = std::unordered_map<std::string, TeamInfo>::iterator();
 	std::unordered_map<std::string, int> ObjectLayer::s_WormTurnIndex = std::unordered_map<std::string, int>();
+	std::vector<unsigned int> ObjectLayer::s_MyNetWormsID = std::vector<unsigned int>();
 
 	std::vector<Gear::Ref<ExplosionEffect>> ObjectLayer::s_Explosion = std::vector<Gear::Ref<ExplosionEffect>>();
 	std::vector<Gear::Ref<ExplosionSmokeBunddle>> ObjectLayer::s_ExplosionSmoke = std::vector<Gear::Ref<ExplosionSmokeBunddle>>();
@@ -37,6 +38,7 @@ namespace InGame {
 
 			for (int j = 0; j < initData.Teams[i].worms.size(); ++j)
 			{
+				auto wormData = initData.Teams[i].worms[j];
 				worms[j].reset(new Worm(i, j, initData));
 			}
 			s_Worms.insert({ initData.Teams[i].TeamName , worms });
@@ -173,11 +175,6 @@ namespace InGame {
 			{
 				exhaust->Render();
 			}
-		}
-
-		if (GameMode::Bit::ModeBit == GameMode::NetWork && s_CurrentActivatedWormID != -1)
-		{
-			Gear::EntitySystem::GetNetController(s_CurrentActivatedWormID)->SendInput();
 		}
 	}
 

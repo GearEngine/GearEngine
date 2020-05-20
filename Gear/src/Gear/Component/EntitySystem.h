@@ -69,6 +69,7 @@ namespace Gear {
 		static void Init();
 		static void Shutdown();
 
+		static void isNetwork(bool isNetWork);
 		static void ActivateEntity(int entityID);
 		static void InActivateComponent(int entityID, const std::vector<ComponentID::ID>& components);
 		static void DeleteEntity(int entityID);
@@ -112,6 +113,7 @@ namespace Gear {
 
 	private:
 		static int s_EntityID;
+		static bool s_isNetWork;
 
 		static std::queue<int> m_SpareIDqueue;
 		static std::queue<int> m_InActivateQueue;

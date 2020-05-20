@@ -2,6 +2,8 @@
 #include "Worm.h"
 
 #include "WormPixelCollisionHandler.h"
+#include "InGame/Layer/ObjectLayer.h"
+#include "WormNetEventController.h"
 
 namespace InGame {
 
@@ -15,8 +17,6 @@ namespace InGame {
 
 		//Create Entity
 		m_ID = Gear::EntitySystem::CreateEntity(true, teamData.TeamName + wormData.Name);
-
-
 
 		//Attach Component
 		Gear::EntitySystem::AttachComponent(m_ID, {
@@ -331,6 +331,12 @@ namespace InGame {
 				{ WormCommand::SetTimer4, GR_KEY_4 },		{ WormCommand::SetTimer5, GR_KEY_5},
 			});
 			Gear::EntitySystem::InActivateComponent(m_ID, { Gear::ComponentID::NetController });
+			auto netController = Gear::EntitySystem::GetNetController(m_ID);
+			netController->RegisterEventCotroller(Gear::CreateRef<WormNetEventController>());
+			if (wormData.MyNetCharacter)
+			{
+				netController->pushAccepterbleEntity(m_ID);
+			}
 		}
 		else
 		{

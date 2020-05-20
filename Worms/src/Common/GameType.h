@@ -574,6 +574,8 @@ namespace GameMode {
 	struct Bit
 	{
 		static unsigned int ModeBit;
+		static unsigned int NetID;
+		static bool alreadySend;
 	};
 }
 
@@ -651,22 +653,79 @@ namespace WormsPacket
 {
 	enum Type : unsigned int
 	{
-		Cmd,
-		Start,
-		TurnChange,
-		WindCheck
+		cmd,
+		start,
+		event,
+	};
+
+	struct Event : public Gear::PacketAble
+	{
+		Event()
+		{
+			m_Type = Type::event;
+		}
+		enum EventType : unsigned int
+		{
+			TurnChange,
+			ItemSelect
+		};
+
+		unsigned int eventType;
+		int wormID;
+		int customIData1;
+		int customIData2;
+		int customIData3;
+		int customIData4;
+		float customFData1;
+		float customFData2;
+		float customFData3;
+		float customFData4;
+
+		virtual void Read(InputMemoryStream& stream) override
+		{
+			stream.Read(m_Type);
+			stream.Read(eventType);
+			stream.Read(wormID);
+			stream.Read(customIData1);
+			stream.Read(customIData2);
+			stream.Read(customIData3);
+			stream.Read(customIData4);
+			stream.Read(customFData1);
+			stream.Read(customFData2);
+			stream.Read(customFData3);
+			stream.Read(customFData4);
+		}
+		virtual void Write(OutputMemoryStream& stream) override
+		{
+			stream.Write(m_Type);
+			stream.Write(eventType);
+			stream.Write(wormID);
+			stream.Write(customIData1);
+			stream.Write(customIData2);
+			stream.Write(customIData3);
+			stream.Write(customIData4);
+			stream.Write(customFData1);
+			stream.Write(customFData2);
+			stream.Write(customFData3);
+			stream.Write(customFData4);
+		}
 	};
 
 	struct StartPacket : public Gear::PacketAble
 	{
 		bool start;
+		unsigned int netID;
 		virtual void Read(InputMemoryStream& stream) override
 		{
+			stream.Read(m_Type);
 			stream.Read(start);
+			stream.Read(netID);
 		}
 		virtual void Write(OutputMemoryStream& stream) override
 		{
+			stream.Write(m_Type);
 			stream.Write(start);
+			stream.Write(netID);
 		}
 	};
 

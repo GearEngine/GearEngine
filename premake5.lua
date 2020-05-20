@@ -238,6 +238,11 @@ project "WormsServer"
 	pchheader "wsvpch.h"
 	pchsource "WormsSever/src/wsvpch.cpp"
 
+	includedirs
+	{
+		"%{prj.name}/src"
+	}
+
 	files
 	{
 		"%{prj.name}/src/**.h",

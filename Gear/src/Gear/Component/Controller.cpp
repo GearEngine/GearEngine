@@ -37,6 +37,7 @@ namespace Gear {
 	NetController::~NetController()
 	{
 		m_Commands.clear();
+		m_EventCotroller.reset();
 	}
 
 	void NetController::Update(Timestep ts)
@@ -49,6 +50,20 @@ namespace Gear {
 		{
 			return;
 		}
+		bool isAcceptable = false;
+		for (int i = 0; i < accepterbleEntity.size(); ++i)
+		{
+			if (m_ID == accepterbleEntity[i])
+			{
+				isAcceptable = true;
+				break;
+			}
+		}
+		if (!isAcceptable)
+		{
+			return;
+		}
+
 		bool send = false;
 		for (auto& command : m_Commands)
 		{
@@ -80,7 +95,30 @@ namespace Gear {
 
 	void NetController::ReceiveInput()
 	{
-		m_Command = NetWorkManager::Get()->Reseive<Command>();
+		auto data = NetWorkManager::Get()->ReceiveInputStream();
+		if (data.second == 0)
+		{
+			return;
+		}
+		char* buffer = static_cast<char*>(malloc(data.second));
+		memcpy(buffer, data.first, data.second);
+		InputMemoryStream checkStream(data.first, data.second);
+
+		m_TypeChecker.Read(checkStream);
+		auto type = m_TypeChecker.m_Type;
+
+		InputMemoryStream inputStream(buffer, data.second);
+		switch (type)
+		{
+		case 0:
+			m_Command.Read(inputStream);
+			break;
+		case 1:
+			break;
+		case 2:
+			m_EventCotroller->Handle(m_ID, inputStream);
+			break;
+		}
 	}
 
 }

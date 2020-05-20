@@ -31,6 +31,7 @@ namespace InGame {
 		static std::vector<Gear::Ref<FlameBundle>> s_Flames;
 		static std::list<Gear::Ref<Smoke>> s_Smokes;
 		static std::list<Gear::Ref<Exhaust>> s_Exhausts;
+		static std::vector<unsigned int> s_MyNetWormsID;
 
 	private:
 		//for turn count

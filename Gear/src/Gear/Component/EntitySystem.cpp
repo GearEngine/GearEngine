@@ -4,6 +4,7 @@
 namespace Gear {
 
 	int EntitySystem::s_EntityID = 0;
+	bool EntitySystem::s_isNetWork = false;
 
 	std::queue<int> EntitySystem::m_SpareIDqueue = std::queue<int>();
 	std::queue<int> EntitySystem::m_InActivateQueue = std::queue<int>();
@@ -80,6 +81,15 @@ namespace Gear {
 
 		InActivateEntity();
 
+		if (s_isNetWork)
+		{
+			for (auto& entity : m_ActivateEntitys)
+			{
+				int id = entity.first;
+				NetControllerReceive(id, ts);
+			}
+		}
+
 		for (auto& entity : m_ActivateEntitys)
 		{
 			int id = entity.first;
@@ -89,7 +99,6 @@ namespace Gear {
 
 			UpdateTimer(id, ts);
 			UpdateController(id, ts);
-			NetControllerReceive(id, ts);
 			UpdateFSM(id, ts);
 			UpdateTransform2D(id, ts);
 			UpdatePhysics2D(id, ts);
@@ -98,6 +107,15 @@ namespace Gear {
 			UpdateAnimator2D(id, ts);
 			UpdateSoundPlayer(id, ts);
 			UpdateDrawer2D(id, ts);
+		}
+
+		if (s_isNetWork)
+		{
+			for (auto& entity : m_ActivateEntitys)
+			{
+				int id = entity.first;
+				NetControllerSend(id, ts);
+			}
 		}
 	}
 
@@ -376,6 +394,11 @@ namespace Gear {
 			return nullptr;
 		}
 		return entity->second;
+	}
+
+	void EntitySystem::isNetwork(bool isNetWork)
+	{
+		s_isNetWork = isNetWork;
 	}
 
 	void EntitySystem::ActivateEntity(int entityID)
@@ -1028,5 +1051,5 @@ namespace Gear {
 		}
 		return m_LateDrawers[entityID];
 	}
-
+	
 }

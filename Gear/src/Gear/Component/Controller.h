@@ -62,6 +62,7 @@ namespace Gear {
 		inline const Command& GetCommand() const { return m_Command; }
 		inline void ResetCommand() { m_Command = s_None; }
 
+
 	private:
 		bool m_ActivatedMouse = false;
 
@@ -75,8 +76,27 @@ namespace Gear {
 		friend class NetController;
 	};
 
+
+	struct TypeChecker : public PacketAble
+	{
+		virtual void Read(InputMemoryStream& stream) override
+		{
+			stream.Read(m_Type);
+		}
+		virtual void Write(OutputMemoryStream& stream) override
+		{
+		}
+	};
+
 	class NetController : public Component
 	{
+	public:
+		class EventController
+		{
+		public:
+			virtual void Handle(int entityID, InputMemoryStream& data) = 0;
+		};
+
 	public:
 		NetController(int entityID)
 			: Component(entityID)
@@ -90,12 +110,22 @@ namespace Gear {
 		inline void RegisterCommand(const std::initializer_list<Command>& commands) { m_Commands = commands; }
 		inline void ActivateMouse(bool activate) { m_ActivatedMouse = activate; }
 		inline const Command& GetCommand() const { return m_Command; }
-		inline void ResetCommand() { m_Command = Controller::s_None; temp = Controller::s_None; }
+		inline void ResetCommand() { m_Command = Controller::s_None; }
+		inline void RegisterEventCotroller(Ref<EventController> eventControllers)
+		{
+			m_EventCotroller = eventControllers;
+		}
+		inline void pushAccepterbleEntity(int entityID)
+		{
+			accepterbleEntity.push_back(entityID);
+		}
 
 	private:
 		std::vector<Command> m_Commands;
-		Command temp;
+		Ref<EventController> m_EventCotroller;
+		std::vector<int> accepterbleEntity;
 		Command m_Command;
+		TypeChecker m_TypeChecker;
 		bool m_ActivatedMouse = false;
 
 		friend class EntitySystem;

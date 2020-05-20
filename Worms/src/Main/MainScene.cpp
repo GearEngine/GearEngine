@@ -235,11 +235,14 @@ namespace Main {
 	void MainScene::StartNetwork()
 	{
 		Gear::NetWorkManager::Get()->ConnectServer("127.0.0.1:9190");
-		Gear::NetWorkManager::Get()->Reseive<WormsPacket::StartPacket>();
+		auto start = Gear::NetWorkManager::Get()->Receive<WormsPacket::StartPacket>();
 
 		InGame::InitiateData initData;
 		initData.GameMode = GameMode::NetWork;
 		GameMode::Bit::ModeBit = GameMode::NetWork;
+		Gear::EntitySystem::isNetwork(true);
+		GameMode::Bit::NetID = start.netID;
+		std::cout << "Receive Start Packet - NetID" << start.netID << std::endl;
 
 		//clear
 		initData.Teams.clear();
@@ -267,6 +270,9 @@ namespace Main {
 		int flatCount = 0;
 		auto rng = std::default_random_engine{};
 		int wormEnergy = BasicOption::GetWormEnergy(BasicOption::WormEnergy::WE150);
+
+		float xArr[6] = { 20.0f, -15.0f, 13.0f, 1.0f, 8.0f, -10.0f };
+
 		for (int i = 0; i < 2; ++i)
 		{
 			InGame::TeamInfo team;
@@ -283,9 +289,13 @@ namespace Main {
 				InGame::WormSpecific worm;
 				worm.Name = nameList[j];
 				worm.AdditionalZRenderOffset = flatCount * 0.02f;
-				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(initData.Mapinfo.TerrainMinX, initData.Mapinfo.TerrainMaxX), 5.0f, ZOrder::z_Worm);
+				worm.StartPosition = glm::vec3(xArr[i * 3 + j], 5.0f, ZOrder::z_Worm);
 				worm.Direction = (InGame::WormInfo::DirectionType)Gear::Util::GetRndInt(2);
-				worm.Hp = wormEnergy;			
+				worm.Hp = wormEnergy;
+				if (i == GameMode::Bit::NetID)
+				{
+					worm.MyNetCharacter = true;
+				}
 				team.TotalWormHp += worm.Hp;
 				team.worms.push_back(worm);
 				++initData.nTotalWorms;

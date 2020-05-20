@@ -4,6 +4,8 @@
 namespace Gear {
 
 	NetWorkManager* NetWorkManager::s_Inst = nullptr;
+	bool NetWorkManager::onceReceive = false;
+	bool NetWorkManager::onceSend = false;
 
 	void NetWorkManager::Init()
 	{

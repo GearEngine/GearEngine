@@ -77,6 +77,19 @@ namespace InGame {
 			auto currentTeamName = std::any_cast<std::string>(Gear::EntitySystem::GetStatus(worldID)->GetStat(WorldInfo::CurrnetTeam));
 			
 			currentWormID = Gear::EntitySystem::GetEntityIDFromName(currentTeamName + currentWormName);
+			if (GameMode::Bit::ModeBit == GameMode::NetWork)
+			{
+				GR_TRACE("Item selected!");
+				GameMode::Bit::alreadySend = true;
+				WormsPacket::Event e;
+				e.wormID = currentWormID;
+				e.eventType = WormsPacket::Event::EventType::ItemSelect;
+				e.customIData1 = SettedItem;
+				Gear::NetWorkManager::Get()->Send(e);
+				handled = true;
+				return;
+			}
+			
 			auto wormFSM = Gear::EntitySystem::GetFSM(currentWormID);
 			auto wormStatus = Gear::EntitySystem::GetStatus(currentWormID);
 

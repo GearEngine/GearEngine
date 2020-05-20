@@ -138,6 +138,7 @@ namespace InGame {
 		int Hp;
 		WormInfo::DirectionType Direction;
 		float AdditionalZRenderOffset;
+		bool MyNetCharacter = false;
 	};
 
 	namespace ItemInfo {
