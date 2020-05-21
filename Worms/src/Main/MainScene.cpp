@@ -240,9 +240,11 @@ namespace Main {
 		InGame::InitiateData initData;
 		initData.GameMode = GameMode::NetWork;
 		GameMode::Bit::ModeBit = GameMode::NetWork;
-		Gear::EntitySystem::isNetwork(true);
+		Gear::EntitySystem::SetNetwork(true);
 		GameMode::Bit::NetID = start.netID;
 		std::cout << "Receive Start Packet - NetID" << start.netID << std::endl;
+
+		srand(100);
 
 		//clear
 		initData.Teams.clear();

@@ -80,7 +80,6 @@ namespace InGame {
 			if (GameMode::Bit::ModeBit == GameMode::NetWork)
 			{
 				GR_TRACE("Item selected!");
-				GameMode::Bit::alreadySend = true;
 				WormsPacket::Event e;
 				e.wormID = currentWormID;
 				e.eventType = WormsPacket::Event::EventType::ItemSelect;

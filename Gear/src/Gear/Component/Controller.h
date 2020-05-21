@@ -55,6 +55,7 @@ namespace Gear {
 		{}
 		virtual ~Controller();
 
+		static Command s_None;
 	private:
 		virtual void Update(Timestep ts) override;
 		inline void RegisterCommand(const std::initializer_list<Command>& commands) { m_Commands = commands; }
@@ -67,7 +68,6 @@ namespace Gear {
 		bool m_ActivatedMouse = false;
 
 		std::vector<Command> m_Commands;
-		static Command s_None;
 		Command m_Command;
 
 		std::pair<float, float> m_PrevMousePos = {0.0f, 0.0f};
@@ -118,8 +118,30 @@ namespace Gear {
 		inline void pushAccepterbleEntity(int entityID)
 		{
 			accepterbleEntity.push_back(entityID);
+			s_AcceptableEntity.push_back(entityID);
 		}
 
+	public:
+		static void AcceptableCheck(int entityID)
+		{
+			for (int i = 0; i < s_AcceptableEntity.size(); ++i)
+			{
+				if (s_AcceptableEntity[i] == entityID)
+				{
+					s_inputAcceptable = true;
+					return;
+				}
+			}
+			s_inputAcceptable = false;
+		}
+
+	public:
+		static bool SendOnlyNull;
+		static void SendNull();
+		static void staticReceive();
+
+		static bool s_inputAcceptable;
+		static Ref<EventController> s_EventController;
 	private:
 		std::vector<Command> m_Commands;
 		Ref<EventController> m_EventCotroller;
@@ -127,6 +149,8 @@ namespace Gear {
 		Command m_Command;
 		TypeChecker m_TypeChecker;
 		bool m_ActivatedMouse = false;
+
+		static std::vector<int> s_AcceptableEntity;
 
 		friend class EntitySystem;
 	};

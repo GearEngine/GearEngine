@@ -95,7 +95,18 @@ namespace InGame {
 					else
 					{
 						GR_TRACE("World OnWaiting FSM : Dispatch New start");
-						Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
+						if (Gear::EntitySystem::isNetwork())
+						{
+							WormsPacket::Event e;
+							e.eventType = WormsPacket::Event::EventType::TurnChange;
+							Gear::NetWorkManager::Get()->Send(e);
+							Gear::NetController::SendOnlyNull = true;
+							return WorldState::OnRunning;
+						}
+						else
+						{
+							Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
+						}
 					}
 				}
 			}

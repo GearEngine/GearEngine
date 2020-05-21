@@ -4,6 +4,7 @@
 #include "InGame/Entity/Object/Worm/WormEnum.h"
 #include "InGame/Entity/Object/Item/Item.h"
 #include "InGame/Entity/Object/Grave/Grave.h"
+#include "InGame/Entity/Object/Worm/WormNetEventController.h"
 
 #include "InGame/Entity/World/World.h"
 
@@ -29,6 +30,7 @@ namespace InGame {
 	ObjectLayer::ObjectLayer(const InitiateData& initData)
 		: Layer("ObjectLayer")
 	{
+		Gear::NetController::s_EventController.reset(new WormNetEventController);
 		for (int i = 0; i < initData.Teams.size(); ++i)
 		{
 			std::vector<Gear::Ref<Worm>> worms;
@@ -190,15 +192,6 @@ namespace InGame {
 	{
 		s_turnChanged = false;
 	
-		if (GameMode::Bit::ModeBit == GameMode::NetWork)
-		{
-			Gear::EntitySystem::ActivateComponent(s_CurrentActivatedWormID, { {Gear::ComponentID::NetController} });
-		}
-		else
-		{
-			Gear::EntitySystem::ActivateComponent(s_CurrentActivatedWormID, { {Gear::ComponentID::Controller} });
-		}
-
 		auto FSM = Gear::EntitySystem::GetFSM(s_CurrentActivatedWormID);
 		auto status = Gear::EntitySystem::GetStatus(s_CurrentActivatedWormID);
 		status->SetNeedHandleData(WormStatusHandleType::Display, true);
@@ -266,6 +259,16 @@ namespace InGame {
 				Gear::EntitySystem::GetStatus(s_CurrentActivatedWormID)->SetStat(WormInfo::TurnPassed, true);
 				break;
 			}
+		}
+
+		if (GameMode::Bit::ModeBit == GameMode::NetWork)
+		{
+			Gear::NetController::AcceptableCheck(s_CurrentActivatedWormID);
+			Gear::EntitySystem::ActivateComponent(s_CurrentActivatedWormID, { {Gear::ComponentID::NetController} });
+		}
+		else
+		{
+			Gear::EntitySystem::ActivateComponent(s_CurrentActivatedWormID, { {Gear::ComponentID::Controller} });
 		}
 		s_turnChanged = true;
 	}

@@ -575,7 +575,6 @@ namespace GameMode {
 	{
 		static unsigned int ModeBit;
 		static unsigned int NetID;
-		static bool alreadySend;
 	};
 }
 

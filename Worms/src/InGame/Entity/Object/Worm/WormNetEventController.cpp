@@ -16,6 +16,9 @@ namespace InGame {
 		case WormsPacket::Event::EventType::ItemSelect:
 			ItemSelectHandle(e);
 			break;
+		case WormsPacket::Event::EventType::TurnChange:
+			TurnChange(e);
+			break;
 		}
 	}
 	void WormNetEventController::ItemSelectHandle(const WormsPacket::Event & e)
@@ -47,5 +50,10 @@ namespace InGame {
 		{
 			itemSelectorFSM->SetCurrentState(ItemSelectorInfo::State::OnSink);
 		}
+	}
+	void WormNetEventController::TurnChange(const WormsPacket::Event & e)
+	{
+		Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
+		Gear::NetController::SendOnlyNull = false;
 	}
 }

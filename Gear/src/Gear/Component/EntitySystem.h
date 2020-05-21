@@ -69,7 +69,8 @@ namespace Gear {
 		static void Init();
 		static void Shutdown();
 
-		static void isNetwork(bool isNetWork);
+		static bool isNetwork();
+		static void SetNetwork(bool activate);
 		static void ActivateEntity(int entityID);
 		static void InActivateComponent(int entityID, const std::vector<ComponentID::ID>& components);
 		static void DeleteEntity(int entityID);

@@ -1,6 +1,8 @@
 #include "grpch.h"
 #include "NetWorkManager.h"
 
+#include "Gear/Component/Controller.h"
+
 namespace Gear {
 
 	NetWorkManager* NetWorkManager::s_Inst = nullptr;
@@ -25,6 +27,17 @@ namespace Gear {
 		SocketAddress addr = *SocketAddressFactory::CreateIPv4FromString(ip);
 		m_ClientSock = SocketUtil::CreateTCPSocket(INET);
 		m_ClientSock->Connect(addr);
+	}
+
+	void NetWorkManager::Update()
+	{
+		if (!m_ClientSock)
+		{
+			return;
+		}
+
+		onceReceive = false;
+		onceSend = false;
 	}
 
 	NetWorkManager * NetWorkManager::Get()

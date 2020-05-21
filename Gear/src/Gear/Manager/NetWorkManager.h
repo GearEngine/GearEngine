@@ -45,10 +45,6 @@ namespace Gear {
 				GR_CORE_TRACE("Aleady Send!");
 				return;
 			}
-			if (onceReceive)
-			{
-				onceReceive = false;
-			}
 
 			onceSend = true;
 			TypeCheck<T>();
@@ -80,7 +76,7 @@ namespace Gear {
 		{
 			if (onceReceive)
 			{
-				GR_CORE_TRACE("Already Receive");
+				//GR_CORE_TRACE("Already Receive");
 				return {nullptr, 0};
 			}
 			if (onceSend)
@@ -91,16 +87,12 @@ namespace Gear {
 			onceReceive = true;
 			char* Buffer = static_cast<char*>(malloc(1470));
 			int size = m_ClientSock->Receive(Buffer, 1470);
-			GR_CORE_TRACE("Receive!");
+			//GR_CORE_TRACE("Receive!");
 
 			return { Buffer, size };
 		}
 
-		void Update()
-		{
-			onceReceive = false;
-			onceSend = false;
-		}
+		void Update();
 		
 	private:
 

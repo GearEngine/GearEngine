@@ -6,6 +6,7 @@ namespace InGame {
 	{
 		virtual void Handle(int entityID, InputMemoryStream& stream);
 		void ItemSelectHandle(const WormsPacket::Event& e);
+		void TurnChange(const WormsPacket::Event& e);
 	};
 
 }

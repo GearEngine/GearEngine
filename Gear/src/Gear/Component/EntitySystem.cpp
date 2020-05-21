@@ -75,21 +75,40 @@ namespace Gear {
 		EventSystem::Shutdown();
 	}
 
+	bool EntitySystem::isNetwork()
+	{
+		return s_isNetWork;
+	}
+
+	void EntitySystem::SetNetwork(bool activate)
+	{
+		s_isNetWork = activate;
+	}
+
 	void EntitySystem::Update(Timestep ts)
 	{
 		GR_PROFILE_FUNCTION();
 
 		InActivateEntity();
 
+		//1
 		if (s_isNetWork)
 		{
-			for (auto& entity : m_ActivateEntitys)
+			if (NetController::SendOnlyNull)
 			{
-				int id = entity.first;
-				NetControllerReceive(id, ts);
+				NetController::staticReceive();
+			}
+			else
+			{
+				for (auto& entity : m_ActivateEntitys)
+				{
+					int id = entity.first;
+					NetControllerReceive(id, ts);
+				}
 			}
 		}
 
+		//2
 		for (auto& entity : m_ActivateEntitys)
 		{
 			int id = entity.first;
@@ -109,12 +128,21 @@ namespace Gear {
 			UpdateDrawer2D(id, ts);
 		}
 
+
+		//3
 		if (s_isNetWork)
 		{
-			for (auto& entity : m_ActivateEntitys)
+			if (NetController::SendOnlyNull)
 			{
-				int id = entity.first;
-				NetControllerSend(id, ts);
+				NetController::SendNull();
+			}
+			else
+			{
+				for (auto& entity : m_ActivateEntitys)
+				{
+					int id = entity.first;
+					NetControllerSend(id, ts);
+				}
 			}
 		}
 	}
@@ -394,11 +422,6 @@ namespace Gear {
 			return nullptr;
 		}
 		return entity->second;
-	}
-
-	void EntitySystem::isNetwork(bool isNetWork)
-	{
-		s_isNetWork = isNetWork;
 	}
 
 	void EntitySystem::ActivateEntity(int entityID)
