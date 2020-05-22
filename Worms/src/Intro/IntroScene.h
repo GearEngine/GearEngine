@@ -17,7 +17,9 @@ namespace Intro {
 		Gear::Ref<Gear::Texture2D> introTexture;
 
 	public:
-		static bool loadingComplete;
+		static bool loadingTextureComplete;
+		static bool loadingSoundComplete;
+
 		bool inFirst = true;
 		bool isEndScene = false;
 		glm::vec4 alpha;

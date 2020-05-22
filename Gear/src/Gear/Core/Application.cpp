@@ -30,6 +30,7 @@ namespace Gear {
 		m_ImGuilayer = new ImGuiLayer;
 		//EntitySystem::Init();
 		Coord2DManger::Init();
+		SoundSystem::Init();
 
 		srand(time(NULL));
 	}

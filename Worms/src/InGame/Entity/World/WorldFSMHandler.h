@@ -35,7 +35,7 @@ namespace InGame {
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
 			Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart, entityID)));
-			return WorldState::OnPrepareRun;
+			return WorldState::OnRunning;
 		}
 	};
 

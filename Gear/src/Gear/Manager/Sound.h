@@ -20,7 +20,7 @@ namespace Gear {
 	class SoundSystem
 	{
 		using SoundChannel = unsigned int;
-		#define SOUND_CHANNEL_MAX 100
+		#define SOUND_CHANNEL_MAX 80
 
 	private:
 		SoundSystem();
@@ -28,9 +28,10 @@ namespace Gear {
 	public:
 		static void Destroy();
 		static SoundSystem* Get();
+		static void Init();
 
 	public:
-		static Ref<Sound> CreateSound(const std::string& path, bool loop, bool stream);
+		Ref<Sound> CreateSound(const std::string& path, bool loop, bool stream);
 
 		void PlaySound_(Ref<Sound> sound, SoundChannel channel);
 		void StopChannel(SoundChannel channel);
@@ -42,8 +43,8 @@ namespace Gear {
 		void Update();
 
 	private:
-		static FMOD::System* s_System;
 		static SoundSystem* s_Instance;
+		FMOD::System* s_System;
 		FMOD::Channel* m_Channel[SOUND_CHANNEL_MAX];
 	};
 
@@ -61,7 +62,7 @@ namespace Gear {
 	};
 }
 
-#define ADD_SOUND(path, name, loop, stream) Gear::SoundStorage::AddSound_(name, Gear::SoundSystem::CreateSound(path, loop, stream))
+#define ADD_SOUND(path, name, loop, stream) Gear::SoundStorage::AddSound_(name, Gear::SoundSystem::Get()->CreateSound(path, loop, stream))
 #define GET_SOUND(name) Gear::SoundStorage::GetSound_(name)
 #define PLAY_SOUND(sound, channel) Gear::SoundSystem::Get()->PlaySound_(sound, channel)
 #define PLAY_SOUND_NAME(name, channel) Gear::SoundSystem::Get()->PlaySound_(GET_SOUND(name), channel)

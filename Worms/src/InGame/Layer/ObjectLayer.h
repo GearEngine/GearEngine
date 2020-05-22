@@ -33,11 +33,11 @@ namespace InGame {
 		static std::list<Gear::Ref<Exhaust>> s_Exhausts;
 		static std::vector<unsigned int> s_MyNetWormsID;
 
-	private:
 		//for turn count
 		static std::unordered_map<std::string, std::vector<Gear::Ref<Worm>>> s_Worms;
 		static std::unordered_map<std::string, TeamInfo> s_TeamInfo;
 		static std::unordered_map<std::string, TeamInfo>::iterator s_TeamIter;
+	private:
 
 		static std::unordered_map<std::string, int> s_WormTurnIndex;
 		static bool s_turnChanged;

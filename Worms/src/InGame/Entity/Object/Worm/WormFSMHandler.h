@@ -1867,12 +1867,14 @@ namespace InGame {
 
 		bool sendDyeEvent = false;
 		bool damageDisplay = false;
+		int worldID;
 
 		void Awake(int entityID) override
 		{
 			transform = Gear::EntitySystem::GetTransform2D(entityID);
 			timer = Gear::EntitySystem::GetTimer(entityID);
 			status = Gear::EntitySystem::GetStatus(entityID);
+			worldID = Gear::EntitySystem::GetEntityIDFromName("World");
 			OnAwake = false;
 		}
 
@@ -1903,8 +1905,7 @@ namespace InGame {
 
 		inline void OnOut(int entityID) override
 		{
-			status->SetStat(WormInfo::MyTurn, true);
-			startSound = false;
+			status->SetStat(WormInfo::MyTurn, true);		
 			status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(0.5f, 0.0f)));
 			Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::RunningStart, 0, entityID)));
 		}
@@ -1930,18 +1931,21 @@ namespace InGame {
 			}
 			if (cmd.KeyType == WormCommand::Left)
 			{
+				startSound = false;
 				physics->SetPixelCollisionHandler("Move");
 				physics->SetExternalVector(glm::vec2(-moveSpeed, 0.0f));
 				return WormState::OnMove;
 			}
 			if (cmd.KeyType == WormCommand::Right)
 			{
+				startSound = false;
 				physics->SetPixelCollisionHandler("Move");
 				physics->SetExternalVector(glm::vec2(moveSpeed, 0.0f));
 				return WormState::OnMove;
 			}
 			if (cmd.KeyType == WormCommand::Jump)
 			{
+				startSound = false;
 				auto timer = Gear::EntitySystem::GetTimer(entityID);
 				timer->SetTimer(0.2f);
 				timer->Start();
@@ -1949,6 +1953,7 @@ namespace InGame {
 			}
 			if (cmd.KeyType == WormCommand::BackJump)
 			{
+				startSound = false;
 				auto timer = Gear::EntitySystem::GetTimer(entityID);
 				timer->SetTimer(0.2f);
 				timer->Start();

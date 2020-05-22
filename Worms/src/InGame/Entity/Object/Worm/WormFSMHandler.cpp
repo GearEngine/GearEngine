@@ -57,7 +57,20 @@ namespace InGame {
 
 			if (!damagedWormCount)
 			{
-				Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
+				bool aleadySend = false;
+				auto curState = Gear::EntitySystem::GetFSM(worldID)->GetCurrentState();
+				auto usedItem = std::any_cast<bool>(status->GetStat(WormInfo::UsedItem));
+				auto myTurn = std::any_cast<bool>(status->GetStat(WormInfo::MyTurn));
+				if (!usedItem && myTurn)
+				{
+					Gear::EventSystem::DispatchEventOnce(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
+					GR_TRACE("Worm On Underwater : Dispatch new Start");
+				}
+				if (curState != WorldState::OnPrepareRun)
+				{
+					Gear::EventSystem::DispatchEventOnce(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
+					GR_TRACE("Worm On Underwater : Dispatch new Start");
+				}
 			}
 
 			return WormState::OnNothing;

@@ -494,7 +494,7 @@ namespace Main {
 				if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT))
 				{
 					PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
-					if (wormCount[i] < TeamBasicOption::Max)
+					if (wormCount[i] < TeamBasicOption::_8)
 					{
 						++wormCount[i];
 					}
@@ -1005,7 +1005,7 @@ namespace Main {
 			{
 				InGame::WormSpecific worm;
 				worm.Name = selectedTeamList[i]->wormName[j];
-				worm.AdditionalZRenderOffset = flatCount * 0.02f;
+				worm.AdditionalZRenderOffset = flatCount * 0.002f;
 				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(initData.Mapinfo.TerrainMinX, initData.Mapinfo.TerrainMaxX), 5.0f, ZOrder::z_Worm);
 				worm.Direction = (InGame::WormInfo::DirectionType)Gear::Util::GetRndInt(2);
 				worm.Hp = wormEnergy;
@@ -1024,6 +1024,18 @@ namespace Main {
 			}
 			team.CurrentTotalWormHp = team.TotalWormHp;
 			initData.Teams.push_back(team);
+		}
+		for (int i = 0; i < 6; ++i)
+		{
+			selectedTeamLayer->allyType[i] = i;
+		}
+		for (int i = 0; i < 6; ++i)
+		{
+			selectedTeamLayer->wormCount[i] = TeamBasicOption::WormCount::_3;
+		}
+		for (int i = 0; i < 6; ++i)
+		{
+			selectedTeamLayer->handicapType[i] = TeamBasicOption::Handicap::None;
 		}
 		return true;
 	}

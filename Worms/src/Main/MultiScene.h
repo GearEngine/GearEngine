@@ -887,6 +887,7 @@ namespace Main {
 				Gear::SceneManager::Get()->EraseScene("InGame");
 				Gear::EntitySystem::Shutdown();
 				needClearInGame = false;
+				PLAY_SOUND_NAME("menu-loop_Stream", WormsSound::bgm);
 			}
 
 			for (int i = 0; i < SceneBackground::MaxStar; ++i)

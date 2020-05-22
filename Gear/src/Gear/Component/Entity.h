@@ -30,6 +30,7 @@ namespace Gear {
 
 	public:
 		const std::string& GetName() const { return m_Name; }
+		std::vector<struct EntityEvent>& GetEventQueue() { return m_EventQueue; }
 
 	protected:
 		int m_EntityID;

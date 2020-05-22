@@ -108,11 +108,9 @@ namespace Gear {
 			}
 		}
 
-		//2
 		for (auto& entity : m_ActivateEntitys)
 		{
 			int id = entity.first;
-
 			//Event Handle
 			EventHandle(entity.second);
 
@@ -155,9 +153,9 @@ namespace Gear {
 
 			if (!m_Drawer[id] || !m_Drawer[id]->m_OnActivate)
 				continue;
-			m_Drawer[id]->Render();	
+			m_Drawer[id]->Render();
 		}
-		for(auto& entity : m_ActivateEntitys)
+		for (auto& entity : m_ActivateEntitys)
 		{
 			int id = entity.first;
 			UpdateLateDrawer(id);
@@ -466,7 +464,7 @@ namespace Gear {
 			}
 			m_InActivateQueue.pop();
 		}
-		
+
 	}
 
 	void EntitySystem::DeleteEntity(int entityID)
@@ -1074,5 +1072,5 @@ namespace Gear {
 		}
 		return m_LateDrawers[entityID];
 	}
-	
+
 }

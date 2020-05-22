@@ -73,7 +73,10 @@ namespace InGame {
 
 			if (midPixel == m_TargetPixelColor)
 			{
-				PLAY_SOUND_NAME("CrateImpact", WormsSound::Grave);
+				if (std::abs(m_ExternalVector->y) > 0.1f)
+				{
+					PLAY_SOUND_NAME("CrateImpact", WormsSound::Grave);
+				}
 				for (int i = 1; i < 40; ++i)
 				{
 					fixedBottomPos = (int)GraveOnTexturePositionY - (basicYOffset - i);

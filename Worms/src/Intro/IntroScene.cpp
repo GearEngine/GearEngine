@@ -3,7 +3,8 @@
 
 namespace Intro {
 
-	bool IntroScene::loadingComplete = false;
+	bool IntroScene::loadingTextureComplete = false;
+	bool IntroScene::loadingSoundComplete = false;
 	std::vector<Gear::TextureData> textureDatas;
 
 	void TextureLoading()
@@ -20,7 +21,7 @@ namespace Intro {
 				textureDatas.emplace_back(Gear::TextureData(path));
 			}
 		}
-		IntroScene::loadingComplete = true;
+		IntroScene::loadingTextureComplete = true;
 	}
 
 	std::string GetName(const std::string& path)
@@ -62,6 +63,7 @@ namespace Intro {
 				}
 			}
 		}
+		IntroScene::loadingSoundComplete = true;
 	}
 
 
@@ -111,7 +113,7 @@ namespace Intro {
 			}
 		}
 
-		if (loadingComplete && !resourceLoadGpu)
+		if (loadingTextureComplete && !resourceLoadGpu)
 		{
 			resourceLoadGpu = true;
 			for (int i = 0; i < textureDatas.size(); ++i)

@@ -4,7 +4,6 @@
 namespace Gear {	
 
 	SoundSystem* SoundSystem::s_Instance = nullptr;
-	FMOD::System* SoundSystem::s_System = nullptr;
 	std::unordered_map<std::string, Ref<Sound>> SoundStorage::m_Sounds = std::unordered_map<std::string, Ref<Sound>>();
 	
 	Sound::Sound(FMOD::Sound* sound, bool loop, bool stream)
@@ -31,17 +30,27 @@ namespace Gear {
 	void SoundSystem::Destroy()
 	{
 		SoundStorage::Clear();
-		delete s_Instance;
+		if (s_Instance)
+		{
+			delete s_Instance;
+		}
 		s_Instance = nullptr;
 	}
+
+	
 
 	SoundSystem * SoundSystem::Get()
 	{
 		if (!s_Instance)
 		{
-			return s_Instance = new SoundSystem;
+			Init();
 		}
 		return s_Instance;
+	}
+
+	void SoundSystem::Init()
+	{
+		s_Instance = new SoundSystem;
 	}
 
 	Ref<class Sound> SoundSystem::CreateSound(const std::string& path, bool loop, bool stream)
