@@ -46,6 +46,7 @@ namespace Gear {
 				entity->m_EventQueue.push_back(event);
 		}
 	}
+
 	void EventChannel::DispatchEventOnce(const EntityEvent& event)
 	{
 		auto type = event.Type;
@@ -63,6 +64,20 @@ namespace Gear {
 			if (!alreadyExist)
 			{
 				entity->m_EventQueue.push_back(event);
+			}
+		}
+	}
+
+	void EventChannel::DisaptchEventTo(const EntityEvent & event, int entityID)
+	{
+		for (auto& entity : m_Subscriber)
+		{
+			if (entity->m_OnActivate)
+			{
+				if (entity->m_EntityID == entityID)
+				{
+					entity->m_EventQueue.push_back(event);
+				}
 			}
 		}
 	}
@@ -144,4 +159,17 @@ namespace Gear {
 		}
 		findChannel->second->DispatchEventOnce(event);
 	}
+
+	void EventSystem::DisaptchEventTo(ChannelType channel, const EntityEvent & event, int entityID)
+	{
+		auto findChannel = s_Channels.find(channel);
+		if (findChannel == s_Channels.end())
+		{
+			GR_CORE_TRACE("On Entity Event Dispatch : {0} channel doesn't exist", channel);
+			return;
+		}
+		findChannel->second->DisaptchEventTo(event, entityID);
+	}
+
+
 }

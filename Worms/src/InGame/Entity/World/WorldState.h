@@ -28,7 +28,8 @@ namespace InGame {
 		enum : unsigned int
 		{
 			CurrnetTeam,
-			CurrentWorm,
+			CurrentWormName,
+			CurrentWormID,
 			CurrentTeamColor,
 
 			WaitingTimeBorderOffset,

@@ -105,7 +105,18 @@ namespace InGame {
 						}
 						else
 						{
-							Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
+							int curWorm = std::any_cast<int>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WorldInfo::CurrentWormID));
+							
+							if (std::any_cast<int>(Gear::EntitySystem::GetStatus(curWorm)->GetStat(WormInfo::ShotgunUseCnt)) != 1)
+							{
+								Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
+							}
+							else
+							{
+								auto timer = Gear::EntitySystem::GetEntityIDFromName("Timer");
+								Gear::EntitySystem::GetStatus(timer)->PushNeedHandleData(3, Gear::Status::StatHandleData(0));
+								return WorldState::OnRunning;
+							}
 						}
 					}
 				}

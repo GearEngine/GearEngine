@@ -73,7 +73,7 @@ namespace InGame {
 			}
 
 			PLAY_SOUND_NAME("CursorSelect", WormsSound::Mouse);
-			auto currentWormName = std::any_cast<std::string>(Gear::EntitySystem::GetStatus(worldID)->GetStat(WorldInfo::CurrentWorm));
+			auto currentWormName = std::any_cast<std::string>(Gear::EntitySystem::GetStatus(worldID)->GetStat(WorldInfo::CurrentWormName));
 			auto currentTeamName = std::any_cast<std::string>(Gear::EntitySystem::GetStatus(worldID)->GetStat(WorldInfo::CurrnetTeam));
 			
 			currentWormID = Gear::EntitySystem::GetEntityIDFromName(currentTeamName + currentWormName);

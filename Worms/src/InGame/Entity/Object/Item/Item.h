@@ -23,6 +23,9 @@ namespace InGame {
 			s_Inst = nullptr; 
 		}
 
+	public:
+		void MakeExplosion(const ExplosionData& data, const glm::vec2 pos, Explosion::Text text, const std::string& sound = "");
+
 	private:
 		static ItemPool* s_Inst;
 		

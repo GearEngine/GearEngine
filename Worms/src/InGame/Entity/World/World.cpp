@@ -33,7 +33,8 @@ namespace InGame {
 		Gear::EntitySystem::GetFSM(m_ID)->SetCurrentState(WorldState::InGameStart);
 
 		Gear::EntitySystem::SetStatus(m_ID, {
-			{ WorldInfo::CurrentWorm, std::string("") }, { WorldInfo::DyeInfo, std::stack<int>()},
+			{ WorldInfo::CurrentWormName, std::string("") }, { WorldInfo::CurrentWormID, -1},
+			{ WorldInfo::DyeInfo, std::stack<int>()},
 			{ WorldInfo::CurrnetTeam, std::string("") }, { WorldInfo::CurrentTeamColor, TeamColor::Blue },
 			{ WorldInfo::TeamInfo, initData.Teams },	 { WorldInfo::TeamInfoBlink, false }
 		});

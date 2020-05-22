@@ -1403,65 +1403,217 @@ namespace InGame {
 		}
 	};
 
-	
-
 	class WormOnUseShotGun : public Gear::FSM::InputHandler
 	{
 		Gear::Ref<Gear::Animator2D> animator;
 		Gear::Ref<Gear::Status> status;
 		Gear::Ref<Gear::Timer> timer;
 
-		bool inFirst = false;
+		bool inFirst = true;
 		float pastTime = 0.0f;
-		const float pushTime = 0.3f;
-		const float pullTime = 0.6f;
-		const float fireTime = 0.9f;
-		const float shotCompleteTime = 1.2f;
+		const float pullTime = 0.4f;
+		const float fireTime = 0.8f;
+		const float shotCompleteTime = 1.1f;
 
-		bool pushComplete = false;
 		bool pullComplete = false;
 		bool fireComplete = false;
 		bool shotComplete = false;
-
-		static inline void calcShotPoint()
-		{
-
-		}
+		glm::vec2 noneHitPosition;
+		static glm::vec2 hitPosition;
+		static void calcShotPoint(Gear::Ref<Gear::Texture2D> mask, const glm::mat4& textureTrasform, const glm::vec3& position, float angle);
 
 		inline void Awake(int entityID) override
 		{
+			noneHitPosition.x = -1000.0f;
+			noneHitPosition.y = 0.0f;
+			
 			animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			status = Gear::EntitySystem::GetStatus(entityID);
 			timer = Gear::EntitySystem::GetTimer(entityID);
+			OnAwake = false;
+		}
+
+		void Shot(int entityID);
+
+		inline void SetAnimator(int mode)
+		{
+			auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
+			if (mode == 0)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->SetCurrentAnimation(WormState::OnLeftFlatShotgunOn2);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->SetCurrentAnimation(WormState::OnRightFlatShotgunOn2);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->SetCurrentAnimation(WormState::OnLeftUpShotgunOn2);
+					break;
+				case InGame::WormInfo::RightUp:
+					animator->SetCurrentAnimation(WormState::OnRightUpShotgunOn2);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->SetCurrentAnimation(WormState::OnLeftDownShotgunOn2);
+					break;
+				case InGame::WormInfo::RightDown:
+					animator->SetCurrentAnimation(WormState::OnRightDownShotgunOn2);
+					break;
+				}
+			}
+			if (mode == 1)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->SetCurrentAnimation(WormState::OnLeftFlatShotgunOn1);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->SetCurrentAnimation(WormState::OnRightFlatShotgunOn1);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->SetCurrentAnimation(WormState::OnLeftUpShotgunOn1);
+					break;
+				case InGame::WormInfo::RightUp:
+					animator->SetCurrentAnimation(WormState::OnRightUpShotgunOn1);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->SetCurrentAnimation(WormState::OnLeftDownShotgunOn1);
+					break;
+				case InGame::WormInfo::RightDown:
+					animator->SetCurrentAnimation(WormState::OnRightDownShotgunOn2);
+					break;
+				}
+			}
+			if (mode == 2)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->SetCurrentAnimation(WormState::OnLeftFlatShotgunShot);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->SetCurrentAnimation(WormState::OnRightFlatShotgunShot);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->SetCurrentAnimation(WormState::OnLeftUpShotgunShot);
+					break;
+				case InGame::WormInfo::RightUp:
+					animator->SetCurrentAnimation(WormState::OnRightUpShotgunShot);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->SetCurrentAnimation(WormState::OnLeftDownShotgunShot);
+					break;
+				case InGame::WormInfo::RightDown:
+					animator->SetCurrentAnimation(WormState::OnRightDownShotgunShot);
+					break;
+				}
+			}
+			if (mode == 3)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->PlayAnimation(WormState::OnLeftFlatShotgunWithraw);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->PlayAnimation(WormState::OnRightFlatShotgunWithraw);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->PlayAnimation(WormState::OnLeftUpShotgunWithraw);
+					break;
+				case InGame::WormInfo::RightUp:
+					animator->PlayAnimation(WormState::OnRightUpShotgunWithraw);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->PlayAnimation(WormState::OnLeftDownShotgunWithraw);
+					break;
+				case InGame::WormInfo::RightDown:
+					animator->PlayAnimation(WormState::OnRightDownShotgunWithraw);
+					break;
+				}
+				return;
+			}
+			float fireAngle = std::any_cast<float>(status->GetStat(WormInfo::FireAngle));
+			animator->SetFrameY(31 - (int)fireAngle);
 		}
 
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
+			if (OnAwake)
+			{
+				Awake(entityID);
+			}
+
+			int useCount = std::any_cast<int>(status->GetStat(WormInfo::ShotgunUseCnt));
 			if (inFirst)
 			{
-				pushComplete = false;
+				hitPosition = noneHitPosition;
+				inFirst = false;
 				pullComplete = false;
 				fireComplete = false;
 				shotComplete = false;
 				pastTime = 0.0f;
-				std::thread calcThread(WormOnUseShotGun::calcShotPoint);
+
+				auto terrain = Gear::EntitySystem::GetEntityIDFromName("Terrain");
+				auto mask = Gear::EntitySystem::GetTexturer(terrain)->GetMask();
+				auto dir = std::any_cast<WormInfo::DirectionType>(status->GetStat(WormInfo::Direction));
+				auto nativeFireAngle = std::any_cast<float>(status->GetStat(WormInfo::FireAngle));
+				auto position = Gear::EntitySystem::GetTransform2D(entityID)->GetPosition();
+				auto textureTransform = Gear::EntitySystem::GetPhysics2D(entityID)->GetPixelCollisionTargetTextureTranslate();
+				float angle;
+				if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat || dir == WormInfo::DirectionType::LeftUp)
+				{
+					angle = 270.0f - nativeFireAngle / 31.0f * 180.0f;
+				}
+				else
+				{
+					angle = (nativeFireAngle - 15.5f) / 15.5f * 90.0f;
+				}
+				std::thread calcThread(WormOnUseShotGun::calcShotPoint, mask, textureTransform, position, angle);
 				calcThread.detach();
+
+				++useCount;
+				status->SetStat(WormInfo::ShotgunUseCnt, useCount);
+				SetAnimator(0);
 			}
-			int useCount = std::any_cast<int>(status->GetStat(WormInfo::ShotgunUseCnt));
-			++useCount;
 
 			pastTime += timer->GetTick();
 
-			if (pastTime >= pushComplete && !pushComplete)
+			if (pastTime >= pullTime && !pullComplete)
 			{
-				pushComplete = true;
+				SetAnimator(1);
+				pullComplete = true;
+			}
+			if (pastTime >= fireTime && !fireComplete)
+			{
+				SetAnimator(2);
+				Shot(entityID);
+				PLAY_SOUND_NAME("ShotGunFire", WormsSound::Weapon);
+				fireComplete = true;
+			}
+			if (pastTime >= shotCompleteTime && !shotComplete)
+			{
+				shotComplete = true;
 			}
 
-
-			status->SetStat( WormInfo::ShotgunUseCnt, useCount);
-			if (useCount == 2)
+			if (shotComplete)
 			{
-				return WormState::OnAfterUseItem;
+				inFirst = true;
+				if (useCount == 1)
+				{
+					SetAnimator(1);
+					return WormState::OnReadyItemUse;
+				}
+				if (useCount == 2)
+				{
+					SetAnimator(3);
+					Gear::EntitySystem::GetFSM(entityID)->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
+					status->SetNeedHandleData(WormStatusHandleType::DisplayAim, true);
+					status->SetStat(WormInfo::ShotgunUseCnt, 0);
+					return WormState::OnItemWithdraw;
+				}
 			}
 			return WormState::OnUseShotgun;
 		}
@@ -1563,11 +1715,17 @@ namespace InGame {
 				case ItemInfo::Number::Banana:
 					status->PushNeedHandleData(WormStatusHandleType::AfterUseItem, Gear::Status::StatHandleData(std::make_pair(2.0f, itemExplosionTime + 1.0f)));
 					break;
+				case ItemInfo::Number::Shotgun:
+					status->PushNeedHandleData(WormStatusHandleType::AfterUseItem, Gear::Status::StatHandleData(std::make_pair(2.0f, 2.1f)));
 				}
 				return WormState::OnBreath;
 			}
 			else
 			{
+				if (std::any_cast<ItemInfo::Number>(status->GetStat(WormInfo::SelectedItem)) == ItemInfo::Shotgun)
+				{
+					status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 1.0f)));
+				}
 				return WormState::OnNothing;
 			}
 		}
@@ -1777,31 +1935,28 @@ namespace InGame {
 			}
 			if (weapon == ItemInfo::Number::Shotgun)
 			{
-				if (std::any_cast<int>(status->GetStat(WormInfo::ShotgunUseCnt)) == 2)
+				switch (dir)
 				{
-					switch (dir)
-					{
-					case InGame::WormInfo::LeftFlat:
-						animator->PlayAnimation(WormState::OnLeftFlatShotgunWithraw);
-						break;
-					case InGame::WormInfo::RightFlat:
-						animator->PlayAnimation(WormState::OnRightFlatShotgunWithraw);
-						break;
-					case InGame::WormInfo::LeftUp:
-						animator->PlayAnimation(WormState::OnLeftUpShotgunWithraw);
-						break;
-					case InGame::WormInfo::RightUp:
-						animator->PlayAnimation(WormState::OnRightUpShotgunWithraw);
-						break;
-					case InGame::WormInfo::LeftDown:
-						animator->PlayAnimation(WormState::OnLeftDownShotgunWithraw);
-						break;
-					case InGame::WormInfo::RightDown:
-						animator->PlayAnimation(WormState::OnRightDownShotgunWithraw);
-						break;
-					}
-					status->SetStat(WormInfo::ShotgunUseCnt, 0);
+				case InGame::WormInfo::LeftFlat:
+					animator->PlayAnimation(WormState::OnLeftFlatShotgunWithraw);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->PlayAnimation(WormState::OnRightFlatShotgunWithraw);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->PlayAnimation(WormState::OnLeftUpShotgunWithraw);
+					break;
+				case InGame::WormInfo::RightUp:
+					animator->PlayAnimation(WormState::OnRightUpShotgunWithraw);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->PlayAnimation(WormState::OnLeftDownShotgunWithraw);
+					break;
+				case InGame::WormInfo::RightDown:
+					animator->PlayAnimation(WormState::OnRightDownShotgunWithraw);
+					break;
 				}
+				status->SetStat(WormInfo::ShotgunUseCnt, 0);
 			}
 			if (weapon == ItemInfo::Number::Banana)
 			{

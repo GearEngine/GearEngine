@@ -126,5 +126,48 @@ namespace InGame {
 		return WormState::OnDye;
 	}
 
+	glm::vec2 WormOnUseShotGun::hitPosition;
+	void WormOnUseShotGun::calcShotPoint(Gear::Ref<Gear::Texture2D> mask, const glm::mat4& textureTrasform, const glm::vec3 & position, float angle)
+	{
+		int width = mask->GetWidth();
+		int height = mask->GetHeight();
+		
+		auto texturePos = Gear::Coord2DManger::Get()->GetTextureLocalPosition_From_WorlPosition(glm::vec2(position.x, position.y), textureTrasform);
+		glm::vec3 targetColor = glm::vec3(255.0f, 255.0f, 255.0f);
+		glm::vec3 pixel;
+		float bulletPositionX = texturePos.x * width;
+		float bulletPositionY = texturePos.y * height;
 
+		float normalX = cosf(glm::radians(angle));
+		float normalY = sinf(glm::radians(angle));
+
+		while (1)
+		{
+			bulletPositionX += normalX;
+			bulletPositionY += normalY;
+
+			pixel = Gear::Coord2DManger::Get()->GetPixel_From_TextureLocal_With_TextureRealPosition(mask, { (int)bulletPositionX , (int)bulletPositionY });
+			if (pixel == targetColor)
+			{
+				float localX = (bulletPositionX) / width - 0.5f;
+				float localY = (bulletPositionY) / height - 0.5f;
+
+				hitPosition.x = textureTrasform[0][0] * localX + textureTrasform[3][0];
+				hitPosition.y = textureTrasform[1][1] * localY + textureTrasform[3][1];
+
+				break;
+			}
+			if (bulletPositionX < 0 || bulletPositionX > width || bulletPositionY < 0 || bulletPositionY >height)
+			{
+				break;
+			}
+		}
+	}
+	void WormOnUseShotGun::Shot(int entityID)
+	{
+		ExplosionData data(hitPosition, Explosion::Size25, 25.0f, ItemInfo::Shotgun, entityID);
+
+		ITEM_POOL->MakeExplosion(data, hitPosition, Explosion::Text::Null, "None");
+	}
 }
+

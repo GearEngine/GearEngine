@@ -70,6 +70,7 @@ namespace Gear {
 		inline void ResetGravityAccelation() { m_GravityAccelation = 0.0f; }
 		inline bool IsActivateGravity() { return m_ActivatedGravity; }
 		inline float GetElastics() { return m_Elastics; }
+		inline glm::mat4 GetPixelCollisionTargetTextureTranslate() { return m_PixelCollisionTargetTextureTranslate; }
 
 		void ActivateMoveLimit(const Util::FRect& moveLimit);
 		void SetFollowTarget(glm::vec3* followTargetPos);

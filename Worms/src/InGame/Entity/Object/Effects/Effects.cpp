@@ -808,7 +808,7 @@ namespace InGame {
 			}
 		}
 
-		void ExplosionEffect::init(const glm::vec2 & basePosition)
+		void ExplosionEffect::init(const glm::vec2 & basePosition, const std::string& specificSound)
 		{
 			m_InFisrt = true;
 			m_OnUsing = true;
@@ -828,7 +828,18 @@ namespace InGame {
 				m_TextTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(basePosition, ZOrder::z_ExplosionText))* glm::scale(glm::mat4(1.0f), m_TextScale);
 			}
 
-			PLAY_SOUND_NAME("Explosion" + std::to_string(Gear::Util::GetRndInt(2) + 1), WormsSound::Weapon);
+			if (specificSound == "")
+			{
+				PLAY_SOUND_NAME("Explosion" + std::to_string(Gear::Util::GetRndInt(2) + 1), WormsSound::Weapon);
+			}
+			else if (specificSound == "None")
+			{
+				//none sound
+			}
+			else
+			{
+				PLAY_SOUND_NAME(specificSound, WormsSound::Weapon);
+			}
 		}
 
 		void ExplosionEffect::Update(float ts)

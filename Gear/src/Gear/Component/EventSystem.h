@@ -23,6 +23,7 @@ namespace Gear {
 
 		void DispatchEvent(const EntityEvent& event);
 		void DispatchEventOnce(const EntityEvent& event);
+		void DisaptchEventTo(const EntityEvent& event, int entityID);
 
 	private:
 		ChannelType m_Channel;
@@ -43,6 +44,7 @@ namespace Gear {
 		static void DispatchEvent(ChannelType channel, const EntityEvent& event);
 		static void RegisterEventHandler(int entityID, ChannelType channel, Ref<EventHandler> handler);
 		static void DispatchEventOnce(ChannelType channel, const EntityEvent& event);
+		static void DisaptchEventTo(ChannelType channel, const EntityEvent& event, int entityID);
 
 	private:
 		static int s_channelID;

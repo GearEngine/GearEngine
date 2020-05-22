@@ -226,7 +226,8 @@ namespace InGame {
 		void init(Explosion::Size size, Explosion::Text explosionText);
 
 	public:
-		void init(const glm::vec2& basePosition);
+		//NOTE : specificSound can be your soundfile name or "None", if you not assign name play genral explosion sound randomly
+		void init(const glm::vec2& basePosition, const std::string& specificSound = "");
 		
 		void Update(float ts);
 		void Render();

@@ -91,6 +91,10 @@ namespace InGame {
 		Gear::Ref<Gear::FSM> FSM;
 		Gear::Ref<Gear::Timer> worldTimer;
 
+		bool inDamageWormFirst = true;
+		bool onShotgun = false;
+		int curWorm;
+
 		void init(int entityID)
 		{
 			status = Gear::EntitySystem::GetStatus(entityID);
@@ -135,7 +139,8 @@ namespace InGame {
 				auto changedWormData = std::any_cast<std::pair<std::string, std::string>>(worldData.Data);
 
 				status->SetStat(WorldInfo::CurrnetTeam, changedWormData.first);
-				status->SetStat(WorldInfo::CurrentWorm, changedWormData.second);
+				status->SetStat(WorldInfo::CurrentWormName, changedWormData.second);
+				status->SetStat(WorldInfo::CurrentWormID, worldData.EntityID);
 				status->SetStat(WorldInfo::CurrentTeamColor, std::any_cast<TeamColor::Color>(Gear::EntitySystem::GetStatus(worldData.EntityID)->GetStat(WormInfo::TeamColor)));
 				status->SetStat(WorldInfo::TeamInfoBlink, true);
 				status->PushNeedHandleData(WorldStatusHandleType::DisplayWaitingCount, Gear::Status::StatHandleData(WorldDenoteData(Gear::TextureStorage::GetTexture2D("WaitingTimeBorder"))));
@@ -218,46 +223,115 @@ namespace InGame {
 
 			if (worldData.DataType == WorldDataType::DamageWorm)
 			{
+				if (inDamageWormFirst)
+				{
+					inDamageWormFirst = false;
+					curWorm = std::any_cast<int>(status->GetStat(WorldInfo::CurrentWormID));
+					if (std::any_cast<int>(Gear::EntitySystem::GetStatus(curWorm)->GetStat(WormInfo::ShotgunUseCnt)) == 1)
+					{
+						onShotgun = true;
+					}
+				}
+
 				std::vector<int> damagedWorm;
 				if (FSM->GetCurrentState() == WorldState::OnWaiting)
 				{
 					FSM->SetCurrentState(WorldState::OnRunning);
 				}
 
-				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
+				if (onShotgun)
 				{
-					auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
-					if (curState != WormState::OnNothing && curState != WormState::OnNotMyTurn)
+					for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
 					{
-						return;
+						auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
+						if (curState != WormState::OnNothing && curState != WormState::OnNotMyTurn)
+						{
+							if (WorldWormData::s_LivingWorms[i] == curWorm)
+							{
+								continue;
+							}
+							else
+							{
+								return;
+							}
+						}
+						if (curState == WormState::OnNothing)
+						{
+							damagedWorm.push_back(WorldWormData::s_LivingWorms[i]);
+						}
 					}
-					if(curState == WormState::OnNothing)
+					if (damagedWorm.size())
 					{
-						damagedWorm.push_back(WorldWormData::s_LivingWorms[i]);
+						for (int i = 0; i < damagedWorm.size(); ++i)
+						{
+							auto status = Gear::EntitySystem::GetStatus(damagedWorm[i]);
+							auto timer = Gear::EntitySystem::GetTimer(damagedWorm[i]);
+							timer->SetTimer(1.0f);
+							timer->Start();
+							GR_TRACE("dispatch damage {0}", Gear::EntitySystem::GetEntity(damagedWorm[i])->GetName());
+							status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
+							Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
+							worldTimer->SetTimer(3.0f);
+							worldTimer->Start();
+							onShotgun = false;
+							inDamageWormFirst = true;
+							handled = true;
+						}
 					}
-				}
-				if (damagedWorm.size())
-				{
-					for (int i = 0; i < damagedWorm.size(); ++i)
+					else
 					{
-						auto status = Gear::EntitySystem::GetStatus(damagedWorm[i]);
-						auto timer = Gear::EntitySystem::GetTimer(damagedWorm[i]);
-						timer->SetTimer(1.0f);
-						timer->Start();
-						GR_TRACE("dispatch damage {0}", Gear::EntitySystem::GetEntity(damagedWorm[i])->GetName());
-						status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
 						Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
-						worldTimer->SetTimer(3.0f);
+						worldTimer->SetTimer(1.0f);
 						worldTimer->Start();
+						onShotgun = false;
+						inDamageWormFirst = true;
 						handled = true;
 					}
+
+
+					//
 				}
 				else
 				{
-					Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
-					worldTimer->SetTimer(1.0f);
-					worldTimer->Start();
-					handled = true;
+					for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
+					{
+						auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
+						if (curState != WormState::OnNothing && curState != WormState::OnNotMyTurn)
+						{
+							return;
+						}
+						if (curState == WormState::OnNothing)
+						{
+							damagedWorm.push_back(WorldWormData::s_LivingWorms[i]);
+						}
+					}
+					if (damagedWorm.size())
+					{
+						for (int i = 0; i < damagedWorm.size(); ++i)
+						{
+							auto status = Gear::EntitySystem::GetStatus(damagedWorm[i]);
+							auto timer = Gear::EntitySystem::GetTimer(damagedWorm[i]);
+							timer->SetTimer(1.0f);
+							timer->Start();
+							GR_TRACE("dispatch damage {0}", Gear::EntitySystem::GetEntity(damagedWorm[i])->GetName());
+							status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
+							Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
+							worldTimer->SetTimer(3.0f);
+							worldTimer->Start();
+							onShotgun = false;
+							inDamageWormFirst = true;
+							handled = true;
+						}
+					}
+					else
+					{
+						Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
+						worldTimer->SetTimer(1.0f);
+						worldTimer->Start();
+						onShotgun = false;
+						inDamageWormFirst = true;
+						handled = true;
+					}
 				}
 				return;
 			}

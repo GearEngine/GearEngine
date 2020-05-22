@@ -7,7 +7,7 @@ namespace InGame {
 	Terrain::Terrain(const InitiateData& initData)
 	{
 		//Create Entity
-		m_ID = Gear::EntitySystem::CreateEntity(true);
+		m_ID = Gear::EntitySystem::CreateEntity(true, "Terrain");
 
 		//Attach Component
 		Gear::EntitySystem::AttachComponent(m_ID, {

@@ -40,7 +40,8 @@ namespace InGame {
 				break;
 			}
 			power = explosion.Power;
-			Gear::EventSystem::DispatchEventOnce(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::DamageWorm)));
+			int worldID = Gear::EntitySystem::GetEntityIDFromName("World");
+			Gear::EventSystem::DisaptchEventTo(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::DamageWorm)), worldID);
 
 			if (distance < radius)
 			{
@@ -50,11 +51,18 @@ namespace InGame {
 				externalVector = glm::vec2(externalVector.x * externalRatio * damageRatio, externalVector.y * externalRatio * damageRatio);
 
 				auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
-				auto FSM = Gear::EntitySystem::GetFSM(entityID);
 				auto status = Gear::EntitySystem::GetStatus(entityID);
+				auto FSM = Gear::EntitySystem::GetFSM(entityID);
 				auto& curExternalVector = physics->GetExternalVector();
 				curExternalVector.x += externalVector.x;
 				curExternalVector.y += externalVector.y;
+
+				if (std::any_cast<int>(status->GetStat(WormInfo::ShotgunUseCnt)))
+				{
+					status->SetStat(WormInfo::ShotgunUseCnt, 0);
+					status->PushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 1.0f)));
+					status->SetNeedHandleData(WormStatusHandleType::DisplayAim, true);
+				}
 
 				auto curDamage = std::any_cast<int>(status->GetStat(WormInfo::Damage));
 				status->SetStat(WormInfo::Damage, int(damageRatio * power + curDamage));
