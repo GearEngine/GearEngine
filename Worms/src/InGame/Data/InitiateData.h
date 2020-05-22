@@ -65,6 +65,8 @@ namespace InGame {
 			UsedItem,
 			Surrendered,
 			TurnPassed,
+			Grave,
+			ShotgunUseCnt,
 			StatEnd
 		};
 		

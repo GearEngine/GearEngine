@@ -131,8 +131,6 @@ namespace Gear {
 		s_System->update();
 	}
 
-	
-
 	void SoundStorage::AddSound_(const std::string & name, Ref<Sound> sound)
 	{
 		if (m_Sounds.find(name) == m_Sounds.end())

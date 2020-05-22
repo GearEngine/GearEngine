@@ -10,11 +10,13 @@ namespace Main {
 		unsigned int playerType;
 		int points;
 		std::vector<std::string> wormName;
+		std::vector<unsigned int> graves;
 
 		BasicTeamInfo(const std::string& name = "")
 			: Gear::JsonAble(name)
 		{
 			wormName.resize(8);
+			graves.resize(8);
 		}
 
 
@@ -30,6 +32,10 @@ namespace Main {
 			{
 				wormName[i] = value["wormName"][i].asString();
 			}
+			for (int i = 0; i < 8; ++i)
+			{
+				graves[i] = value["graves"][i].asUInt();
+			}
 		}
 		virtual void Write(Json::Value& value) override
 		{
@@ -41,6 +47,7 @@ namespace Main {
 			for (int i = 0; i < 8; ++i)
 			{
 				value["wormName"][i] = wormName[i];
+				value["graves"][i] = graves[i];
 			}
 		}
 	};

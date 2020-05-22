@@ -36,6 +36,7 @@ namespace InGame {
 			OnNothing,
 			OnVictory,
 			OnAfterUseItem,
+			OnUseShotgun,
 
 			OnLeftFlatMove, OnRightFlatMove,
 			OnLeftUpMove, OnRightUpMove,
@@ -121,6 +122,46 @@ namespace InGame {
 			OnLeftUpSurrenderReady, OnRightUpSurrenderReady,
 			OnLeftDownSurrenderReady, OnRightDownSurrenderReady,
 
+			OnLeftFlatTeleportOn, OnRightFlatTeleportOn,
+			OnLeftUpTeleportOn, OnRightUpTeleportOn,
+			OnLeftDownTeleportOn, OnRightDownTeleportOn,
+
+			OnLeftFlatTeleportWithraw, OnRightFlatTeleportWithraw,
+			OnLeftUpTeleportWithraw, OnRightUpTeleportWithraw,
+			OnLeftDownTeleportWithraw, OnRightDownTeleportWithraw,
+
+			OnLeftFlatTeleportReady, OnRightFlatTeleportReady,
+			OnLeftUpTeleportReady, OnRightUpTeleportReady,
+			OnLeftDownTeleportReady, OnRightDownTeleportReady,
+
+			OnLeftFlatTeleportUse, OnRightFlatTeleportUse,
+			OnLeftUpTeleportUse, OnRightUpTeleportUse,
+			OnLeftDownTeleportUse, OnRightDownTeleportUse,
+
+			OnLeftFlatTeleportAfterUse, OnRightFlatTeleportAfterUse,
+			OnLeftUpTeleportAfterUse, OnRightUpTeleportAfterUse,
+			OnLeftDownTeleportAfterUse, OnRightDownTeleportAfterUse,
+
+			OnLeftFlatShotgunOn1, OnRightFlatShotgunOn1,
+			OnLeftUpShotgunOn1, OnRightUpShotgunOn1,
+			OnLeftDownShotgunOn1, OnRightDownShotgunOn1,
+
+			OnLeftFlatShotgunOn2, OnRightFlatShotgunOn2,
+			OnLeftUpShotgunOn2, OnRightUpShotgunOn2,
+			OnLeftDownShotgunOn2, OnRightDownShotgunOn2,
+
+			OnLeftFlatShotgunReady, OnRightFlatShotgunReady,
+			OnLeftUpShotgunReady, OnRightUpShotgunReady,
+			OnLeftDownShotgunReady, OnRightDownShotgunReady,
+
+			OnLeftFlatShotgunWithraw, OnRightFlatShotgunWithraw,
+			OnLeftUpShotgunWithraw, OnRightUpShotgunWithraw,
+			OnLeftDownShotgunWithraw, OnRightDownShotgunWithraw,
+
+			OnLeftFlatShotgunShot, OnRightFlatShotgunShot,
+			OnLeftUpShotgunShot, OnRightUpShotgunShot,
+			OnLeftDownShotgunShot, OnRightDownShotgunShot,
+			
 			OnLeftFlatStuck, OnRightFlatStuck,
 			OnLeftUpStuck, OnRightUpStuck,
 			OnLeftDownStuck, OnRightDownStuck,

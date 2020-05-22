@@ -115,7 +115,7 @@ namespace InGame {
 			EffectPool::pushExplosionSmoke(smoke);
 			EffectPool::pushFlame(flame);
 
-			GRAVE_POOL->ActivateGrave(GraveInfo::_1, wormPosition);
+			GRAVE_POOL->ActivateGrave(std::any_cast<GraveInfo::Type>(status->GetStat(WormInfo::Grave)), wormPosition);
 
 			Gear::EventSystem::DispatchEvent(EventChannel::Explosion, Gear::EntityEvent(EventType::Explosion, ExplosionData(position, Explosion::Size::Size25, 25.0f)));
 			

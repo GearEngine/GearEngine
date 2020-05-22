@@ -69,6 +69,11 @@ namespace InGame {
 		{
 			stuckAniOrder.push_back({ 0, 48 - i });
 		}
+		std::vector<std::pair<int, int>> _48AniOrder;
+		for (int i = 0; i < 48; ++i)
+		{
+			_48AniOrder.push_back({ 0, 47 - i });
+		}
 		std::vector<std::pair<int, int>> afterSlidingAniOrder;
 		for (int i = 0; i < 22; ++i)
 		{
@@ -281,6 +286,76 @@ namespace InGame {
 			{ WormState::OnRightFlatSurrenderOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatSurrenderOn"), 0.02f, true) },
 			{ WormState::OnRightUpSurrenderOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpSurrenderOn"), 0.02f, true) },
 			{ WormState::OnRightDownSurrenderOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownSurrenderOn"), 0.02f, true) },
+			
+			{ WormState::OnLeftFlatTeleportReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatTeleportReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnLeftUpTeleportReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpTeleportReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnLeftDownTeleportReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownTeleportReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightFlatTeleportReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatTeleportReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightUpTeleportReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpTeleportReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightDownTeleportReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownTeleportReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			
+			{ WormState::OnLeftFlatTeleportWithraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatTeleportReady"), 0.02f, false) },
+			{ WormState::OnLeftUpTeleportWithraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpTeleportReady"), 0.02f, false) },
+			{ WormState::OnLeftDownTeleportWithraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownTeleportReady"), 0.02f, false) },
+			{ WormState::OnRightFlatTeleportWithraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatTeleportReady"), 0.02f, false) },
+			{ WormState::OnRightUpTeleportWithraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpTeleportReady"), 0.02f, false) },
+			{ WormState::OnRightDownTeleportWithraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownTeleportReady"), 0.02f, false) },
+
+			{ WormState::OnLeftFlatTeleportUse, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatTeleportUse"), 0.02f, _48AniOrder, false) },
+			{ WormState::OnLeftUpTeleportUse, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpTeleportUse"), 0.02f, _48AniOrder, false) },
+			{ WormState::OnLeftDownTeleportUse, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownTeleportUse"), 0.02f, _48AniOrder, false) },
+			{ WormState::OnRightFlatTeleportUse, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatTeleportUse"), 0.02f, _48AniOrder, false) },
+			{ WormState::OnRightUpTeleportUse, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpTeleportUse"), 0.02f, _48AniOrder, false) },
+			{ WormState::OnRightDownTeleportUse, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownTeleportUse"), 0.02f, _48AniOrder, false) },
+
+			{ WormState::OnLeftFlatTeleportAfterUse, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatTeleportUse"), 0.02f, false) },
+			{ WormState::OnLeftUpTeleportAfterUse, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpTeleportUse"), 0.02f, false) },
+			{ WormState::OnLeftDownTeleportAfterUse, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownTeleportUse"), 0.02f, false) },
+			{ WormState::OnRightFlatTeleportAfterUse, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatTeleportUse"), 0.02f, false) },
+			{ WormState::OnRightUpTeleportAfterUse, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpTeleportUse"), 0.02f, false) },
+			{ WormState::OnRightDownTeleportAfterUse, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownTeleportUse"), 0.02f, false) },
+
+			{ WormState::OnLeftFlatTeleportOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatTeleportOn"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnLeftUpTeleportOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpTeleportOn"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnLeftDownTeleportOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownTeleportOn"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightFlatTeleportOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatTeleportOn"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightUpTeleportOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpTeleportOn"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightDownTeleportOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownTeleportOn"), 0.02f, GrenadeReadyAniOrder, false) },
+
+			{ WormState::OnLeftFlatShotgunOn1, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatShotgunOn1"), 0.02f, false) },
+			{ WormState::OnLeftUpShotgunOn1, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpShotgunOn1"), 0.02f, false) },
+			{ WormState::OnLeftDownShotgunOn1, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownShotgunOn1"), 0.02f, false) },
+			{ WormState::OnRightFlatShotgunOn1, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatShotgunOn1"), 0.02f, false) },
+			{ WormState::OnRightUpShotgunOn1, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpShotgunOn1"), 0.02f, false) },
+			{ WormState::OnRightDownShotgunOn1, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownShotgunOn1"), 0.02f, false) },
+
+			{ WormState::OnLeftFlatShotgunOn2, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatShotgunOn2"), 0.02f, false) },
+			{ WormState::OnLeftUpShotgunOn2, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpShotgunOn2"), 0.02f, false) },
+			{ WormState::OnLeftDownShotgunOn2, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownShotgunOn2"), 0.02f, false) },
+			{ WormState::OnRightFlatShotgunOn2, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatShotgunOn2"), 0.02f, false) },
+			{ WormState::OnRightUpShotgunOn2, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpShotgunOn2"), 0.02f, false) },
+			{ WormState::OnRightDownShotgunOn2, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownShotgunOn2"), 0.02f, false) },
+
+			{ WormState::OnLeftFlatShotgunReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatShotgunReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnLeftUpShotgunReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpShotgunReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnLeftDownShotgunReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownShotgunReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightFlatShotgunReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatShotgunReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightUpShotgunReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpShotgunReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightDownShotgunReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownShotgunReady"), 0.02f, GrenadeReadyAniOrder, false) },
+
+			{ WormState::OnLeftFlatShotgunWithraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatShotgunReady"), 0.02f, false) },
+			{ WormState::OnLeftUpShotgunWithraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpShotgunReady"), 0.02f, false) },
+			{ WormState::OnLeftDownShotgunWithraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownShotgunReady"), 0.02f, false) },
+			{ WormState::OnRightFlatShotgunWithraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatShotgunReady"), 0.02f, false) },
+			{ WormState::OnRightUpShotgunWithraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpShotgunReady"), 0.02f, false) },
+			{ WormState::OnRightDownShotgunWithraw, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownShotgunReady"), 0.02f, false) },
+
+			{ WormState::OnLeftFlatShotgunShot, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatShotgunShot"), 0.02f, false) },
+			{ WormState::OnLeftUpShotgunShot, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpShotgunShot"), 0.02f, false) },
+			{ WormState::OnLeftDownShotgunShot, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownShotgunShot"), 0.02f, false) },
+			{ WormState::OnRightFlatShotgunShot, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatShotgunShot"), 0.02f, false) },
+			{ WormState::OnRightUpShotgunShot, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpShotgunShot"), 0.02f, false) },
+			{ WormState::OnRightDownShotgunShot, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownShotgunShot"), 0.02f, false) },
 
 			{ WormState::OnLeftFly,	Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftWormFly"), 0.02f, false)},
 			{ WormState::OnRightFly, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightWormFly"), 0.02f, false)},
@@ -315,8 +390,9 @@ namespace InGame {
 			{ WormState::OnAfterDamaged, new WormOnAfterDamaged }, { WormState::OnReadyItemUse, new WormOnReadyItemUseHandler },
 			{ WormState::OnItemWithdraw, new WormOnItemWithdraw }, { WormState::OnUseItem, new WormOnUseItemHandler },
 			{ WormState::OnAttacked, new WormOnAttackedHandler }, { WormState::OnDye, new WormOnDyeHandler },
-			{ WormState::OnAfterUseItem, new WormOnAfterUseItem }
-		});
+			{ WormState::OnAfterUseItem, new WormOnAfterUseItem }, { WormState::OnUseShotgun, new WormOnUseShotGun }
+		
+			});
 
 		//Set Controller
 		if (initData.GameMode == GameMode::NetWork)
@@ -374,7 +450,7 @@ namespace InGame {
 			{ WormInfo::Stat::Direction, wormData.Direction}, { WormInfo::Stat::MoveSpeed, initData.WormMoveSpeed },
 			{ WormInfo::Stat::MyTurn, false }, { WormInfo::Stat::Damage, 0 }, {WormInfo::Stat::SelfDamage , 0},
 			{ WormInfo::Stat::ItemExplosionTime, 3.0f }, { WormInfo::Stat::UsedItem, false }, {WormInfo::Stat::Surrendered, false },
-			{ WormInfo::Stat::TurnPassed, false }
+			{ WormInfo::Stat::TurnPassed, false }, { WormInfo::Stat::Grave, wormData.GraveType }, { WormInfo::Stat::ShotgunUseCnt, 0 }
 		});
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {

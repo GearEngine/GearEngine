@@ -999,16 +999,22 @@ namespace Main {
 			team.TeamIcon = Gear::TextureStorage::GetTexture2D(selectedTeamList[i]->teamIcon);
 			team.TeamItem = itemList;
 
-			auto coppyWormNameList = selectedTeamList[i]->wormName;
-			std::shuffle(coppyWormNameList.begin(), coppyWormNameList.end(), rng);
+			std::vector<int> shuffleIdx;
+			for (int i = 0; i < 8; ++i)
+			{
+				shuffleIdx.push_back(i);
+			}
+
+			std::shuffle(shuffleIdx.begin(), shuffleIdx.end(), rng);
 			for (int j = 0; j < team.nWorm; ++j)
 			{
 				InGame::WormSpecific worm;
-				worm.Name = selectedTeamList[i]->wormName[j];
+				worm.Name = selectedTeamList[i]->wormName[shuffleIdx[j]];
 				worm.AdditionalZRenderOffset = flatCount * 0.002f;
 				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(initData.Mapinfo.TerrainMinX, initData.Mapinfo.TerrainMaxX), 5.0f, ZOrder::z_Worm);
 				worm.Direction = (InGame::WormInfo::DirectionType)Gear::Util::GetRndInt(2);
 				worm.Hp = wormEnergy;
+				worm.GraveType = (InGame::GraveInfo::Type)selectedTeamList[i]->graves[shuffleIdx[j]];
 				if (selectedTeamLayer->handicapType[i] == TeamBasicOption::Handicap::Plus)
 				{
 					worm.Hp += 25;
