@@ -67,9 +67,11 @@ namespace InGame {
 			TurnPassed,
 			Grave,
 			ShotgunUseCnt,
+			WindowPickedPoint,
 			StatEnd
 		};
-		
+		#define NONE_PICK 9999.0f
+
 		enum DirectionType : unsigned int
 		{
 			LeftFlat,
@@ -168,6 +170,58 @@ namespace InGame {
 			SkipGo, Surrender, TurnChange, Freeze, MagicMissile,
 			BabyBanana, ItemEnd
 		};
+
+		inline bool isShowAim(Number number)
+		{
+			switch (number)
+			{
+			case InGame::ItemInfo::Bazooka:
+				return true;
+			case InGame::ItemInfo::HomingMissile:
+				return true;
+			case InGame::ItemInfo::Mortar:
+				return true;
+			case InGame::ItemInfo::HomingPigeon:
+				return true;
+			case InGame::ItemInfo::SheepLauncher:
+				return true;
+			case InGame::ItemInfo::Grenade:
+				return true;
+			case InGame::ItemInfo::ClusterBomb:
+				return true;
+			case InGame::ItemInfo::Banana:
+				return true;
+			case InGame::ItemInfo::Shotgun:
+				return true;
+			case InGame::ItemInfo::Handgun:
+				return true;
+			case InGame::ItemInfo::Uzi:
+				return true;
+			case InGame::ItemInfo::Minigun:
+				return true;
+			case InGame::ItemInfo::Longbow:
+				return true;
+			case InGame::ItemInfo::KamiKaze:
+				return true;
+			case InGame::ItemInfo::BlowTorch:
+				return true;
+			case InGame::ItemInfo::BaseballBat:
+				return true;
+			case InGame::ItemInfo::NinjaRope:
+				return true;
+			case InGame::ItemInfo::SupperBanana:
+				return true;
+			case InGame::ItemInfo::HollyGrenade:
+				return true;
+			case InGame::ItemInfo::FlameThrower:
+				return true;
+			case InGame::ItemInfo::PetrolBomb:
+				return true;
+			case InGame::ItemInfo::Ceramics:
+				return true;
+			}
+			return false;
+		}
 
 		struct ItemDescprition
 		{

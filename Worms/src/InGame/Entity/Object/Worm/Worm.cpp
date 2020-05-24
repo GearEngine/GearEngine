@@ -390,9 +390,9 @@ namespace InGame {
 			{ WormState::OnAfterDamaged, new WormOnAfterDamaged }, { WormState::OnReadyItemUse, new WormOnReadyItemUseHandler },
 			{ WormState::OnItemWithdraw, new WormOnItemWithdraw }, { WormState::OnUseItem, new WormOnUseItemHandler },
 			{ WormState::OnAttacked, new WormOnAttackedHandler }, { WormState::OnDye, new WormOnDyeHandler },
-			{ WormState::OnAfterUseItem, new WormOnAfterUseItem }, { WormState::OnUseShotgun, new WormOnUseShotGun }
-		
-			});
+			{ WormState::OnAfterUseItem, new WormOnAfterUseItem }, { WormState::OnUseShotgun, new WormOnUseShotGun },
+			{ WormState::OnUseWindowPickItem, new WormOnUseWindowPickItem},
+		});
 
 		//Set Controller
 		if (initData.GameMode == GameMode::NetWork)
@@ -437,6 +437,7 @@ namespace InGame {
 			{ "Move", Gear::CreateRef<WormMovePCHandler>() },
 			{ "Sliding", Gear::CreateRef<WormSlidingPCHandler>() },
 			{ "UnderWater", Gear::CreateRef<WormOnUnderWater>() },
+			{ "Nothing", Gear::CreateRef< WormOnNotPhysics>() },
 		});
 		
 		physics->SetPixelCollisionHandler("Move");
@@ -450,7 +451,8 @@ namespace InGame {
 			{ WormInfo::Stat::Direction, wormData.Direction}, { WormInfo::Stat::MoveSpeed, initData.WormMoveSpeed },
 			{ WormInfo::Stat::MyTurn, false }, { WormInfo::Stat::Damage, 0 }, {WormInfo::Stat::SelfDamage , 0},
 			{ WormInfo::Stat::ItemExplosionTime, 3.0f }, { WormInfo::Stat::UsedItem, false }, {WormInfo::Stat::Surrendered, false },
-			{ WormInfo::Stat::TurnPassed, false }, { WormInfo::Stat::Grave, wormData.GraveType }, { WormInfo::Stat::ShotgunUseCnt, 0 }
+			{ WormInfo::Stat::TurnPassed, false }, { WormInfo::Stat::Grave, wormData.GraveType }, { WormInfo::Stat::ShotgunUseCnt, 0 },
+			{ WormInfo::Stat::WindowPickedPoint, glm::vec2(NONE_PICK, NONE_PICK)}
 		});
 
 		Gear::EntitySystem::SetStatusHanlder(m_ID, {
@@ -462,7 +464,8 @@ namespace InGame {
 			{ WormStatusHandleType::DisplayAim, Gear::CreateRef<WormDisplayAimHandler>() },
 			{ WormStatusHandleType::AfterUseItem, Gear::CreateRef<WormAfterUseItemHanlder>() },
 			{ WormStatusHandleType::SkipGo, Gear::CreateRef<WormSkipGoHanlder>() },
-			{ WormStatusHandleType::Surrender, Gear::CreateRef<WormSurrenderHanlder>() }
+			{ WormStatusHandleType::Surrender, Gear::CreateRef<WormSurrenderHanlder>() },
+			{ WormStatusHandleType::Teleport, Gear::CreateRef<WormTeleportHandler>()}
 		});
 
 		auto NameBorder = Gear::TextureStorage::GetTexture2D("WormNameBorder");

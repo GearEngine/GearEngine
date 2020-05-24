@@ -7,6 +7,7 @@
 #include "InGame/Entity/UI/Checker/WindChecker.h"
 #include "InGame/Entity/UI/Checker/TurnChecker.h"
 #include "InGame/Entity/UI/ItemSelector/ItemSelector.h"
+#include "InGame/Entity/UI/WindowSelector/WindowSelector.h"
 
 namespace InGame {
 
@@ -31,6 +32,7 @@ namespace InGame {
 		Gear::Ref<WindChecker> m_WindChecker;
 		Gear::Ref<TurnChecker> m_TurnChecker;
 		Gear::Ref<ItemSelector> m_ItemSelector;
+		Gear::Ref<WindowSelector> m_WindowSelector;
 
 		glm::vec4 m_ClearColor = { 0.14117, 0.16470, 0.29019, 1.0 };
 	};

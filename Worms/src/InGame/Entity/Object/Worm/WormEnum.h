@@ -37,6 +37,7 @@ namespace InGame {
 			OnVictory,
 			OnAfterUseItem,
 			OnUseShotgun,
+			OnUseWindowPickItem,
 
 			OnLeftFlatMove, OnRightFlatMove,
 			OnLeftUpMove, OnRightUpMove,
@@ -205,7 +206,8 @@ namespace InGame {
 			DisplayAim,
 			AfterUseItem,
 			SkipGo,
-			Surrender
+			Surrender,
+			Teleport
 		};
 	}
 

@@ -885,4 +885,65 @@ namespace InGame {
 			}
 		}
 	};
+
+	class WormTeleportHandler : public Gear::Status::StatusHandler
+	{
+		Gear::Ref<Gear::FSM> FSM;
+		Gear::Ref<Gear::Status> Status;
+		Gear::Ref<Gear::Animator2D> Animator;
+		Gear::Ref<Gear::Timer> timer;
+
+		bool awake = false;
+		
+		bool canTurnChange = false;
+		float TurnChangeDelay = 2.5f;
+		float pastTime = 0.0f;
+
+		void Awake(int entityID)
+		{
+			FSM = Gear::EntitySystem::GetFSM(entityID);
+			Status = Gear::EntitySystem::GetStatus(entityID);
+			Animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			timer = Gear::EntitySystem::GetTimer(entityID);
+		}
+
+		virtual void Handle(int entityID, Gear::Status::StatHandleData& data, std::unordered_map<Gear::EnumType, std::any>& statlist) override
+		{
+			if (!awake)
+			{
+				Awake(entityID);
+			}
+
+			unsigned int curAni = Animator->GetCurrentAnimationEnum();
+			if (WormState::OnLeftFlatBreath <= curAni && curAni <= WormState::OnRightDownBreath)
+			{
+				if (canTurnChange)
+				{
+					pastTime += timer->GetTick();
+					if (pastTime > TurnChangeDelay)
+					{
+						Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
+						pastTime = 0.0f;
+						data.Handled = true;
+						canTurnChange = false;
+					}
+				}
+				else
+				{
+					if (std::any_cast<int>(Status->GetStat(WormInfo::Damage)) + std::any_cast<int>(Status->GetStat(WormInfo::SelfDamage)) == 0)
+					{
+						Status->RegisterPushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 1.0f)));
+						FSM->SetCurrentState(WormState::OnNotMyTurn);
+						Status->SetStat(WormInfo::MyTurn, false);
+
+						canTurnChange = true;
+					}
+					else
+					{
+						data.Handled = true;
+					}
+				}
+			}
+		}
+	};
 }

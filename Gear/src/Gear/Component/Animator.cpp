@@ -11,6 +11,7 @@ namespace Gear {
 
 	void Animator2D::SetCurrentAnimation(EnumType name)
 	{
+		m_CurrentAnimationEnum = name;
 		auto find = m_AnimationList.find(name);
 		if (find == m_AnimationList.end())
 		{
@@ -22,6 +23,7 @@ namespace Gear {
 
 	void Animator2D::PlayAnimation(EnumType name)
 	{
+		m_CurrentAnimationEnum = name;
 		m_CurrentAnimation->Stop();
 
 		auto find = m_AnimationList.find(name);

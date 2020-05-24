@@ -44,6 +44,7 @@ namespace InGame {
 				}
 				handled = true;
 			}
+			handled = true;
 		}
 	};
 

@@ -748,6 +748,14 @@ namespace InGame {
 		}
 	};
 
+	class WormOnNotPhysics : public Gear::Physics2D::PixelCollisionHander
+	{
+		inline virtual void Handle(int entityID) override
+		{
+
+		}
+	};
+
 	class WormOnUnderWater : public Gear::Physics2D::PixelCollisionHander
 	{
 		inline virtual void Handle(int entityID) override

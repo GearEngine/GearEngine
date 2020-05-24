@@ -35,6 +35,24 @@ namespace InGame {
 		GameEnd
 	};
 
+	enum WindowSelctorType : unsigned int 
+	{
+		Drop,
+		Util,
+		Stop
+	};
+
+	struct WindowSelectData
+	{
+		WindowSelectData(int fromID, int type, ItemInfo::Number itemNum)
+			: FromID(fromID), Type(type), ItemNum(itemNum)
+		{}
+
+		int FromID;
+		int Type;
+		ItemInfo::Number ItemNum;
+	};
+
 	struct ExplosionData
 	{
 		ExplosionData(const glm::vec2 position, Explosion::Size size, float power, unsigned int itemNumber = 0xffffffffu, int fromEntityID = -1)

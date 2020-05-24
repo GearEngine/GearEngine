@@ -964,7 +964,7 @@ namespace InGame {
 		float firstFireAngle;
 		int worldID;
 		const float FixedFireAngle = 15.0f;
-
+		bool initWindowSelect = false;
 
 		Gear::Ref<Gear::Animator2D> animator;
 		Gear::Ref<Gear::Status> status;
@@ -997,6 +997,7 @@ namespace InGame {
 			inFirst = true;
 			SettedAngle = false;
 			afterReadyAni = false;
+			initWindowSelect = false;
 			status->SetNeedHandleData(WormStatusHandleType::DisplayAim, true);
 		}
 
@@ -1143,22 +1144,22 @@ namespace InGame {
 				switch (dir)
 				{
 				case InGame::WormInfo::LeftFlat:
-					animator->SetCurrentAnimation(WormState::OnLeftFlatTeleportOn);
+					animator->SetCurrentAnimation(WormState::OnLeftFlatTeleportReady);
 					break;
 				case InGame::WormInfo::RightFlat:
-					animator->SetCurrentAnimation(WormState::OnRightFlatTeleportOn);
+					animator->SetCurrentAnimation(WormState::OnRightFlatTeleportReady);
 					break;
 				case InGame::WormInfo::LeftUp:
-					animator->SetCurrentAnimation(WormState::OnLeftUpTeleportOn);
+					animator->SetCurrentAnimation(WormState::OnLeftUpTeleportReady);
 					break;
 				case InGame::WormInfo::RightUp:
-					animator->SetCurrentAnimation(WormState::OnRightUpTeleportOn);
+					animator->SetCurrentAnimation(WormState::OnRightUpTeleportReady);
 					break;
 				case InGame::WormInfo::LeftDown:
-					animator->SetCurrentAnimation(WormState::OnLeftDownTeleportOn);
+					animator->SetCurrentAnimation(WormState::OnLeftDownTeleportReady);
 					break;
 				case InGame::WormInfo::RightDown:
-					animator->SetCurrentAnimation(WormState::OnRightDownTeleportOn);
+					animator->SetCurrentAnimation(WormState::OnRightDownTeleportReady);
 					break;
 				}
 				animator->ResumeAnimation();
@@ -1206,7 +1207,7 @@ namespace InGame {
 
 				curItem = std::any_cast<ItemInfo::Number>(status->GetStat(WormInfo::SelectedItem));
 
-				if (curItem < ItemInfo::Number::SkipGo || curItem == ItemInfo::Number::Teleport)
+				if (ItemInfo::isShowAim(curItem))
 				{
 					status->SetNeedHandleData(WormStatusHandleType::DisplayAim, false);
 				}
@@ -1223,39 +1224,52 @@ namespace InGame {
 
 			if (curItem < ItemInfo::Number::SkipGo)
 			{
-				if (!SettedAngle && afterReadyAni)
+				if (curItem == ItemInfo::Teleport)
 				{
-					if ((int)firstFireAngle != (int)actualFireAngle)
+					if (!initWindowSelect)
 					{
-						if (firstFireAngle > actualFireAngle)
+						initWindowSelect = true;
+						auto windowSelector = Gear::EntitySystem::GetEntityIDFromName("WindowSelector");
+						Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, WindowSelectData(entityID, WindowSelctorType::Util, curItem)), windowSelector);
+					}
+					return WormState::OnReadyItemUse;
+				}
+				else
+				{
+					if (!SettedAngle && afterReadyAni)
+					{
+						if ((int)firstFireAngle != (int)actualFireAngle)
 						{
-							if (std::abs(firstFireAngle - actualFireAngle) >= 2.0f)
+							if (firstFireAngle > actualFireAngle)
 							{
-								firstFireAngle -= 2;
+								if (std::abs(firstFireAngle - actualFireAngle) >= 2.0f)
+								{
+									firstFireAngle -= 2;
+								}
+								else
+								{
+									firstFireAngle -= 1;
+
+								}
 							}
 							else
 							{
-								firstFireAngle -= 1;
-
+								if (std::abs(actualFireAngle - firstFireAngle) >= 2.0f)
+								{
+									firstFireAngle += 2;
+								}
+								else
+								{
+									firstFireAngle += 1;
+								}
 							}
 						}
 						else
 						{
-							if (std::abs(actualFireAngle - firstFireAngle) >= 2.0f)
-							{
-								firstFireAngle += 2;
-							}
-							else
-							{
-								firstFireAngle += 1;
-							}
+							SettedAngle = true;
 						}
+						animator->SetFrameY((int)31 - firstFireAngle);
 					}
-					else
-					{
-						SettedAngle = true;
-					}
-					animator->SetFrameY((int)31 - firstFireAngle);
 				}
 			}
 
@@ -1400,6 +1414,213 @@ namespace InGame {
 
 
 			return WormState::OnReadyItemUse;
+		}
+	};
+
+	class WormOnUseWindowPickItem : public Gear::FSM::InputHandler
+	{
+		bool awake = false;
+		bool inFirst = true;
+
+		Gear::Ref<Gear::FSM> FSM;
+		Gear::Ref<Gear::Status> Status;
+		Gear::Ref<Gear::Animator2D> Animator;
+		Gear::Ref<Gear::Physics2D> Physics;
+		Gear::Ref<Gear::Transform2D> Transform;
+
+		ItemInfo::Number selectedItem;
+
+		int aniCompleteCount = 0;
+
+		WormInfo::DirectionType dir;
+		glm::vec3 pickedPoint;
+		std::string teamName;
+
+		virtual void Awake(int entityID) override
+		{
+			FSM = Gear::EntitySystem::GetFSM(entityID);
+			Status = Gear::EntitySystem::GetStatus(entityID);
+			Animator = Gear::EntitySystem::GetAnimator2D(entityID);
+			Physics = Gear::EntitySystem::GetPhysics2D(entityID);
+			Transform = Gear::EntitySystem::GetTransform2D(entityID);
+		}
+
+		void InFirst(int entityID)
+		{
+			inFirst = false;
+			selectedItem = std::any_cast<ItemInfo::Number>(Status->GetStat(WormInfo::SelectedItem));
+			dir = std::any_cast<WormInfo::DirectionType>(Status->GetStat(WormInfo::Direction));
+			pickedPoint = glm::vec3(std::any_cast<glm::vec2>(Status->GetStat(WormInfo::WindowPickedPoint)), ZOrder::z_Worm);
+			teamName = std::any_cast<std::string>(Status->GetStat(WormInfo::TeamName));
+		}
+
+		virtual void OnOut(int entityID) override
+		{
+			inFirst = true;
+			aniCompleteCount = 0;
+		}
+
+		void SetUseAnimation(int mode)
+		{
+			if (mode == -1)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					Animator->PlayAnimation(WormState::OnLeftFlatBreath);
+					break;
+				case InGame::WormInfo::RightFlat:
+					Animator->PlayAnimation(WormState::OnRightFlatBreath);
+					break;
+				case InGame::WormInfo::LeftUp:
+					Animator->PlayAnimation(WormState::OnLeftUpBreath);
+					break;
+				case InGame::WormInfo::RightUp:
+					Animator->PlayAnimation(WormState::OnRightUpBreath);
+					break;
+				case InGame::WormInfo::LeftDown:
+					Animator->PlayAnimation(WormState::OnLeftDownBreath);
+					break;
+				case InGame::WormInfo::RightDown:
+					Animator->PlayAnimation(WormState::OnRightDownBreath);
+					break;
+				}
+				return;
+			}
+			if (selectedItem == ItemInfo::Teleport)
+			{
+
+				if (mode == 0)
+				{
+					switch (dir)
+					{
+					case InGame::WormInfo::LeftFlat:
+						Animator->PlayAnimation(WormState::OnLeftFlatTeleportOn);
+						break;
+					case InGame::WormInfo::RightFlat:
+						Animator->PlayAnimation(WormState::OnRightFlatTeleportOn);
+						break;
+					case InGame::WormInfo::LeftUp:
+						Animator->PlayAnimation(WormState::OnLeftUpTeleportOn);
+						break;
+					case InGame::WormInfo::RightUp:
+						Animator->PlayAnimation(WormState::OnRightUpTeleportOn);
+						break;
+					case InGame::WormInfo::LeftDown:
+						Animator->PlayAnimation(WormState::OnLeftDownTeleportOn);
+						break;
+					case InGame::WormInfo::RightDown:
+						Animator->PlayAnimation(WormState::OnRightDownTeleportOn);
+						break;
+					}
+				}
+				if (mode == 1)
+				{
+					switch (dir)
+					{
+					case InGame::WormInfo::LeftFlat:
+						Animator->PlayAnimation(WormState::OnLeftFlatTeleportUse);
+						break;
+					case InGame::WormInfo::RightFlat:
+						Animator->PlayAnimation(WormState::OnRightFlatTeleportUse);
+						break;
+					case InGame::WormInfo::LeftUp:
+						Animator->PlayAnimation(WormState::OnLeftUpTeleportUse);
+						break;
+					case InGame::WormInfo::RightUp:
+						Animator->PlayAnimation(WormState::OnRightUpTeleportUse);
+						break;
+					case InGame::WormInfo::LeftDown:
+						Animator->PlayAnimation(WormState::OnLeftDownTeleportUse);
+						break;
+					case InGame::WormInfo::RightDown:
+						Animator->PlayAnimation(WormState::OnRightDownTeleportUse);
+						break;
+					}
+				}
+				if (mode == 2)
+				{
+					switch (dir)
+					{
+					case InGame::WormInfo::LeftFlat:
+						Animator->PlayAnimation(WormState::OnLeftFlatTeleportAfterUse);
+						break;
+					case InGame::WormInfo::RightFlat:
+						Animator->PlayAnimation(WormState::OnRightFlatTeleportAfterUse);
+						break;
+					case InGame::WormInfo::LeftUp:
+						Animator->PlayAnimation(WormState::OnLeftUpTeleportAfterUse);
+						break;
+					case InGame::WormInfo::RightUp:
+						Animator->PlayAnimation(WormState::OnRightUpTeleportAfterUse);
+						break;
+					case InGame::WormInfo::LeftDown:
+						Animator->PlayAnimation(WormState::OnLeftDownTeleportAfterUse);
+						break;
+					case InGame::WormInfo::RightDown:
+						Animator->PlayAnimation(WormState::OnRightDownTeleportAfterUse);
+						break;
+					}
+				}
+			}
+		}
+
+		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		{
+			if (!awake)
+			{
+				Awake(entityID);
+			}
+			if (inFirst)
+			{
+				InFirst(entityID);
+			}
+			
+			if (selectedItem == ItemInfo::Teleport)
+			{
+				if (aniCompleteCount == 0)
+				{
+					SetUseAnimation(aniCompleteCount);
+					++aniCompleteCount;
+					Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+					return WormState::OnUseWindowPickItem;
+				}
+				if (aniCompleteCount == 1 && Animator->loopCompleted())
+				{
+					PLAY_SOUND_NAME("TELEPORT", WormsSound::Weapon);
+					SetUseAnimation(aniCompleteCount);
+					++aniCompleteCount;
+					return WormState::OnUseWindowPickItem;
+				}
+				if (aniCompleteCount == 2 && Animator->loopCompleted())
+				{
+					PLAY_SOUND_NAME("TELEPORT", WormsSound::Weapon);
+					SetUseAnimation(aniCompleteCount);
+					++aniCompleteCount;
+					Transform->SetPosition(pickedPoint);
+					Physics->SetPixelCollisionHandler("Nothing");
+					return WormState::OnUseWindowPickItem;
+				}
+				if (aniCompleteCount == 3)
+				{
+					if (Animator->loopCompleted())
+					{
+						Physics->SetPixelCollisionHandler("OnAir"); 
+						Physics->SetExternalVector(glm::vec2(0.0f, 0.0f));
+						Physics->ActivateGravity();
+
+						Status->SetStat(WormInfo::SelectedItem, ItemInfo::Bazooka);
+						int timerID = Gear::EntitySystem::GetEntityIDFromName("Timer");
+						Gear::EntitySystem::GetStatus(timerID)->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
+						Status->PushNeedHandleData(WormStatusHandleType::Teleport, Gear::Status::StatHandleData(0));
+						int ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
+						Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(ItemInfo::Teleport, teamName)), ItemSelectorID);
+						OnOut(entityID);
+						return WormState::OnAir;
+					}
+				}
+			}
+			return WormState::OnUseWindowPickItem;
 		}
 	};
 
@@ -1609,9 +1830,14 @@ namespace InGame {
 				if (useCount == 2)
 				{
 					SetAnimator(3);
+					auto teamName = std::any_cast<std::string>(status->GetStat(WormInfo::TeamName));
 					Gear::EntitySystem::GetFSM(entityID)->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
 					status->SetNeedHandleData(WormStatusHandleType::DisplayAim, true);
 					status->SetStat(WormInfo::ShotgunUseCnt, 0);
+					int timerID = Gear::EntitySystem::GetEntityIDFromName("Timer");
+					int ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
+					Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(ItemInfo::Shotgun, teamName)), ItemSelectorID);
+					Gear::EntitySystem::GetStatus(timerID)->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
 					return WormState::OnItemWithdraw;
 				}
 			}
@@ -2066,7 +2292,8 @@ namespace InGame {
 
 					AfterShoot(entityID);
 					auto teamName = std::any_cast<std::string>(status->GetStat(WormInfo::TeamName));
-					Gear::EventSystem::DispatchEvent(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(weapon, teamName)));
+					int ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
+					Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(weapon, teamName)), ItemSelectorID);
 
 					OnOut(entityID);
 					return WormState::OnItemWithdraw;
@@ -2100,7 +2327,8 @@ namespace InGame {
 
 			AfterShoot(entityID);
 			auto teamName = std::any_cast<std::string>(status->GetStat(WormInfo::TeamName));
-			Gear::EventSystem::DispatchEvent(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(weapon, teamName)));
+			int ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
+			Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(weapon, teamName)), ItemSelectorID);
 
 			OnOut(entityID);
 			return WormState::OnItemWithdraw;
@@ -2304,6 +2532,12 @@ namespace InGame {
 
 			float moveSpeed = std::any_cast<float>(status->GetStat(WormInfo::Stat::MoveSpeed));
 
+			if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_RIGHT) || Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_RIGHT))
+			{
+				startSound = false;
+				OnOut(entityID);
+				return WormState::OnBreath;
+			}
 			if (cmd.KeyType != NONE_COMMAND)
 			{
 				OnOut(entityID);

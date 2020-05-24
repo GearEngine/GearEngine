@@ -45,8 +45,16 @@ namespace InGame {
 				GR_TRACE("On Item Selector Get Right Button Click Event");
 				FSM->SetCurrentState(ItemSelectorInfo::State::OnUpdate);
 				int mouseID = Gear::EntitySystem::GetEntityIDFromName("Mouse");
+
+				auto mouseState = Gear::EntitySystem::GetFSM(mouseID)->GetCurrentState();
+				if (mouseState == WorldState::OnWindowSelect)
+				{
+					auto mouseHandler = Gear::EntitySystem::GetFSM(mouseID)->GetHandler(WorldState::OnWindowSelect);
+					mouseHandler->OnOut(mouseID);
+				}
 				auto mouseHandler = Gear::EntitySystem::GetFSM(mouseID)->GetHandler(WorldState::OnItemWindow);
 				mouseHandler->OnOut(mouseID);
+				Gear::EntitySystem::GetFSM(mouseID)->SetCurrentState(WorldState::OnItemWindow);
 				handled = true;
 				return;
 			}

@@ -11,6 +11,8 @@ namespace InGame {
 
 	std::pair<float, float>& GetMousePickPoint();
 	std::pair<float, float>& GetMousePos();
+	std::pair<float, float>& GetWMousePickPoint();
+	std::pair<float, float>& GetWMousePos();
 
 	class MouseOnGameRunningHandler : public Gear::FSM::InputHandler
 	{
@@ -107,10 +109,36 @@ namespace InGame {
 
 	class MouseOnWindowSelectHandler : public Gear::FSM::InputHandler
 	{
-		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
+		bool inFirst = true;
+		bool needReset = true;
+
+		float MouseSensitiveX = 0.001f;
+		float MouseSensitiveY = 0.00177f;
+
+		Gear::Util::FRect WindowSelectorRect;
+
+		int worldID;
+		int WindowSelectorID;
+
+		Gear::Ref<Gear::Timer> timer;
+		Gear::Ref<Gear::Animation2D> virtualWindowSelectCursor;
+		Gear::Ref<Gear::Status> worldStatus;
+		Gear::Ref<Gear::FSM> WindowSelectorFSM;
+
+		glm::mat4 mouseTransform;
+
+		unsigned int curTeamColor;
+
+		void init(int entityID);
+
+		void reset();
+
+		inline void OnOut(int entityID) override
 		{
-			return WorldState::OnWindowSelect;
+			needReset = true;
 		}
+
+		virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override;
 	};
 
 	class MouseOnQuitWindowHandler : public Gear::FSM::InputHandler

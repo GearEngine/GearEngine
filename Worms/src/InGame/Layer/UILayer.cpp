@@ -13,6 +13,7 @@ namespace InGame {
 		m_WindChecker.reset(new WindChecker(initData));
 		m_TurnChecker.reset(new TurnChecker(initData));
 		m_ItemSelector.reset(new ItemSelector(initData));
+		m_WindowSelector.reset(new WindowSelector(initData));
 	}
 
 	void UILayer::OnAttach()

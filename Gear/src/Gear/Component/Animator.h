@@ -33,6 +33,7 @@ namespace Gear {
 	public:
 		void SetCurrentAnimation(EnumType name);
 		inline Ref<Animation2D> GetCurrentAnimation() { return m_CurrentAnimation; }
+		inline EnumType GetCurrentAnimationEnum() { return m_CurrentAnimationEnum; }
 
 		virtual void PlayAnimation(EnumType name) override;
 		virtual void PauseAnimation() override;
@@ -45,6 +46,7 @@ namespace Gear {
 
 		std::pair<int, int> GetFrameIdx();
 		void SetFrameIdx(const std::pair<int, int>& index);
+		EnumType m_CurrentAnimationEnum = 0;
 
 	private:
 		std::unordered_map<EnumType, Ref<Animation2D>> m_AnimationList;
