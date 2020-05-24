@@ -201,7 +201,7 @@ namespace Gear {
 			FrameHeight = Height / FrameY;
 		}
 		GR_CORE_ASSERT(Data, "Failed to load image!");
-		if (FrameX + FrameY > 2)
+		if (Path[path.length() - 5] == ')')
 		{
 			isFrameData = true;
 			DivideStore();

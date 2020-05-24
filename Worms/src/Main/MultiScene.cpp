@@ -982,6 +982,7 @@ namespace Main {
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Teleport, "Teleport", -1, 0));
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::SkipGo, "Skip Go", -1, 0));
 		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Surrender, "Surrender", -1, 0));
+		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Donkey, "Donkey", -1, 0));
 
 		//BagicGameOption
 		initData.LimitTurnTime = BasicOption::GetTurnTime(OptionsIndex[BasicOption::Options::TurnTime]);

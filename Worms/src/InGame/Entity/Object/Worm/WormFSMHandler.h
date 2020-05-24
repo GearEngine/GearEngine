@@ -337,6 +337,30 @@ namespace InGame {
 				break;
 			}
 		}
+		if (curSettedItem == ItemInfo::Number::Donkey)
+		{
+			switch (dir)
+			{
+			case InGame::WormInfo::LeftFlat:
+				animator->PlayAnimation(WormState::OnLeftFlatAirStrikeReady);
+				break;
+			case InGame::WormInfo::RightFlat:
+				animator->PlayAnimation(WormState::OnRightFlatAirStrikeReady);
+				break;
+			case InGame::WormInfo::LeftUp:
+				animator->PlayAnimation(WormState::OnLeftUpAirStrikeReady);
+				break;
+			case InGame::WormInfo::RightUp:
+				animator->PlayAnimation(WormState::OnRightUpAirStrikeReady);
+				break;
+			case InGame::WormInfo::LeftDown:
+				animator->PlayAnimation(WormState::OnLeftDownAirStrikeReady);
+				break;
+			case InGame::WormInfo::RightDown:
+				animator->PlayAnimation(WormState::OnRightDownAirStrikeReady);
+				break;
+			}
+		}
 		if (curSettedItem == ItemInfo::Number::Shotgun)
 		{
 			switch (dir)
@@ -1165,6 +1189,32 @@ namespace InGame {
 				animator->ResumeAnimation();
 				canChangeTime = false;
 			}
+			if (curItem == ItemInfo::Number::Donkey)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					animator->SetCurrentAnimation(WormState::OnLeftFlatAirStrikeReady);
+					break;
+				case InGame::WormInfo::RightFlat:
+					animator->SetCurrentAnimation(WormState::OnRightFlatAirStrikeReady);
+					break;
+				case InGame::WormInfo::LeftUp:
+					animator->SetCurrentAnimation(WormState::OnLeftUpAirStrikeReady);
+					break;
+				case InGame::WormInfo::RightUp:
+					animator->SetCurrentAnimation(WormState::OnRightUpAirStrikeReady);
+					break;
+				case InGame::WormInfo::LeftDown:
+					animator->SetCurrentAnimation(WormState::OnLeftDownAirStrikeReady);
+					break;
+				case InGame::WormInfo::RightDown:
+					animator->SetCurrentAnimation(WormState::OnRightDownAirStrikeReady);
+					break;
+				}
+				animator->ResumeAnimation();
+				canChangeTime = false;
+			}
 			if (curItem == ItemInfo::Number::Surrender)
 			{
 				switch (dir)
@@ -1231,6 +1281,16 @@ namespace InGame {
 						initWindowSelect = true;
 						auto windowSelector = Gear::EntitySystem::GetEntityIDFromName("WindowSelector");
 						Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, WindowSelectData(entityID, WindowSelctorType::Util, curItem)), windowSelector);
+					}
+					return WormState::OnReadyItemUse;
+				}
+				else if (curItem == ItemInfo::Donkey)
+				{
+					if (!initWindowSelect)
+					{
+						initWindowSelect = true;
+						auto windowSelector = Gear::EntitySystem::GetEntityIDFromName("WindowSelector");
+						Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, WindowSelectData(entityID, WindowSelctorType::Drop, curItem)), windowSelector);
 					}
 					return WormState::OnReadyItemUse;
 				}
@@ -1489,7 +1549,6 @@ namespace InGame {
 			}
 			if (selectedItem == ItemInfo::Teleport)
 			{
-
 				if (mode == 0)
 				{
 					switch (dir)
@@ -1563,6 +1622,30 @@ namespace InGame {
 					}
 				}
 			}
+			if (selectedItem == ItemInfo::Donkey)
+			{
+				switch (dir)
+				{
+				case InGame::WormInfo::LeftFlat:
+					Animator->PlayAnimation(WormState::OnLeftFlatAirStrikeOn);
+					break;
+				case InGame::WormInfo::RightFlat:
+					Animator->PlayAnimation(WormState::OnRightFlatAirStrikeOn);
+					break;
+				case InGame::WormInfo::LeftUp:
+					Animator->PlayAnimation(WormState::OnLeftUpAirStrikeOn);
+					break;
+				case InGame::WormInfo::RightUp:
+					Animator->PlayAnimation(WormState::OnRightUpAirStrikeOn);
+					break;
+				case InGame::WormInfo::LeftDown:
+					Animator->PlayAnimation(WormState::OnLeftDownAirStrikeOn);
+					break;
+				case InGame::WormInfo::RightDown:
+					Animator->PlayAnimation(WormState::OnRightDownAirStrikeOn);
+					break;
+				}
+			}
 		}
 
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
@@ -1617,6 +1700,38 @@ namespace InGame {
 						Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(ItemInfo::Teleport, teamName)), ItemSelectorID);
 						OnOut(entityID);
 						return WormState::OnAir;
+					}
+				}
+			}
+			if (selectedItem == ItemInfo::Donkey)
+			{
+				if (aniCompleteCount == 0)
+				{
+					PLAY_SOUND_NAME("HOLYDONKEY", WormsSound::wormSpeech);
+					SetUseAnimation(aniCompleteCount);
+					++aniCompleteCount;
+					Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+					return WormState::OnUseWindowPickItem;
+				}
+				if (aniCompleteCount == 1)
+				{
+					if (Animator->loopCompleted())
+					{
+						SetUseAnimation(-1);
+						FSM->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
+						
+						auto position = std::any_cast<glm::vec2>(Status->GetStat(WormInfo::WindowPickedPoint));
+						auto item = ITEM_POOL->GetItem(ItemInfo::Donkey);
+						item->init(glm::vec3(position, ZOrder::z_Item), 0.0f, 0.0f, entityID, 0.0f);
+
+						Status->RegisterPushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 1.0f)));
+						Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, 0, item->GetID())));
+						int timerID = Gear::EntitySystem::GetEntityIDFromName("Timer");
+						Gear::EntitySystem::GetStatus(timerID)->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
+						int ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
+						Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(ItemInfo::Donkey, teamName)), ItemSelectorID);
+						OnOut(entityID);
+						return WormState::OnNothing;
 					}
 				}
 			}

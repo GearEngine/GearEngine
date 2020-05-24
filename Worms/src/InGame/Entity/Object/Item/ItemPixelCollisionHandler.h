@@ -299,6 +299,11 @@ namespace InGame {
 		}
 	};
 
+	class DonkeyTypePCHandler : public Gear::Physics2D::PixelCollisionHander
+	{
+		int collisionCnt = 0;
+		virtual void Handle(int entityID) override;
+	};
 
 	class GaneralWeaponOnUnderWater : public Gear::Physics2D::PixelCollisionHander
 	{

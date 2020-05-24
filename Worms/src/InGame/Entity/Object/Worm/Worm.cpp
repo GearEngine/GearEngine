@@ -356,6 +356,20 @@ namespace InGame {
 			{ WormState::OnRightFlatShotgunShot, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatShotgunShot"), 0.02f, false) },
 			{ WormState::OnRightUpShotgunShot, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpShotgunShot"), 0.02f, false) },
 			{ WormState::OnRightDownShotgunShot, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownShotgunShot"), 0.02f, false) },
+			
+			{ WormState::OnLeftFlatAirStrikeReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatAirStrikeReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnLeftUpAirStrikeReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpAirStrikeReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnLeftDownAirStrikeReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownAirStrikeReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightFlatAirStrikeReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatAirStrikeReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightUpAirStrikeReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpAirStrikeReady"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightDownAirStrikeReady, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownAirStrikeReady"), 0.02f, GrenadeReadyAniOrder, false) },
+
+			{ WormState::OnLeftFlatAirStrikeOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftFlatAirStrikeOn"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnLeftUpAirStrikeOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftUpAirStrikeOn"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnLeftDownAirStrikeOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftDownAirStrikeOn"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightFlatAirStrikeOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightFlatAirStrikeOn"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightUpAirStrikeOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightUpAirStrikeOn"), 0.02f, GrenadeReadyAniOrder, false) },
+			{ WormState::OnRightDownAirStrikeOn, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightDownAirStrikeOn"), 0.02f, GrenadeReadyAniOrder, false) },
 
 			{ WormState::OnLeftFly,	Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftWormFly"), 0.02f, false)},
 			{ WormState::OnRightFly, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightWormFly"), 0.02f, false)},

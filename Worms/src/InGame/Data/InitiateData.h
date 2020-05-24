@@ -166,7 +166,7 @@ namespace InGame {
 			NinjaRope, Bungee, Parachute, Teleport, Scales,
 			SupperBanana, HollyGrenade, FlameThrower, Tambourine, RiddleBomb,
 			PetrolBomb, Skunk, Ceramics, FireShipStrike, CarpetStrike,
-			MadCow, OldWoman, Dunkey, Sanctuary, Ammageddon,
+			MadCow, OldWoman, Donkey, Sanctuary, Ammageddon,
 			SkipGo, Surrender, TurnChange, Freeze, MagicMissile,
 			BabyBanana, ItemEnd
 		};

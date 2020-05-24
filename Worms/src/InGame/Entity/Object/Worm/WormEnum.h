@@ -143,6 +143,14 @@ namespace InGame {
 			OnLeftUpTeleportAfterUse, OnRightUpTeleportAfterUse,
 			OnLeftDownTeleportAfterUse, OnRightDownTeleportAfterUse,
 
+			OnLeftFlatAirStrikeOn, OnRightFlatAirStrikeOn,
+			OnLeftUpAirStrikeOn, OnRightUpAirStrikeOn,
+			OnLeftDownAirStrikeOn, OnRightDownAirStrikeOn,
+
+			OnLeftFlatAirStrikeReady, OnRightFlatAirStrikeReady,
+			OnLeftUpAirStrikeReady, OnRightUpAirStrikeReady,
+			OnLeftDownAirStrikeReady, OnRightDownAirStrikeReady,
+
 			OnLeftFlatShotgunOn1, OnRightFlatShotgunOn1,
 			OnLeftUpShotgunOn1, OnRightUpShotgunOn1,
 			OnLeftDownShotgunOn1, OnRightDownShotgunOn1,

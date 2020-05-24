@@ -93,6 +93,7 @@ namespace InGame {
 
 		bool inDamageWormFirst = true;
 		bool onShotgun = false;
+		bool onDonkey = false;
 		int curWorm;
 
 		void init(int entityID)
@@ -231,6 +232,10 @@ namespace InGame {
 					{
 						onShotgun = true;
 					}
+					if (std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(curWorm)->GetStat(WormInfo::SelectedItem)) == ItemInfo::Donkey)
+					{
+						onDonkey = true;
+					}
 				}
 
 				std::vector<int> damagedWorm;
@@ -287,9 +292,61 @@ namespace InGame {
 						inDamageWormFirst = true;
 						handled = true;
 					}
+				}
+				else if (onDonkey)
+				{
+					int donkeyId = Gear::EntitySystem::GetEntityIDFromName("Donkey");
+					if (Gear::EntitySystem::IsEntityActivated(donkeyId))
+					{
+						return;
+					}
 
-
-					//
+					for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
+					{
+						auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
+						if (curState != WormState::OnNothing && curState != WormState::OnNotMyTurn)
+						{
+							if (WorldWormData::s_LivingWorms[i] == curWorm)
+							{
+								continue;
+							}
+							else
+							{
+								return;
+							}
+						}
+						if (std::any_cast<int>(Gear::EntitySystem::GetStatus(WorldWormData::s_LivingWorms[i])->GetStat(WormInfo::Damage)));
+						{
+							damagedWorm.push_back(WorldWormData::s_LivingWorms[i]);
+						}
+					}
+					if (damagedWorm.size())
+					{
+						for (int i = 0; i < damagedWorm.size(); ++i)
+						{
+							auto status = Gear::EntitySystem::GetStatus(damagedWorm[i]);
+							auto timer = Gear::EntitySystem::GetTimer(damagedWorm[i]);
+							timer->SetTimer(1.0f);
+							timer->Start();
+							GR_TRACE("dispatch damage {0}", Gear::EntitySystem::GetEntity(damagedWorm[i])->GetName());
+							status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
+							Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
+							worldTimer->SetTimer(3.0f);
+							worldTimer->Start();
+							onDonkey = false;
+							inDamageWormFirst = true;
+							handled = true;
+						}
+					}
+					else
+					{
+						Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
+						worldTimer->SetTimer(1.0f);
+						worldTimer->Start();
+						onDonkey = false;
+						inDamageWormFirst = true;
+						handled = true;
+					}
 				}
 				else
 				{

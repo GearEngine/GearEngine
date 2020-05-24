@@ -14,9 +14,9 @@ namespace InGame {
 
 		Gear::EntitySystem::SetFSM(m_ID, {
 			{ WindowSelectorState::OnNothing, new OnNotingSelectHandler  },
-			{ WindowSelectorState::OnDropSelect, new OnNotingSelectHandler  },
+			{ WindowSelectorState::OnDropSelect, new OnDropSelectHandler  },
 			{ WindowSelectorState::OnUtilSelect, new OnUtilSelectHandler  }
-			});
+		});
 
 		Gear::EntitySystem::SetStatus(m_ID, {
 			{ WindowSelectorStat::FromID , -1 },
