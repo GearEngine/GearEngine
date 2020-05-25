@@ -106,14 +106,15 @@ namespace InGame {
 						else
 						{
 							int curWorm = std::any_cast<int>(Gear::EntitySystem::GetStatus(entityID)->GetStat(WorldInfo::CurrentWormID));
-							
-							if (std::any_cast<int>(Gear::EntitySystem::GetStatus(curWorm)->GetStat(WormInfo::ShotgunUseCnt)) != 1)
+							int shotgunCnt = std::any_cast<int>(Gear::EntitySystem::GetStatus(curWorm)->GetStat(WormInfo::ShotgunUseCnt));
+							if (shotgunCnt != 1)
 							{
 								Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewStart)));
 							}
 							else
 							{
 								auto timer = Gear::EntitySystem::GetEntityIDFromName("Timer");
+								Gear::EntitySystem::ActivateComponent(curWorm, { Gear::ComponentID::Controller });
 								Gear::EntitySystem::GetStatus(timer)->PushNeedHandleData(3, Gear::Status::StatHandleData(0));
 								return WorldState::OnRunning;
 							}

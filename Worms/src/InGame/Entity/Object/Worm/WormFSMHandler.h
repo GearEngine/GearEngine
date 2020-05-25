@@ -964,7 +964,6 @@ namespace InGame {
 				break;
 			}
 			animator->ResumeAnimation();
-
 			Gear::EventSystem::DispatchEventOnce(EventType::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::DamageWorm)));
 
 			return WormState::OnNothing;
@@ -1282,7 +1281,7 @@ namespace InGame {
 					{
 						initWindowSelect = true;
 						auto windowSelector = Gear::EntitySystem::GetEntityIDFromName("WindowSelector");
-						Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, WindowSelectData(entityID, WindowSelctorType::Util, curItem)), windowSelector);
+						Gear::EventSystem::DispatchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, WindowSelectData(entityID, WindowSelctorType::Util, curItem)), windowSelector);
 					}
 					return WormState::OnReadyItemUse;
 				}
@@ -1292,7 +1291,7 @@ namespace InGame {
 					{
 						initWindowSelect = true;
 						auto windowSelector = Gear::EntitySystem::GetEntityIDFromName("WindowSelector");
-						Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, WindowSelectData(entityID, WindowSelctorType::Drop, curItem)), windowSelector);
+						Gear::EventSystem::DispatchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, WindowSelectData(entityID, WindowSelctorType::Drop, curItem)), windowSelector);
 					}
 					return WormState::OnReadyItemUse;
 				}
@@ -1385,6 +1384,7 @@ namespace InGame {
 				{
 					timerStatus->PushNeedHandleData(2, Gear::Status::StatHandleData(0));
 					PLAY_SOUND_NAME("SHOTGUNRELOAD", WormsSound::wormSpeech);
+					Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
 					return WormState::OnUseShotgun;
 				}
 				else if (curItem == ItemInfo::Number::Teleport)
@@ -1708,7 +1708,7 @@ namespace InGame {
 						Gear::EntitySystem::GetStatus(timerID)->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
 						Status->PushNeedHandleData(WormStatusHandleType::Teleport, Gear::Status::StatHandleData(0));
 						int ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
-						Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(ItemInfo::Teleport, teamName)), ItemSelectorID);
+						Gear::EventSystem::DispatchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(ItemInfo::Teleport, teamName)), ItemSelectorID);
 						OnOut(entityID);
 						return WormState::OnAir;
 					}
@@ -1740,7 +1740,7 @@ namespace InGame {
 						int timerID = Gear::EntitySystem::GetEntityIDFromName("Timer");
 						Gear::EntitySystem::GetStatus(timerID)->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
 						int ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
-						Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(ItemInfo::Donkey, teamName)), ItemSelectorID);
+						Gear::EventSystem::DispatchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(ItemInfo::Donkey, teamName)), ItemSelectorID);
 						Status->SetStat(WormInfo::MyTurn, false);
 						OnOut(entityID);
 						return WormState::OnNotMyTurn;
@@ -1963,7 +1963,7 @@ namespace InGame {
 					status->SetStat(WormInfo::ShotgunUseCnt, 0);
 					int timerID = Gear::EntitySystem::GetEntityIDFromName("Timer");
 					int ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
-					Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(ItemInfo::Shotgun, teamName)), ItemSelectorID);
+					Gear::EventSystem::DispatchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(ItemInfo::Shotgun, teamName)), ItemSelectorID);
 					Gear::EntitySystem::GetStatus(timerID)->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
 					return WormState::OnItemWithdraw;
 				}
@@ -2420,7 +2420,7 @@ namespace InGame {
 					AfterShoot(entityID);
 					auto teamName = std::any_cast<std::string>(status->GetStat(WormInfo::TeamName));
 					int ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
-					Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(weapon, teamName)), ItemSelectorID);
+					Gear::EventSystem::DispatchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(weapon, teamName)), ItemSelectorID);
 
 					OnOut(entityID);
 					return WormState::OnItemWithdraw;
@@ -2455,7 +2455,7 @@ namespace InGame {
 			AfterShoot(entityID);
 			auto teamName = std::any_cast<std::string>(status->GetStat(WormInfo::TeamName));
 			int ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
-			Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(weapon, teamName)), ItemSelectorID);
+			Gear::EventSystem::DispatchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(weapon, teamName)), ItemSelectorID);
 
 			OnOut(entityID);
 			return WormState::OnItemWithdraw;

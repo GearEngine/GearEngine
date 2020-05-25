@@ -18,7 +18,5 @@ namespace InGame {
 		
 		int m_ID;
 
-		static Gear::Ref<WormExplosionEventHandler> s_ExplosionEventHandler;
-		static Gear::Ref<WormWorldEventHandler> s_WorldEventHandler;
 	};
 }

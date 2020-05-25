@@ -41,7 +41,7 @@ namespace InGame {
 			}
 			power = explosion.Power;
 			int worldID = Gear::EntitySystem::GetEntityIDFromName("World");
-			Gear::EventSystem::DisaptchEventTo(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::DamageWorm)), worldID);
+			Gear::EventSystem::DispatchEventOnceTo(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::DamageWorm)), worldID);
 
 			if (distance < radius)
 			{

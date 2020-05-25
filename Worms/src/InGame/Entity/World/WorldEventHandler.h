@@ -366,13 +366,13 @@ namespace InGame {
 							timer->Start();
 							GR_TRACE("dispatch damage {0}", Gear::EntitySystem::GetEntity(damagedWorm[i])->GetName());
 							status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
-							Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
-							worldTimer->SetTimer(3.0f);
-							worldTimer->Start();
-							onShotgun = false;
-							inDamageWormFirst = true;
-							handled = true;
 						}
+						Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
+						worldTimer->SetTimer(3.0f);
+						worldTimer->Start();
+						onShotgun = false;
+						inDamageWormFirst = true;
+						handled = true;
 					}
 					else
 					{

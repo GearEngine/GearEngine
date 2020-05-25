@@ -40,6 +40,15 @@ namespace InGame {
 				handled = true;
 				return;
 			}
+			
+			int curWorm = std::any_cast<int>(Gear::EntitySystem::GetStatus(worldID)->GetStat(WorldInfo::CurrentWormID));
+			if (std::any_cast<int>(Gear::EntitySystem::GetStatus(curWorm)->GetStat(WormInfo::ShotgunUseCnt)) == 1)
+			{
+				handled = true;
+				PLAY_SOUND_NAME("WARNINGBEEP", WormsSound::effect);
+				return;
+			}
+
 			if (curState == ItemSelectorInfo::State::OnNotActivate)
 			{
 				GR_TRACE("On Item Selector Get Right Button Click Event");

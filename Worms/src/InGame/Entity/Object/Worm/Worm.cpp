@@ -7,9 +7,6 @@
 
 namespace InGame {
 
-	Gear::Ref<WormExplosionEventHandler> Worm::s_ExplosionEventHandler = Gear::CreateRef<WormExplosionEventHandler>();
-	Gear::Ref<WormWorldEventHandler> Worm::s_WorldEventHandler = Gear::CreateRef<WormWorldEventHandler>();
-
 	Worm::Worm(int teamNumber, int wormNumber, const InitiateData& initData)
 	{
 		auto teamData = initData.Teams[teamNumber];
@@ -377,7 +374,6 @@ namespace InGame {
 			{ WormState::OnRightDying, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("RightWormDying"), 0.02f, dyingAniOrder, false)},
 			{ WormState::OnLeftDying, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("LeftWormDying"), 0.02f, dyingAniOrder, false)},
 
-			//{ WormState::OnUseItem,	Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("OnUseItem"), 0.02f, true)},
 		});
 		
 		//Set Transform
@@ -505,8 +501,8 @@ namespace InGame {
 		//Subscpribe EventChannel
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::Explosion);
 		Gear::EventSystem::SubscribeChannel(m_ID, EventChannel::World);
-		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::Explosion, s_ExplosionEventHandler);
-		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::World, s_WorldEventHandler);
+		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::World, Gear::CreateRef<WormWorldEventHandler>());
+		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::Explosion, Gear::CreateRef<WormExplosionEventHandler>());
 
 		auto animator = Gear::EntitySystem::GetAnimator2D(m_ID);
 		switch (wormData.Direction)
@@ -521,7 +517,8 @@ namespace InGame {
 			break;
 		}
 		
-		Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::CreatedWorm, 0, m_ID)));
+		auto worldID = Gear::EntitySystem::GetEntityIDFromName("World");
+		Gear::EventSystem::DispatchEventTo(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::CreatedWorm, 0, m_ID)), worldID);
 	}
 
 	Worm::~Worm()
