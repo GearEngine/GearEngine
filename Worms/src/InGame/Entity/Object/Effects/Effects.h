@@ -65,6 +65,54 @@ namespace InGame {
 		};
 	}
 
+	class Spangle
+	{
+	private:
+		void init(TeamColor::Color teamColor);
+	public:
+		void init(const glm::vec2& worldPosition);
+		void Update(Gear::Timestep ts);
+		void Render();
+
+		glm::vec3 m_Scale;
+		glm::mat4 m_Transform;
+
+		Gear::Ref<Gear::FrameTexture2D> m_Texture;
+		int m_StartIndex;
+		int m_TextureIndex;
+
+		const float m_FrameDelay = 0.01f;
+		float m_PastTime = 0.0f;
+		bool m_OnUsing = false;
+
+		friend class EffectPool;
+	};
+	
+	class Marker
+	{
+	private:
+		void init(TeamColor::Color teamColor);
+	public:
+		void init(const glm::vec2& worldPosition);
+		void Update(Gear::Timestep ts);
+		void Render();
+
+		glm::vec3 m_Scale;
+		glm::mat4 m_Transform;
+
+		Gear::Ref<Gear::FrameTexture2D> m_Texture;
+		int m_StartIndex;
+		int m_TextureIndex;
+
+		const float m_FrameDelay = 0.01f;
+		float m_PastTime = 0.0f;
+		int m_LoopCount = 0;
+		bool m_OnUsing = false;
+		bool m_OnReverse = false;
+
+		friend class EffectPool;
+	};
+
 	class Smoke
 	{
 	private:
@@ -277,14 +325,21 @@ namespace InGame {
 		static Gear::Ref<FlameBundle> GetFlame(Explosion::Size size);
 		static Gear::Ref<Smoke> GetSmoke(Explosion::SmokeSize size);
 		static Gear::Ref<Exhaust> GetExhuast(ExhaustType::Type type);
+		static Gear::Ref<Spangle> GetSpangle(TeamColor::Color color);
+		static Gear::Ref<Marker> GetMarker(TeamColor::Color color);
 
 		static void pushExplosion(Gear::Ref<ExplosionEffect> explosion);
 		static void pushExplosionSmoke(Gear::Ref<ExplosionSmokeBunddle> explosionSmoke);
 		static void pushFlame(Gear::Ref<FlameBundle> flame);
+		static void pushSpangle(Gear::Ref<Spangle> spangle);
+		static void pushMarker(Gear::Ref<Marker> spangle);
 
 	public:
 		static std::vector<Gear::Ref<Blob>> s_BlobPool;
 		static int s_BlobPtr;
+		
+		static std::vector<Gear::Ref<Spangle>> s_Spangle;
+		static std::vector<Gear::Ref<Marker>> s_Marker;
 		
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Ex25;
 

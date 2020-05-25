@@ -34,6 +34,12 @@ namespace InGame {
 		Gear::Renderer2D::BeginScene(m_Camera->m_CameraController->GetCamera());
 		m_TurnChecker->Render();
 		m_WindChecker->Render(ts);
+
+		if (Gear::Input::IsKeyPressd(GR_KEY_ESCAPE))
+		{
+			PLAY_SOUND_NAME("UnFreeze", WormsSound::effect);
+			Gear::EntitySystem::GetFSM(m_World->m_ID)->SetCurrentState(WorldState::OnGameDraw);
+		}
 	}
 
 	void UILayer::OnImGuiRender()

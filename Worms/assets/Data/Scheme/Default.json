@@ -1,0 +1,51 @@
+{
+  "IndexCount": 8,
+  "0": {
+    "ItemNumber": 5,
+    "Name": "Bazooka",
+    "Quantity": -1,
+    "RemainTurn": 0
+  },
+  "1": {
+    "ItemNumber": 10,
+    "Name": "Grenade",
+    "Quantity": -1,
+    "RemainTurn": 0
+  },
+  "2": {
+    "ItemNumber": 15,
+    "Name": "Shotgun",
+    "Quantity": -1,
+    "RemainTurn": 0
+  },
+  "3": {
+    "ItemNumber": 12,
+    "Name": "Banana",
+    "Quantity": 1,
+    "RemainTurn": 3
+  },
+  "4": {
+    "ItemNumber": 43,
+    "Name": "Teleport",
+    "Quantity": 2,
+    "RemainTurn": 2
+  },
+  "5": {
+    "ItemNumber": 60,
+    "Name": "Skip Go",
+    "Quantity": -1,
+    "RemainTurn": 0
+  },
+  "6": {
+    "ItemNumber": 61,
+    "Name": "Surrender",
+    "Quantity": -1,
+    "RemainTurn": 0
+  },
+  "7": {
+    "ItemNumber": 57,
+    "Name": "Donkey",
+    "Quantity": 1,
+    "RemainTurn": 4
+  }
+}

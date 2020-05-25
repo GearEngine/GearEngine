@@ -146,6 +146,32 @@ namespace Gear {
 
 			data.Read(value);
 		}
+		template<typename T>
+		void ReadVector(const std::string& path, std::vector<T>& vector)
+		{
+			TypeCheck<T>();
+
+			std::string fullpath = GetFullPath(path);
+			if (fullpath.empty() || !std::experimental::filesystem::is_regular_file(fullpath))
+			{
+				GR_CORE_ASSERT(false, "JsonManager::Read {0} does't exist!", fullpath);
+				return;
+			}
+
+			std::ifstream input(fullpath, std::ifstream::binary);
+			Json::Reader reader;
+			Json::Value value;
+			reader.parse(input, value);
+			input.close();
+
+			int count = value["IndexCount"].asInt();
+			for (int i = 0; i < count; ++i)
+			{
+				T data;
+				data.Read(value[std::to_string(i)]);
+				vector.push_back(data);
+			}
+		}
 
 		template<typename T>
 		void Write(const std::string& path, T& data)

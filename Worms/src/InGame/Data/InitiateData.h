@@ -223,8 +223,9 @@ namespace InGame {
 			return false;
 		}
 
-		struct ItemDescprition
+		struct ItemDescprition : public Gear::JsonAble
 		{
+			ItemDescprition() = default;
 			ItemDescprition(Number number, const std::string& name, int quantity, int remainTurn)
 				: ItemNumber(number), Name(name), Quantity(quantity), RemainTurn(remainTurn)
 			{
@@ -238,6 +239,23 @@ namespace InGame {
 			glm::mat4 Translate;
 			int Quantity;
 			int RemainTurn;
+
+			virtual void Read(const Json::Value& value) override
+			{
+				ItemNumber = (Number)value["ItemNumber"].asUInt();
+				Name = value["Name"].asString();
+				Quantity = value["Quantity"].asInt();
+				RemainTurn = value["RemainTurn"].asInt();
+				Texture = Gear::TextureStorage::GetTexture2D(Name);
+			}
+			virtual void Write(Json::Value& value) override
+			{
+				value["ItemNumber"] = (unsigned int)ItemNumber;
+				value["Name"] = Name;
+				value["Quantity"] = Quantity;
+				value["RemainTurn"] = RemainTurn;
+			}
+
 		};
 	}
 

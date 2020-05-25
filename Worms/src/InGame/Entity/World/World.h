@@ -20,6 +20,8 @@ namespace InGame {
 
 	private:
 		int m_ID;
+
+		friend class UILayer;
 	};
 
 }

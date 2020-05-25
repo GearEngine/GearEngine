@@ -47,6 +47,8 @@ namespace InGame {
 	}
 
 	std::vector<Gear::Ref<Blob>> EffectPool::s_BlobPool = std::vector<Gear::Ref<Blob>>(EFFECT_POOL_MAX);
+	std::vector<Gear::Ref<Spangle>> EffectPool::s_Spangle = std::vector<Gear::Ref<Spangle>>();
+	std::vector<Gear::Ref<Marker>> EffectPool::s_Marker = std::vector<Gear::Ref<Marker>>();
 
 	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex25 = std::vector<Gear::Ref<ExplosionEffect>>();
 	std::vector<Gear::Ref<ExplosionEffect>> EffectPool::s_Ex50Foom = std::vector<Gear::Ref<ExplosionEffect>>();
@@ -116,6 +118,22 @@ namespace InGame {
 		{
 			s_BlobPool[i].reset(new Blob);
 			s_BlobPool[i]->m_BlobTexture = Gear::TextureStorage::GetFrameTexture2D("Blob");
+		}
+
+		//spangle
+		s_Spangle.resize(6);
+		for(int i = TeamColor::Red ; i <= TeamColor::Sky; ++i)
+		{
+			s_Spangle[i - TeamColor::Red].reset(new Spangle);
+			s_Spangle[i - TeamColor::Red]->init((TeamColor::Color)i);
+		}
+
+		//Marker
+		s_Marker.resize(6);
+		for (int i = TeamColor::Red; i <= TeamColor::Sky; ++i)
+		{
+			s_Marker[i - TeamColor::Red].reset(new Marker);
+			s_Marker[i - TeamColor::Red]->init((TeamColor::Color)i);
 		}
 
 		//Explosion
@@ -722,6 +740,46 @@ namespace InGame {
 			return nullptr;
 		}
 
+		Gear::Ref<Spangle> EffectPool::GetSpangle(TeamColor::Color color)
+		{
+			switch (color)
+			{
+			case InGame::TeamColor::Red:
+				return s_Spangle[0];
+			case InGame::TeamColor::Blue:
+				return s_Spangle[1];
+			case InGame::TeamColor::Green:
+				return s_Spangle[2];
+			case InGame::TeamColor::Yellow:
+				return s_Spangle[3];
+			case InGame::TeamColor::Purple:
+				return s_Spangle[4];
+			case InGame::TeamColor::Sky:
+				return s_Spangle[5];
+			}
+			return nullptr;
+		}
+
+		Gear::Ref<Marker> EffectPool::GetMarker(TeamColor::Color color)
+		{
+			switch (color)
+			{
+			case InGame::TeamColor::Red:
+				return s_Marker[0];
+			case InGame::TeamColor::Blue:
+				return s_Marker[1];
+			case InGame::TeamColor::Green:
+				return s_Marker[2];
+			case InGame::TeamColor::Yellow:
+				return s_Marker[3];
+			case InGame::TeamColor::Purple:
+				return s_Marker[4];
+			case InGame::TeamColor::Sky:
+				return s_Marker[5];
+			}
+			return nullptr;
+		}
+
 		void EffectPool::pushExplosion(Gear::Ref<ExplosionEffect> explosion)
 		{
 			ObjectLayer::s_Explosion.push_back(explosion);
@@ -735,6 +793,16 @@ namespace InGame {
 		void EffectPool::pushFlame(Gear::Ref<FlameBundle> flame)
 		{
 			ObjectLayer::s_Flames.push_back(flame);
+		}
+
+		void EffectPool::pushSpangle(Gear::Ref<Spangle> spangle)
+		{
+			ObjectLayer::s_Spangle.push_back(spangle);
+		}
+
+		void EffectPool::pushMarker(Gear::Ref<Marker> marker)
+		{
+			ObjectLayer::s_Marker.push_back(marker);
 		}
 
 
@@ -1117,6 +1185,12 @@ namespace InGame {
 			m_Translate[3][0] += m_ExternalVector.x;
 			m_Translate[3][1] += m_ExternalVector.y;
 
+			if (m_Translate[3][1] < -13.0f)
+			{
+				PLAY_SOUND_NAME("SIZZLE", WormsSound::flame);
+				m_OnUsing = false;
+			}
+
 			if (m_PastTime > m_FrameDelay)
 			{
 				m_PastTime = 0.0f;
@@ -1320,4 +1394,141 @@ namespace InGame {
 			}
 		}
 
-	}
+		void Spangle::init(TeamColor::Color teamColor)
+		{
+			switch (teamColor)
+			{
+			case InGame::TeamColor::Red:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("spangler");
+				break;
+			case InGame::TeamColor::Blue:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("spangleb");
+				break;
+			case InGame::TeamColor::Green:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("spangleg");
+				break;
+			case InGame::TeamColor::Yellow:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("spangley");
+				break;
+			case InGame::TeamColor::Purple:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("spanglep");
+				break;
+			case InGame::TeamColor::Sky:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("spanglec");
+				break;
+			}
+			int width = m_Texture->GetWidth();
+			int height = m_Texture->GetHeight();
+			m_Scale = glm::vec3(width / 60.0f * 1.8f, height / 60.0f  * 1.8f, 1.0f);
+		}
+
+		void Spangle::init(const glm::vec2 & worldPosition)
+		{
+			m_Transform = glm::translate(glm::mat4(1.0f), glm::vec3(worldPosition, ZOrder::z_Cursor - 0.1f)) * glm::scale(glm::mat4(1.0f), m_Scale);;
+			m_OnUsing = true;
+			m_PastTime = 0.0f;
+			m_TextureIndex = 30;
+		}
+
+		void Spangle::Update(Gear::Timestep ts)
+		{
+			m_PastTime += ts;
+
+			if (m_PastTime > m_FrameDelay)
+			{
+				m_PastTime = 0.0f;
+				--m_TextureIndex;
+				if (m_TextureIndex < 0)
+				{
+					m_OnUsing = false;
+				}
+			}
+		}
+
+		void Spangle::Render()
+		{
+			if (m_OnUsing)
+			{
+				Gear::Renderer2D::DrawFrameQuad(m_Transform, m_Texture, 0, m_TextureIndex);
+			}
+		}
+
+		void Marker::init(TeamColor::Color teamColor)
+		{
+			switch (teamColor)
+			{
+			case InGame::TeamColor::Red:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("markerr");
+				break;
+			case InGame::TeamColor::Blue:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("markerb");
+				break;
+			case InGame::TeamColor::Green:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("markerg");
+				break;
+			case InGame::TeamColor::Yellow:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("markery");
+				break;
+			case InGame::TeamColor::Purple:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("markerp");
+				break;
+			case InGame::TeamColor::Sky:
+				m_Texture = Gear::TextureStorage::GetFrameTexture2D("markerc");
+				break;
+			}
+			int width = m_Texture->GetWidth();
+			int height = m_Texture->GetHeight();
+			m_Scale = glm::vec3(width / 60.0f * 1.8f, height / 60.0f  * 1.8f, 1.0f);
+		}
+
+		void Marker::init(const glm::vec2 & worldPosition)
+		{
+			m_Transform = glm::translate(glm::mat4(1.0f), glm::vec3(worldPosition, ZOrder::z_Cursor - 0.1f)) * glm::scale(glm::mat4(1.0f), m_Scale);;
+			m_OnUsing = true;
+			m_OnReverse = false;
+			m_PastTime = 0.0f;
+			m_LoopCount = 0;
+			m_TextureIndex = 9;
+		}
+
+		void Marker::Update(Gear::Timestep ts)
+		{
+			if (m_LoopCount == 4)
+			{
+				m_OnUsing = false;
+			}
+
+			m_PastTime += ts;
+			if (m_PastTime > m_FrameDelay)
+			{
+				if (m_OnReverse)
+				{
+					++m_TextureIndex;
+					if (m_TextureIndex > 9)
+					{
+						m_TextureIndex = 9;
+						m_OnReverse = false;
+						++m_LoopCount;
+					}
+				}
+				else
+				{
+					--m_TextureIndex;
+					if (m_TextureIndex < 0)
+					{
+						m_TextureIndex = 0;
+						m_OnReverse = true;
+					}
+				}
+			}
+		}
+
+		void Marker::Render()
+		{
+			if (m_OnUsing)
+			{
+				Gear::Renderer2D::DrawFrameQuad(m_Transform, m_Texture, 0, m_TextureIndex);
+			}
+		}
+
+}

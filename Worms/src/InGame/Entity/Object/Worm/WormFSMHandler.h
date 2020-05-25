@@ -995,6 +995,7 @@ namespace InGame {
 		Gear::Ref<Gear::Physics2D> physics;
 		Gear::Ref<Gear::Timer> timer;
 		Gear::Ref<Gear::Status> worldStatus;
+		Gear::Ref<Gear::FSM> worldFSM;
 		std::string itemStr;
 		bool canChangeTime = false;
 
@@ -1013,6 +1014,7 @@ namespace InGame {
 			timerStatus = Gear::EntitySystem::GetStatus(timerCheckerID);
 			worldID = Gear::EntitySystem::GetEntityIDFromName("World");
 			worldStatus = Gear::EntitySystem::GetStatus(worldID);
+			worldFSM = Gear::EntitySystem::GetFSM(worldID);
 			OnAwake = false;
 		}
 
@@ -1331,6 +1333,15 @@ namespace InGame {
 						animator->SetFrameY((int)31 - firstFireAngle);
 					}
 				}
+			}
+
+			if (!afterReadyAni)
+			{
+				return WormState::OnReadyItemUse;
+			}
+			if (curItem == ItemInfo::Number::Shotgun && worldFSM->GetCurrentState() == WorldState::OnWaiting)
+			{
+				return WormState::OnReadyItemUse;
 			}
 
 			if (cmd.KeyType == WormCommand::BackJump)
@@ -1730,8 +1741,9 @@ namespace InGame {
 						Gear::EntitySystem::GetStatus(timerID)->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
 						int ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
 						Gear::EventSystem::DisaptchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(ItemInfo::Donkey, teamName)), ItemSelectorID);
+						Status->SetStat(WormInfo::MyTurn, false);
 						OnOut(entityID);
-						return WormState::OnNothing;
+						return WormState::OnNotMyTurn;
 					}
 				}
 			}
@@ -1760,7 +1772,7 @@ namespace InGame {
 
 		inline void Awake(int entityID) override
 		{
-			noneHitPosition.x = -1000.0f;
+			noneHitPosition.x = 1000.0f;
 			noneHitPosition.y = 0.0f;
 			
 			animator = Gear::EntitySystem::GetAnimator2D(entityID);

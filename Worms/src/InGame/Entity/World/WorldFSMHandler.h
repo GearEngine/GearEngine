@@ -257,7 +257,7 @@ namespace InGame {
 			{
 				pastTime += timer->GetTick();
 			}
-			return WorldState::OnGameVictory;
+			return WorldState::OnGameDraw;
 		}
 	};
 

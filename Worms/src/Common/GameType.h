@@ -643,7 +643,7 @@ namespace WormsSound
 {
 	enum Channel : unsigned int
 	{
-		bgm, effect, wormSpeech, wormWalk, wormAct, Weapon, Water, Grave, Mouse
+		bgm, effect, wormSpeech, wormWalk, wormAct, Weapon, Water, Grave, Mouse, flame
 	};
 
 }

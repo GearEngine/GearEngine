@@ -298,6 +298,7 @@ namespace InGame {
 					int donkeyId = Gear::EntitySystem::GetEntityIDFromName("Donkey");
 					if (Gear::EntitySystem::IsEntityActivated(donkeyId))
 					{
+						handled = true;
 						return;
 					}
 
@@ -306,16 +307,9 @@ namespace InGame {
 						auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
 						if (curState != WormState::OnNothing && curState != WormState::OnNotMyTurn)
 						{
-							if (WorldWormData::s_LivingWorms[i] == curWorm)
-							{
-								continue;
-							}
-							else
-							{
-								return;
-							}
+							return;
 						}
-						if (std::any_cast<int>(Gear::EntitySystem::GetStatus(WorldWormData::s_LivingWorms[i])->GetStat(WormInfo::Damage)));
+						if (curState == WormState::OnNothing)
 						{
 							damagedWorm.push_back(WorldWormData::s_LivingWorms[i]);
 						}

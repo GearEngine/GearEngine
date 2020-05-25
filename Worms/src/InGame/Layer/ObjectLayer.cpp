@@ -19,6 +19,8 @@ namespace InGame {
 	std::vector<Gear::Ref<ExplosionEffect>> ObjectLayer::s_Explosion = std::vector<Gear::Ref<ExplosionEffect>>();
 	std::vector<Gear::Ref<ExplosionSmokeBunddle>> ObjectLayer::s_ExplosionSmoke = std::vector<Gear::Ref<ExplosionSmokeBunddle>>();
 	std::vector<Gear::Ref<FlameBundle>> ObjectLayer::s_Flames = std::vector<Gear::Ref<FlameBundle>>();
+	std::vector<Gear::Ref<Spangle>> ObjectLayer::s_Spangle = std::vector<Gear::Ref<Spangle>>();
+	std::vector<Gear::Ref<Marker>> ObjectLayer::s_Marker = std::vector<Gear::Ref<Marker>>();
 	std::list<Gear::Ref<Smoke>> ObjectLayer::s_Smokes = std::list<Gear::Ref<Smoke>>();
 	std::list<Gear::Ref<Exhaust>> ObjectLayer::s_Exhausts = std::list<Gear::Ref<Exhaust>>();
 
@@ -100,6 +102,44 @@ namespace InGame {
 			for (auto& explosion : s_Explosion)
 			{
 				explosion->Render();
+			}
+		}
+		if (s_Spangle.size())
+		{
+			for (auto spangle = s_Spangle.begin(); spangle != s_Spangle.end(); )
+			{
+				(*spangle)->Update(ts);
+				if (!(*spangle)->m_OnUsing)
+				{
+					spangle = s_Spangle.erase(spangle);
+				}
+				else
+				{
+					++spangle;
+				}
+			}
+			for (auto& spangle : s_Spangle)
+			{
+				spangle->Render();
+			}
+		}
+		if (s_Marker.size())
+		{
+			for (auto marker = s_Marker.begin(); marker != s_Marker.end(); )
+			{
+				(*marker)->Update(ts);
+				if (!(*marker)->m_OnUsing)
+				{
+					marker = s_Marker.erase(marker);
+				}
+				else
+				{
+					++marker;
+				}
+			}
+			for (auto& marker : s_Marker)
+			{
+				marker->Render();
 			}
 		}
 		if (s_ExplosionSmoke.size())

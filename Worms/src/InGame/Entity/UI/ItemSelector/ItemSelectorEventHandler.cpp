@@ -80,7 +80,19 @@ namespace InGame {
 				return;
 			}
 
-			PLAY_SOUND_NAME("CursorSelect", WormsSound::Mouse);
+			
+			if (SettedItem == ItemInfo::Number::ItemEnd)
+			{
+				PLAY_SOUND_NAME("WARNINGBEEP", WormsSound::Mouse);
+				handled = true;
+				return;
+			}
+			else
+			{
+				PLAY_SOUND_NAME("CursorSelect", WormsSound::Mouse);
+			}
+
+
 			auto currentWormName = std::any_cast<std::string>(Gear::EntitySystem::GetStatus(worldID)->GetStat(WorldInfo::CurrentWormName));
 			auto currentTeamName = std::any_cast<std::string>(Gear::EntitySystem::GetStatus(worldID)->GetStat(WorldInfo::CurrnetTeam));
 			

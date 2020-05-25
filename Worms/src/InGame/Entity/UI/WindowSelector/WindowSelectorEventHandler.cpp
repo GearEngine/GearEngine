@@ -3,6 +3,7 @@
 
 #include "InGame/Entity/UI/Mouse/MouseFSMHandler.h"
 #include "InGame/Entity/Object/Worm/WormEnum.h"
+#include "InGame/Entity/Object/Effects/Effects.h"
 
 namespace InGame {
 
@@ -106,6 +107,11 @@ namespace InGame {
 			}
 			else
 			{
+				auto teamColor = std::any_cast<TeamColor::Color>(Gear::EntitySystem::GetStatus(from)->GetStat(WormInfo::TeamColor));
+				auto spangle = EffectPool::GetSpangle(teamColor);
+				spangle->init(worldPos);
+				EffectPool::pushSpangle(spangle);
+
 				PLAY_SOUND_NAME("Communicator", WormsSound::effect);
 				Gear::EntitySystem::GetFSM(from)->GetHandler(WormState::OnReadyItemUse)->OnOut(from);
 				Gear::EntitySystem::GetStatus(from)->SetStat(WormInfo::WindowPickedPoint, worldPos);
@@ -129,6 +135,11 @@ namespace InGame {
 			auto worldPos = Gear::Coord2DManger::Get()->GetWorldPosition_From_ScreenPosition(mouseScreenPos);
 
 			auto from = std::any_cast<int>(Status->GetStat(WindowSelectorStat::FromID));
+
+			auto teamColor = std::any_cast<TeamColor::Color>(Gear::EntitySystem::GetStatus(from)->GetStat(WormInfo::TeamColor));
+			auto marker = EffectPool::GetMarker(teamColor);
+			marker->init(worldPos);
+			EffectPool::pushMarker(marker);
 
 			PLAY_SOUND_NAME("CursorSelect", WormsSound::effect);
 			Gear::EntitySystem::GetFSM(from)->GetHandler(WormState::OnReadyItemUse)->OnOut(from);

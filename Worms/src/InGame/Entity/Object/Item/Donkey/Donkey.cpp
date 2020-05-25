@@ -32,7 +32,7 @@ namespace InGame {
 			* glm::scale(glm::mat4(1.0f), { width / initData.MapReductionRatio  , height / initData.MapReductionRatio , 1.0f });
 
 		Gear::EntitySystem::SetPhysics(m_ID, false, 0.4f, 3.0f);
-		Gear::EntitySystem::SetPixelCollision(m_ID, { 255, 255, 255 }, mask, maskTranslate, {
+		Gear::EntitySystem::SetPixelCollision(m_ID, { 255.0f, 255.0f, 255.0f }, mask, maskTranslate, {
 			{ "DonkeyPC", Gear::CreateRef<DonkeyTypePCHandler>() },
 		});
 

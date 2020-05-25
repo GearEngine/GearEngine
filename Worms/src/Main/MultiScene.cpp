@@ -975,14 +975,9 @@ namespace Main {
 
 		//ItemSetting
 		std::vector<InGame::ItemInfo::ItemDescprition> itemList;
-		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Bazooka, "Bazooka", -1, 0));
-		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Grenade, "Grenade", -1, 0));
-		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Shotgun, "Shotgun", -1, 0));
-		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Banana, "Banana", 3, 0));
-		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Teleport, "Teleport", -1, 0));
-		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::SkipGo, "Skip Go", -1, 0));
-		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Surrender, "Surrender", -1, 0));
-		itemList.push_back(InGame::ItemInfo::ItemDescprition(InGame::ItemInfo::Donkey, "Donkey", -1, 0));
+		std::string SchemeName = "Free";
+		SchemeName += ".json";
+		Gear::JsonManager::Get()->ReadVector("assets\\Data\\Scheme\\" + SchemeName,itemList);
 
 		//BagicGameOption
 		initData.LimitTurnTime = BasicOption::GetTurnTime(OptionsIndex[BasicOption::Options::TurnTime]);

@@ -546,7 +546,7 @@ namespace InGame {
 		float wormOnTexturePositionX = textureLocalPosition.x * width;
 		float wormOnTexturePositionY = textureLocalPosition.y * height;
 
-		int basicYOffset = 8;
+		int basicYOffset = 5;
 		while (1)
 		{
 			int fixedBottomPos = (int)wormOnTexturePositionY - basicYOffset;
@@ -555,7 +555,7 @@ namespace InGame {
 				wormData.StartPosition.x = Gear::Util::GetRndFloatFromTo(-25.0f, 25.0f);
 				textureLocalPosition = coordManager->GetTextureLocalPosition_From_WorlPosition(glm::vec2(wormData.StartPosition.x, wormData.StartPosition.y), maskTranslate);
 				wormOnTexturePositionX = textureLocalPosition.x * width;
-				basicYOffset = 8;
+				basicYOffset = 5;
 				continue;
 			}
 
@@ -571,30 +571,11 @@ namespace InGame {
 					
 					if (pixel != targetPxiel)
 					{
-						/*auto adjacentPixelLeft = coordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(mask, { (int)wormOnTexturePositionX - 1, fixedBottomPos - 1 });
-						if (adjacentPixelLeft != targetPxiel)
-						{
-							adjacentCheck = false;
-							break;
-						}
-						auto adjacentPixelRight = coordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(mask, { (int)wormOnTexturePositionX + 1, fixedBottomPos - 1 });
-						if (adjacentPixelRight != targetPxiel)
-						{
-							adjacentCheck = false;
-							break;
-						}*/
-						//std::cout << "dispose" << wormData.Name << " worm coplete\n";
 						float localY = (fixedBottomPos - 1) / height - 0.5f;
 						wormData.StartPosition.y = maskTranslate[1][1] * localY + maskTranslate[3][1];
 						return;
 					}
 				}
-				/*if (!adjacentCheck)
-				{
-					wormOnTexturePositionX = Gear::Util::GetRndFloatFromTo(-1900.0f, 1900.0f);
-					basicYOffset = 8;
-					continue;
-				}*/
 			}
 			basicYOffset += 10;
 		}

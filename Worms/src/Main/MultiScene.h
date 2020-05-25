@@ -232,7 +232,7 @@ namespace Main {
 		BarracksLayer(const Gear::Util::FRect& borderRect)
 			: Gear::Layer("BarraksLayer"), BorderRect(borderRect)
 		{
-			teamInfolist = Gear::JsonManager::Get()->ReadAll<BasicTeamInfo>("assets\\Data\\TeamInfo2");
+			teamInfolist = Gear::JsonManager::Get()->ReadAll<BasicTeamInfo>("assets\\Data\\TeamInfo");
 			scrollerColor = glm::vec4(254.0f / 255.0f, 182.0f / 255.0f, 168.0f / 255.0f, 1.0f);
 
 			sortTeamInfoListName();
