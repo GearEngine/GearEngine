@@ -559,6 +559,7 @@ namespace Main_Multi {
 		CreateNewTeam,
 		StartGame,
 		Exit,
+		SchemeSelectorList,
 		Max
 	};
 }

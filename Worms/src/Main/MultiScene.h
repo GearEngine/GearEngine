@@ -198,6 +198,126 @@ namespace Main {
 		void MousePressLogic();
 	};
 
+	class SchemeListLayer : public Gear::Layer
+	{
+	public:
+		SchemeListLayer(glm::mat4 schemeSelectorTransform, glm::mat4* _schemeListTransform, bool* OnSchemeSelectorActivate)
+		{
+			schemeListTexture = Gear::TextureStorage::GetTexture2D("SchemeSelectorList");
+			float width = schemeListTexture->GetWidth();
+			float height = schemeListTexture->GetHeight();
+
+			onActivate = OnSchemeSelectorActivate;
+
+			for (int i = 0; i < 20; ++i)
+			{
+				schemeList.push_back("Defualt" + std::to_string(i));
+			}
+			curScheme = schemeList[highlighterIndex];
+			//schemeList.push_back("Defualt");
+			//schemeList.push_back("Free");
+			scrollerColor = glm::vec4(254.0f / 255.0f, 182.0f / 255.0f, 168.0f / 255.0f, 1.0f);
+
+			ScrollerTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.12f, 0.0f, 0.6f)) * glm::scale(glm::mat4(1.0f), glm::vec3(8 / 238.0f, 0.0f, 1.0f));
+
+			listIndexMax = schemeList.size();
+			maxListShowIndex = schemeList.size() - showMapNameMax;
+			schemeListTransform = glm::translate(glm::mat4(1.0f), glm::vec3(schemeSelectorTransform[3][0], schemeSelectorTransform[3][1] - schemeSelectorTransform[1][1] / 2 - height / 238.0f / 2.0f, 0.55f)) * glm::scale(glm::mat4(1.0f), glm::vec3(width / 238.0f, height / 238.0f, 1.0f));
+			schemeListRect.Set(schemeListTransform);
+			*_schemeListTransform = schemeListTransform;
+
+			MapSelectorDivideUnit = (height / 238.0f) / showMapNameMax;
+
+			listFieldTop = schemeListTransform[1][1] / 2 + schemeListTransform[3][1] - schemeSelectorTransform[1][1] / 2;
+
+			fieldTransforms.resize(showMapNameMax);
+			fieldRects.resize(showMapNameMax);
+			for (int i = 0; i < showMapNameMax; ++i)
+			{
+				fieldTransforms[i] = glm::translate(glm::mat4(1.0f), glm::vec3(fieldCenterX, listFieldTop - MapSelectorDivideUnit * i, 0.57f)) * glm::scale(glm::mat4(1.0f), glm::vec3(schemeSelectorTransform[0][0] - 0.07f, MapSelectorDivideUnit, 1.0f));
+				fieldRects[i].Set(fieldTransforms[i]);
+			}
+
+			RecalculateScrollerPos();
+			ScrollerRect.Set(ScrollerTransform);
+		}
+
+	public:
+		std::vector<std::string> schemeList;
+		std::string curScheme;
+
+		Gear::Ref<Gear::Texture2D> schemeListTexture;
+		Gear::Util::FRect schemeListRect;
+		glm::mat4 schemeListTransform;
+
+		//
+		Gear::Ref<Gear::Texture2D> Scroller;
+		glm::vec4 scrollerColor;
+		Gear::Util::FRect ScrollerRect;
+		glm::mat4 ScrollerTransform;
+
+		const float ScrollerTop = -0.24f;
+		const float ScrollerBottom = -0.8f;
+		float scrollerHighestYpos;
+		float scrollerLowestYpos;
+		float scrollerYOffset;
+		//
+		float listFieldTop;
+		float fieldCenterX = -0.6848f;
+		float fieldFront = -1.17f;
+
+		int curListShowIndex = 0;
+		int maxListShowIndex;
+		int listIndexMax;
+		int showMapNameMax = 12;
+
+		int highlighterIndex = 0;
+
+		std::vector<glm::mat4> fieldTransforms;
+		std::vector<Gear::Util::FRect> fieldRects;
+
+		float MapSelectorDivideUnit;
+
+		//KeyDown
+		float keyPastTime = 0.0f;
+		float keyPressDeleay = 0.05f;
+		bool keypressReady = true;
+
+		//MousePress
+		float mousePressPastTime = 0.0f;
+		float mousePressDelay = 0.1f;
+		bool MousePressReady = false;
+
+		bool* onActivate;
+		bool MouseOnListrect = false;
+		int* SelectedIndex;
+
+	public:
+		void RecalculateScrollerPos();
+
+		int GetShowIndex(int curIndex)
+		{
+			return curIndex - curListShowIndex;
+		}
+
+		int GetListIndex(int showIndex)
+		{
+			return showIndex + curListShowIndex;
+		}
+
+		void calcListShowIndex();
+		virtual void OnUpdate(Gear::Timestep ts) override;
+
+		virtual void OnEvent(Gear::Event& e) override;
+
+		bool OnMouseScrolled(Gear::MouseScrolledEvent & e);
+		bool OnMouseClick(Gear::MouseButtonReleasedEvent& e);
+
+		void KeyInputLogic();
+		void MousePressLogic();
+
+	};
+
 	class BarracksLayer : public Gear::Layer 
 	{
 		std::vector<BasicTeamInfo*> teamInfolist;
@@ -560,7 +680,6 @@ namespace Main {
 		friend class MultiScene;
 	};
 
-
 	class MultiScene : public Gear::Scene
 	{
 		InGame::InitiateData initData;
@@ -615,10 +734,17 @@ namespace Main {
 		int mapSelectedIndex;
 		//
 
+		//SchemeSelector
 		Gear::Ref<Gear::Texture2D> SchemeSelector;
 		Gear::Ref<Gear::Texture2D> SchemeSelectorReady;
 		Gear::Util::FRect SchemeSelectorRect;
 		glm::mat4 schemeSelectorTransform;
+		SchemeListLayer* schemeListLayer;
+		bool OnSchemeSelectorActivate = false;
+
+		glm::mat4 schemeListTransform;
+		Gear::Util::FRect schemeListRect;
+		//
 
 		std::vector<Gear::Ref<Gear::Texture2D>> MapIcons;
 		glm::mat4 mapIconTransform;
@@ -827,9 +953,12 @@ namespace Main {
 			MapSelectorLayer = new MapListLayer(&mapSelectorScrollerTransform, &MapSelectorScrollerRect, &MouseOnMapList, mapSelectorListTransform[1][1], mapSelectorListTransform[0][0], &mapSelectedIndex);
 			barraksLayer = new BarracksLayer(TeamListRect);
 			selectedTeamLayer = new SelectedTeamLayer(SelectedTeamRect, barraksLayer);
+			schemeListLayer = new SchemeListLayer(schemeSelectorTransform, &schemeListTransform, &OnSchemeSelectorActivate);
+			schemeListRect.Set(schemeListTransform);
 			m_LayerStack.PushLayer(MapSelectorLayer);
 			m_LayerStack.PushLayer(barraksLayer);
 			m_LayerStack.PushLayer(selectedTeamLayer);
+			m_LayerStack.PushLayer(schemeListLayer);
 
 			OptionsRect.resize(BasicOption::OptionMax);
 			for (int i = 0; i < BasicOption::OptionMax; ++i)
@@ -939,12 +1068,17 @@ namespace Main {
 			if (Gear::Input::IsKeyPressd(GR_KEY_ENTER) || Gear::Input::IsKeyPressd(GR_KEY_ESCAPE))
 			{
 				OnMapSelectorActive = false;
+				OnSchemeSelectorActivate = false;
 			}
 
 			//Layer Update
 			if (OnMapSelectorActive)
 			{
 				MapSelectorLayer->OnUpdate(ts);
+			}
+			if (OnSchemeSelectorActivate)
+			{
+				schemeListLayer->OnUpdate(ts);
 			}
 			if (selectedTeamList.size())
 			{

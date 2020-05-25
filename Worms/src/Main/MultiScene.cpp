@@ -592,7 +592,7 @@ namespace Main {
 			Gear::Renderer2D::DrawQuad(mapSelectorScrollerTransform, MapSelectorScroller);
 		}
 
-		if (MouseOn[Main_Multi::GameSchemeSelector])
+		if (MouseOn[Main_Multi::GameSchemeSelector] && !OnSchemeSelectorActivate)
 		{
 			Gear::Renderer2D::DrawQuad(schemeSelectorTransform, SchemeSelectorReady);
 		}
@@ -703,8 +703,9 @@ namespace Main {
 		Font::PrintFont(glm::vec3(TerrainBorderTransform[3][0] + 0.03f, TerrainBorderTransform[3][1] + TerrainBorderTransform[1][1] / 2, 0.55f), glm::vec3(0.07f, 0.07f, 1.0f), "Terrain", FontType::GraySmall, 0.04f, false);
 
 		//Scheme
+		auto curScheme = "[" + schemeListLayer->curScheme + "]";
+		Font::PrintFont(glm::vec3(schemeSelectorTransform[3][0] - 0.53f + curScheme.length() * 0.5f * 0.04f, schemeSelectorTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), curScheme, FontType::GraySmall, 0.04f, false);
 		Font::PrintFont(glm::vec3(SchemeBorderTransform[3][0] + 0.03f, SchemeBorderTransform[3][1] + SchemeBorderTransform[1][1] / 2, 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Scheme options", FontType::GraySmall, 0.04f, false);
-		Font::PrintFont(glm::vec3(schemeSelectorTransform[3][0] - 0.37f, schemeSelectorTransform[3][1], 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "[Default]", FontType::GraySmall, 0.04f, false);
 
 		//Teams
 		Font::PrintFont(glm::vec3(TeamBorderTransform[3][0] + 0.03f, TeamBorderTransform[3][1] + TeamBorderTransform[1][1] / 2, 0.53f), glm::vec3(0.07f, 0.07f, 1.0f), "Teams", FontType::GraySmall, 0.04f, false);
@@ -735,6 +736,15 @@ namespace Main {
 			{
 				MouseOn[Main_Multi::MapSelectorList] = true;
 				MouseOnMapList = true;
+				return;
+			}
+		}
+
+		if (OnSchemeSelectorActivate)
+		{
+			if (Gear::Util::IsPointRectCollision(virtualCursorPos, schemeListRect))
+			{
+				MouseOn[Main_Multi::SchemeSelectorList] = true;
 				return;
 			}
 		}
@@ -1119,6 +1129,7 @@ namespace Main {
 
 	void MultiScene::OnSchemeSelector()
 	{
+		OnSchemeSelectorActivate = !OnSchemeSelectorActivate;
 	}
 
 	void MultiScene::OnDelete()
@@ -1171,6 +1182,267 @@ namespace Main {
 
 			Gear::SceneManager::Get()->AddScene(loadingScene);
 			Gear::SceneManager::Get()->changeScene("LoadingScene");
+		}
+	}
+
+	void SchemeListLayer::RecalculateScrollerPos()
+	{
+		int listSize = schemeList.size();
+		if (listSize < showMapNameMax)
+		{
+			listSize = 12;
+		}
+		maxListShowIndex = listSize - showMapNameMax;
+
+		//showIndex
+		if (listSize > 12)
+		{
+			if (curListShowIndex > showMapNameMax)
+			{
+				curListShowIndex = showMapNameMax;
+			}
+		}
+		else
+		{
+			curListShowIndex = 0;
+		}
+
+		//height
+		float scrollerHeight = showMapNameMax / (float)listSize * (ScrollerTop - ScrollerBottom);
+		ScrollerTransform[1][1] = scrollerHeight;
+
+		//yPos
+		scrollerHighestYpos = ScrollerTop - scrollerHeight / 2;
+		scrollerLowestYpos = ScrollerBottom + scrollerHeight / 2;
+
+		float scrollerMaxDist = scrollerHighestYpos - scrollerLowestYpos;
+
+		if (maxListShowIndex > 0)
+		{
+			scrollerYOffset = scrollerMaxDist / (float)maxListShowIndex;
+		}
+		else
+		{
+			scrollerYOffset = 0.0f;
+		}
+
+		ScrollerTransform[3][1] = scrollerHighestYpos - scrollerYOffset * curListShowIndex;
+	}
+
+	void SchemeListLayer::calcListShowIndex()
+	{
+		float scrollerY = ScrollerTransform[3][1];
+		float dist = ScrollerTop - scrollerY;
+		curListShowIndex = dist / scrollerYOffset;
+		if (curListShowIndex > maxListShowIndex)
+		{
+			curListShowIndex = maxListShowIndex - 13;
+		}
+	}
+
+	void SchemeListLayer::OnUpdate(Gear::Timestep ts)
+	{
+		if (!keypressReady)
+		{
+			keyPastTime += ts;
+			if (keyPastTime > keyPressDeleay)
+			{
+				keyPastTime = 0.0f;
+				keypressReady = true;
+			}
+		}
+
+		if (!MousePressReady)
+		{
+			mousePressPastTime += ts;
+			if (mousePressPastTime > mousePressDelay)
+			{
+				mousePressPastTime = 0.0f;
+				MousePressReady = true;
+			}
+		}
+
+		if (keypressReady)
+		{
+			KeyInputLogic();
+		}
+
+		if (Gear::Util::IsPointRectCollision(MultiScene::virtualCursorPos, schemeListRect))
+		{
+			MouseOnListrect = true;
+		}
+		else
+		{
+			MouseOnListrect = false;
+		}
+		if (MousePressReady)
+		{
+			MousePressLogic();
+		}
+
+		if (curListShowIndex <= highlighterIndex && highlighterIndex < curListShowIndex + 12)
+		{
+			Gear::Renderer2D::DrawQuad(fieldTransforms[GetShowIndex(highlighterIndex)], glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+
+		for (int i = 0; i < showMapNameMax; ++i)
+		{
+			auto schemeName = schemeList[i + curListShowIndex];
+			Font::PrintFont(glm::vec3(fieldFront + schemeName.length() * 0.5f * 0.024f, fieldTransforms[i][3][1], 0.58f), glm::vec3(0.05f, 0.05f, 1.0f), "[" + schemeName + "]", FontType::WhiteTinySmall, 0.025f, false);
+		}
+
+		Gear::Renderer2D::DrawQuad(schemeListTransform, schemeListTexture);
+
+		if (maxListShowIndex)
+		{
+			Gear::Renderer2D::DrawQuad(ScrollerTransform, scrollerColor);
+		}
+		
+	}
+
+	void SchemeListLayer::OnEvent(Gear::Event & e)
+	{
+		Gear::EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<Gear::MouseScrolledEvent>(GR_BIND_EVENT_FN(SchemeListLayer::OnMouseScrolled));
+	}
+
+	bool SchemeListLayer::OnMouseScrolled(Gear::MouseScrolledEvent & e)
+	{
+		float yOffset = e.GetYOffset();
+		if (yOffset > 0.0f)
+		{
+			ScrollerTransform[3][1] += scrollerYOffset;
+			if (ScrollerTransform[3][1] > ScrollerTop)
+			{
+				ScrollerTransform[3][1] = ScrollerTop;
+			}
+		}
+		else if (yOffset < 0.0f)
+		{
+			ScrollerTransform[3][1] -= scrollerYOffset;
+			if (ScrollerTransform[3][1] < ScrollerBottom)
+			{
+				ScrollerTransform[3][1] = ScrollerBottom;
+			}
+		}
+		ScrollerRect.Set(ScrollerTransform);
+		calcListShowIndex();
+		return false;
+	}
+
+	void SchemeListLayer::KeyInputLogic()
+	{
+		if (curListShowIndex <= highlighterIndex && highlighterIndex < curListShowIndex + 12)
+		{
+			if (Gear::Input::IsKeyPressd(GR_KEY_UP))
+			{
+				keypressReady = false;
+				if (highlighterIndex != 0)
+				{
+					if (GetShowIndex(highlighterIndex) == 0)
+					{
+						--curListShowIndex;
+						ScrollerTransform[3][1] += scrollerYOffset;
+					}
+					--highlighterIndex;
+				}
+			}
+
+			if (Gear::Input::IsKeyPressd(GR_KEY_DOWN))
+			{
+				keypressReady = false;
+				if (highlighterIndex != listIndexMax - 1)
+				{
+					if (GetShowIndex(highlighterIndex) == 11)
+					{
+						++curListShowIndex;
+						ScrollerTransform[3][1] -= scrollerYOffset;
+					}
+					++highlighterIndex;
+				}
+			}
+		}
+		else
+		{
+			if (Gear::Input::IsKeyPressd(GR_KEY_UP))
+			{
+				keypressReady = false;
+				if (highlighterIndex == 0)
+				{
+					curListShowIndex = 0;
+					ScrollerTransform[3][1] = ScrollerTop;
+				}
+				else
+				{
+					if (curListShowIndex < highlighterIndex)
+					{
+						--highlighterIndex;
+						curListShowIndex = highlighterIndex - 11;
+						ScrollerTransform[3][1] = ScrollerTop - scrollerYOffset * curListShowIndex;
+					}
+					else
+					{
+						--highlighterIndex;
+						curListShowIndex = highlighterIndex;
+						ScrollerTransform[3][1] = ScrollerTop - scrollerYOffset * curListShowIndex;
+					}
+				}
+			}
+
+			if (Gear::Input::IsKeyPressd(GR_KEY_DOWN))
+			{
+				keypressReady = false;
+				if (highlighterIndex == listIndexMax - 1)
+				{
+					curListShowIndex = maxListShowIndex;
+					ScrollerTransform[3][1] = ScrollerBottom;
+				}
+				else
+				{
+					if (curListShowIndex < highlighterIndex)
+					{
+						++highlighterIndex;
+						curListShowIndex = highlighterIndex - 11;
+						ScrollerTransform[3][1] = ScrollerTop - scrollerYOffset * curListShowIndex;
+					}
+					else
+					{
+						++highlighterIndex;
+						curListShowIndex = highlighterIndex;
+						ScrollerTransform[3][1] = ScrollerTop - scrollerYOffset * curListShowIndex;
+					}
+				}
+			}
+		}
+		curScheme = schemeList[highlighterIndex];
+	}
+
+	void SchemeListLayer::MousePressLogic()
+	{
+		if (Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT))
+		{
+			if (!MouseOnListrect)
+			{
+				*onActivate = false;
+			}
+
+			MousePressReady = false;
+			for (int i = 0; i < showMapNameMax; ++i)
+			{
+				if (Gear::Util::IsPointRectCollision(MultiScene::virtualCursorPos, fieldRects[i]))
+				{
+					int listIndex = GetListIndex(i);
+					if (highlighterIndex == listIndex)
+					{
+						*onActivate = false;
+					}
+					else
+					{
+						highlighterIndex = listIndex;
+					}
+					curScheme = schemeList[highlighterIndex];
+				}
+			}
 		}
 	}
 
