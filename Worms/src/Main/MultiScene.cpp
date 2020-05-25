@@ -985,7 +985,7 @@ namespace Main {
 
 		//ItemSetting
 		std::vector<InGame::ItemInfo::ItemDescprition> itemList;
-		std::string SchemeName = "Free";
+		std::string SchemeName = schemeListLayer->curScheme;
 		SchemeName += ".json";
 		Gear::JsonManager::Get()->ReadVector("assets\\Data\\Scheme\\" + SchemeName,itemList);
 
@@ -1130,6 +1130,7 @@ namespace Main {
 	void MultiScene::OnSchemeSelector()
 	{
 		OnSchemeSelectorActivate = !OnSchemeSelectorActivate;
+		schemeListLayer->OnReinit();
 	}
 
 	void MultiScene::OnDelete()
@@ -1187,19 +1188,19 @@ namespace Main {
 
 	void SchemeListLayer::RecalculateScrollerPos()
 	{
-		int listSize = schemeList.size();
-		if (listSize < showMapNameMax)
+		listIndexMax = schemeList.size();
+		maxListShowIndex = listIndexMax - showMapNameMax;
+		if (maxListShowIndex < 0)
 		{
-			listSize = 12;
+			maxListShowIndex = 0;
 		}
-		maxListShowIndex = listSize - showMapNameMax;
 
 		//showIndex
-		if (listSize > 12)
+		if (listIndexMax > 12)
 		{
-			if (curListShowIndex > showMapNameMax)
+			if (curListShowIndex > maxListShowIndex)
 			{
-				curListShowIndex = showMapNameMax;
+				curListShowIndex = maxListShowIndex;
 			}
 		}
 		else
@@ -1208,13 +1209,12 @@ namespace Main {
 		}
 
 		//height
-		float scrollerHeight = showMapNameMax / (float)listSize * (ScrollerTop - ScrollerBottom);
+		float scrollerHeight = maxListShowIndex / (float)listIndexMax * (ScrollerTop - ScrollerBottom);
 		ScrollerTransform[1][1] = scrollerHeight;
 
 		//yPos
 		scrollerHighestYpos = ScrollerTop - scrollerHeight / 2;
 		scrollerLowestYpos = ScrollerBottom + scrollerHeight / 2;
-
 		float scrollerMaxDist = scrollerHighestYpos - scrollerLowestYpos;
 
 		if (maxListShowIndex > 0)
@@ -1229,15 +1229,52 @@ namespace Main {
 		ScrollerTransform[3][1] = scrollerHighestYpos - scrollerYOffset * curListShowIndex;
 	}
 
+	void SchemeListLayer::LoadSchemeDataName()
+	{
+		std::string dir = "assets\\Data\\Scheme";
+		std::experimental::filesystem::directory_iterator dirIter(dir);
+
+		for (auto& file : dirIter)
+		{
+			if (std::experimental::filesystem::is_regular_file(file.path()))
+			{
+				auto str = file.path().string();
+				int length = str.length();
+				for (int i = length - 1; i > 0; --i)
+				{
+					if (str[i] == '\\')
+					{
+						auto name = str.substr(i + 1, length - 6 - i);
+						schemeList.push_back(name);
+						break;
+					}
+				}
+
+			}
+		}
+	}
+
 	void SchemeListLayer::calcListShowIndex()
 	{
+		if (scrollerYOffset == 0.0f)
+		{
+			return;
+		}
 		float scrollerY = ScrollerTransform[3][1];
-		float dist = ScrollerTop - scrollerY;
+		float dist = scrollerHighestYpos - scrollerY;
 		curListShowIndex = dist / scrollerYOffset;
 		if (curListShowIndex > maxListShowIndex)
 		{
-			curListShowIndex = maxListShowIndex - 13;
+			curListShowIndex = maxListShowIndex;
 		}
+	}
+
+	void SchemeListLayer::OnReinit()
+	{
+		keypressReady = false;
+		MousePressReady = false;
+		keyPastTime = 0.0f;
+		mousePressPastTime = 0.0f;
 	}
 
 	void SchemeListLayer::OnUpdate(Gear::Timestep ts)
@@ -1285,7 +1322,8 @@ namespace Main {
 			Gear::Renderer2D::DrawQuad(fieldTransforms[GetShowIndex(highlighterIndex)], glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 		}
 
-		for (int i = 0; i < showMapNameMax; ++i)
+		int listMax = listIndexMax < showMapNameMax ? listIndexMax : showMapNameMax;
+		for (int i = 0; i < listMax; ++i)
 		{
 			auto schemeName = schemeList[i + curListShowIndex];
 			Font::PrintFont(glm::vec3(fieldFront + schemeName.length() * 0.5f * 0.024f, fieldTransforms[i][3][1], 0.58f), glm::vec3(0.05f, 0.05f, 1.0f), "[" + schemeName + "]", FontType::WhiteTinySmall, 0.025f, false);
@@ -1312,17 +1350,17 @@ namespace Main {
 		if (yOffset > 0.0f)
 		{
 			ScrollerTransform[3][1] += scrollerYOffset;
-			if (ScrollerTransform[3][1] > ScrollerTop)
+			if (ScrollerTransform[3][1] > scrollerHighestYpos)
 			{
-				ScrollerTransform[3][1] = ScrollerTop;
+				ScrollerTransform[3][1] = scrollerHighestYpos;
 			}
 		}
 		else if (yOffset < 0.0f)
 		{
 			ScrollerTransform[3][1] -= scrollerYOffset;
-			if (ScrollerTransform[3][1] < ScrollerBottom)
+			if (ScrollerTransform[3][1] < scrollerLowestYpos)
 			{
-				ScrollerTransform[3][1] = ScrollerBottom;
+				ScrollerTransform[3][1] = scrollerLowestYpos;
 			}
 		}
 		ScrollerRect.Set(ScrollerTransform);
@@ -1432,6 +1470,10 @@ namespace Main {
 				if (Gear::Util::IsPointRectCollision(MultiScene::virtualCursorPos, fieldRects[i]))
 				{
 					int listIndex = GetListIndex(i);
+					if (listIndex > listIndexMax - 1)
+					{
+						return;
+					}
 					if (highlighterIndex == listIndex)
 					{
 						*onActivate = false;

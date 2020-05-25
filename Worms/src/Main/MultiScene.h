@@ -202,40 +202,37 @@ namespace Main {
 	{
 	public:
 		SchemeListLayer(glm::mat4 schemeSelectorTransform, glm::mat4* _schemeListTransform, bool* OnSchemeSelectorActivate)
+			: scrollerColor(254.0f / 255.0f, 182.0f / 255.0f, 168.0f / 255.0f, 1.0f)
 		{
-			schemeListTexture = Gear::TextureStorage::GetTexture2D("SchemeSelectorList");
-			float width = schemeListTexture->GetWidth();
-			float height = schemeListTexture->GetHeight();
-
 			onActivate = OnSchemeSelectorActivate;
 
-			for (int i = 0; i < 20; ++i)
-			{
-				schemeList.push_back("Defualt" + std::to_string(i));
-			}
+			LoadSchemeDataName();
 			curScheme = schemeList[highlighterIndex];
-			//schemeList.push_back("Defualt");
-			//schemeList.push_back("Free");
-			scrollerColor = glm::vec4(254.0f / 255.0f, 182.0f / 255.0f, 168.0f / 255.0f, 1.0f);
 
-			ScrollerTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.12f, 0.0f, 0.6f)) * glm::scale(glm::mat4(1.0f), glm::vec3(8 / 238.0f, 0.0f, 1.0f));
-
-			listIndexMax = schemeList.size();
-			maxListShowIndex = schemeList.size() - showMapNameMax;
-			schemeListTransform = glm::translate(glm::mat4(1.0f), glm::vec3(schemeSelectorTransform[3][0], schemeSelectorTransform[3][1] - schemeSelectorTransform[1][1] / 2 - height / 238.0f / 2.0f, 0.55f)) * glm::scale(glm::mat4(1.0f), glm::vec3(width / 238.0f, height / 238.0f, 1.0f));
+			schemeListTexture = Gear::TextureStorage::GetTexture2D("SchemeSelectorList");
+			float listWidth = schemeListTexture->GetWidth();
+			float listHeight = schemeListTexture->GetHeight();
+			schemeListTransform = glm::translate(glm::mat4(1.0f), glm::vec3(schemeSelectorTransform[3][0], schemeSelectorTransform[3][1] - schemeSelectorTransform[1][1] / 2 - listHeight / 238.0f / 2.0f, 0.55f)) * glm::scale(glm::mat4(1.0f), glm::vec3(listWidth / 238.0f, listHeight / 238.0f, 1.0f));
 			schemeListRect.Set(schemeListTransform);
 			*_schemeListTransform = schemeListTransform;
 
-			MapSelectorDivideUnit = (height / 238.0f) / showMapNameMax;
-
 			listFieldTop = schemeListTransform[1][1] / 2 + schemeListTransform[3][1] - schemeSelectorTransform[1][1] / 2;
-
+			MapSelectorDivideUnit = ((listHeight / 238.0f) - 0.02f) / showMapNameMax;
 			fieldTransforms.resize(showMapNameMax);
 			fieldRects.resize(showMapNameMax);
 			for (int i = 0; i < showMapNameMax; ++i)
 			{
 				fieldTransforms[i] = glm::translate(glm::mat4(1.0f), glm::vec3(fieldCenterX, listFieldTop - MapSelectorDivideUnit * i, 0.57f)) * glm::scale(glm::mat4(1.0f), glm::vec3(schemeSelectorTransform[0][0] - 0.07f, MapSelectorDivideUnit, 1.0f));
 				fieldRects[i].Set(fieldTransforms[i]);
+			}
+
+			ScrollerTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.118f, 0.0f, 0.6f)) * glm::scale(glm::mat4(1.0f), glm::vec3(8 / 238.0f, 0.0f, 1.0f));
+			ScrollerTop = schemeListTransform[3][1] + schemeListTransform[1][1] / 2 - 0.055f;
+			ScrollerBottom = schemeListTransform[3][1] - schemeListTransform[1][1] / 2 + 0.055;
+
+			if (maxListShowIndex < 0)
+			{
+				maxListShowIndex = 0;
 			}
 
 			RecalculateScrollerPos();
@@ -256,22 +253,23 @@ namespace Main {
 		Gear::Util::FRect ScrollerRect;
 		glm::mat4 ScrollerTransform;
 
-		const float ScrollerTop = -0.24f;
-		const float ScrollerBottom = -0.8f;
+		float ScrollerTop;
+		float ScrollerBottom;
 		float scrollerHighestYpos;
 		float scrollerLowestYpos;
 		float scrollerYOffset;
-		//
+
 		float listFieldTop;
 		float fieldCenterX = -0.6848f;
 		float fieldFront = -1.17f;
 
+		int highlighterIndex = 0;
 		int curListShowIndex = 0;
 		int maxListShowIndex;
-		int listIndexMax;
-		int showMapNameMax = 12;
 
-		int highlighterIndex = 0;
+		int listIndexMax;
+		const int showMapNameMax = 12;
+
 
 		std::vector<glm::mat4> fieldTransforms;
 		std::vector<Gear::Util::FRect> fieldRects;
@@ -305,13 +303,14 @@ namespace Main {
 			return showIndex + curListShowIndex;
 		}
 
+		void LoadSchemeDataName();
 		void calcListShowIndex();
+		void OnReinit();
 		virtual void OnUpdate(Gear::Timestep ts) override;
 
 		virtual void OnEvent(Gear::Event& e) override;
 
 		bool OnMouseScrolled(Gear::MouseScrolledEvent & e);
-		bool OnMouseClick(Gear::MouseButtonReleasedEvent& e);
 
 		void KeyInputLogic();
 		void MousePressLogic();
