@@ -301,7 +301,11 @@ namespace InGame {
 
 	class DonkeyTypePCHandler : public Gear::Physics2D::PixelCollisionHander
 	{
-		int collisionCnt = 0;
+		virtual void Handle(int entityID) override;
+	};
+
+	class HosPCHandler : public Gear::Physics2D::PixelCollisionHander
+	{
 		virtual void Handle(int entityID) override;
 	};
 
