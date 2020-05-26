@@ -13,6 +13,13 @@ namespace InGame {
 		m_Grenade.reset(new Grenade(initData));
 		m_Banana.reset(new Banana(initData));
 		m_Donkey.reset(new Donkey(initData));
+		m_Hos.reset(new Hos(initData));
+
+		m_BabyHos.resize(m_BabyHosMax);
+		for (int i = 0; i < m_BabyHosMax; ++i)
+		{
+			m_BabyHos[i].reset(new BabyHos(initData));
+		}
 	}
 
 	ItemPool::~ItemPool()
@@ -21,6 +28,7 @@ namespace InGame {
 		m_Grenade.reset();
 		m_Banana.reset();
 		m_Donkey.reset();
+		m_Hos.reset();
 	}
 
 	void ItemPool::init(const InitiateData& initData)
@@ -44,7 +52,29 @@ namespace InGame {
 			return m_Banana;
 		case ItemInfo::Donkey:
 			return m_Donkey;
+		case ItemInfo::Hos:
+			return m_Hos;
+		case ItemInfo::BabyHos:
+			return GetBabyHos();
 		}
+		return nullptr;
+	}
+
+	Gear::Ref<BabyHos> ItemPool::GetBabyHos()
+	{
+		while (1)
+		{
+			if (!Gear::EntitySystem::IsEntityActivated(m_BabyHos[m_BabyHosPtr]->GetID()))
+			{
+				return m_BabyHos[m_BabyHosPtr];
+			}
+			++m_BabyHosPtr;
+			if (m_BabyHosPtr >= m_BabyHosMax)
+			{
+				m_BabyHosPtr = 0;
+			}
+		}
+		return nullptr;
 	}
 
 	void ItemPool::MakeExplosion(const ExplosionData& data, const glm::vec2 pos, Explosion::Text text, const std::string& sound)

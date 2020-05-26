@@ -62,6 +62,7 @@ namespace InGame {
 		enum Type : unsigned int
 		{
 			_1,
+			Magic
 		};
 	}
 
@@ -267,7 +268,6 @@ namespace InGame {
 		friend class EffectPool;
 	};
 
-
 	class ExplosionEffect
 	{
 	private:
@@ -333,6 +333,11 @@ namespace InGame {
 		static void pushFlame(Gear::Ref<FlameBundle> flame);
 		static void pushSpangle(Gear::Ref<Spangle> spangle);
 		static void pushMarker(Gear::Ref<Marker> spangle);
+		static void pushExhaust(Gear::Ref<Exhaust> exhaust);
+
+	public:
+		static int explosionMax;
+		static int flameMax;
 
 	public:
 		static std::vector<Gear::Ref<Blob>> s_BlobPool;
@@ -406,8 +411,10 @@ namespace InGame {
 		static int s_Sm40Ptr;
 
 		static std::vector<Gear::Ref<Exhaust>> s_Exhaust1;
+		static std::vector<Gear::Ref<Exhaust>> s_ExhaustMagic;
 
 		static int s_Exhaust1Ptr;
+		static int s_ExhaustMagicPtr;
 
 	};
 }

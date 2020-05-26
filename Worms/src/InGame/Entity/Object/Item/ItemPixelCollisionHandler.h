@@ -293,9 +293,6 @@ namespace InGame {
 				}
 				m_ExternalVector->x = -m_ExternalVector->x * 0.8f;
 			}
-
-
-			
 		}
 	};
 
@@ -306,6 +303,10 @@ namespace InGame {
 
 	class HosPCHandler : public Gear::Physics2D::PixelCollisionHander
 	{
+		int collisionXPoint;
+		int collisionYPoint;
+
+		void BoundHandle(int entitID);
 		virtual void Handle(int entityID) override;
 	};
 

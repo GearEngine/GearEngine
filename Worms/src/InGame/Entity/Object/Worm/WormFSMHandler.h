@@ -337,7 +337,7 @@ namespace InGame {
 				break;
 			}
 		}
-		if (curSettedItem == ItemInfo::Number::Donkey)
+		if (curSettedItem == ItemInfo::Number::Donkey || curSettedItem == ItemInfo::Number::Hos)
 		{
 			switch (dir)
 			{
@@ -1190,7 +1190,7 @@ namespace InGame {
 				animator->ResumeAnimation();
 				canChangeTime = false;
 			}
-			if (curItem == ItemInfo::Number::Donkey)
+			if (curItem == ItemInfo::Number::Donkey || curItem == ItemInfo::Number::Hos)
 			{
 				switch (dir)
 				{
@@ -1285,7 +1285,7 @@ namespace InGame {
 					}
 					return WormState::OnReadyItemUse;
 				}
-				else if (curItem == ItemInfo::Donkey)
+				else if (curItem == ItemInfo::Donkey || curItem == ItemInfo::Hos)
 				{
 					if (!initWindowSelect)
 					{
@@ -1633,7 +1633,7 @@ namespace InGame {
 					}
 				}
 			}
-			if (selectedItem == ItemInfo::Donkey)
+			if (selectedItem == ItemInfo::Donkey || selectedItem == ItemInfo::Hos)
 			{
 				switch (dir)
 				{
@@ -1741,6 +1741,49 @@ namespace InGame {
 						Gear::EntitySystem::GetStatus(timerID)->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
 						int ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
 						Gear::EventSystem::DispatchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(ItemInfo::Donkey, teamName)), ItemSelectorID);
+						Status->SetStat(WormInfo::MyTurn, false);
+						OnOut(entityID);
+						return WormState::OnNotMyTurn;
+					}
+				}
+			}
+			if (selectedItem == ItemInfo::Hos)
+			{
+				if (aniCompleteCount == 0)
+				{
+					PLAY_SOUND_NAME("YOUMUSTHAVEGONGMUL", WormsSound::Hos);
+					STOP_SOUND_CAHNNEL(WormsSound::bgm);
+					SetUseAnimation(aniCompleteCount);
+					++aniCompleteCount;
+					Gear::EntitySystem::InActivateComponent(entityID, { Gear::ComponentID::Controller });
+					return WormState::OnUseWindowPickItem;
+				}
+				if (aniCompleteCount == 1)
+				{
+					if (Animator->loopCompleted())
+					{
+						++aniCompleteCount;
+						SetUseAnimation(-1);
+					}
+				}
+				if (aniCompleteCount == 2)
+				{
+					if (!IS_PLAYING_SOUND(WormsSound::Hos))
+					{
+						PLAY_SOUND_NAME("HOSTheme", WormsSound::bgm);
+						Gear::SoundSystem::Get()->SetVolue(WormsSound::bgm, 1.0f);
+						FSM->GetHandler(WormState::OnReadyItemUse)->OnOut(entityID);
+
+						auto position = std::any_cast<glm::vec2>(Status->GetStat(WormInfo::WindowPickedPoint));
+						auto item = ITEM_POOL->GetItem(ItemInfo::Hos);
+						item->init(glm::vec3(position, ZOrder::z_Item), 0.0f, 0.0f, entityID, 0.0f);
+
+						Status->RegisterPushNeedHandleData(WormStatusHandleType::DisplayPosChange, Gear::Status::StatHandleData(std::make_pair(-0.2f, 1.0f)));
+						Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, 0, item->GetID())));
+						int timerID = Gear::EntitySystem::GetEntityIDFromName("Timer");
+						Gear::EntitySystem::GetStatus(timerID)->PushNeedHandleData(1, Gear::Status::StatHandleData(0));
+						int ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
+						Gear::EventSystem::DispatchEventTo(EventChannel::Worm, Gear::EntityEvent(EventType::Worm, UseItemData(ItemInfo::Hos, teamName)), ItemSelectorID);
 						Status->SetStat(WormInfo::MyTurn, false);
 						OnOut(entityID);
 						return WormState::OnNotMyTurn;

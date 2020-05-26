@@ -1,5 +1,5 @@
 {
-  "IndexCount": 8,
+  "IndexCount": 9,
   "0": {
     "ItemNumber": 5,
     "Name": "Bazooka",
@@ -47,5 +47,11 @@
     "Name": "Donkey",
     "Quantity": 1,
     "RemainTurn": 4
+  },
+  "8": {
+    "ItemNumber": 59,
+    "Name": "Hos",
+    "Quantity": -1,
+    "RemainTurn": 0
   }
 }

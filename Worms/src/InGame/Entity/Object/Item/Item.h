@@ -5,6 +5,8 @@
 #include "Grenade/Grenade.h"
 #include "Banana/Banana.h"
 #include "Donkey/Donkey.h"
+#include "Hos/Hos.h"
+#include "Hos/BabyHos.h"
 
 namespace InGame {
 
@@ -23,6 +25,8 @@ namespace InGame {
 				delete s_Inst; 
 			s_Inst = nullptr; 
 		}
+	private:
+		Gear::Ref<BabyHos> GetBabyHos();
 
 	public:
 		void MakeExplosion(const ExplosionData& data, const glm::vec2 pos, Explosion::Text text, const std::string& sound = "");
@@ -34,6 +38,11 @@ namespace InGame {
 		Gear::Ref<Grenade> m_Grenade;
 		Gear::Ref<Banana> m_Banana;
 		Gear::Ref<Donkey> m_Donkey;
+		Gear::Ref<Hos> m_Hos;
+
+		std::vector<Gear::Ref<BabyHos>> m_BabyHos;
+		const int m_BabyHosMax = 50;
+		int m_BabyHosPtr = 0;
 	};
 	
 	#define ITEM_POOL ItemPool::Get()

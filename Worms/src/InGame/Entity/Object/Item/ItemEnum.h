@@ -14,7 +14,7 @@ namespace InGame {
 		enum Info : unsigned int
 		{
 			Power, Angle, WindAdjustRatio, ExplosionSize, 
-			ExplosionText, From, Number, Baby
+			ExplosionText, From, Number, Baby, RotateDir
 		};
 
 		enum StatusHandleType : unsigned int

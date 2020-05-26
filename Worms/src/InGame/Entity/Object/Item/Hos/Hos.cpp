@@ -17,12 +17,14 @@ namespace InGame {
 			});
 
 		Gear::EntitySystem::SetFSM(m_ID, {
-			{ Item::State::OnGoing, new HosOnGoingHandler }
+			{ Item::State::OnGoing, new HosOnGoingHandler }, {Item::State::OnExplosion, new HosOnExplosionHandler }
 		});
 
 		Gear::EntitySystem::SetAnimator(m_ID, {
 			{ Item::State::OnGoing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("HosBullet"), 0.0f) }
-			});
+		});
+
+		Gear::EntitySystem::GetAnimator2D(m_ID)->GetCurrentAnimation()->GetTintColor().a = 0.7f;
 
 		auto mask = initData.Mapinfo.Mask;
 		int width = mask->GetWidth();
@@ -41,13 +43,13 @@ namespace InGame {
 		});
 	}
 
-	void Donkey::init(const glm::vec3 & position, float initAngle, float initPower, int From, float explosionTime)
+	void Hos::init(const glm::vec3 & position, float initAngle, float initPower, int From, float explosionTime)
 	{
 		Gear::EntitySystem::ActivateEntity(m_ID);
 		Gear::EntitySystem::GetFSM(m_ID)->SetCurrentState(Item::State::OnGoing);
 
 		glm::vec3 pos(position.x, 20.0f, ZOrder::z_Item);
-		Gear::EntitySystem::SetTransform(m_ID, pos, 0.0f, glm::vec2(3.96f, 4.35f));
+		Gear::EntitySystem::SetTransform(m_ID, pos, 0.0f, glm::vec2(3.96f, 3.96f));
 
 		auto physics = Gear::EntitySystem::GetPhysics2D(m_ID);
 		glm::vec2 ExternalVector(0.0f, 0.0f);

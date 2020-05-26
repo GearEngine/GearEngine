@@ -20,7 +20,7 @@ namespace Gear {
 	class SoundSystem
 	{
 		using SoundChannel = unsigned int;
-		#define SOUND_CHANNEL_MAX 10
+		#define SOUND_CHANNEL_MAX 15
 
 	private:
 		SoundSystem();

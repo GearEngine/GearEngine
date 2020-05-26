@@ -216,9 +216,9 @@ namespace InGame {
 			NinjaRope, Bungee, Parachute, Teleport, Scales,
 			SupperBanana, HollyGrenade, FlameThrower, Tambourine, RiddleBomb,
 			PetrolBomb, Skunk, Ceramics, FireShipStrike, CarpetStrike,
-			MadCow, OldWoman, Donkey, Sanctuary, Ammageddon,
+			MadCow, OldWoman, Donkey, Sanctuary, Hos,
 			SkipGo, Surrender, TurnChange, Freeze, MagicMissile,
-			BabyBanana, ItemEnd
+			BabyBanana, BabyHos, ItemEnd
 		};
 
 		inline bool isShowAim(Number number)

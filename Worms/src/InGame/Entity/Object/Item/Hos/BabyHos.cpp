@@ -21,6 +21,9 @@ namespace InGame {
 			{ Item::State::OnGoing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("BabyHosBullet"), 0.0f) }
 		});
 
+		Gear::EntitySystem::GetAnimator2D(m_ID)->GetCurrentAnimation()->SetTintColor(glm::vec4(Gear::Util::GetRndFloat(1.0f), Gear::Util::GetRndFloat(1.0f), Gear::Util::GetRndFloat(1.0f), 0.7f));
+
+
 		Gear::EntitySystem::SetFSM(m_ID, {
 			{ Item::State::OnGoing, new BabyHosOnGoingHandler }, { Item::State::OnUnderWater, new BabyHosOnUnderWater},
 			{ Item::State::OnExplosion, new BabyHosOnExplosion },
@@ -41,7 +44,7 @@ namespace InGame {
 
 		Gear::EntitySystem::SetStatus(m_ID, {
 			{ Item::Info::Angle, 0.0f}, { Item::Info::Power, 100.0f }, {Item::Info::ExplosionText, Explosion::Text::Poot}, {Item::Info::ExplosionSize, Explosion::Size::Size75},
-			{ Item::Info::From, -1}, { Item::Info::Number, ItemInfo::Number::BabyBanana }
+			{ Item::Info::From, -1}, { Item::Info::Number, ItemInfo::Number::BabyHos }, {Item::Info::RotateDir, Gear::Util::GetRndInt(2)}
 		});
 	}
 
@@ -55,7 +58,7 @@ namespace InGame {
 
 		glm::vec3 pos = position;
 		pos.z = ZOrder::z_Item;
-		Gear::EntitySystem::SetTransform(m_ID, pos, 0.0f, glm::vec2(1.8f, 1.8f));
+		Gear::EntitySystem::SetTransform(m_ID, pos, 0.0f, glm::vec2(0.8f, 0.8f));
 
 		auto physics = Gear::EntitySystem::GetPhysics2D(m_ID);
 		glm::vec2 ExternalVector(initPower * glm::cos(glm::radians(initAngle)), initPower * glm::sin(glm::radians(initAngle)));

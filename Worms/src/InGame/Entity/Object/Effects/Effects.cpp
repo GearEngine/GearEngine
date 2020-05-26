@@ -79,6 +79,10 @@ namespace InGame {
 	std::vector<Gear::Ref<Smoke>> EffectPool::s_Sm40 = std::vector<Gear::Ref<Smoke>>();
 
 	std::vector<Gear::Ref<Exhaust>> EffectPool::s_Exhaust1 = std::vector<Gear::Ref<Exhaust>>();
+	std::vector<Gear::Ref<Exhaust>> EffectPool::s_ExhaustMagic = std::vector<Gear::Ref<Exhaust>>();
+
+	int EffectPool::explosionMax = 30;
+	int EffectPool::flameMax = 30;
 
 	int EffectPool::s_Ex25Ptr = 0;
 	int EffectPool::s_Ex50FoomPtr = 0;
@@ -109,6 +113,7 @@ namespace InGame {
 	int EffectPool::s_Sm40Ptr = 0;
 
 	int EffectPool::s_Exhaust1Ptr = 0;
+	int EffectPool::s_ExhaustMagicPtr = 0;
 
 	int EffectPool::s_BlobPtr = 0;
 
@@ -137,85 +142,86 @@ namespace InGame {
 		}
 
 		//Explosion
-		s_Ex25.resize(10);
-		for (int i = 0; i < 10; ++i)
+		
+		s_Ex25.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Ex25[i].reset(new ExplosionEffect);
 			s_Ex25[i]->init(Explosion::Size25, Explosion::Null);
 		}
-		s_Ex50Biff.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Ex50Biff.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Ex50Biff[i].reset(new ExplosionEffect);
 			s_Ex50Biff[i]->init(Explosion::Size50, Explosion::Biff);
 		}
-		s_Ex75Biff.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Ex75Biff.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Ex75Biff[i].reset(new ExplosionEffect);
 			s_Ex75Biff[i]->init(Explosion::Size75, Explosion::Biff);
 		}
-		s_Ex100Biff.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Ex100Biff.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Ex100Biff[i].reset(new ExplosionEffect);
 			s_Ex100Biff[i]->init(Explosion::Size100, Explosion::Biff);
 		}
 
 
-		s_Ex50Foom.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Ex50Foom.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Ex50Foom[i].reset(new ExplosionEffect);
 			s_Ex50Foom[i]->init(Explosion::Size50, Explosion::Foom);
 		}
-		s_Ex75Foom.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Ex75Foom.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Ex75Foom[i].reset(new ExplosionEffect);
 			s_Ex75Foom[i]->init(Explosion::Size75, Explosion::Foom);
 		}
-		s_Ex100Foom.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Ex100Foom.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Ex100Foom[i].reset(new ExplosionEffect);
 			s_Ex100Foom[i]->init(Explosion::Size100, Explosion::Foom);
 		}
 
 
-		s_Ex50Poot.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Ex50Poot.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Ex50Poot[i].reset(new ExplosionEffect);
 			s_Ex50Poot[i]->init(Explosion::Size50, Explosion::Poot);
 		}
-		s_Ex75Poot.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Ex75Poot.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Ex75Poot[i].reset(new ExplosionEffect);
 			s_Ex75Poot[i]->init(Explosion::Size75, Explosion::Poot);
 		}
-		s_Ex100Poot.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Ex100Poot.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Ex100Poot[i].reset(new ExplosionEffect);
 			s_Ex100Poot[i]->init(Explosion::Size100, Explosion::Poot);
 		}
 
-		s_Ex50Pow.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Ex50Pow.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Ex50Pow[i].reset(new ExplosionEffect);
 			s_Ex50Pow[i]->init(Explosion::Size50, Explosion::Pow);
 		}
-		s_Ex75Pow.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Ex75Pow.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Ex75Pow[i].reset(new ExplosionEffect);
 			s_Ex75Pow[i]->init(Explosion::Size75, Explosion::Pow);
 		}
-		s_Ex100Pow.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Ex100Pow.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Ex100Pow[i].reset(new ExplosionEffect);
 			s_Ex100Pow[i]->init(Explosion::Size100, Explosion::Pow);
@@ -248,26 +254,26 @@ namespace InGame {
 		}
 
 		//Flame
-		s_Fm25.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Fm25.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Fm25[i].reset(new FlameBundle);
 			s_Fm25[i]->init(Explosion::Size::Size25);
 		}
-		s_Fm50.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Fm50.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Fm50[i].reset(new FlameBundle);
 			s_Fm50[i]->init(Explosion::Size::Size50);
 		}
-		s_Fm75.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Fm75.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Fm75[i].reset(new FlameBundle);
 			s_Fm75[i]->init(Explosion::Size::Size75);
 		}
-		s_Fm100.resize(10);
-		for (int i = 0; i < 10; ++i)
+		s_Fm100.resize(explosionMax);
+		for (int i = 0; i < explosionMax; ++i)
 		{
 			s_Fm100[i].reset(new FlameBundle);
 			s_Fm100[i]->init(Explosion::Size::Size100);
@@ -299,7 +305,12 @@ namespace InGame {
 			s_Exhaust1[i].reset(new Exhaust);
 			s_Exhaust1[i]->init(ExhaustType::_1);
 		}
-
+		s_ExhaustMagic.resize(EFFECT_POOL_MAX);
+		for (int i = 0; i < EFFECT_POOL_MAX; ++i)
+		{
+			s_ExhaustMagic[i].reset(new Exhaust);
+			s_ExhaustMagic[i]->init(ExhaustType::Magic);
+		}
 	}
 
 	Gear::Ref<Blob> EffectPool::GetBlob()
@@ -328,7 +339,7 @@ namespace InGame {
 				if (s_Ex25[s_Ex25Ptr]->m_OnUsing)
 				{
 					++s_Ex25Ptr;
-					if (s_Ex25Ptr >= 10)
+					if (s_Ex25Ptr >= explosionMax)
 					{
 						s_Ex25Ptr = 0;
 					}
@@ -347,7 +358,7 @@ namespace InGame {
 					if (s_Ex50Foom[s_Ex50FoomPtr]->m_OnUsing)
 					{
 						++s_Ex50FoomPtr;
-						if (s_Ex50FoomPtr >= 10)
+						if (s_Ex50FoomPtr >= explosionMax)
 						{
 							s_Ex50FoomPtr = 0;
 						}
@@ -363,7 +374,7 @@ namespace InGame {
 					if (s_Ex50Biff[s_Ex50BiffPtr]->m_OnUsing)
 					{
 						++s_Ex50BiffPtr;
-						if (s_Ex50BiffPtr >= 10)
+						if (s_Ex50BiffPtr >= explosionMax)
 						{
 							s_Ex50BiffPtr = 0;
 						}
@@ -379,7 +390,7 @@ namespace InGame {
 					if (s_Ex50Poot[s_Ex50PootPtr]->m_OnUsing)
 					{
 						++s_Ex50PootPtr;
-						if (s_Ex50PootPtr >= 10)
+						if (s_Ex50PootPtr >= explosionMax)
 						{
 							s_Ex50PootPtr = 0;
 						}
@@ -395,7 +406,7 @@ namespace InGame {
 					if (s_Ex50Pow[s_Ex50PowPtr]->m_OnUsing)
 					{
 						++s_Ex50PowPtr;
-						if (s_Ex50PowPtr >= 10)
+						if (s_Ex50PowPtr >= explosionMax)
 						{
 							s_Ex50PowPtr = 0;
 						}
@@ -415,7 +426,7 @@ namespace InGame {
 					if (s_Ex75Foom[s_Ex75FoomPtr]->m_OnUsing)
 					{
 						++s_Ex75FoomPtr;
-						if (s_Ex75FoomPtr >= 10)
+						if (s_Ex75FoomPtr >= explosionMax)
 						{
 							s_Ex75FoomPtr = 0;
 						}
@@ -431,7 +442,7 @@ namespace InGame {
 					if (s_Ex75Biff[s_Ex75BiffPtr]->m_OnUsing)
 					{
 						++s_Ex75BiffPtr;
-						if (s_Ex75BiffPtr >= 10)
+						if (s_Ex75BiffPtr >= explosionMax)
 						{
 							s_Ex75BiffPtr = 0;
 						}
@@ -447,7 +458,7 @@ namespace InGame {
 					if (s_Ex75Poot[s_Ex75PootPtr]->m_OnUsing)
 					{
 						++s_Ex75PootPtr;
-						if (s_Ex75PootPtr >= 10)
+						if (s_Ex75PootPtr >= explosionMax)
 						{
 							s_Ex75PootPtr = 0;
 						}
@@ -463,7 +474,7 @@ namespace InGame {
 					if (s_Ex75Pow[s_Ex75PowPtr]->m_OnUsing)
 					{
 						++s_Ex75PowPtr;
-						if (s_Ex75PowPtr >= 10)
+						if (s_Ex75PowPtr >= explosionMax)
 						{
 							s_Ex75PowPtr = 0;
 						}
@@ -483,7 +494,7 @@ namespace InGame {
 					if (s_Ex100Foom[s_Ex100FoomPtr]->m_OnUsing)
 					{
 						++s_Ex100FoomPtr;
-						if (s_Ex100FoomPtr >= 10)
+						if (s_Ex100FoomPtr >= explosionMax)
 						{
 							s_Ex100FoomPtr = 0;
 						}
@@ -499,7 +510,7 @@ namespace InGame {
 					if (s_Ex100Biff[s_Ex100BiffPtr]->m_OnUsing)
 					{
 						++s_Ex100BiffPtr;
-						if (s_Ex100BiffPtr >= 10)
+						if (s_Ex100BiffPtr >= explosionMax)
 						{
 							s_Ex100BiffPtr = 0;
 						}
@@ -515,7 +526,7 @@ namespace InGame {
 					if (s_Ex100Poot[s_Ex100PootPtr]->m_OnUsing)
 					{
 						++s_Ex100PootPtr;
-						if (s_Ex100PootPtr >= 10)
+						if (s_Ex100PootPtr >= explosionMax)
 						{
 							s_Ex100PootPtr = 0;
 						}
@@ -531,7 +542,7 @@ namespace InGame {
 					if (s_Ex100Pow[s_Ex100PowPtr]->m_OnUsing)
 					{
 						++s_Ex100PowPtr;
-						if (s_Ex100PowPtr >= 10)
+						if (s_Ex100PowPtr >= explosionMax)
 						{
 							s_Ex100PowPtr = 0;
 						}
@@ -613,7 +624,7 @@ namespace InGame {
 			while (1)
 			{
 				++s_Fm25Ptr;
-				if (s_Fm25Ptr >= 10)
+				if (s_Fm25Ptr >= explosionMax)
 				{
 					s_Fm25Ptr = 0;
 				}
@@ -627,7 +638,7 @@ namespace InGame {
 			while (1)
 			{
 				++s_Fm50Ptr;
-				if (s_Fm50Ptr >= 10)
+				if (s_Fm50Ptr >= explosionMax)
 				{
 					s_Fm50Ptr = 0;
 				}
@@ -641,7 +652,7 @@ namespace InGame {
 			while (1)
 			{
 				++s_Fm75Ptr;
-				if (s_Fm75Ptr >= 10)
+				if (s_Fm75Ptr >= explosionMax)
 				{
 					s_Fm75Ptr = 0;
 				}
@@ -655,7 +666,7 @@ namespace InGame {
 			while (1)
 			{
 				++s_Fm100Ptr;
-				if (s_Fm100Ptr >= 10)
+				if (s_Fm100Ptr >= explosionMax)
 				{
 					s_Fm100Ptr = 0;
 				}
@@ -736,6 +747,19 @@ namespace InGame {
 					return s_Exhaust1[s_Exhaust1Ptr];
 				}
 			}
+		case InGame::ExhaustType::Magic:
+			while (1)
+			{
+				++s_ExhaustMagicPtr;
+				if (s_ExhaustMagicPtr >= EFFECT_POOL_MAX)
+				{
+					s_ExhaustMagicPtr = 0;
+				}
+				if (!s_ExhaustMagic[s_ExhaustMagicPtr]->m_OnUsing)
+				{
+					return s_ExhaustMagic[s_ExhaustMagicPtr];
+				}
+			}
 		}
 		return nullptr;
 	}
@@ -803,6 +827,11 @@ namespace InGame {
 	void EffectPool::pushMarker(Gear::Ref<Marker> marker)
 	{
 		ObjectLayer::s_Marker.push_back(marker);
+	}
+
+	void EffectPool::pushExhaust(Gear::Ref<Exhaust> exhaust)
+	{
+		ObjectLayer::s_Exhausts.push_back(exhaust);
 	}
 
 
@@ -1350,6 +1379,11 @@ namespace InGame {
 		{
 		case InGame::ExhaustType::_1:
 			m_Texture = Gear::TextureStorage::GetFrameTexture2D("Exhaust1");
+			m_StartIndex = 27;
+			break;
+		case InGame::ExhaustType::Magic:
+			m_Texture = Gear::TextureStorage::GetFrameTexture2D("MagicExhaust");
+			m_StartIndex = 29;
 			break;
 		}
 
@@ -1358,8 +1392,6 @@ namespace InGame {
 
 		m_Scale = glm::vec3(1.8f, 1.8f, 1.0f);
 		m_OriginTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, ZOrder::z_Exhaust)) * glm::scale(glm::mat4(1.0f), m_Scale);
-
-		m_StartIndex = 27;
 	}
 
 	void Exhaust::init(const glm::vec3 & wolrdPosition)

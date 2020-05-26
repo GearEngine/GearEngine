@@ -80,10 +80,10 @@ namespace InGame {
 
 	void World::Update(Gear::Timestep ts)
 	{
-		if (!IS_PLAYING_SOUND(WormsSound::bgm))
+		if (!IS_PLAYING_SOUND(WormsSound::bgm) && !IS_PLAYING_SOUND(WormsSound::Hos))
 		{
 			PLAY_SOUND_NAME(bgms[Gear::Util::GetRndInt(11)], WormsSound::bgm);
-			Gear::SoundSystem::Get()->SetVolue(WormsSound::bgm, 0.4f);
+			Gear::SoundSystem::Get()->SetVolue(WormsSound::bgm, 0.5f);
 		}
 	}
 

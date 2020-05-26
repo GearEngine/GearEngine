@@ -138,9 +138,14 @@ namespace InGame {
 				{
 					onShotgun = true;
 				}
-				if (std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(curWorm)->GetStat(WormInfo::SelectedItem)) == ItemInfo::Donkey)
+				auto selectedItem = std::any_cast<ItemInfo::Number>(Gear::EntitySystem::GetStatus(curWorm)->GetStat(WormInfo::SelectedItem));
+				if (selectedItem == ItemInfo::Donkey)
 				{
 					onDonkey = true;
+				}
+				if (selectedItem == ItemInfo::Hos)
+				{
+					onHos = true;
 				}
 			}
 
@@ -248,12 +253,61 @@ namespace InGame {
 					handled = true;
 				}
 			}
+			else if (onHos)
+			{
+				int hosId = Gear::EntitySystem::GetEntityIDFromName("Hos");
+				if (Gear::EntitySystem::IsEntityActivated(hosId))
+				{
+					handled = true;
+					return;
+				}
+
+				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
+				{
+					auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
+					if (curState != WormState::OnNothing && curState != WormState::OnNotMyTurn)
+					{
+						return;
+					}
+					if (curState == WormState::OnNothing)
+					{
+						damagedWorm.push_back(WorldWormData::s_LivingWorms[i]);
+					}
+				}
+				if (damagedWorm.size())
+				{
+					for (int i = 0; i < damagedWorm.size(); ++i)
+					{
+						auto status = Gear::EntitySystem::GetStatus(damagedWorm[i]);
+						auto timer = Gear::EntitySystem::GetTimer(damagedWorm[i]);
+						timer->SetTimer(1.0f);
+						timer->Start();
+						GR_TRACE("dispatch damage {0}", Gear::EntitySystem::GetEntity(damagedWorm[i])->GetName());
+						status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
+					}
+					Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
+					worldTimer->SetTimer(3.0f);
+					worldTimer->Start();
+					onDonkey = false;
+					inDamageWormFirst = true;
+					handled = true;
+				}
+				else
+				{
+					Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
+					worldTimer->SetTimer(1.0f);
+					worldTimer->Start();
+					onDonkey = false;
+					inDamageWormFirst = true;
+					handled = true;
+				}
+			}
 			else
 			{
 				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
 				{
 					auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
-					if (curState != WormState::OnNothing && curState != WormState::OnNotMyTurn)
+					if (curState != WormState::OnNothing && curState != WormState::OnNotMyTurn && curState != WormState::OnUnderWater)
 					{
 						return;
 					}
@@ -330,7 +384,10 @@ namespace InGame {
 			{
 				if (*worm == worldData.EntityID)
 				{
-					WorldWormData::s_WaitingDyeQue.push(*worm);
+					if (Gear::EntitySystem::GetFSM(worldData.EntityID)->GetCurrentState() != WormState::OnUnderWater)
+					{
+						WorldWormData::s_WaitingDyeQue.push(*worm);
+					}
 					for (auto activeWorm = WorldWormData::s_ActiveWorms.begin(); activeWorm != WorldWormData::s_ActiveWorms.end(); ++activeWorm)
 					{
 						if (*worm == *activeWorm)

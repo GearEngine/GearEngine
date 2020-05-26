@@ -94,6 +94,7 @@ namespace InGame {
 		bool inDamageWormFirst = true;
 		bool onShotgun = false;
 		bool onDonkey = false;
+		bool onHos = false;
 		int curWorm;
 
 		void init(int entityID)
