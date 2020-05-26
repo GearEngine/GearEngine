@@ -16,7 +16,7 @@ namespace InGame {
 		});
 
 		//Set Component specific
-		auto terrainBack = Gear::TextureStorage::GetTexture2D(initData.Mapinfo.TerrianBackName + "Back");
+		auto terrainBack = initData.Mapinfo.TerrainBack;
 		Gear::EntitySystem::SetTexturer(m_ID, Gear::RenderType::Normal, terrainBack);
 
 		int width = terrainBack->GetWidth();

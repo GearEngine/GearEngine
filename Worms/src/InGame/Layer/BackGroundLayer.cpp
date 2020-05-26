@@ -138,7 +138,7 @@ namespace InGame {
 	void BackGroundLayer::WaterSettup(const InitiateData& initData)
 	{
 		//water settup
-		auto waterTexture = Gear::TextureStorage::GetFrameTexture2D(initData.Mapinfo.Water);
+		auto waterTexture = Gear::TextureStorage::GetFrameTexture2D(WaterInfo::GetName(initData.Mapinfo.Water));
 		m_WaterWave = Gear::CreateRef<Gear::Animation2D>(waterTexture, 0.05f, true);
 
 		float waterWidth = waterTexture->GetWidth();
@@ -161,30 +161,35 @@ namespace InGame {
 			for (int j = 0; j < 21; ++j)
 			{
 				auto waterTranslate = glm::translate(glm::mat4(1.0f),
-					glm::vec3(initData.WorldRect.Left + j * waterScale.x + WaterOffset[i], -13.3f + i * (waterScale.y * 0.5f), waterZOrder))
+					glm::vec3(initData.WorldRect.Left + j * waterScale.x + WaterOffset[i], -13.3f + i * (waterScale.y * 0.41f), waterZOrder))
 					* glm::scale(glm::mat4(1.0f), waterScale);
 				m_WaterWaveTranslates.push_back(waterTranslate);
 			}
 		}
 		m_WaterBackGroundTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -15.0f, ZOrder::z_WatterBackGround))
 			* glm::scale(glm::mat4(1.0f), glm::vec3(140.0f, 7.5f, 1.0f));
-		m_WaterBackGroundmColor = initData.Mapinfo.WaterRGB;
+		
+		m_WaterBackGroundmColor = WaterInfo::GetColor(initData.Mapinfo.Water);
 	}
 
 	void BackGroundLayer::FloatingSettup(const InitiateData& initData)
 	{
 		m_FloatingTextures.resize(10);
 		m_FloatingTranslates.resize(10);
-		auto leaf = Gear::TextureStorage::GetFrameTexture2D("FallenLeaf");
+		auto debris = Gear::TextureStorage::GetFrameTexture2D("debris" + std::to_string(initData.Mapinfo.FloatingMaterialIndex));
+		float width = debris->GetWidth();
+		float height = debris->GetHeight();
+
 		for (int i = 0; i < 10; ++i)
 		{
-			m_FloatingTextures[i] = Gear::CreateRef<Gear::Animation2D>(leaf, 0.05f, true);
+			m_FloatingTextures[i] = Gear::CreateRef<Gear::Animation2D>(debris, 0.05f, true);
 			m_FloatingTextures[i]->SetFrameY(i * 10);
 			m_FloatingTextures[i]->Resume();
+
 			for (int j = 0; j < 10; ++j)
 			{
 				m_FloatingTranslates[i].push_back(FloatingMatter(glm::vec3(Gear::Util::GetRndFloatFromTo(initData.WorldRect.Left, initData.WorldRect.Right), Gear::Util::GetRndFloatFromTo(-11.0f, 9.0f), ZOrder::z_FloatingMatter),
-					glm::vec3( 0.6f, 0.6f, 1.0f ), Gear::Util::GetRndFloatFromTo(0.3f, 0.9f), initData.WorldRect));
+					glm::vec3( width / initData.MapReductionRatio , height /initData.MapReductionRatio , 1.0f ), Gear::Util::GetRndFloatFromTo(0.3f, 0.9f), initData.WorldRect));
 			}
 		}
 	}

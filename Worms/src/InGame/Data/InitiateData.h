@@ -7,12 +7,13 @@ namespace InGame {
 	public:
 		Gear::Ref<Gear::Texture2D> Map;
 		Gear::Ref<Gear::Texture2D> Mask;
+		Gear::Ref<Gear::Texture2D> TerrainBack;
 		std::string MapName;
-		std::string TerrianBackName;
-		std::string FloatingMaterial;
-		std::string Water;
 		std::string Grad;
-		glm::vec4 WaterRGB;
+
+		unsigned int Water;
+		int TerrianBackIndex;
+		int FloatingMaterialIndex;
 		float TerrainMaxX;
 		float TerrainMinX;
 
@@ -20,17 +21,17 @@ namespace InGame {
 		{
 			Map = Gear::Texture2D::Create("assets\\Terrain\\" + MapName + ".png");
 			Mask = Gear::Texture2D::Create("assets\\Terrain\\" + MapName + "Mask.png");
+			TerrainBack = Gear::Texture2D::Create("assets\\Terrain\\Back\\TerrainBack" + std::to_string(TerrianBackIndex) + ".png");
 		}
 
 		virtual void Read(const Json::Value& value) override
 		{
 			Json::Value mapValue = value[Name];
 			MapName = Name;
-			TerrianBackName = mapValue["TerrianBackName"].asString();
-			FloatingMaterial = mapValue["FloatingMaterial"].asString();
-			Water = mapValue["Water"].asString();
+			TerrianBackIndex = mapValue["TerrianBackIndex"].asInt();
+			FloatingMaterialIndex = mapValue["FloatingMaterialIndex"].asInt();
+			Water = mapValue["Water"].asUInt();
 			Grad = mapValue["Grad"].asString();
-			WaterRGB = glm::vec4(mapValue["WR"].asFloat() / 255.0f, mapValue["WG"].asFloat() / 255.0f, mapValue["WB"].asFloat() / 255.0f, mapValue["WA"].asFloat() / 255.0f);
 			TerrainMaxX = mapValue["TerrainMaxX"].asFloat();
 			TerrainMinX = mapValue["TerrainMinX"].asFloat();
 		}
@@ -41,6 +42,55 @@ namespace InGame {
 		}
 
 	};
+
+	namespace WaterInfo
+	{
+		enum Color : unsigned int
+		{
+			Blue,
+			Green,
+			Purple,
+			Red,
+			Yellow,
+			Max
+		};
+		inline glm::vec4 GetColor(unsigned int color)
+		{
+			switch (color)
+			{
+			case InGame::WaterInfo::Blue:
+				return glm::vec4(47 / 255.0f, 55 / 255.0f, 123 / 255.0f, 1.0f);
+			case InGame::WaterInfo::Green:
+				return glm::vec4(47 / 255.0f, 123 / 255.0f, 123 / 255.0f, 1.0f);
+			case InGame::WaterInfo::Purple:
+				return glm::vec4(108 / 255.0f, 47 / 255.0f, 123 / 255.0f, 1.0f);
+			case InGame::WaterInfo::Red:
+				return glm::vec4(123 / 255.0f, 52 / 255.0f, 47 / 255.0f, 1.0f);
+			case InGame::WaterInfo::Yellow:
+				return  glm::vec4(123 / 255.0f, 102 / 255.0f, 47 / 255.0f, 1.0f);
+			}
+			return glm::vec4();
+		}
+
+		inline std::string GetName(unsigned int color)
+		{
+			switch (color)
+			{
+			case InGame::WaterInfo::Blue:
+				return "BlueWater";
+			case InGame::WaterInfo::Green:
+				return "GreenWater";
+			case InGame::WaterInfo::Purple:
+				return "PurpleWater";
+			case InGame::WaterInfo::Red:
+				return "RedWater";
+			case InGame::WaterInfo::Yellow:
+				return "YellowWater";
+			}
+			return "";
+		}
+
+	}
 
 	namespace WormInfo {
 
