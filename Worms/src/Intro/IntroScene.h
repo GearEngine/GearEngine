@@ -26,6 +26,10 @@ namespace Intro {
 		float pastTime = 0.0f;
 		float sceneChangeDelay = 3.0f;
 		bool resourceLoadGpu = false;
+		bool animationCreate = false;
+
+		int loadIndex = 0;
+		const int perFramLoadMax = 200;
 
 	public:
 		IntroScene()

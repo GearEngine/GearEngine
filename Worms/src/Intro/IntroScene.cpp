@@ -74,7 +74,7 @@ namespace Intro {
 
 		Gear::Renderer2D::BeginScene(SceneBackground::UiCamera);
 
-		if (!inFirst && !isEndScene && resourceLoadGpu)
+		if (!inFirst && !isEndScene && resourceLoadGpu && animationCreate)
 		{
 			if (Gear::Input::IsKeyPressd(GR_KEY_ENTER) || Gear::Input::IsKeyPressd(GR_KEY_ESCAPE) || Gear::Input::IsKeyPressd(GR_KEY_SPACE)
 				|| Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_RIGHT) || Gear::Input::IsMouseButtonPressed(GR_MOUSE_BUTTON_LEFT))
@@ -103,6 +103,10 @@ namespace Intro {
 			}
 			Gear::Renderer2D::DrawQuad(introTranslate, introTexture, alpha);
 		}
+		else if (!inFirst && !resourceLoadGpu)
+		{
+			Gear::Renderer2D::DrawQuad(introTranslate, introTexture);
+		}
 		else if (!inFirst && resourceLoadGpu)
 		{
 			Gear::Renderer2D::DrawQuad(introTranslate, introTexture);
@@ -115,9 +119,13 @@ namespace Intro {
 
 		if (loadingTextureComplete && !resourceLoadGpu)
 		{
-			resourceLoadGpu = true;
-			for (int i = 0; i < textureDatas.size(); ++i)
+			for (int i = loadIndex; i < i + perFramLoadMax; ++i)
 			{
+				if (i == textureDatas.size())
+				{
+					resourceLoadGpu = true;
+					break;
+				}
 				if (textureDatas[i].isFrameData)
 				{
 					Gear::TextureStorage::AddFrameTexture2D(textureDatas[i].Name, Gear::FrameTexture2D::Create(textureDatas[i]));
@@ -127,7 +135,13 @@ namespace Intro {
 					Gear::TextureStorage::AddTexture2D(textureDatas[i].Name, Gear::Texture2D::Create(textureDatas[i]));
 				}
 			}
+			loadIndex += perFramLoadMax;
+		}
+
+		if (loadingTextureComplete && resourceLoadGpu && !animationCreate)
+		{
 			//animation
+			animationCreate = true;
 			std::vector<std::pair<int, int>> orderVector;
 			for (int i = 0; i < 32; ++i)
 			{
@@ -146,7 +160,7 @@ namespace Intro {
 			auto YellowArrow = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("YellowFollowingArrow"), 0.02f, orderVector, true);
 			auto SkyArrow = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("SkyFollowingArrow"), 0.02f, orderVector, true);
 			auto PurpleArrow = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("PurpleFollowingArrow"), 0.02f, orderVector, true);
-			
+
 			redArrow->Start();
 			blueArrow->Start();
 			GreenArrow->Start();
@@ -166,7 +180,7 @@ namespace Intro {
 			auto yellowCursor = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("YellowCursor"), 0.0f, true);
 			auto skyCursor = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("SkyCursor"), 0.0f, true);
 			auto purpleCursor = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("PurpleCursor"), 0.0f, true);
-			
+
 			Gear::TextureStorage::AddAnimation("RedCursor", redCursor);
 			Gear::TextureStorage::AddAnimation("BlueCursor", blueCursor);
 			Gear::TextureStorage::AddAnimation("GreenCursor", greenCursor);

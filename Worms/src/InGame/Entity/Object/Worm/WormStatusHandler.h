@@ -869,6 +869,7 @@ namespace InGame {
 				pastTime = 0.0f;
 				timer->SetTimer(1.0f);
 				FSM->SetCurrentState(WormState::OnNotMyTurn);
+				status->SetStat(WormInfo::Surrendered, true);
 
 				status->SetStat(WormInfo::MyTurn, false);
 				if (GameMode::Bit::ModeBit == GameMode::NetWork)

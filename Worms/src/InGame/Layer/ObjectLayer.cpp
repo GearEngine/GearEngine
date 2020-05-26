@@ -11,8 +11,8 @@
 namespace InGame {
 
 	std::unordered_map<std::string, std::vector<Gear::Ref<Worm>>> ObjectLayer::s_Worms = std::unordered_map<std::string, std::vector<Gear::Ref<Worm>>>();
-	std::unordered_map<std::string, TeamInfo> ObjectLayer:: s_TeamInfo = std::unordered_map<std::string, TeamInfo>();
-	std::unordered_map<std::string, TeamInfo>::iterator ObjectLayer:: s_TeamIter = std::unordered_map<std::string, TeamInfo>::iterator();
+	std::unordered_map<std::string, TeamInfo> ObjectLayer::s_TeamInfo = std::unordered_map<std::string, TeamInfo>();
+	std::unordered_map<std::string, TeamInfo>::iterator ObjectLayer::s_TeamIter = std::unordered_map<std::string, TeamInfo>::iterator();
 	std::unordered_map<std::string, int> ObjectLayer::s_WormTurnIndex = std::unordered_map<std::string, int>();
 	std::vector<unsigned int> ObjectLayer::s_MyNetWormsID = std::vector<unsigned int>();
 
@@ -231,7 +231,7 @@ namespace InGame {
 	void ObjectLayer::HandleTurnChange()
 	{
 		s_turnChanged = false;
-	
+
 		auto FSM = Gear::EntitySystem::GetFSM(s_CurrentActivatedWormID);
 		auto status = Gear::EntitySystem::GetStatus(s_CurrentActivatedWormID);
 		status->SetNeedHandleData(WormStatusHandleType::Display, true);
@@ -277,7 +277,7 @@ namespace InGame {
 			{
 				s_TeamIter = s_TeamInfo.begin();
 			}
-			if (s_TeamIter->second.TotalWormHp != 0)
+			if (s_TeamIter->second.TotalWormHp != 0 && !s_TeamIter->second.Surrendered)
 			{
 				break;
 			}
@@ -331,7 +331,7 @@ namespace InGame {
 		{
 			auto status = Gear::EntitySystem::GetStatus(WorldWormData::s_ActiveWorms[i]);
 			bool turnPassed = std::any_cast<bool>(status->GetStat(WormInfo::TurnPassed));
-			if(!turnPassed)
+			if (!turnPassed)
 			{
 				return;
 			}

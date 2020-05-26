@@ -1,7 +1,7 @@
 {
   "points": 0,
   "playerType": 0,
-  "teamIcon": "Japan",
+  "teamIcon": "Denmark",
   "teamName": "3-Up",
   "wormName": [
     "Worm1",
@@ -12,5 +12,16 @@
     "Worm6",
     "Worm7",
     "Worm8"
+  ],
+  "graves": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
   ]
 }

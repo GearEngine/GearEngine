@@ -314,6 +314,7 @@ namespace InGame {
 		int nWorm = 0;
 		int CurrentTotalWormHp = 0;
 		int TotalWormHp = 0;
+		bool Surrendered = false;
 		std::string TeamName;
 		TeamColor::Color TeamColor;
 		std::vector<WormSpecific> worms;

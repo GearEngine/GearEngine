@@ -1,0 +1,27 @@
+{
+  "points": 10,
+  "playerType": 0,
+  "teamIcon": "Korea",
+  "teamName": "Academy",
+  "wormName": [
+    "ChunhoYeok_1_BURN_Exit",
+    "Kyungil",
+    "Game",
+    "Academy",
+    "Junsoo",
+    "Jisoo",
+    "Changhee",
+    "Soonwoo"
+  ],
+  "graves": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    1,
+    2
+  ]
+}
