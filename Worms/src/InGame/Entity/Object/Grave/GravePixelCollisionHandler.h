@@ -38,15 +38,9 @@ namespace InGame {
 				return;
 			}
 			auto& externalVectorY = physics->GetExternalVectorY();
-			if (externalVectorY > 0.0f)
-			{
-				return;
-			}
+			auto& position = transform->GetPosition();
 
-			auto trans = transform->GetTranslate();
-			auto TargetPos = glm::vec2(trans[3][0], trans[3][1]);
-
-			if (TargetPos.y < -13.0f)
+			if (position.y < -13.0f)
 			{
 				FSM->SetCurrentState(GraveInfo::State::OnUnderWater);
 				int curFrameY = animator->GetFrameIdx().second;
@@ -61,43 +55,70 @@ namespace InGame {
 				return;
 			}
 
-			auto textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(TargetPos, *m_PixelCollisionTargetTextureTranslate);
-			
+			auto textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(glm::vec2(position.x, position.y), *m_PixelCollisionTargetTextureTranslate);
+
 			float GraveOnTexturePositionX = textureLocalPosition.x * m_TargetTextureWidth;
-			float GraveOnTexturePositionY = textureLocalPosition.y * m_TargetTextureHeight;			
+			float GraveOnTexturePositionY = textureLocalPosition.y * m_TargetTextureHeight;
 
 			//Position adjust
-			int basicYOffset = 4;
-			int fixedBottomPos;
-			auto midPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)GraveOnTexturePositionX, (int)GraveOnTexturePositionY - basicYOffset });
 
-			if (midPixel == m_TargetPixelColor)
+			if (externalVectorY > 0.0f)
 			{
-				if (std::abs(m_ExternalVector->y) > 0.1f)
+				int basicYOffset = 8;
+				int fixedBottomPos;
+				auto midPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)GraveOnTexturePositionX, (int)GraveOnTexturePositionY + basicYOffset });
+
+				if (midPixel == m_TargetPixelColor)
 				{
 					PLAY_SOUND_NAME("CrateImpact", WormsSound::Grave);
-				}
-				for (int i = 1; i < 40; ++i)
-				{
-					fixedBottomPos = (int)GraveOnTexturePositionY - (basicYOffset - i);
-					midPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)GraveOnTexturePositionX, fixedBottomPos });
-					if (midPixel != m_TargetPixelColor)
+					for (int i = 1; i < 40; ++i)
 					{
-						float localY = (GraveOnTexturePositionY + i - 1) / m_TargetTextureHeight - 0.5f;
-						TargetPos.y = (*m_PixelCollisionTargetTextureTranslate)[1][1] * localY + (*m_PixelCollisionTargetTextureTranslate)[3][1];
-						
-						
-						if (externalVectorY < -0.01f)
+						fixedBottomPos = (int)GraveOnTexturePositionY + (basicYOffset - i);
+						midPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)GraveOnTexturePositionX, fixedBottomPos });
+						if (midPixel != m_TargetPixelColor)
 						{
-							externalVectorY = -externalVectorY * elastics;
-							physics->ResetGravityAccelation();
-						}
-						else
-						{
-							physics->InActivateGravity();
+							float localY = (GraveOnTexturePositionY + i - 1) / m_TargetTextureHeight - 0.5f;
+							position.y = (*m_PixelCollisionTargetTextureTranslate)[1][1] * localY + (*m_PixelCollisionTargetTextureTranslate)[3][1];
+
 							externalVectorY = 0.0f;
+							physics->ResetGravityAccelation();
+							break;
 						}
-						break;
+					}
+				}
+			}
+			else
+			{
+				int basicYOffset = 4;
+				int fixedBottomPos;
+				auto midPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)GraveOnTexturePositionX, (int)GraveOnTexturePositionY - basicYOffset });
+
+				if (midPixel == m_TargetPixelColor)
+				{
+					if (std::abs(m_ExternalVector->y) > 0.1f)
+					{
+						PLAY_SOUND_NAME("CrateImpact", WormsSound::Grave);
+					}
+					for (int i = 1; i < 40; ++i)
+					{
+						fixedBottomPos = (int)GraveOnTexturePositionY - (basicYOffset - i);
+						midPixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { (int)GraveOnTexturePositionX, fixedBottomPos });
+						if (midPixel != m_TargetPixelColor)
+						{
+							float localY = (GraveOnTexturePositionY + i - 1) / m_TargetTextureHeight - 0.5f;
+							position.y = (*m_PixelCollisionTargetTextureTranslate)[1][1] * localY + (*m_PixelCollisionTargetTextureTranslate)[3][1];
+							if (externalVectorY < -0.01f)
+							{
+								externalVectorY = -externalVectorY * elastics;
+								physics->ResetGravityAccelation();
+							}
+							else
+							{
+								physics->InActivateGravity();
+								externalVectorY = 0.0f;
+							}
+							break;
+						}
 					}
 				}
 			}

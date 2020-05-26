@@ -42,6 +42,8 @@ namespace InGame {
 		int m_GraveType4Ptr = 0;
 		int m_GraveType5Ptr = 0;
 		int m_GraveType6Ptr = 0;
+
+		const int GraveMax = 64;
 	};
 
 	#define GRAVE_POOL GravePool::Get()

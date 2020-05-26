@@ -144,33 +144,33 @@ namespace InGame {
 		m_GraveType5.clear();
 		m_GraveType6.clear();
 
-		m_GraveType1.resize(15);
-		for (int i = 0; i < 15; ++i)
+		m_GraveType1.resize(GraveMax);
+		for (int i = 0; i < GraveMax; ++i)
 		{
 			m_GraveType1[i].reset(new Grave(initData, GraveInfo::Type::_1));
 		}
-		m_GraveType2.resize(15);
-		for (int i = 0; i < 15; ++i)
+		m_GraveType2.resize(GraveMax);
+		for (int i = 0; i < GraveMax; ++i)
 		{
 			m_GraveType2[i].reset(new Grave(initData, GraveInfo::Type::_2));
 		}
-		m_GraveType3.resize(15);
-		for (int i = 0; i < 15; ++i)
+		m_GraveType3.resize(GraveMax);
+		for (int i = 0; i < GraveMax; ++i)
 		{
 			m_GraveType3[i].reset(new Grave(initData, GraveInfo::Type::_3));
 		}
-		m_GraveType4.resize(15);
-		for (int i = 0; i < 15; ++i)
+		m_GraveType4.resize(GraveMax);
+		for (int i = 0; i < GraveMax; ++i)
 		{
 			m_GraveType4[i].reset(new Grave(initData, GraveInfo::Type::_4));
 		}
-		m_GraveType5.resize(15);
-		for (int i = 0; i < 15; ++i)
+		m_GraveType5.resize(GraveMax);
+		for (int i = 0; i < GraveMax; ++i)
 		{
 			m_GraveType5[i].reset(new Grave(initData, GraveInfo::Type::_5));
 		}
-		m_GraveType6.resize(15);
-		for (int i = 0; i < 15; ++i)
+		m_GraveType6.resize(GraveMax);
+		for (int i = 0; i < GraveMax; ++i)
 		{
 			m_GraveType6[i].reset(new Grave(initData, GraveInfo::Type::_6));
 		}
@@ -184,7 +184,7 @@ namespace InGame {
 			while (1)
 			{
 				++m_GraveType1Ptr;
-				if (m_GraveType1Ptr >= 15)
+				if (m_GraveType1Ptr >= GraveMax)
 				{
 					m_GraveType1Ptr = 0;
 				}
@@ -198,7 +198,7 @@ namespace InGame {
 			while (1)
 			{
 				++m_GraveType2Ptr;
-				if (m_GraveType2Ptr >= 15)
+				if (m_GraveType2Ptr >= GraveMax)
 				{
 					m_GraveType2Ptr = 0;
 				}
@@ -212,7 +212,7 @@ namespace InGame {
 			while (1)
 			{
 				++m_GraveType3Ptr;
-				if (m_GraveType3Ptr >= 15)
+				if (m_GraveType3Ptr >= GraveMax)
 				{
 					m_GraveType3Ptr = 0;
 				}
@@ -226,7 +226,7 @@ namespace InGame {
 			while (1)
 			{
 				++m_GraveType4Ptr;
-				if (m_GraveType4Ptr >= 15)
+				if (m_GraveType4Ptr >= GraveMax)
 				{
 					m_GraveType4Ptr = 0;
 				}
@@ -240,7 +240,7 @@ namespace InGame {
 			while (1)
 			{
 				++m_GraveType5Ptr;
-				if (m_GraveType5Ptr >= 15)
+				if (m_GraveType5Ptr >= GraveMax)
 				{
 					m_GraveType5Ptr = 0;
 				}
@@ -254,7 +254,7 @@ namespace InGame {
 			while (1)
 			{
 				++m_GraveType6Ptr;
-				if (m_GraveType6Ptr >= 15)
+				if (m_GraveType6Ptr >= GraveMax)
 				{
 					m_GraveType6Ptr = 0;
 				}

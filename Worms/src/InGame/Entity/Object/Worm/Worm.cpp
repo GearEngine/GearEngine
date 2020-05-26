@@ -384,7 +384,9 @@ namespace InGame {
 		auto maskTranslate = glm::translate(glm::mat4(1.0f), initData.MapPosition)
 			* glm::scale(glm::mat4(1.0f), { width / initData.MapReductionRatio  , height / initData.MapReductionRatio , 1.0f });
 
-		InitWormPosition(wormData, wormNumber, teamNumber, mask, maskTranslate);
+		int fixedBottomPos;
+		int wormOnTexturePositionX;
+		InitWormPosition(wormData, wormNumber, teamNumber, mask, maskTranslate, fixedBottomPos, wormOnTexturePositionX);
 		Gear::EntitySystem::SetTransform(m_ID, wormData.StartPosition, 0.0f, initData.WormScale);
 
 		//Set FSM
@@ -504,18 +506,7 @@ namespace InGame {
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::World, Gear::CreateRef<WormWorldEventHandler>());
 		Gear::EventSystem::RegisterEventHandler(m_ID, EventType::Explosion, Gear::CreateRef<WormExplosionEventHandler>());
 
-		auto animator = Gear::EntitySystem::GetAnimator2D(m_ID);
-		switch (wormData.Direction)
-		{
-		case WormInfo::DirectionType::LeftFlat:
-			animator->SetCurrentAnimation(WormState::OnLeftFlatBreath);
-			animator->PlayAnimation(WormState::OnLeftFlatBreath);
-			break;
-		case WormInfo::DirectionType::RightFlat:
-			animator->SetCurrentAnimation(WormState::OnRightFlatBreath);
-			animator->PlayAnimation(WormState::OnRightFlatBreath);
-			break;
-		}
+		GradientCheck(wormOnTexturePositionX, fixedBottomPos, mask, wormData.Direction);
 		
 		auto worldID = Gear::EntitySystem::GetEntityIDFromName("World");
 		Gear::EventSystem::DispatchEventTo(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::CreatedWorm, 0, m_ID)), worldID);
@@ -532,43 +523,43 @@ namespace InGame {
 
 	}
 
-	void Worm::InitWormPosition(WormSpecific& wormData, int wormNumber, int teamNumber, Gear::Ref<Gear::Texture2D> mask ,const glm::mat4& maskTranslate)
+	void Worm::InitWormPosition(WormSpecific& wormData, int wormNumber, int teamNumber, Gear::Ref<Gear::Texture2D> mask ,const glm::mat4& maskTranslate, int& fixedBottomPos, int& wormOnTexturePositionX)
 	{
 		auto coordManager = Gear::Coord2DManger::Get();
 		float width = (float)mask->GetWidth();
 		float height = (float)mask->GetHeight();
 
-		glm::vec3 targetPxiel(255, 255, 255);
+		glm::vec3 targetPxiel(255.0f, 255.0f, 255.0f);
 		auto textureLocalPosition = coordManager->GetTextureLocalPosition_From_WorlPosition(glm::vec2(wormData.StartPosition.x, wormData.StartPosition.y), maskTranslate);
-		float wormOnTexturePositionX = textureLocalPosition.x * width;
+		wormOnTexturePositionX = textureLocalPosition.x * width;
 		float wormOnTexturePositionY = textureLocalPosition.y * height;
 
-		int basicYOffset = 5;
+		int basicYOffset = 10;
 		while (1)
 		{
-			int fixedBottomPos = (int)wormOnTexturePositionY - basicYOffset;
+			fixedBottomPos = (int)wormOnTexturePositionY - basicYOffset;
 			if (fixedBottomPos < 0)
 			{
 				wormData.StartPosition.x = Gear::Util::GetRndFloatFromTo(-25.0f, 25.0f);
 				textureLocalPosition = coordManager->GetTextureLocalPosition_From_WorlPosition(glm::vec2(wormData.StartPosition.x, wormData.StartPosition.y), maskTranslate);
 				wormOnTexturePositionX = textureLocalPosition.x * width;
-				basicYOffset = 5;
+				basicYOffset = 8;
 				continue;
 			}
 
 			auto pixel = coordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(mask, { (int)wormOnTexturePositionX, fixedBottomPos });
 
+			bool adjacentCheck = true;
 			if (pixel == targetPxiel)
 			{
-				bool adjacentCheck = true;
-				for (int i = 1; i < 40; ++i)
+				for (int i = 1; i < 11; ++i)
 				{
 					fixedBottomPos = (int)wormOnTexturePositionY - (basicYOffset - i);
 					pixel = coordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(mask, { (int)wormOnTexturePositionX, fixedBottomPos });
-					
+
 					if (pixel != targetPxiel)
 					{
-						float localY = (fixedBottomPos - 1) / height - 0.5f;
+						float localY = (fixedBottomPos + 8) / height - 0.5f;
 						wormData.StartPosition.y = maskTranslate[1][1] * localY + maskTranslate[3][1];
 						return;
 					}
@@ -576,6 +567,103 @@ namespace InGame {
 			}
 			basicYOffset += 10;
 		}
+	}
+
+	void Worm::GradientCheck(int midX, int bottomY, Gear::Ref<Gear::Texture2D> mask, WormInfo::DirectionType dir)
+	{
+		int xOffset = 4;
+		int gradRange = 4;
+
+		auto leftPixel = Gear::Coord2DManger::Get()->GetPixel_From_TextureLocal_With_TextureRealPosition(mask, { midX - xOffset, bottomY });
+		auto rightPixel = Gear::Coord2DManger::Get()->GetPixel_From_TextureLocal_With_TextureRealPosition(mask, { midX + xOffset, bottomY });
+
+		glm::vec3 m_TargetPixelColor(255.0f, 255.0f, 255.0f);
+		int leftOffset = 0;
+		if (leftPixel == m_TargetPixelColor)
+		{
+			for (int i = 0; i < gradRange; ++i)
+			{
+				++leftOffset;
+				leftPixel = Gear::Coord2DManger::Get()->GetPixel_From_TextureLocal_With_TextureRealPosition(mask, { midX - xOffset, bottomY + leftOffset });
+				if (leftPixel != m_TargetPixelColor)
+				{
+					--leftOffset;
+					break;
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < gradRange; ++i)
+			{
+				--leftOffset;
+				leftPixel = Gear::Coord2DManger::Get()->GetPixel_From_TextureLocal_With_TextureRealPosition(mask, { midX - xOffset , bottomY + leftOffset });
+				if (leftPixel == m_TargetPixelColor)
+				{
+					break;
+				}
+			}
+		}
+
+		int rightOffset = 0;
+		if (rightPixel == m_TargetPixelColor)
+		{
+			for (int i = 0; i < gradRange; ++i)
+			{
+				++rightOffset;
+				rightPixel = Gear::Coord2DManger::Get()->GetPixel_From_TextureLocal_With_TextureRealPosition(mask, { midX + xOffset, bottomY + rightOffset });
+				if (rightPixel != m_TargetPixelColor)
+				{
+					--rightOffset;
+					break;
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < gradRange; ++i)
+			{
+				--rightOffset;
+				rightPixel = Gear::Coord2DManger::Get()->GetPixel_From_TextureLocal_With_TextureRealPosition(mask, { midX + xOffset, bottomY + rightOffset });
+				if (rightPixel == m_TargetPixelColor)
+				{
+					break;
+				}
+			}
+		}
+		auto animator = Gear::EntitySystem::GetAnimator2D(m_ID);
+		//result
+		if (dir == WormInfo::DirectionType::LeftDown || dir == WormInfo::DirectionType::LeftFlat || dir == WormInfo::DirectionType::LeftUp)
+		{
+			if (leftOffset == rightOffset)
+			{
+				animator->SetCurrentAnimation(WormState::OnLeftFlatBreath);
+			}
+			if (leftOffset > rightOffset)
+			{
+				animator->SetCurrentAnimation(WormState::OnLeftUpBreath);
+			}
+			if (leftOffset < rightOffset)
+			{
+				animator->SetCurrentAnimation(WormState::OnLeftDownBreath);
+			}
+		}
+		else
+		{
+			if (leftOffset == rightOffset)
+			{
+				animator->SetCurrentAnimation(WormState::OnRightFlatBreath);
+			}
+			if (leftOffset > rightOffset)
+			{
+				animator->SetCurrentAnimation(WormState::OnRightDownBreath);
+			}
+			if (leftOffset < rightOffset)
+			{
+				animator->SetCurrentAnimation(WormState::OnRightUpBreath);
+			}
+		}
+		animator->ResumeAnimation();
 	}
 }
 

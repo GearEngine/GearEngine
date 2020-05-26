@@ -1020,6 +1020,7 @@ namespace Main {
 				worm.StartPosition = glm::vec3(Gear::Util::GetRndFloatFromTo(initData.Mapinfo.TerrainMinX, initData.Mapinfo.TerrainMaxX), 5.0f, ZOrder::z_Worm);
 				worm.Direction = (InGame::WormInfo::DirectionType)Gear::Util::GetRndInt(2);
 				worm.Hp = wormEnergy;
+
 				worm.GraveType = (InGame::GraveInfo::Type)selectedTeamList[i]->graves[shuffleIdx[j]];
 				if (selectedTeamLayer->handicapType[i] == TeamBasicOption::Handicap::Plus)
 				{

@@ -14,8 +14,9 @@ namespace InGame {
 		int GetID() { return m_ID; }
 
 	private:
-		void InitWormPosition(WormSpecific& wormData, int wormNumber, int teamNumber, Gear::Ref<Gear::Texture2D> mask, const glm::mat4& maskTranslate);
-		
+		void InitWormPosition(WormSpecific& wormData, int wormNumber, int teamNumber, Gear::Ref<Gear::Texture2D> mask, const glm::mat4& maskTranslate, int& fixedBottomPos, int& wormOnTexturePositionX);
+		void GradientCheck(int midX, int bottomY, Gear::Ref<Gear::Texture2D> mask, WormInfo::DirectionType dir);
+
 		int m_ID;
 
 	};

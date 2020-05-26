@@ -18,7 +18,7 @@
   "Chemist": {
     "FloatingMaterialIndex": 4,
     "TerrianBackIndex": 18,
-    "Water": 3,
+    "Water": 4,
     "Grad": "Grad0",
     "TerrainMaxX": 25.3,
     "TerrainMinX": -23.3
@@ -42,7 +42,7 @@
   "Dino": {
     "FloatingMaterialIndex": 1,
     "TerrianBackIndex": 8,
-    "Water": 3,
+    "Water": 2,
     "Grad": "Grad0",
     "TerrainMaxX": 24.3,
     "TerrainMinX": -24.3
@@ -114,7 +114,7 @@
   "MPSLogo": {
     "FloatingMaterialIndex": 0,
     "TerrianBackIndex": 19,
-    "Water": 3,
+    "Water": 1,
     "Grad": "Grad0",
     "TerrainMaxX": 23.3,
     "TerrainMinX": -24.3
@@ -139,7 +139,7 @@
   "Plumbing": {
     "FloatingMaterialIndex": 6,
     "TerrianBackIndex": 22,
-    "Water": 3,
+    "Water": 0,
     "Grad": "Grad0",
     "TerrainMaxX": 22.3,
     "TerrainMinX": -22.3
@@ -219,7 +219,7 @@
   "Toys": {
     "FloatingMaterialIndex": 4,
     "TerrianBackIndex": 13,
-    "Water": 3,
+    "Water": 4,
     "Grad": "Grad0",
     "TerrainMaxX": 25.3,
     "TerrainMinX": -24.3
