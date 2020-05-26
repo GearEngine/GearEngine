@@ -48,7 +48,7 @@ namespace InGame {
 		Gear::EntitySystem::ActivateEntity(m_ID);
 		Gear::EntitySystem::GetFSM(m_ID)->SetCurrentState(Item::State::OnGoing);
 
-		glm::vec3 pos(position.x, 20.0f, ZOrder::z_Item);
+		glm::vec3 pos(position.x, 13.0f, ZOrder::z_Item);
 		Gear::EntitySystem::SetTransform(m_ID, pos, 0.0f, glm::vec2(3.96f, 3.96f));
 
 		auto physics = Gear::EntitySystem::GetPhysics2D(m_ID);

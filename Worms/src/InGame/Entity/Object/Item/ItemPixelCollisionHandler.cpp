@@ -92,7 +92,7 @@ namespace InGame {
 			return;
 		}
 		float orthogonalinclination = -1.0f / inclination;
-		m_ExternalVector->x = orthogonalinclination * 1.5f;
+		m_ExternalVector->x = orthogonalinclination * 2.0f;
 	}
 
 	void HosPCHandler::Handle(int entityID)
@@ -128,15 +128,17 @@ namespace InGame {
 
 		bool leftCollision = false;
 		bool rightCollision = false;
+		
+		int hosRadius = 45;
 
 		if (m_ExternalVector->x > 0.0f)
 		{
-			for (int i = -70; i <= 70; i += 5)
+			for (int i = -hosRadius; i <= hosRadius; i += 5)
 			{
-				auto pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX + 65, ItemOnTexturePositionY + i });
+				int xOffset = hosRadius;
+				auto pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX + xOffset, ItemOnTexturePositionY + i });
 				if (pixel == m_TargetPixelColor)
 				{
-					int xOffset = 65;
 					while (1)
 					{
 						xOffset -= 2;
@@ -151,7 +153,7 @@ namespace InGame {
 					//PLAY_SOUND_NAME("HOLYDONKEYIMPACT", WormsSound::Weapon);
 
 					auto from = std::any_cast<int>(Gear::EntitySystem::GetStatus(entityID)->GetStat(Item::Info::From));
-					ITEM_POOL->MakeExplosion(ExplosionData(glm::vec2(m_TargetPos->x + 1.2f, m_TargetPos->y), Explosion::Size100, 100.0f, ItemInfo::Donkey, from), glm::vec2(m_TargetPos->x + 1.2f, m_TargetPos->y), Explosion::Text::Foom, "");
+					ITEM_POOL->MakeExplosion(ExplosionData(glm::vec2(m_TargetPos->x + 1.0f, m_TargetPos->y), Explosion::Size100, 100.0f, ItemInfo::Donkey, from), glm::vec2(m_TargetPos->x + 1.0f, m_TargetPos->y), Explosion::Text::Foom, "");
 					Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(Item::State::OnExplosion);
 					rightCollision = true;
 					break;
@@ -160,13 +162,12 @@ namespace InGame {
 		}
 		else if (m_ExternalVector->x < 0.0f)
 		{
-			for (int i = -70; i <= 70; i += 5)
+			for (int i = -hosRadius; i <= hosRadius; i += 5)
 			{
-				auto pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX - 65, ItemOnTexturePositionY + i });
-
+				int xOffset = hosRadius;
+				auto pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX - xOffset, ItemOnTexturePositionY + i });
 				if (pixel == m_TargetPixelColor)
 				{
-					int xOffset = 65;
 					while (1)
 					{
 						xOffset -= 2;
@@ -181,7 +182,7 @@ namespace InGame {
 					//PLAY_SOUND_NAME("HOLYDONKEYIMPACT", WormsSound::Weapon);
 
 					auto from = std::any_cast<int>(Gear::EntitySystem::GetStatus(entityID)->GetStat(Item::Info::From));
-					ITEM_POOL->MakeExplosion(ExplosionData(glm::vec2(m_TargetPos->x - 1.2f, m_TargetPos->y), Explosion::Size100, 100.0f, ItemInfo::Donkey, from), glm::vec2(m_TargetPos->x - 1.2f, m_TargetPos->y), Explosion::Text::Foom, "");
+					ITEM_POOL->MakeExplosion(ExplosionData(glm::vec2(m_TargetPos->x - 1.0f, m_TargetPos->y), Explosion::Size100, 100.0f, ItemInfo::Donkey, from), glm::vec2(m_TargetPos->x - 1.0f, m_TargetPos->y), Explosion::Text::Foom, "");
 					Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(Item::State::OnExplosion);
 					leftCollision = true;
 					break;
@@ -199,13 +200,12 @@ namespace InGame {
 		}
 
 
-		for (int i = -65; i <= 65; i += 5)
+		for (int i = -hosRadius; i <= hosRadius; i += 5)
 		{
-			auto pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX + i, ItemOnTexturePositionY - 60 });
-
+			int yOffset = hosRadius;
+			auto pixel = s_CoordManager->GetPixel_From_TextureLocal_With_TextureRealPosition(m_TargetTexture, { ItemOnTexturePositionX + i, ItemOnTexturePositionY - yOffset });
 			if (pixel == m_TargetPixelColor)
 			{
-				int yOffset = 60;
 				while (1)
 				{
 					yOffset -= 2;

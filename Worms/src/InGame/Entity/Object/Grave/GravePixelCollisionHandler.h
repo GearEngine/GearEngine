@@ -7,7 +7,6 @@ namespace InGame {
 	class GraveGenerallPCHandler : public Gear::Physics2D::PixelCollisionHander
 	{
 		Gear::Ref<Gear::Physics2D> physics;
-		Gear::Ref<Gear::Status> status;
 		Gear::Ref<Gear::FSM> FSM;
 		Gear::Ref<Gear::Animator2D> animator;
 		Gear::Ref<Gear::Transform2D> transform;
@@ -17,7 +16,6 @@ namespace InGame {
 		void init(int entityID)
 		{
 			physics = Gear::EntitySystem::GetPhysics2D(entityID);
-			status = Gear::EntitySystem::GetStatus(entityID);
 			FSM = Gear::EntitySystem::GetFSM(entityID);
 			animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			transform = Gear::EntitySystem::GetTransform2D(entityID);

@@ -688,6 +688,11 @@ namespace InGame {
 				auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 				auto status = Gear::EntitySystem::GetStatus(entityID);
 				physics->SetPixelCollisionHandler("Move");
+
+				if (!std::any_cast<bool>(status->GetStat(WormInfo::MyTurn)))
+				{
+					return WormState::OnNotMyTurn;
+				}
 				return WormState::OnBreath;
 			}
 			return WormState::OnLand;

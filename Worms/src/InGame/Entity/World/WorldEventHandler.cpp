@@ -307,7 +307,7 @@ namespace InGame {
 				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
 				{
 					auto curState = Gear::EntitySystem::GetFSM(WorldWormData::s_LivingWorms[i])->GetCurrentState();
-					if (curState != WormState::OnNothing && curState != WormState::OnNotMyTurn && curState != WormState::OnUnderWater)
+					if (curState != WormState::OnNothing && curState != WormState::OnNotMyTurn)
 					{
 						return;
 					}

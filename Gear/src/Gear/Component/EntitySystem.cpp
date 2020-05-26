@@ -113,6 +113,13 @@ namespace Gear {
 			int id = entity.first;
 			//Event Handle
 			EventHandle(entity.second);
+		}
+
+		for (auto& entity : m_ActivateEntitys)
+		{
+			int id = entity.first;
+			////Event Handle
+			//EventHandle(entity.second);
 
 			UpdateTimer(id, ts);
 			UpdateController(id, ts);
