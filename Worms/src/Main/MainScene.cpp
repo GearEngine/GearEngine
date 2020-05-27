@@ -200,7 +200,7 @@ namespace Main {
 				if (mouseOnNet)
 				{
 					PLAY_SOUND_NAME("increaseiconnumber", WormsSound::effect);
-					StartNetwork();
+					//StartNetwork();
 				}
 				if (mouseOnOptions)
 				{

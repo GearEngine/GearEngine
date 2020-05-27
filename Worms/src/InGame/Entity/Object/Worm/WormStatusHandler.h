@@ -294,7 +294,7 @@ namespace InGame {
 				}
 				else
 				{
-					GR_TRACE("DisplayPosChage complete");
+					DEBUG_GR_TRACE("DisplayPosChage complete");
 
 					hpOffset = BottomNameOffset - offsetDist;
 					nameOffset = BottomNameOffset;
@@ -313,7 +313,7 @@ namespace InGame {
 				}
 				else
 				{
-					GR_TRACE("DisplayPosChage complete");
+					DEBUG_GR_TRACE("DisplayPosChage complete");
 
 					hpOffset = TopNameOffset - offsetDist;
 					nameOffset = TopNameOffset;
@@ -415,7 +415,7 @@ namespace InGame {
 			auto status = Gear::EntitySystem::GetStatus(entityID);
 			if (inFirst)
 			{
-				GR_TRACE("Worm Enter WormGetDamageHanlder {0}", Gear::EntitySystem::GetEntity(entityID)->GetName());
+				DEBUG_GR_TRACE("Worm Enter WormGetDamageHanlder {0}", Gear::EntitySystem::GetEntity(entityID)->GetName());
 				inFirst = false;
 				pastTime = 0.0f;
 			}

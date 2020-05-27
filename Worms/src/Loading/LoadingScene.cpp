@@ -13,7 +13,7 @@ namespace Loading {
 	{
 		inGameScene = new InGame::InGameScene(InitData);
 		loadComplete = true;
-		GR_TRACE("IngameScene loading Complete");
+		GR_INFO("IngameScene loading Complete");
 	}
 
 	void LoadingScene::Init(const std::any& data)

@@ -40,6 +40,56 @@ namespace ZOrder {
 
 }
 
+class BasicTeamInfo : public Gear::JsonAble
+{
+public:
+	std::string teamName;
+	std::string teamIcon;
+	unsigned int playerType;
+	int points;
+	std::vector<std::string> wormName;
+	std::vector<unsigned int> graves;
+
+	BasicTeamInfo(const std::string& name = "")
+		: Gear::JsonAble(name)
+	{
+		wormName.resize(8);
+		graves.resize(8);
+	}
+
+
+	virtual void Read(const Json::Value& value) override
+	{
+		teamName = value["teamName"].asString();
+		teamIcon = value["teamIcon"].asString();
+		points = value["points"].asInt();
+		playerType = value["playerType"].asUInt();
+
+		wormName.resize(8);
+		for (int i = 0; i < 8; ++i)
+		{
+			wormName[i] = value["wormName"][i].asString();
+		}
+		for (int i = 0; i < 8; ++i)
+		{
+			graves[i] = value["graves"][i].asUInt();
+		}
+	}
+	virtual void Write(Json::Value& value) override
+	{
+		value["teamName"] = teamName;
+		value["teamIcon"] = teamIcon;
+		value["points"] = points;
+		value["playerType"] = playerType;
+
+		for (int i = 0; i < 8; ++i)
+		{
+			value["wormName"][i] = wormName[i];
+			value["graves"][i] = graves[i];
+		}
+	}
+};
+
 namespace BasicOption {
 
 	enum Options : unsigned int

@@ -20,7 +20,6 @@ namespace InGame {
 		ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
 		ItemSelectorFSM = Gear::EntitySystem::GetFSM(ItemSelectorID);
 
-		GR_TRACE("MouseOnItemWindowHandler::init mousePos set 1.2f, -0.7f");
 		m_VirtualItemMousePos.first = 1.2f;
 		m_VirtualItemMousePos.second = -0.7f;
 

@@ -51,7 +51,7 @@ namespace InGame {
 
 			if (curState == ItemSelectorInfo::State::OnNotActivate)
 			{
-				GR_TRACE("On Item Selector Get Right Button Click Event");
+				DEBUG_GR_TRACE("On Item Selector Get Right Button Click Event");
 				FSM->SetCurrentState(ItemSelectorInfo::State::OnUpdate);
 				int mouseID = Gear::EntitySystem::GetEntityIDFromName("Mouse");
 
@@ -108,7 +108,7 @@ namespace InGame {
 			currentWormID = Gear::EntitySystem::GetEntityIDFromName(currentTeamName + currentWormName);
 			if (GameMode::Bit::ModeBit == GameMode::NetWork)
 			{
-				GR_TRACE("Item selected!");
+				DEBUG_GR_TRACE("Item selected!");
 				WormsPacket::Event e;
 				e.wormID = currentWormID;
 				e.eventType = WormsPacket::Event::EventType::ItemSelect;

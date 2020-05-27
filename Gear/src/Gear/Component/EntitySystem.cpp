@@ -27,6 +27,7 @@ namespace Gear {
 
 	void EntitySystem::Init()
 	{
+		GR_CORE_INFO("Initiate EntitySystem!");
 		srand(time(NULL));
 
 		m_Animators.resize(10000);
@@ -46,6 +47,7 @@ namespace Gear {
 
 	void EntitySystem::Shutdown()
 	{
+		GR_CORE_INFO("ShoutDown EntitySystem!");
 		s_EntityID = 0;
 		while (!m_SpareIDqueue.empty())
 		{
@@ -399,7 +401,7 @@ namespace Gear {
 			{
 				ActivateEntity(entityID);
 			}
-			GR_CORE_TRACE("{0} entity Created!", entityID);
+			DEBUG_GR_CORE_TRACE("{0} entity Created!", entityID);
 		}
 		else
 		{
@@ -413,7 +415,7 @@ namespace Gear {
 			{
 				ActivateEntity(entityID);
 			}
-			GR_CORE_TRACE("{0} entity Created!", entityID);
+			DEBUG_GR_CORE_TRACE("{0} entity Created!", entityID);
 		}
 		return entityID;
 	}
@@ -439,7 +441,7 @@ namespace Gear {
 			if (entityInPool != m_EntityPool.end())
 			{
 				entityInPool->second->m_OnActivate = true;
-				GR_CORE_TRACE("{0} entity activated!", entityID);
+				DEBUG_GR_CORE_TRACE("{0} entity activated!", entityID);
 				m_ActivateEntitys.insert({ entityID, entityInPool->second });
 			}
 			else
@@ -463,7 +465,7 @@ namespace Gear {
 			{
 				entityInActivate->second->m_OnActivate = false;
 				m_ActivateEntitys.erase(entityInActivate);
-				GR_CORE_TRACE("{0} entity inactivated!", entityID);
+				DEBUG_GR_CORE_TRACE("{0} entity inactivated!", entityID);
 			}
 			else
 			{
@@ -487,7 +489,7 @@ namespace Gear {
 				auto entityInActivate = m_ActivateEntitys.find(entityID);
 				m_ActivateEntitys.erase(entityInActivate);
 			}
-			GR_CORE_TRACE("{0} entity deleted!", entityID);
+			DEBUG_GR_CORE_TRACE("{0} entity deleted!", entityID);
 			m_Animators[entityID].reset();
 			m_Controllers[entityID].reset();
 			m_NetControllers[entityID].reset();

@@ -2,57 +2,6 @@
 
 namespace Main {
 
-	class BasicTeamInfo : public Gear::JsonAble
-	{
-	public:
-		std::string teamName;
-		std::string teamIcon;
-		unsigned int playerType;
-		int points;
-		std::vector<std::string> wormName;
-		std::vector<unsigned int> graves;
-
-		BasicTeamInfo(const std::string& name = "")
-			: Gear::JsonAble(name)
-		{
-			wormName.resize(8);
-			graves.resize(8);
-		}
-
-
-		virtual void Read(const Json::Value& value) override
-		{
-			teamName = value["teamName"].asString();
-			teamIcon = value["teamIcon"].asString();
-			points = value["points"].asInt();
-			playerType = value["playerType"].asUInt();
-
-			wormName.resize(8);
-			for (int i = 0; i < 8; ++i)
-			{
-				wormName[i] = value["wormName"][i].asString();
-			}
-			for (int i = 0; i < 8; ++i)
-			{
-				graves[i] = value["graves"][i].asUInt();
-			}
-		}
-		virtual void Write(Json::Value& value) override
-		{
-			value["teamName"] = teamName;
-			value["teamIcon"] = teamIcon;
-			value["points"] = points;
-			value["playerType"] = playerType;
-
-			for (int i = 0; i < 8; ++i)
-			{
-				value["wormName"][i] = wormName[i];
-				value["graves"][i] = graves[i];
-			}
-		}
-	};
-
-
 	class MapListLayer : public Gear::Layer
 	{
 		std::vector<std::string> MapStrList;
@@ -387,6 +336,12 @@ namespace Main {
 			}
 
 			RecalculateScrollerPos();
+		}
+
+		void ReloadTeamInfo()
+		{
+			teamInfolist.clear();
+			teamInfolist = Gear::JsonManager::Get()->ReadAll<BasicTeamInfo>("assets\\Data\\TeamInfo");
 		}
 
 		void pushTeamData(BasicTeamInfo* teamInfo) 
@@ -984,12 +939,25 @@ namespace Main {
 			if (std::any_cast<int>(data) == -1)
 			{
 				needClearInGame = true;
+				for (int i = 0; i < 6; ++i)
+				{
+					selectedTeamLayer->allyType[i] = i;
+				}
+				for (int i = 0; i < 6; ++i)
+				{
+					selectedTeamLayer->wormCount[i] = TeamBasicOption::WormCount::_3;
+				}
+				for (int i = 0; i < 6; ++i)
+				{
+					selectedTeamLayer->handicapType[i] = TeamBasicOption::Handicap::None;
+				}
+				barraksLayer->ReloadTeamInfo();
 			}
 
 			virtualCursorPos = { 640.0f, 360.0f };
 			cursorTransform[3][0] = 0.0f;
 			cursorTransform[3][1] = 0.0f;
-
+			
 			OptionsIndex[BasicOption::TurnTime] = BasicOption::TurnTime::TT45;
 			OptionsIndex[BasicOption::RoundTime] = BasicOption::RoundTime::RT15;
 			OptionsIndex[BasicOption::WinRequires] = BasicOption::WinRequires::WR1;
@@ -997,15 +965,7 @@ namespace Main {
 			OptionsIndex[BasicOption::WormSelect] = BasicOption::WormSelect::WSOff;
 			OptionsIndex[BasicOption::Teleportin] = BasicOption::Teleportin::Off;
 
-			if (selectedTeamList.size())
-			{
-				for (int i = 0; i < selectedTeamList.size(); ++i)
-				{
-					barraksLayer->pushTeamData(selectedTeamList[i]);
-				}
-				barraksLayer->sortTeamInfoListName();
-				selectedTeamList.clear();
-			}
+			selectedTeamList.clear();
 
 			OnMapSelectorActive = false;
 		}

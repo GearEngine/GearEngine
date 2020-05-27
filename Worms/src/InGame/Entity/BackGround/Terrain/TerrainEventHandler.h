@@ -24,7 +24,7 @@ namespace InGame {
 			mask->SetData(maskData, width * height * 4);
 			texture->SetData(textureData, width * height * 4);
 
-			GR_TRACE("No.{0} Entity : Terrain Damaged by explosion", entityID);
+			DEBUG_GR_TRACE("No.{0} Entity : Terrain Damaged by explosion", entityID);
 			handled = true;
 		}
 

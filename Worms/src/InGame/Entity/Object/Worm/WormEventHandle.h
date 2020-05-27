@@ -68,7 +68,7 @@ namespace InGame {
 				status->SetStat(WormInfo::Damage, int(damageRatio * power + curDamage));
 
 				FSM->SetCurrentState(WormState::OnAttacked);
-				GR_TRACE("{0} OnAttacked", Gear::EntitySystem::GetEntity(entityID)->GetName());
+				DEBUG_GR_TRACE("{0} OnAttacked", Gear::EntitySystem::GetEntity(entityID)->GetName());
 				PLAY_SOUND_NAME("OW" + std::to_string(Gear::Util::GetRndInt(3) + 1), WormsSound::wormSpeech);
 
 				physics->ActivateGravity();

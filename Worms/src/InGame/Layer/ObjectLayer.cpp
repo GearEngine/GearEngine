@@ -245,6 +245,28 @@ namespace InGame {
 		Gear::EventSystem::DispatchEvent(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow, ChangedWormData, s_CurrentActivatedWormID)));
 	}
 
+	void ObjectLayer::ApplyGameResult()
+	{
+		std::set<std::string> remainTeam;
+		for (int i = 0; i < WorldWormData::s_ActiveWorms.size(); ++i)
+		{
+			auto status = Gear::EntitySystem::GetStatus(WorldWormData::s_ActiveWorms[i]);
+			auto teamName = std::any_cast<std::string>(status->GetStat(WormInfo::TeamName));
+			remainTeam.insert(teamName);
+		}
+
+		std::string basicPath = "assets\\Data\\TeamInfo";
+		for (auto& teamName : remainTeam)
+		{
+			std::string path = basicPath + '\\' + teamName + ".json";
+			BasicTeamInfo info;
+			Gear::JsonManager::Get()->Read(path, info);
+			info.points += 5;
+			info.SetName(teamName);
+			Gear::JsonManager::Get()->Write(basicPath, info);
+		}
+	}
+
 	void ObjectLayer::ChangeWorm()
 	{
 		static std::unordered_map<std::string, TeamInfo>::iterator prevTeamIter = s_TeamInfo.begin();
@@ -267,6 +289,7 @@ namespace InGame {
 			int worldID = Gear::EntitySystem::GetEntityIDFromName("World");
 			auto worldFSM = Gear::EntitySystem::GetFSM(worldID);
 			worldFSM->SetCurrentState(WorldState::OnGameVictory);
+			ApplyGameResult();
 			return;
 		}
 

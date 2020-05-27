@@ -862,7 +862,7 @@ namespace InGame {
 		bool popSound = false;
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			GR_TRACE("FSM on Stuck Worm : {0}", entityID);
+			DEBUG_GR_TRACE("FSM on Stuck Worm : {0}", entityID);
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			if (!popSound)
 			{
@@ -886,7 +886,7 @@ namespace InGame {
 	{
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-			GR_TRACE("FSM on ReadyFallen Worm : {0}", entityID);
+			DEBUG_GR_TRACE("FSM on ReadyFallen Worm : {0}", entityID);
 			auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 			auto animator = Gear::EntitySystem::GetAnimator2D(entityID);
 			auto status = Gear::EntitySystem::GetStatus(entityID);

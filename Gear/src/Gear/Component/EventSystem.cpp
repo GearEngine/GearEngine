@@ -21,7 +21,7 @@ namespace Gear {
 			}
 		}
 		m_Subscriber.push_back(EntitySystem::GetEntity(entityID));
-		GR_CORE_TRACE("On {0} {1}entity subscribe channel", m_Channel, entityID);
+		DEBUG_GR_CORE_TRACE("On {0} {1}entity subscribe channel", m_Channel, entityID);
 	}
 
 	void EventChannel::UnSubscribe(int entityID)
@@ -31,7 +31,7 @@ namespace Gear {
 			if ((*it)->m_EntityID == entityID)
 			{
 				m_Subscriber.erase(it);
-				GR_CORE_TRACE("On {0} : {1}entity unsubscribe channel", m_Channel, entityID);
+				DEBUG_GR_CORE_TRACE("On {0} : {1}entity unsubscribe channel", m_Channel, entityID);
 				return;
 			}
 		}
@@ -131,7 +131,7 @@ namespace Gear {
 		}
 		s_Channels.insert({ s_channelID, CreateRef<EventChannel>(channel, s_channelID) });
 		s_channelID++;
-		GR_CORE_TRACE("{0} channel created!", channel);
+		DEBUG_GR_CORE_TRACE("{0} channel created!", channel);
 	}
 
 	void EventSystem::SubscribeChannel(int entityID, ChannelType channel)
@@ -150,7 +150,7 @@ namespace Gear {
 		auto findChannel = s_Channels.find(channel);
 		if (findChannel == s_Channels.end())
 		{
-			GR_CORE_TRACE("{0} channel doesn't exist", channel);
+			GR_CORE_WARN("{0} channel doesn't exist", channel);
 			return;
 		}
 		findChannel->second->UnSubscribe(entityID);
@@ -161,7 +161,7 @@ namespace Gear {
 		auto findChannel = s_Channels.find(channel);
 		if (findChannel == s_Channels.end())
 		{
-			GR_CORE_TRACE("On Entity Event Dispatch : {0} channel doesn't exist", channel);
+			GR_CORE_WARN("On Entity Event Dispatch : {0} channel doesn't exist", channel);
 			return;
 		}
 		findChannel->second->DispatchEvent(event);
@@ -182,7 +182,7 @@ namespace Gear {
 		auto findChannel = s_Channels.find(channel);
 		if (findChannel == s_Channels.end())
 		{
-			GR_CORE_TRACE("On Entity Event Dispatch : {0} channel doesn't exist", channel);
+			GR_CORE_WARN("On Entity Event Dispatch : {0} channel doesn't exist", channel);
 			return;
 		}
 		findChannel->second->DispatchEventOnce(event);
@@ -193,7 +193,7 @@ namespace Gear {
 		auto findChannel = s_Channels.find(channel);
 		if (findChannel == s_Channels.end())
 		{
-			GR_CORE_TRACE("On Entity Event Dispatch : {0} channel doesn't exist", channel);
+			GR_CORE_WARN("On Entity Event Dispatch : {0} channel doesn't exist", channel);
 			return;
 		}
 		findChannel->second->DispatchEventTo(event, entityID);
@@ -204,7 +204,7 @@ namespace Gear {
 		auto findChannel = s_Channels.find(channel);
 		if (findChannel == s_Channels.end())
 		{
-			GR_CORE_TRACE("On Entity Event Dispatch : {0} channel doesn't exist", channel);
+			GR_CORE_WARN("On Entity Event Dispatch : {0} channel doesn't exist", channel);
 			return;
 		}
 		findChannel->second->DispatchEventOnceTo(event, entityID);

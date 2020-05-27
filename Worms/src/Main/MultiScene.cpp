@@ -1037,19 +1037,7 @@ namespace Main {
 			}
 			team.CurrentTotalWormHp = team.TotalWormHp;
 			initData.Teams.push_back(team);
-		}
-		for (int i = 0; i < 6; ++i)
-		{
-			selectedTeamLayer->allyType[i] = i;
-		}
-		for (int i = 0; i < 6; ++i)
-		{
-			selectedTeamLayer->wormCount[i] = TeamBasicOption::WormCount::_3;
-		}
-		for (int i = 0; i < 6; ++i)
-		{
-			selectedTeamLayer->handicapType[i] = TeamBasicOption::Handicap::None;
-		}
+		}		
 		return true;
 	}
 

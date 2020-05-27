@@ -56,7 +56,6 @@ namespace InGame {
 			if (timer->isExpired())
 			{
 				int damagedWormCount = 0;
-				//GR_TRACE("World On Waiting");
 
 				for (int i = 0; i < WorldWormData::s_LivingWorms.size(); ++i)
 				{

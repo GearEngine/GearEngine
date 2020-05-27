@@ -184,9 +184,10 @@ namespace InGame {
 						auto timer = Gear::EntitySystem::GetTimer(damagedWorm[i]);
 						timer->SetTimer(1.0f);
 						timer->Start();
-						GR_TRACE("dispatch damage {0}", Gear::EntitySystem::GetEntity(damagedWorm[i])->GetName());
+						
 						status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
 					}
+					GR_TRACE("dispatch damage On Shotgun");
 					Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
 					worldTimer->SetTimer(3.0f);
 					worldTimer->Start();
@@ -233,9 +234,9 @@ namespace InGame {
 						auto timer = Gear::EntitySystem::GetTimer(damagedWorm[i]);
 						timer->SetTimer(1.0f);
 						timer->Start();
-						GR_TRACE("dispatch damage {0}", Gear::EntitySystem::GetEntity(damagedWorm[i])->GetName());
 						status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
 					}
+					GR_TRACE("dispatch damage OnDonkey");
 					Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
 					worldTimer->SetTimer(3.0f);
 					worldTimer->Start();
@@ -282,13 +283,13 @@ namespace InGame {
 						auto timer = Gear::EntitySystem::GetTimer(damagedWorm[i]);
 						timer->SetTimer(1.0f);
 						timer->Start();
-						GR_TRACE("dispatch damage {0}", Gear::EntitySystem::GetEntity(damagedWorm[i])->GetName());
 						status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
 					}
+					GR_TRACE("dispatch damage OnHos");
 					Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
 					worldTimer->SetTimer(3.0f);
 					worldTimer->Start();
-					onDonkey = false;
+					onHos = false;
 					inDamageWormFirst = true;
 					handled = true;
 				}
@@ -297,7 +298,7 @@ namespace InGame {
 					Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
 					worldTimer->SetTimer(1.0f);
 					worldTimer->Start();
-					onDonkey = false;
+					onHos = false;
 					inDamageWormFirst = true;
 					handled = true;
 				}
@@ -324,9 +325,9 @@ namespace InGame {
 						auto timer = Gear::EntitySystem::GetTimer(damagedWorm[i]);
 						timer->SetTimer(1.0f);
 						timer->Start();
-						GR_TRACE("dispatch damage {0}", Gear::EntitySystem::GetEntity(damagedWorm[i])->GetName());
 						status->SetNeedHandleData(WormStatusHandleType::Damaged, false);
 					}
+					GR_TRACE("dispatch damage On Generall");
 					Gear::EntitySystem::GetFSM(entityID)->SetCurrentState(WorldState::OnWaiting);
 					worldTimer->SetTimer(3.0f);
 					worldTimer->Start();

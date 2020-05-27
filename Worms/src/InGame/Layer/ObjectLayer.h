@@ -20,12 +20,14 @@ namespace InGame {
 
 	private:
 		void HandleTurnChange();
-
-	public:
-		static void ChangeWorm();
+		static void ApplyGameResult();
 		static int GameEndCheck();
 		static void TurnCheck();
 
+	public:
+		static void ChangeWorm();
+
+	public:
 		static std::vector<Gear::Ref<ExplosionEffect>> s_Explosion;
 		static std::vector<Gear::Ref<ExplosionSmokeBunddle>> s_ExplosionSmoke;
 		static std::vector<Gear::Ref<FlameBundle>> s_Flames;
