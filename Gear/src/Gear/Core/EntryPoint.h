@@ -6,9 +6,11 @@ extern Gear::Application* Gear::CreateApplication();
 
 int main(int argc, char** argv)
 {
-#ifdef GR_RELEASE
 	HWND hWndConsole = GetConsoleWindow();
+#if GR_CONSOLE_SHOW
 	ShowWindow(hWndConsole, SW_HIDE);
+#else
+	ShowWindow(hWndConsole, SW_SHOW);
 #endif
 
 	Gear::Log::Init();

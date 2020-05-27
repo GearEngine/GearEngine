@@ -30,13 +30,13 @@ namespace InGame {
 			auto worldData = std::any_cast<WorldData>(data);
 			if (worldData.DataType == WorldDataType::NewFollow)
 			{
+				auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 				if (worldData.EntityID == -1)
 				{
-					return;
+					physics->InActivateFollowTarget();
 				}
 				else
 				{
-					auto physics = Gear::EntitySystem::GetPhysics2D(entityID);
 					auto targetTransform = Gear::EntitySystem::GetTransform2D(worldData.EntityID);
 
 					physics->SetFollowTarget(&targetTransform->GetPosition());

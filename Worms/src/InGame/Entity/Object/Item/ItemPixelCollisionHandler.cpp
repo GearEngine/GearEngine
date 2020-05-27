@@ -109,6 +109,8 @@ namespace InGame {
 			Gear::EntitySystem::RegisterInActivateEntity(entityID);
 			Gear::EntitySystem::GetStatus(from)->SetStat(WormInfo::SelectedItem, ItemInfo::Bazooka);
 			Gear::EntitySystem::GetStatus(from)->SetStat(WormInfo::MyTurn, false);
+
+			sendEventNoFollow = false;
 		}
 
 		m_ExternalVector->y -= 0.53f;
@@ -117,8 +119,14 @@ namespace InGame {
 		{
 			m_ExternalVector->y = -30.0f;
 		}
-		if (m_ExternalVector->y > 0.0f || m_TargetPos->y < -20.0f)
+		if (m_TargetPos->y < -20.0f)
 		{
+			if (!sendEventNoFollow)
+			{
+				sendEventNoFollow = true;
+				int cameraID = Gear::EntitySystem::GetEntityIDFromName("Camera");
+				Gear::EventSystem::DispatchEventTo(EventChannel::World, Gear::EntityEvent(EventType::World, WorldData(WorldDataType::NewFollow)), cameraID);
+			}
 			return;
 		}
 		auto textureLocalPosition = s_CoordManager->GetTextureLocalPosition_From_WorlPosition(*m_TargetPos, *m_PixelCollisionTargetTextureTranslate);

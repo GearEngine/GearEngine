@@ -65,6 +65,37 @@ namespace InGame {
 		s_Worms.clear();
 		s_TeamInfo.clear();
 		s_WormTurnIndex.clear();
+
+		for (int i = 0; i < s_Explosion.size(); ++i)
+		{
+			s_Explosion[i]->m_OnUsing = false;
+		}
+		s_Explosion.clear();
+		for (int i = 0; i < s_Flames.size(); ++i)
+		{
+			s_Flames[i]->m_OnUsing = false;
+		}
+		s_Flames.clear();
+		for (auto& smoke : s_Smokes)
+		{
+			smoke->m_OnUsing = false;
+		}
+		s_Smokes.clear();
+		for (auto& exhaust : s_Exhausts)
+		{
+			exhaust->m_OnUsing = false;
+		}
+		s_Exhausts.clear();
+		for (int i = 0; i < s_Spangle.size(); ++i)
+		{
+			s_Spangle[i]->m_OnUsing = false;
+		}
+		s_Spangle.clear();
+		for (int i = 0; i < s_Marker.size(); ++i)
+		{
+			s_Marker[i]->m_OnUsing = false;
+		}
+		s_Marker.clear();
 	}
 
 	void ObjectLayer::OnAttach()

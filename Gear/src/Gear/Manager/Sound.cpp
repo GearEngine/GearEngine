@@ -1,11 +1,11 @@
 #include "grpch.h"
 #include "Sound.h"
 
-namespace Gear {	
+namespace Gear {
 
 	SoundSystem* SoundSystem::s_Instance = nullptr;
 	std::unordered_map<std::string, Ref<Sound>> SoundStorage::m_Sounds = std::unordered_map<std::string, Ref<Sound>>();
-	
+
 	Sound::Sound(FMOD::Sound* sound, bool loop, bool stream)
 		: m_Sound(sound), m_Loop(loop), m_Stream(stream)
 	{
@@ -23,8 +23,6 @@ namespace Gear {
 
 	SoundSystem::SoundSystem()
 	{
-		FMOD::System_Create(&s_System);
-		s_System->init(SOUND_CHANNEL_MAX, FMOD_INIT_NORMAL, nullptr);
 	}
 
 	void SoundSystem::Destroy()
@@ -37,7 +35,7 @@ namespace Gear {
 		s_Instance = nullptr;
 	}
 
-	
+
 
 	SoundSystem * SoundSystem::Get()
 	{
@@ -50,37 +48,42 @@ namespace Gear {
 
 	void SoundSystem::Init()
 	{
-		s_Instance = new SoundSystem;
+		if (!s_Instance)
+		{
+			s_Instance = new SoundSystem;
+			s_Instance->localInit();
+		}
+	}
+
+	void SoundSystem::localInit()
+	{
+		FMOD::System_Create(&m_System);
+		m_System->init(SOUND_CHANNEL_MAX, FMOD_INIT_NORMAL, nullptr);
 	}
 
 	Ref<class Sound> SoundSystem::CreateSound(const std::string& path, bool loop, bool stream)
 	{
-		if (!s_Instance)
-		{
-			s_Instance = new SoundSystem;
-		}
-
 		FMOD::Sound* sound;
 		if (stream)
 		{
 			if (loop)
 			{
-				s_System->createStream(path.c_str(), FMOD_LOOP_NORMAL, 0, &sound);
+				m_System->createStream(path.c_str(), FMOD_LOOP_NORMAL, 0, &sound);
 			}
 			else
 			{
-				s_System->createStream(path.c_str(), FMOD_LOOP_OFF, 0, &sound);
+				m_System->createStream(path.c_str(), FMOD_LOOP_OFF, 0, &sound);
 			}
 		}
 		else
 		{
 			if (loop)
 			{
-				s_System->createSound(path.c_str(), FMOD_LOOP_NORMAL, 0, &sound);
+				m_System->createSound(path.c_str(), FMOD_LOOP_NORMAL, 0, &sound);
 			}
 			else
 			{
-				s_System->createSound(path.c_str(), FMOD_LOOP_OFF, 0, &sound);
+				m_System->createSound(path.c_str(), FMOD_LOOP_OFF, 0, &sound);
 			}
 		}
 		return CreateRef<Sound>(sound, loop, stream);
@@ -88,7 +91,7 @@ namespace Gear {
 
 	void SoundSystem::PlaySound_(Ref<Sound> sound, SoundChannel channel)
 	{
-		s_System->playSound(sound->m_Sound, 0, false, &m_Channel[channel]);
+		m_System->playSound(sound->m_Sound, 0, false, &m_Channel[channel]);
 	}
 
 	void SoundSystem::StopChannel(SoundChannel channel)
@@ -109,7 +112,18 @@ namespace Gear {
 	bool SoundSystem::isPlaying(SoundChannel channel)
 	{
 		bool ret;
-		m_Channel[channel]->isPlaying(&ret);
+		if (m_Channel[channel] == nullptr)
+		{
+			ret = false;
+		}
+		else
+		{
+			result = m_Channel[channel]->isPlaying(&ret);
+			if (result != FMOD_OK)
+			{
+				GR_CORE_WARN("FMOD error!");
+			}
+		}
 		return ret;
 	}
 
@@ -122,13 +136,24 @@ namespace Gear {
 	{
 		for (int i = 0; i < SOUND_CHANNEL_MAX; ++i)
 		{
-			m_Channel[i]->stop();
+			if (m_Channel[i] == nullptr)
+			{
+				continue;
+			}
+			else
+			{
+				result = m_Channel[i]->stop();
+				if (result != FMOD_OK)
+				{
+					GR_CORE_WARN("FMOD error!");
+				}
+			}
 		}
 	}
 
 	void SoundSystem::Update()
 	{
-		s_System->update();
+		m_System->update();
 	}
 
 	void SoundStorage::AddSound_(const std::string & name, Ref<Sound> sound)
@@ -150,7 +175,7 @@ namespace Gear {
 		{
 			return find->second;
 		}
-		else 
+		else
 		{
 			GR_CORE_WARN("{0} does't exist!", name);
 			return nullptr;
@@ -160,7 +185,7 @@ namespace Gear {
 	void SoundStorage::DeleteSound_(const std::string & name)
 	{
 		auto find = m_Sounds.find(name);
-		if(find != m_Sounds.end())
+		if (find != m_Sounds.end())
 		{
 			m_Sounds.erase(name);
 		}

@@ -31,6 +31,7 @@ namespace Gear {
 		static void Init();
 
 	public:
+		void localInit();
 		Ref<Sound> CreateSound(const std::string& path, bool loop, bool stream);
 
 		void PlaySound_(Ref<Sound> sound, SoundChannel channel);
@@ -44,8 +45,9 @@ namespace Gear {
 
 	private:
 		static SoundSystem* s_Instance;
-		FMOD::System* s_System;
+		FMOD::System* m_System;
 		FMOD::Channel* m_Channel[SOUND_CHANNEL_MAX];
+		FMOD_RESULT result;
 	};
 
 	class SoundStorage 

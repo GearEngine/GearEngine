@@ -268,6 +268,7 @@ namespace InGame {
 			Gear::SoundSystem::Get()->AllStop();
 			Gear::Application::Get().ActivateEntitySystem(false);
 			Gear::SceneManager::Get()->changeScene("MultiScene", -1);
+			Gear::EntitySystem::s_OnUpdate = false;
 
 			WorldWormData::s_ActiveWorms.clear();
 			WorldWormData::s_LivingWorms.clear();

@@ -112,6 +112,9 @@ namespace Gear {
 		static Ref<Status>			GetStatus(int entityID);
 		static Ref<LateDrawer>		GetLateDrawer(int entityID);
 
+	public:
+		static bool s_OnUpdate;
+
 	private:
 		static int s_EntityID;
 		static bool s_isNetWork;

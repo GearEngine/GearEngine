@@ -5,6 +5,7 @@ namespace Gear {
 
 	int EntitySystem::s_EntityID = 0;
 	bool EntitySystem::s_isNetWork = false;
+	bool EntitySystem::s_OnUpdate = false;
 
 	std::queue<int> EntitySystem::m_SpareIDqueue = std::queue<int>();
 	std::queue<int> EntitySystem::m_InActivateQueue = std::queue<int>();
@@ -27,6 +28,7 @@ namespace Gear {
 
 	void EntitySystem::Init()
 	{
+		s_OnUpdate = true;
 		GR_CORE_INFO("Initiate EntitySystem!");
 		srand(time(NULL));
 
@@ -48,6 +50,7 @@ namespace Gear {
 	void EntitySystem::Shutdown()
 	{
 		GR_CORE_INFO("ShoutDown EntitySystem!");
+		s_OnUpdate = false;
 		s_EntityID = 0;
 		while (!m_SpareIDqueue.empty())
 		{
@@ -133,6 +136,10 @@ namespace Gear {
 			UpdateAnimator2D(id, ts);
 			UpdateSoundPlayer(id, ts);
 			UpdateDrawer2D(id, ts);
+			if (!s_OnUpdate)
+			{
+				return;
+			}
 		}
 
 

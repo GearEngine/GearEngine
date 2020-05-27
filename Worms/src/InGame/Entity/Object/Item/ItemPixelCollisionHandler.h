@@ -306,6 +306,7 @@ namespace InGame {
 		int collisionXPoint;
 		int collisionYPoint;
 
+		bool sendEventNoFollow = false;
 		void BoundHandle(int entitID);
 		virtual void Handle(int entityID) override;
 	};

@@ -176,7 +176,7 @@ namespace Main {
 			}
 
 			ScrollerTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.118f, 0.0f, 0.6f)) * glm::scale(glm::mat4(1.0f), glm::vec3(8 / 238.0f, 0.0f, 1.0f));
-			ScrollerTop = schemeListTransform[3][1] + schemeListTransform[1][1] / 2 - 0.055f;
+			ScrollerTop = schemeListTransform[3][1] + schemeListTransform[1][1] / 2 - 0.053f;
 			ScrollerBottom = schemeListTransform[3][1] - schemeListTransform[1][1] / 2 + 0.055;
 
 			if (maxListShowIndex < 0)
@@ -304,10 +304,10 @@ namespace Main {
 			scrollerColor = glm::vec4(254.0f / 255.0f, 182.0f / 255.0f, 168.0f / 255.0f, 1.0f);
 
 			sortTeamInfoListName();
-			float BorderHeight = BorderRect.Height - 0.034f * 2;
+			float BorderHeight = BorderRect.Height - 0.038f * 2;
 			float BorderWidth = BorderRect.Width - 0.05f;
-			SelectorListBorderTop = BorderRect.CenterY - 0.034f + BorderHeight / 2;
-			SelectorListBorderBottom = BorderRect.CenterY - 0.034f - BorderHeight / 2;
+			SelectorListBorderTop = BorderRect.CenterY - 0.038f + BorderHeight / 2;
+			SelectorListBorderBottom = BorderRect.CenterY - 0.032f - BorderHeight / 2;
 			filedYOffset = BorderHeight / listShowMax;
 
 			float scrollerWidth = Gear::TextureStorage::GetTexture2D("MapListScroller")->GetWidth();
@@ -320,7 +320,7 @@ namespace Main {
 			
 			playerTypeIconTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.17f, SelectorListBorderTop - filedYOffset / 2, 0.4f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.06f, 0.06f, 1.0f));
 			teamNameFiledTranform = glm::translate(glm::mat4(1.0f), glm::vec3(0.3f, SelectorListBorderTop - filedYOffset / 2, 0.4f)) * glm::scale(glm::mat4(1.0f), glm::vec3(BorderWidth, filedYOffset, 1.0f));
-			scrollerTransform = glm::translate(glm::mat4(1.0f), glm::vec3(1.17f, 0.0f, 0.4f)) * glm::scale(glm::mat4(1.0f), glm::vec3(scrollerWidth / 238.0f, 0.0f, 1.0f));
+			scrollerTransform = glm::translate(glm::mat4(1.0f), glm::vec3(1.17f, 0.0f, 0.4f)) * glm::scale(glm::mat4(1.0f), glm::vec3((scrollerWidth - 1) / 238.0f, 0.0f, 1.0f));
 			ScrollerTop = SelectorListBorderTop - scrollerTransform[0][0] * 1.7f;
 			ScrollerBottom = SelectorListBorderBottom + scrollerTransform[0][0] * 1.7f;
 

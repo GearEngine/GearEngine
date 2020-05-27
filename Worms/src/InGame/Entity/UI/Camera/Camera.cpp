@@ -13,7 +13,7 @@ namespace InGame {
 		Gear::Coord2DManger::Get()->SetResolution(initData.WindowWidth, initData.WindowHeight);
 
 		//Create Entity
-		m_ID = Gear::EntitySystem::CreateEntity(true);
+		m_ID = Gear::EntitySystem::CreateEntity(true, "Camera");
 
 		Gear::EntitySystem::AttachComponent(m_ID, {
 			Gear::ComponentID::Transform,	Gear::ComponentID::FSM,			

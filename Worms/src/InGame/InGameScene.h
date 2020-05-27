@@ -26,6 +26,7 @@ namespace InGame {
 		}
 		virtual ~InGameScene()
 		{		
+
 		}
 
 		inline virtual void Update(Gear::Timestep ts) override
