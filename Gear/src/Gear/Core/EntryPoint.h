@@ -6,6 +6,11 @@ extern Gear::Application* Gear::CreateApplication();
 
 int main(int argc, char** argv)
 {
+#ifdef GR_RELEASE
+	HWND hWndConsole = GetConsoleWindow();
+	ShowWindow(hWndConsole, SW_HIDE);
+#endif
+
 	Gear::Log::Init();
 
 	GR_PROFILE_BEGIN_SESSION("Startup", "GearProfile-Startup.json");
