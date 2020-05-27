@@ -342,6 +342,7 @@ namespace Main {
 		{
 			teamInfolist.clear();
 			teamInfolist = Gear::JsonManager::Get()->ReadAll<BasicTeamInfo>("assets\\Data\\TeamInfo");
+			RecalculateScrollerPos();
 		}
 
 		void pushTeamData(BasicTeamInfo* teamInfo) 
@@ -951,7 +952,6 @@ namespace Main {
 				{
 					selectedTeamLayer->handicapType[i] = TeamBasicOption::Handicap::None;
 				}
-				barraksLayer->ReloadTeamInfo();
 			}
 
 			virtualCursorPos = { 640.0f, 360.0f };
@@ -965,7 +965,11 @@ namespace Main {
 			OptionsIndex[BasicOption::WormSelect] = BasicOption::WormSelect::WSOff;
 			OptionsIndex[BasicOption::Teleportin] = BasicOption::Teleportin::Off;
 
-			selectedTeamList.clear();
+			if (selectedTeamList.size())
+			{
+				barraksLayer->ReloadTeamInfo();
+				selectedTeamList.clear();
+			}
 
 			OnMapSelectorActive = false;
 		}
