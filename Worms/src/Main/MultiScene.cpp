@@ -1199,6 +1199,10 @@ namespace Main {
 
 		//height
 		float scrollerHeight = maxListShowIndex / (float)listIndexMax * (ScrollerTop - ScrollerBottom);
+		if (maxListShowIndex == 0)
+		{
+			scrollerHeight = (ScrollerTop - ScrollerBottom);
+		}
 		ScrollerTransform[1][1] = scrollerHeight;
 
 		//yPos
@@ -1314,13 +1318,13 @@ namespace Main {
 		int listMax = listIndexMax < showMapNameMax ? listIndexMax : showMapNameMax;
 		for (int i = 0; i < listMax; ++i)
 		{
-			auto schemeName = schemeList[i + curListShowIndex];
-			Font::PrintFont(glm::vec3(fieldFront + schemeName.length() * 0.5f * 0.024f, fieldTransforms[i][3][1], 0.58f), glm::vec3(0.05f, 0.05f, 1.0f), "[" + schemeName + "]", FontType::WhiteTinySmall, 0.025f, false);
+			auto schemeName = '[' + schemeList[i + curListShowIndex] + ']';
+			Font::PrintFont(glm::vec3(fieldFront + schemeName.length() * 0.5f * 0.0255f, fieldTransforms[i][3][1], 0.58f), glm::vec3(0.05f, 0.05f, 1.0f), schemeName, FontType::WhiteTinySmall, 0.025f, false);
 		}
 
 		Gear::Renderer2D::DrawQuad(schemeListTransform, schemeListTexture);
 
-		if (maxListShowIndex)
+		//if (maxListShowIndex)
 		{
 			Gear::Renderer2D::DrawQuad(ScrollerTransform, scrollerColor);
 		}

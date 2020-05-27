@@ -210,7 +210,7 @@ namespace Main {
 
 		float listFieldTop;
 		float fieldCenterX = -0.6848f;
-		float fieldFront = -1.17f;
+		float fieldFront = -1.21f;
 
 		int highlighterIndex = 0;
 		int curListShowIndex = 0;
