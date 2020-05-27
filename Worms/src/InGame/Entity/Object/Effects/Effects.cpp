@@ -46,7 +46,9 @@ namespace InGame {
 		m_Angle = angle;
 	}
 
-	std::vector<Gear::Ref<Blob>> EffectPool::s_BlobPool = std::vector<Gear::Ref<Blob>>(EFFECT_POOL_MAX);
+	bool EffectPool::initiated = false;
+
+	std::vector<Gear::Ref<Blob>> EffectPool::s_BlobPool = std::vector<Gear::Ref<Blob>>();
 	std::vector<Gear::Ref<Spangle>> EffectPool::s_Spangle = std::vector<Gear::Ref<Spangle>>();
 	std::vector<Gear::Ref<Marker>> EffectPool::s_Marker = std::vector<Gear::Ref<Marker>>();
 
@@ -119,7 +121,13 @@ namespace InGame {
 
 	void EffectPool::Init()
 	{
-		for (int i = 0; i < EFFECT_POOL_MAX; ++i)
+		if (initiated)
+		{
+			return;
+		}
+
+		s_BlobPool.resize(50);
+		for (int i = 0; i < 50; ++i)
 		{
 			s_BlobPool[i].reset(new Blob);
 			s_BlobPool[i]->m_BlobTexture = Gear::TextureStorage::GetFrameTexture2D("Blob");
@@ -279,20 +287,20 @@ namespace InGame {
 			s_Fm100[i]->init(Explosion::Size::Size100);
 		}
 
-		s_Sm20.resize(150);
-		for (int i = 0; i < 150; ++i)
+		s_Sm20.resize(EFFECT_POOL_MAX);
+		for (int i = 0; i < EFFECT_POOL_MAX; ++i)
 		{
 			s_Sm20[i].reset(new Smoke);
 			s_Sm20[i]->init(Explosion::SmokeSize::Size20);
 		}
-		s_Sm30.resize(150);
-		for (int i = 0; i < 150; ++i)
+		s_Sm30.resize(EFFECT_POOL_MAX);
+		for (int i = 0; i < EFFECT_POOL_MAX; ++i)
 		{
 			s_Sm30[i].reset(new Smoke);
 			s_Sm20[i]->init(Explosion::SmokeSize::Size30);
 		}
-		s_Sm40.resize(150);
-		for (int i = 0; i < 150; ++i)
+		s_Sm40.resize(EFFECT_POOL_MAX);
+		for (int i = 0; i < EFFECT_POOL_MAX; ++i)
 		{
 			s_Sm40[i].reset(new Smoke);
 			s_Sm20[i]->init(Explosion::SmokeSize::Size40);
@@ -305,17 +313,18 @@ namespace InGame {
 			s_Exhaust1[i].reset(new Exhaust);
 			s_Exhaust1[i]->init(ExhaustType::_1);
 		}
-		s_ExhaustMagic.resize(EFFECT_POOL_MAX);
-		for (int i = 0; i < EFFECT_POOL_MAX; ++i)
+		s_ExhaustMagic.resize(EFFECT_POOL_MAX + 200);
+		for (int i = 0; i < EFFECT_POOL_MAX + 200; ++i)
 		{
 			s_ExhaustMagic[i].reset(new Exhaust);
 			s_ExhaustMagic[i]->init(ExhaustType::Magic);
 		}
+		initiated = true;
 	}
 
 	Gear::Ref<Blob> EffectPool::GetBlob()
 	{
-		for (s_BlobPtr; s_BlobPtr < EFFECT_POOL_MAX; )
+		for (s_BlobPtr; s_BlobPtr < 50; )
 		{
 			if (s_BlobPool[s_BlobPtr]->m_OnUsing)
 			{
@@ -688,7 +697,7 @@ namespace InGame {
 			while (1)
 			{
 				++s_Sm20Ptr;
-				if (s_Sm20Ptr >= 150)
+				if (s_Sm20Ptr >= EFFECT_POOL_MAX)
 				{
 					s_Sm20Ptr = 0;
 				}
@@ -702,7 +711,7 @@ namespace InGame {
 			while (1)
 			{
 				++s_Sm30Ptr;
-				if (s_Sm30Ptr >= 150)
+				if (s_Sm30Ptr >= EFFECT_POOL_MAX)
 				{
 					s_Sm30Ptr = 0;
 				}
@@ -716,7 +725,7 @@ namespace InGame {
 			while (1)
 			{
 				++s_Sm40Ptr;
-				if (s_Sm40Ptr >= 150)
+				if (s_Sm40Ptr >= EFFECT_POOL_MAX)
 				{
 					s_Sm40Ptr = 0;
 				}
@@ -751,7 +760,7 @@ namespace InGame {
 			while (1)
 			{
 				++s_ExhaustMagicPtr;
-				if (s_ExhaustMagicPtr >= EFFECT_POOL_MAX)
+				if (s_ExhaustMagicPtr >= EFFECT_POOL_MAX + 200)
 				{
 					s_ExhaustMagicPtr = 0;
 				}

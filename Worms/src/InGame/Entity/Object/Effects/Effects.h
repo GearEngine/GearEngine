@@ -338,6 +338,7 @@ namespace InGame {
 	public:
 		static int explosionMax;
 		static int flameMax;
+		static bool initiated;
 
 	public:
 		static std::vector<Gear::Ref<Blob>> s_BlobPool;
