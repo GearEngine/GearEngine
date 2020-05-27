@@ -35,10 +35,15 @@ namespace InGame {
 		m_TurnChecker->Render();
 		m_WindChecker->Render(ts);
 
-		if (Gear::Input::IsKeyPressd(GR_KEY_ESCAPE))
+		if (!escape)
 		{
-			PLAY_SOUND_NAME("UnFreeze", WormsSound::effect);
-			Gear::EntitySystem::GetFSM(m_World->m_ID)->SetCurrentState(WorldState::OnGameDraw);
+			if (Gear::Input::IsKeyPressd(GR_KEY_ESCAPE))
+			{
+				escape = true;
+				PLAY_SOUND_NAME("UnFreeze", WormsSound::effect);
+				Gear::EventSystem::IgnoreAllEvent(m_World->m_ID);
+				Gear::EntitySystem::GetFSM(m_World->m_ID)->SetCurrentState(WorldState::OnGameDraw);
+			}
 		}
 	}
 

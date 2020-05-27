@@ -232,7 +232,6 @@ namespace InGame {
 
 		inline virtual Gear::EnumType Handle(int entityID, const Gear::Command& cmd) override
 		{
-
 			if (inFirst)
 			{
 				inFirst = false;
@@ -241,6 +240,7 @@ namespace InGame {
 				lateDrawer->ActivateStuff("Fog", Gear::Stuff::Quard);
 				lateDrawer->GetQuardStuff("Fog").Color.a = 0.0f;
 			}
+
 
 			if (pastTime > fogDelay)
 			{

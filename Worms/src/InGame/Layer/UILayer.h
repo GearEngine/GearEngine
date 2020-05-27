@@ -25,6 +25,8 @@ namespace InGame {
 		void OnEvent(Gear::Event& e) override;
 
 	private:
+		bool escape = false;
+
 		Gear::Ref<Camera> m_Camera;
 		Gear::Ref<Mouse> m_Mouse;
 		Gear::Ref<World> m_World;

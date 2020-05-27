@@ -5,6 +5,8 @@ namespace Gear {
 
 	int EventSystem::s_channelID = 0;
 	std::unordered_map<int, Ref<EventChannel>> EventSystem::s_Channels = std::unordered_map<int, Ref<EventChannel>>();
+	std::unordered_map<int, std::set<ChannelType>> EventSystem::s_IgnoreChannel = std::unordered_map<int, std::set<ChannelType>>();
+	std::set<int> EventSystem::s_IgnoredEventEntity = std::set<int>();
 
 	EventChannel::EventChannel(ChannelType channel, int id)
 		: m_Channel(channel), m_ChannelID(id)
@@ -42,8 +44,11 @@ namespace Gear {
 	{
 		for (auto& entity : m_Subscriber)
 		{
-			if(entity->m_OnActivate)
+			if (CheckIgnore(m_Channel, entity->m_EntityID)) continue;
+			if (entity->m_OnActivate)
+			{
 				entity->m_EventQueue.push_back(event);
+			}
 		}
 	}
 
@@ -52,6 +57,8 @@ namespace Gear {
 		auto type = event.Type;
 		for (auto& entity : m_Subscriber)
 		{
+			if (CheckIgnore(m_Channel, entity->m_EntityID)) continue;
+
 			bool alreadyExist = false;
 			for (auto event : entity->m_EventQueue)
 			{
@@ -114,12 +121,16 @@ namespace Gear {
 	{
 		s_channelID = 0;
 		s_Channels.clear();
+		s_IgnoreChannel.clear();
+		s_IgnoredEventEntity.clear();
 	}
 
 	void EventSystem::Shutdown()
 	{
 		Reset();
 	}
+
+
 
 	void EventSystem::CreateChannel(ChannelType channel)
 	{
@@ -196,7 +207,10 @@ namespace Gear {
 			GR_CORE_WARN("On Entity Event Dispatch : {0} channel doesn't exist", channel);
 			return;
 		}
-		findChannel->second->DispatchEventTo(event, entityID);
+		if (CheckIgnore(channel, entityID) == false)
+		{
+			findChannel->second->DispatchEventTo(event, entityID);
+		}
 	}
 
 	void EventSystem::DispatchEventOnceTo(ChannelType channel, const EntityEvent & event, int entityID)
@@ -207,8 +221,70 @@ namespace Gear {
 			GR_CORE_WARN("On Entity Event Dispatch : {0} channel doesn't exist", channel);
 			return;
 		}
-		findChannel->second->DispatchEventOnceTo(event, entityID);
+		if (CheckIgnore(channel, entityID) == false)
+		{
+			findChannel->second->DispatchEventOnceTo(event, entityID);
+		}
 	}
 
+	void EventSystem::IgnoreAllEvent(int entityID)
+	{
+		for (auto& channel : s_Channels)
+		{
+			s_IgnoreChannel[entityID].insert(channel.first);
+		}
+		s_IgnoredEventEntity.insert(entityID);
+	}
 
+	void EventSystem::IgnoreChannelEvent(ChannelType channel, int entityID)
+	{
+		s_IgnoreChannel[entityID].erase(channel);
+		if (s_IgnoreChannel[entityID].empty())
+		{
+			s_IgnoredEventEntity.erase(entityID);
+		}
+	}
+
+	void EventSystem::ReAcceptAllEvent(int entityID)
+	{
+		auto findIgnoreChannel = s_IgnoreChannel.find(entityID);
+		if (findIgnoreChannel != s_IgnoreChannel.end())
+		{
+			s_IgnoreChannel.erase(findIgnoreChannel);
+			s_IgnoredEventEntity.erase(entityID);
+		}
+	}
+
+	void EventSystem::ReAcceptChannelEvent(ChannelType channel, int entityID)
+	{
+		auto findIgnoreChannel = s_IgnoreChannel.find(entityID);
+		if (findIgnoreChannel != s_IgnoreChannel.end())
+		{
+			findIgnoreChannel->second.erase(channel);
+			if (findIgnoreChannel->second.empty())
+			{
+				s_IgnoredEventEntity.erase(entityID);
+			}
+		}
+	}
+
+	bool CheckIgnore(ChannelType channel, int entityID)
+	{
+		if (EventSystem::s_IgnoreChannel.empty())
+		{
+			return false;
+		}
+
+		auto findIgnoreChannel = EventSystem::s_IgnoreChannel.find(entityID);
+		if (findIgnoreChannel == EventSystem::s_IgnoreChannel.end())
+		{
+			return false;
+		}
+
+		if (findIgnoreChannel->second.find(channel) != findIgnoreChannel->second.end())
+		{
+			return true;
+		}
+		return false;
+	}
 }
