@@ -1,0 +1,27 @@
+{
+  "IndexCount": 4,
+  "0": {
+    "ItemNumber": 43,
+    "Name": "Teleport",
+    "Quantity": -1,
+    "RemainTurn": 0
+  },
+  "1": {
+    "ItemNumber": 59,
+    "Name": "Hos",
+    "Quantity": -1,
+    "RemainTurn": 0
+  },
+  "2": {
+    "ItemNumber": 60,
+    "Name": "Skip Go",
+    "Quantity": -1,
+    "RemainTurn": 0
+  },
+  "3": {
+    "ItemNumber": 61,
+    "Name": "Surrender",
+    "Quantity": -1,
+    "RemainTurn": 0
+  }
+}

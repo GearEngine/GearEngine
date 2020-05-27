@@ -1,5 +1,5 @@
 {
-  "IndexCount": 8,
+  "IndexCount": 6,
   "0": {
     "ItemNumber": 5,
     "Name": "Bazooka",
@@ -19,33 +19,21 @@
     "RemainTurn": 0
   },
   "3": {
-    "ItemNumber": 12,
-    "Name": "Banana",
-    "Quantity": 1,
-    "RemainTurn": 3
-  },
-  "4": {
     "ItemNumber": 43,
     "Name": "Teleport",
-    "Quantity": 2,
+    "Quantity": 1,
     "RemainTurn": 2
   },
-  "5": {
+  "4": {
     "ItemNumber": 60,
     "Name": "Skip Go",
     "Quantity": -1,
     "RemainTurn": 0
   },
-  "6": {
+  "5": {
     "ItemNumber": 61,
     "Name": "Surrender",
     "Quantity": -1,
     "RemainTurn": 0
-  },
-  "7": {
-    "ItemNumber": 57,
-    "Name": "Donkey",
-    "Quantity": 1,
-    "RemainTurn": 4
-  },
+  }
 }

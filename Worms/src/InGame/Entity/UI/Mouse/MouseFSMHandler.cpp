@@ -20,6 +20,7 @@ namespace InGame {
 		ItemSelectorID = Gear::EntitySystem::GetEntityIDFromName("ItemSelector");
 		ItemSelectorFSM = Gear::EntitySystem::GetFSM(ItemSelectorID);
 
+		GR_TRACE("MouseOnItemWindowHandler::init mousePos set 1.2f, -0.7f");
 		m_VirtualItemMousePos.first = 1.2f;
 		m_VirtualItemMousePos.second = -0.7f;
 
@@ -56,7 +57,7 @@ namespace InGame {
 		mouseTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(m_VirtualItemMousePos.first, m_VirtualItemMousePos.second, ZOrder::z_FlatMouse))
 			* glm::scale(glm::mat4(1.0f), glm::vec3(0.16f, 0.16f, 1.0f));
 
-		itemSelectorRect = std::any_cast<Gear::Util::FRect>(Gear::EntitySystem::GetStatus(ItemSelectorID)->GetStat(1u));
+		
 
 		needReset = false;
 	}
@@ -72,7 +73,6 @@ namespace InGame {
 		{
 			reset();
 		}
-
 		unsigned int itemSelectorState = ItemSelectorFSM->GetCurrentState();
 		if (itemSelectorState == 3 || itemSelectorState == 4)
 		{
@@ -87,6 +87,7 @@ namespace InGame {
 				m_VirtualItemMousePos.second += dy * MouseSensitiveY;
 			}
 
+			itemSelectorRect = std::any_cast<Gear::Util::FRect>(Gear::EntitySystem::GetStatus(ItemSelectorID)->GetStat(1u));
 			if (m_VirtualItemMousePos.first < itemSelectorRect.Left)
 			{
 				m_VirtualItemMousePos.first = itemSelectorRect.Left;

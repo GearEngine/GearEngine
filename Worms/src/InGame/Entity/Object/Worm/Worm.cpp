@@ -486,7 +486,7 @@ namespace InGame {
 		float nameBorderWidthUnit = nameBorderWidth / (initData.MapReductionRatio * 3);
 		float nameBorderHeightUnit = nameBorderHeight / (initData.MapReductionRatio * 3);
 
-		auto hpBorder = Gear::TextureStorage::GetTexture2D("WormHpBorder");
+		auto hpBorder = Gear::TextureStorage::GetTexture2D("WormHPBorder");
 		float hpBorderWidth = hpBorder->GetWidth();
 		float hpBorderHeight = hpBorder->GetHeight();
 		float hpBorderWidthUnit = hpBorderWidth / (initData.MapReductionRatio * 3);

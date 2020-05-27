@@ -45,60 +45,60 @@ namespace InGame {
 		{
 		case InGame::GraveInfo::_1:
 		{
-			auto underwater = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Grave1"), 0.02f, graveAniOrder, true);
+			auto underwater = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("grave1"), 0.02f, graveAniOrder, true);
 			underwater->SetTintColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.3f));
 			Gear::EntitySystem::SetAnimator(m_ID, {
-				{ GraveInfo::State::OnNothing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Grave1"), 0.02f,graveAniOrder, true)},
+				{ GraveInfo::State::OnNothing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("grave1"), 0.02f,graveAniOrder, true)},
 				{ GraveInfo::State::OnUnderWater, underwater}
 			});
 		}
 		break;
 		case InGame::GraveInfo::_2:
 		{
-			auto underwater = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Grave2"), 0.02f, graveAniOrder, true);
+			auto underwater = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("grave2"), 0.02f, graveAniOrder, true);
 			underwater->SetTintColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.3f));
 			Gear::EntitySystem::SetAnimator(m_ID, {
-				{ GraveInfo::State::OnNothing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Grave2"), 0.02f,graveAniOrder, true)},
+				{ GraveInfo::State::OnNothing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("grave2"), 0.02f,graveAniOrder, true)},
 				{ GraveInfo::State::OnUnderWater, underwater}
 			});
 		}
 		break;
 		case InGame::GraveInfo::_3:
 		{
-			auto underwater = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Grave3"), 0.02f, graveAniOrder, true);
+			auto underwater = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("grave3"), 0.02f, graveAniOrder, true);
 			underwater->SetTintColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.3f));
 			Gear::EntitySystem::SetAnimator(m_ID, {
-				{ GraveInfo::State::OnNothing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Grave3"), 0.02f,graveAniOrder, true)},
+				{ GraveInfo::State::OnNothing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("grave3"), 0.02f,graveAniOrder, true)},
 				{ GraveInfo::State::OnUnderWater, underwater}
 			});
 		}
 		break;
 		case InGame::GraveInfo::_4:
 		{
-			auto underwater = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Grave4"), 0.02f, graveAniOrder, true);
+			auto underwater = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("grave4"), 0.02f, graveAniOrder, true);
 			underwater->SetTintColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.3f));
 			Gear::EntitySystem::SetAnimator(m_ID, {
-				{ GraveInfo::State::OnNothing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Grave4"), 0.02f,graveAniOrder, true)},
+				{ GraveInfo::State::OnNothing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("grave4"), 0.02f,graveAniOrder, true)},
 				{ GraveInfo::State::OnUnderWater, underwater}
 				});
 		}
 		break;
 		case InGame::GraveInfo::_5:
 		{
-			auto underwater = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Grave5"), 0.02f, graveAniOrder, true);
+			auto underwater = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("grave5"), 0.02f, graveAniOrder, true);
 			underwater->SetTintColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.3f));
 			Gear::EntitySystem::SetAnimator(m_ID, {
-				{ GraveInfo::State::OnNothing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Grave5"), 0.02f, graveAniOrder, true)},
+				{ GraveInfo::State::OnNothing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("grave5"), 0.02f, graveAniOrder, true)},
 				{ GraveInfo::State::OnUnderWater, underwater}
 			});
 		}
 		break;
 		case InGame::GraveInfo::_6:
 		{
-			auto underwater = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Grave6"), 0.02f, graveAniOrder, true);
+			auto underwater = Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("grave6"), 0.02f, graveAniOrder, true);
 			underwater->SetTintColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.3f));
 			Gear::EntitySystem::SetAnimator(m_ID, {
-				{ GraveInfo::State::OnNothing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("Grave6"), 0.02f, graveAniOrder, true)},
+				{ GraveInfo::State::OnNothing, Gear::Animation2D::Create(Gear::TextureStorage::GetFrameTexture2D("grave6"), 0.02f, graveAniOrder, true)},
 				{ GraveInfo::State::OnUnderWater, underwater}
 			});
 		}

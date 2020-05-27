@@ -579,7 +579,7 @@ namespace InGame {
 			damageBorderPosition.z = ZOrder::z_Font;
 			damageBorderPosition.y += damageBorderOffset;
 
-			damageBorder = Gear::TextureStorage::GetTexture2D("WormHpBorder");
+			damageBorder = Gear::TextureStorage::GetTexture2D("WormHPBorder");
 			float hpBorderWidth = damageBorder->GetWidth();
 			float hpBorderHeight = damageBorder->GetHeight();
 			damageBorderWidthUnit = hpBorderWidth / (37.0f * 3) * totalDamageLength / 3;
