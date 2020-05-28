@@ -47,7 +47,6 @@ project "Gear"
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
 		"%{prj.name}/vendor/fmod/include/**.h",
-		"%{prj.name}/vendor/fmod/include/**.h",
 		"%{prj.name}/vendor/Json/include/json.h"
 	}
 	
@@ -78,7 +77,7 @@ project "Gear"
 		"Glad",
 		"ImGui",
 		"opengl32.lib",
-		"fmod64_vc.lib",
+		"fmod_vc.lib",
 		"jsoncpp.lib",
 		"KSNetwork.lib",
 		"ws2_32.lib"

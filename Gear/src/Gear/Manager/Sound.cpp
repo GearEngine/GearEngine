@@ -121,7 +121,7 @@ namespace Gear {
 			result = m_Channel[channel]->isPlaying(&ret);
 			if (result != FMOD_OK)
 			{
-				GR_CORE_WARN("FMOD error!");
+				DEBUG_GR_CORE_WARN("FMOD error!");
 			}
 		}
 		return ret;
@@ -145,7 +145,7 @@ namespace Gear {
 				result = m_Channel[i]->stop();
 				if (result != FMOD_OK)
 				{
-					GR_CORE_WARN("FMOD error!");
+					DEBUG_GR_CORE_WARN("FMOD error!");
 				}
 			}
 		}
